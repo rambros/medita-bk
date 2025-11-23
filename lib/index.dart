@@ -1,7 +1,7 @@
 // Export pages
 export '/modules/authentication/sign_in/sign_in_widget.dart' show SignInWidget;
 export '/modules/authentication/sign_up/sign_up_widget.dart' show SignUpWidget;
-export '/modules/config/edit_profile_page/edit_profile_page_widget.dart' show EditProfilePageWidget;
+export '/ui/config/edit_profile_page/edit_profile_page.dart' show EditProfilePageWidget;
 export '/modules/authentication/forgot_password/forgot_password_widget.dart' show ForgotPasswordWidget;
 export '/modules/home_page/home_page_widget.dart' show HomePageWidget;
 export 'ui/config/profile_page/profile_page.dart' show ProfilePageWidget;
@@ -9,15 +9,15 @@ export '/modules/meditation/meditation_home_page/meditation_home_page_widget.dar
 export '/modules/notification/notification_list_page/notification_list_page_widget.dart'
     show NotificationListPageWidget;
 export '/modules/authentication/sociall_login/sociall_login_widget.dart' show SociallLoginWidget;
-export '/modules/config/config_page/config_page_widget.dart' show ConfigPageWidget;
-export '/modules/config/about_page/about_page_widget.dart' show AboutPageWidget;
+export '/ui/config/config_page/config_page.dart' show ConfigPageWidget;
+export '/ui/config/about_page/about_page.dart' show AboutPage;
 export '/modules/authentication/change_email_page/change_email_page_widget.dart' show ChangeEmailPageWidget;
-export '/modules/config/app_review_page/app_review_page_widget.dart' show AppReviewPageWidget;
-export '/modules/config/settings_page/settings_page_widget.dart' show SettingsPageWidget;
-export '/modules/config/invite_page/invite_page_widget.dart' show InvitePageWidget;
-export '/modules/config/delete_account_page/delete_account_page_widget.dart' show DeleteAccountPageWidget;
+export '/ui/config/app_review_page/app_review_page.dart' show AppReviewPageWidget;
+export '/ui/config/settings_page/settings_page.dart' show SettingsPage;
+export '/ui/config/invite_page/invite_page.dart' show InvitePageWidget;
+export '/ui/config/delete_account_page/delete_account_page.dart' show DeleteAccountPage;
 export '/ui/config/about_authors_page/about_authors_page.dart' show AboutAuthorsPageWidget;
-export '/modules/config/alarm_page/alarm_page_widget.dart' show AlarmPageWidget;
+export '/ui/config/alarm_page/alarm_page.dart' show AlarmPageWidget;
 export '/modules/meditation/meditation_details_page/meditation_details_page_widget.dart'
     show MeditationDetailsPageWidget;
 export '/modules/meditation/meditation_play_page/meditation_play_page_widget.dart' show MeditationPlayPageWidget;
@@ -55,10 +55,10 @@ export '/modules/mensagens/mensagens_semantic_search_page/mensagens_semantic_sea
     show MensagensSemanticSearchPageWidget;
 export '/ui/video/canal_viver_list_page/canal_viver_list_page.dart' show CanalViverListPageWidget;
 export '/ui/video/palestras_list_page/palestras_list_page.dart' show PalestrasListPageWidget;
-export '/modules/config/support_page/support_page_widget.dart' show SupportPageWidget;
-export '/modules/config/feedback_page/feedback_page_widget.dart' show FeedbackPageWidget;
-export '/modules/config/feature_page/feature_page_widget.dart' show FeaturePageWidget;
-export '/modules/config/donation_page/donation_page_widget.dart' show DonationPageWidget;
+export '/ui/config/support_page/support_page.dart' show SupportPageWidget;
+export '/ui/config/feedback_page/feedback_page.dart' show FeedbackPageWidget;
+export '/ui/config/feature_page/feature_page.dart' show FeaturePageWidget;
+export '/ui/config/donation_page/donation_page.dart' show DonationPageWidget;
 export '/modules/playlist/playlist_play_page/playlist_play_page_widget.dart' show PlaylistPlayPageWidget;
 export '/modules/meditation/meditation_play_page_old/meditation_play_page_old_widget.dart'
     show MeditationPlayPageOldWidget;

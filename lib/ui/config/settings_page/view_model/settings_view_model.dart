@@ -1,0 +1,58 @@
+import 'package:flutter/material.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/custom_code/actions/index.dart' as actions;
+
+class SettingsViewModel extends ChangeNotifier {
+  String _appVersion = '';
+  String get appVersion => _appVersion;
+
+  void initialize() {
+    _loadVersion();
+  }
+
+  Future<void> _loadVersion() async {
+    _appVersion = await actions.getVersionApp();
+    notifyListeners();
+  }
+
+  bool get isDarkMode => FFAppState().darkTheme;
+  bool get receiveNotifications => FFAppState().receiveNotifications;
+  bool get receiveEmails => FFAppState().receiveEmails;
+
+  void toggleDarkMode(BuildContext context, bool value) {
+    FFAppState().darkTheme = value;
+    if (value) {
+      setDarkModeSetting(context, ThemeMode.dark);
+    } else {
+      setDarkModeSetting(context, ThemeMode.light);
+    }
+    notifyListeners();
+  }
+
+  void toggleNotifications(bool value) {
+    FFAppState().receiveNotifications = value;
+    notifyListeners();
+  }
+
+  void toggleEmails(bool value) {
+    FFAppState().receiveEmails = value;
+    notifyListeners();
+  }
+
+  Future<void> deleteDownloads(BuildContext context) async {
+    await actions.clearAudioCache();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Meditações deletadas',
+          style: TextStyle(
+            color: FlutterFlowTheme.of(context).primaryText,
+          ),
+        ),
+        duration: const Duration(milliseconds: 4000),
+        backgroundColor: FlutterFlowTheme.of(context).secondary,
+      ),
+    );
+  }
+}

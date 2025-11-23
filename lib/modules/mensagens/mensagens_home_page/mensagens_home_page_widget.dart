@@ -2,16 +2,15 @@ import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
-import 'dart:math';
+
 import 'dart:ui';
 import '/actions/actions.dart' as action_blocks;
 import '/index.dart';
+import '/modules/mensagens/mensagem_details_page/mensagem_details_page_widget.dart';
+import '/modules/mensagens/mensagens_semantic_search_page/mensagens_semantic_search_page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'mensagens_home_page_model.dart';
 export 'mensagens_home_page_model.dart';
 
@@ -22,12 +21,10 @@ class MensagensHomePageWidget extends StatefulWidget {
   static String routePath = 'mensagensHomePage';
 
   @override
-  State<MensagensHomePageWidget> createState() =>
-      _MensagensHomePageWidgetState();
+  State<MensagensHomePageWidget> createState() => _MensagensHomePageWidgetState();
 }
 
-class _MensagensHomePageWidgetState extends State<MensagensHomePageWidget>
-    with TickerProviderStateMixin {
+class _MensagensHomePageWidgetState extends State<MensagensHomePageWidget> with TickerProviderStateMixin {
   late MensagensHomePageModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -39,8 +36,7 @@ class _MensagensHomePageWidgetState extends State<MensagensHomePageWidget>
     super.initState();
     _model = createModel(context, () => MensagensHomePageModel());
 
-    logFirebaseEvent('screen_view',
-        parameters: {'screen_name': 'mensagensHomePage'});
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'mensagensHomePage'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       await action_blocks.checkInternetAccess(context);
@@ -106,8 +102,7 @@ class _MensagensHomePageWidgetState extends State<MensagensHomePageWidget>
                   background: Align(
                     alignment: const AlignmentDirectional(0.0, 1.0),
                     child: Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                      padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -123,8 +118,7 @@ class _MensagensHomePageWidgetState extends State<MensagensHomePageWidget>
                                 extra: <String, dynamic>{
                                   kTransitionInfoKey: const TransitionInfo(
                                     hasTransition: true,
-                                    transitionType:
-                                        PageTransitionType.leftToRight,
+                                    transitionType: PageTransitionType.leftToRight,
                                   ),
                                 },
                               );
@@ -137,15 +131,11 @@ class _MensagensHomePageWidgetState extends State<MensagensHomePageWidget>
                           ),
                           Text(
                             'Mensagens',
-                            style: FlutterFlowTheme.of(context)
-                                .headlineMedium
-                                .override(
-                                  fontFamily: FlutterFlowTheme.of(context)
-                                      .headlineMediumFamily,
+                            style: FlutterFlowTheme.of(context).headlineMedium.override(
+                                  fontFamily: FlutterFlowTheme.of(context).headlineMediumFamily,
                                   color: FlutterFlowTheme.of(context).primary,
                                   letterSpacing: 0.0,
-                                  useGoogleFonts: !FlutterFlowTheme.of(context)
-                                      .headlineMediumIsCustom,
+                                  useGoogleFonts: !FlutterFlowTheme.of(context).headlineMediumIsCustom,
                                 ),
                           ),
                           FlutterFlowIconButton(
@@ -153,8 +143,7 @@ class _MensagensHomePageWidgetState extends State<MensagensHomePageWidget>
                             borderRadius: 20.0,
                             borderWidth: 1.0,
                             buttonSize: 40.0,
-                            fillColor:
-                                FlutterFlowTheme.of(context).primaryBackground,
+                            fillColor: FlutterFlowTheme.of(context).primaryBackground,
                             icon: Icon(
                               Icons.notifications_none,
                               color: FlutterFlowTheme.of(context).primary,
@@ -190,12 +179,10 @@ class _MensagensHomePageWidgetState extends State<MensagensHomePageWidget>
                       'Reflexões para o seu dia',
                       textAlign: TextAlign.center,
                       style: FlutterFlowTheme.of(context).titleLarge.override(
-                            fontFamily:
-                                FlutterFlowTheme.of(context).titleLargeFamily,
+                            fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
                             color: FlutterFlowTheme.of(context).primary,
                             letterSpacing: 0.0,
-                            useGoogleFonts: !FlutterFlowTheme.of(context)
-                                .titleLargeIsCustom,
+                            useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
                           ),
                     ),
                   ],
@@ -232,8 +219,7 @@ class _MensagensHomePageWidgetState extends State<MensagensHomePageWidget>
                               extra: <String, dynamic>{
                                 kTransitionInfoKey: const TransitionInfo(
                                   hasTransition: true,
-                                  transitionType:
-                                      PageTransitionType.leftToRight,
+                                  transitionType: PageTransitionType.leftToRight,
                                 ),
                               },
                             );
@@ -253,8 +239,7 @@ class _MensagensHomePageWidgetState extends State<MensagensHomePageWidget>
                               padding: const EdgeInsets.all(16.0),
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
@@ -266,26 +251,18 @@ class _MensagensHomePageWidgetState extends State<MensagensHomePageWidget>
                                     ),
                                     child: Icon(
                                       Icons.filter_vintage,
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryText,
+                                      color: FlutterFlowTheme.of(context).secondaryText,
                                       size: 24.0,
                                     ),
-                                  ).animateOnPageLoad(animationsMap[
-                                      'containerOnPageLoadAnimation1']!),
+                                  ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation1']!),
                                   Text(
                                     'Mensagem para o dia',
                                     textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyLarge
-                                        .override(
-                                          fontFamily:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyLargeFamily,
+                                    style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                          fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
                                           letterSpacing: 0.0,
                                           fontWeight: FontWeight.w500,
-                                          useGoogleFonts:
-                                              !FlutterFlowTheme.of(context)
-                                                  .bodyLargeIsCustom,
+                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
                                         ),
                                   ),
                                 ],
@@ -312,8 +289,7 @@ class _MensagensHomePageWidgetState extends State<MensagensHomePageWidget>
                               extra: <String, dynamic>{
                                 kTransitionInfoKey: const TransitionInfo(
                                   hasTransition: true,
-                                  transitionType:
-                                      PageTransitionType.leftToRight,
+                                  transitionType: PageTransitionType.leftToRight,
                                 ),
                               },
                             );
@@ -333,8 +309,7 @@ class _MensagensHomePageWidgetState extends State<MensagensHomePageWidget>
                               padding: const EdgeInsets.all(16.0),
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
@@ -346,26 +321,18 @@ class _MensagensHomePageWidgetState extends State<MensagensHomePageWidget>
                                     ),
                                     child: Icon(
                                       Icons.calendar_today,
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryText,
+                                      color: FlutterFlowTheme.of(context).secondaryText,
                                       size: 24.0,
                                     ),
-                                  ).animateOnPageLoad(animationsMap[
-                                      'containerOnPageLoadAnimation2']!),
+                                  ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation2']!),
                                   Text(
                                     'Pesquisar mensagens',
                                     textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyLarge
-                                        .override(
-                                          fontFamily:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyLargeFamily,
+                                    style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                          fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
                                           letterSpacing: 0.0,
                                           fontWeight: FontWeight.w500,
-                                          useGoogleFonts:
-                                              !FlutterFlowTheme.of(context)
-                                                  .bodyLargeIsCustom,
+                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
                                         ),
                                   ),
                                 ],

@@ -1,7 +1,6 @@
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import 'dart:ui';
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -217,6 +216,46 @@ class _EntrevistasListPageWidgetState extends State<EntrevistasListPageWidget> {
                                     ),
                                   ),
                                 ),
+                                firstPageErrorIndicatorBuilder: (_) => Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.error_outline,
+                                        size: 48.0,
+                                        color: FlutterFlowTheme.of(context).error,
+                                      ),
+                                      const SizedBox(height: 16.0),
+                                      Text(
+                                        'Erro ao carregar vídeos',
+                                        style: FlutterFlowTheme.of(context).titleMedium.override(
+                                              fontFamily: FlutterFlowTheme.of(context).titleMediumFamily,
+                                              letterSpacing: 0.0,
+                                              useGoogleFonts: !FlutterFlowTheme.of(context).titleMediumIsCustom,
+                                            ),
+                                      ),
+                                      const SizedBox(height: 8.0),
+                                      Text(
+                                        'Verifique sua conexão e tente novamente',
+                                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                              fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
+                                              letterSpacing: 0.0,
+                                              useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
+                                            ),
+                                      ),
+                                      const SizedBox(height: 16.0),
+                                      ElevatedButton.icon(
+                                        onPressed: () => viewModel.pagingController.refresh(),
+                                        icon: const Icon(Icons.refresh),
+                                        label: const Text('Tentar Novamente'),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: FlutterFlowTheme.of(context).primary,
+                                          foregroundColor: FlutterFlowTheme.of(context).info,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                                 newPageProgressIndicatorBuilder: (_) => Center(
                                   child: SizedBox(
                                     width: 40.0,
@@ -226,6 +265,13 @@ class _EntrevistasListPageWidgetState extends State<EntrevistasListPageWidget> {
                                         FlutterFlowTheme.of(context).primary,
                                       ),
                                     ),
+                                  ),
+                                ),
+                                newPageErrorIndicatorBuilder: (_) => Center(
+                                  child: TextButton.icon(
+                                    onPressed: () => viewModel.pagingController.retryLastFailedRequest(),
+                                    icon: const Icon(Icons.refresh),
+                                    label: const Text('Tentar Novamente'),
                                   ),
                                 ),
                                 itemBuilder: (context, video, index) {

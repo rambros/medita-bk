@@ -17,16 +17,13 @@ class YouTubeGroup {
   static String getBaseUrl() => 'https://www.googleapis.com';
   static Map<String, String> headers = {};
   static CanalViverMeditarCall canalViverMeditarCall = CanalViverMeditarCall();
-  static CanalBrahmaKumarisCall canalBrahmaKumarisCall =
-      CanalBrahmaKumarisCall();
+  static CanalBrahmaKumarisCall canalBrahmaKumarisCall = CanalBrahmaKumarisCall();
   static VideosCongressoCall videosCongressoCall = VideosCongressoCall();
   static VideosEntrevistasCall videosEntrevistasCall = VideosEntrevistasCall();
   static VideosPalestrasCall videosPalestrasCall = VideosPalestrasCall();
-  static GetNumVideosPalestrasCall getNumVideosPalestrasCall =
-      GetNumVideosPalestrasCall();
+  static GetNumVideosPalestrasCall getNumVideosPalestrasCall = GetNumVideosPalestrasCall();
   static VideosMeditationsCall videosMeditationsCall = VideosMeditationsCall();
-  static VideosCanalViverMeditarCall videosCanalViverMeditarCall =
-      VideosCanalViverMeditarCall();
+  static VideosCanalViverMeditarCall videosCanalViverMeditarCall = VideosCanalViverMeditarCall();
 }
 
 class CanalViverMeditarCall {
@@ -436,16 +433,14 @@ class SearchMensagensCall {
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'searchMensagens',
-      apiUrl:
-          'https://hxhpzoyjjghtekqgfbfh.supabase.co/functions/v1/search-mbk-messages',
+      apiUrl: 'https://hxhpzoyjjghtekqgfbfh.supabase.co/functions/v1/search-mbk-messages',
       callType: ApiCallType.POST,
       headers: {
         'Content-Type': 'application/json',
         'Authorization':
             'Bearer  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4aHB6b3lqamdodGVrcWdmYmZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5NTQ2NTcsImV4cCI6MjAxNzUzMDY1N30.AXFvKve52GjqNJu9Npg3HCnfQ5suy_ba3n-2_s5ZnDs',
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers':
-            'authorization, x-client-info, apikey, content-type',
+        'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
       },
       params: {},
       body: ffApiRequestBody,

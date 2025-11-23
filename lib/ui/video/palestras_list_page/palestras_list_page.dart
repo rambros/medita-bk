@@ -1,13 +1,13 @@
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import 'dart:ui';
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 import 'view_model/palestras_list_view_model.dart';
 import '/domain/models/video/video_model.dart';
+import '../widgets/video_error_indicator.dart';
 
 class PalestrasListPageWidget extends StatefulWidget {
   const PalestrasListPageWidget({super.key});
@@ -218,6 +218,9 @@ class _PalestrasListPageWidgetState extends State<PalestrasListPageWidget> {
                                     ),
                                   ),
                                 ),
+                                firstPageErrorIndicatorBuilder: (_) => VideoErrorIndicator(
+                                  onRetry: () => viewModel.pagingController.refresh(),
+                                ),
                                 newPageProgressIndicatorBuilder: (_) => Center(
                                   child: SizedBox(
                                     width: 40.0,
@@ -228,6 +231,9 @@ class _PalestrasListPageWidgetState extends State<PalestrasListPageWidget> {
                                       ),
                                     ),
                                   ),
+                                ),
+                                newPageErrorIndicatorBuilder: (_) => VideoNewPageErrorIndicator(
+                                  onRetry: () => viewModel.pagingController.retryLastFailedRequest(),
                                 ),
                                 itemBuilder: (context, video, index) {
                                   return Padding(

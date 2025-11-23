@@ -142,9 +142,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => const ConfigPageWidget(),
             ),
             FFRoute(
-              name: AboutPageWidget.routeName,
-              path: AboutPageWidget.routePath,
-              builder: (context, params) => const AboutPageWidget(),
+              name: AboutPage.routeName,
+              path: AboutPage.routePath,
+              builder: (context, params) => const AboutPage(),
             ),
             FFRoute(
               name: ChangeEmailPageWidget.routeName,
@@ -157,9 +157,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => const AppReviewPageWidget(),
             ),
             FFRoute(
-              name: SettingsPageWidget.routeName,
-              path: SettingsPageWidget.routePath,
-              builder: (context, params) => const SettingsPageWidget(),
+              name: SettingsPage.routeName,
+              path: SettingsPage.routePath,
+              builder: (context, params) => const SettingsPage(),
             ),
             FFRoute(
               name: InvitePageWidget.routeName,
@@ -167,9 +167,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => const InvitePageWidget(),
             ),
             FFRoute(
-              name: DeleteAccountPageWidget.routeName,
-              path: DeleteAccountPageWidget.routePath,
-              builder: (context, params) => const DeleteAccountPageWidget(),
+              name: DeleteAccountPage.routeName,
+              path: DeleteAccountPage.routePath,
+              builder: (context, params) => const DeleteAccountPage(),
             ),
             FFRoute(
               name: AboutAuthorsPageWidget.routeName,

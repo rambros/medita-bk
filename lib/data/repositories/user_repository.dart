@@ -36,4 +36,14 @@ class UserRepository {
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) => UsersRecord.fromSnapshot(doc)).toList());
   }
+
+  /// Update user document
+  Future<void> updateUser(DocumentReference reference, Map<String, dynamic> data) async {
+    try {
+      await reference.update(data);
+    } catch (e) {
+      print('Error updating user: $e');
+      rethrow;
+    }
+  }
 }

@@ -2,16 +2,16 @@ import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
-import 'dart:math';
+
 import 'dart:ui';
 import '/actions/actions.dart' as action_blocks;
 import '/index.dart';
+import '/modules/meditation/meditation_video_list_page/meditation_video_list_page_widget.dart';
+import '/modules/meditation/meditation_statistics_page/meditation_statistics_page_widget.dart';
+import '/modules/playlist/playlist_list_page/playlist_list_page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'meditation_home_page_model.dart';
 export 'meditation_home_page_model.dart';
 
@@ -22,12 +22,10 @@ class MeditationHomePageWidget extends StatefulWidget {
   static String routePath = 'meditationHomePage';
 
   @override
-  State<MeditationHomePageWidget> createState() =>
-      _MeditationHomePageWidgetState();
+  State<MeditationHomePageWidget> createState() => _MeditationHomePageWidgetState();
 }
 
-class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget>
-    with TickerProviderStateMixin {
+class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget> with TickerProviderStateMixin {
   late MeditationHomePageModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -39,8 +37,7 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget>
     super.initState();
     _model = createModel(context, () => MeditationHomePageModel());
 
-    logFirebaseEvent('screen_view',
-        parameters: {'screen_name': 'meditationHomePage'});
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'meditationHomePage'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       await action_blocks.checkInternetAccess(context);
@@ -142,8 +139,7 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget>
                   background: Align(
                     alignment: const AlignmentDirectional(0.0, 1.0),
                     child: Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                      padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -159,8 +155,7 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget>
                                 extra: <String, dynamic>{
                                   kTransitionInfoKey: const TransitionInfo(
                                     hasTransition: true,
-                                    transitionType:
-                                        PageTransitionType.leftToRight,
+                                    transitionType: PageTransitionType.leftToRight,
                                   ),
                                 },
                               );
@@ -173,15 +168,11 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget>
                           ),
                           Text(
                             'Meditações',
-                            style: FlutterFlowTheme.of(context)
-                                .headlineMedium
-                                .override(
-                                  fontFamily: FlutterFlowTheme.of(context)
-                                      .headlineMediumFamily,
+                            style: FlutterFlowTheme.of(context).headlineMedium.override(
+                                  fontFamily: FlutterFlowTheme.of(context).headlineMediumFamily,
                                   color: FlutterFlowTheme.of(context).primary,
                                   letterSpacing: 0.0,
-                                  useGoogleFonts: !FlutterFlowTheme.of(context)
-                                      .headlineMediumIsCustom,
+                                  useGoogleFonts: !FlutterFlowTheme.of(context).headlineMediumIsCustom,
                                 ),
                           ),
                           FlutterFlowIconButton(
@@ -189,8 +180,7 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget>
                             borderRadius: 20.0,
                             borderWidth: 1.0,
                             buttonSize: 40.0,
-                            fillColor:
-                                FlutterFlowTheme.of(context).primaryBackground,
+                            fillColor: FlutterFlowTheme.of(context).primaryBackground,
                             icon: Icon(
                               Icons.notifications_none,
                               color: FlutterFlowTheme.of(context).primary,
@@ -226,12 +216,10 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget>
                       'O que você quer fazer agora?',
                       textAlign: TextAlign.center,
                       style: FlutterFlowTheme.of(context).titleLarge.override(
-                            fontFamily:
-                                FlutterFlowTheme.of(context).titleLargeFamily,
+                            fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
                             color: FlutterFlowTheme.of(context).primary,
                             letterSpacing: 0.0,
-                            useGoogleFonts: !FlutterFlowTheme.of(context)
-                                .titleLargeIsCustom,
+                            useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
                           ),
                     ),
                   ],
@@ -270,8 +258,7 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget>
                               extra: <String, dynamic>{
                                 kTransitionInfoKey: const TransitionInfo(
                                   hasTransition: true,
-                                  transitionType:
-                                      PageTransitionType.leftToRight,
+                                  transitionType: PageTransitionType.leftToRight,
                                 ),
                               },
                             );
@@ -291,8 +278,7 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget>
                               padding: const EdgeInsets.all(16.0),
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
@@ -304,26 +290,18 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget>
                                     ),
                                     child: Icon(
                                       FFIcons.kyogaPosition,
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryText,
+                                      color: FlutterFlowTheme.of(context).secondaryText,
                                       size: 24.0,
                                     ),
-                                  ).animateOnPageLoad(animationsMap[
-                                      'containerOnPageLoadAnimation1']!),
+                                  ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation1']!),
                                   Text(
                                     'Escolher uma meditação',
                                     textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyLarge
-                                        .override(
-                                          fontFamily:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyLargeFamily,
+                                    style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                          fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
                                           letterSpacing: 0.0,
                                           fontWeight: FontWeight.w500,
-                                          useGoogleFonts:
-                                              !FlutterFlowTheme.of(context)
-                                                  .bodyLargeIsCustom,
+                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
                                         ),
                                   ),
                                 ],
@@ -371,8 +349,7 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget>
                               },
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
@@ -384,26 +361,18 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget>
                                     ),
                                     child: Icon(
                                       Icons.playlist_play,
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryText,
+                                      color: FlutterFlowTheme.of(context).secondaryText,
                                       size: 28.0,
                                     ),
-                                  ).animateOnPageLoad(animationsMap[
-                                      'containerOnPageLoadAnimation2']!),
+                                  ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation2']!),
                                   Text(
                                     'Playlist de meditação',
                                     textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyLarge
-                                        .override(
-                                          fontFamily:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyLargeFamily,
+                                    style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                          fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
                                           letterSpacing: 0.0,
                                           fontWeight: FontWeight.w500,
-                                          useGoogleFonts:
-                                              !FlutterFlowTheme.of(context)
-                                                  .bodyLargeIsCustom,
+                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
                                         ),
                                   ),
                                 ],
@@ -432,8 +401,7 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget>
                               extra: <String, dynamic>{
                                 kTransitionInfoKey: const TransitionInfo(
                                   hasTransition: true,
-                                  transitionType:
-                                      PageTransitionType.rightToLeft,
+                                  transitionType: PageTransitionType.rightToLeft,
                                 ),
                               },
                             );
@@ -453,8 +421,7 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget>
                               padding: const EdgeInsets.all(16.0),
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
@@ -466,26 +433,18 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget>
                                     ),
                                     child: Icon(
                                       FFIcons.kchalkboardTeacher,
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryText,
+                                      color: FlutterFlowTheme.of(context).secondaryText,
                                       size: 20.0,
                                     ),
-                                  ).animateOnPageLoad(animationsMap[
-                                      'containerOnPageLoadAnimation3']!),
+                                  ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation3']!),
                                   Text(
                                     'Meditação com vídeo',
                                     textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyLarge
-                                        .override(
-                                          fontFamily:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyLargeFamily,
+                                    style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                          fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
                                           letterSpacing: 0.0,
                                           fontWeight: FontWeight.w500,
-                                          useGoogleFonts:
-                                              !FlutterFlowTheme.of(context)
-                                                  .bodyLargeIsCustom,
+                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
                                         ),
                                   ),
                                 ],
@@ -512,8 +471,7 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget>
                               extra: <String, dynamic>{
                                 kTransitionInfoKey: const TransitionInfo(
                                   hasTransition: true,
-                                  transitionType:
-                                      PageTransitionType.leftToRight,
+                                  transitionType: PageTransitionType.leftToRight,
                                 ),
                               },
                             );
@@ -533,8 +491,7 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget>
                               padding: const EdgeInsets.all(16.0),
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
@@ -546,26 +503,18 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget>
                                     ),
                                     child: Icon(
                                       Icons.poll_sharp,
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryText,
+                                      color: FlutterFlowTheme.of(context).secondaryText,
                                       size: 24.0,
                                     ),
-                                  ).animateOnPageLoad(animationsMap[
-                                      'containerOnPageLoadAnimation4']!),
+                                  ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation4']!),
                                   Text(
                                     'Estatísticas de meditação',
                                     textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyLarge
-                                        .override(
-                                          fontFamily:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyLargeFamily,
+                                    style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                          fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
                                           letterSpacing: 0.0,
                                           fontWeight: FontWeight.w500,
-                                          useGoogleFonts:
-                                              !FlutterFlowTheme.of(context)
-                                                  .bodyLargeIsCustom,
+                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
                                         ),
                                   ),
                                 ],
@@ -604,8 +553,7 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget>
                               padding: const EdgeInsets.all(16.0),
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
@@ -617,26 +565,18 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget>
                                     ),
                                     child: Icon(
                                       Icons.spa_sharp,
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryText,
+                                      color: FlutterFlowTheme.of(context).secondaryText,
                                       size: 24.0,
                                     ),
-                                  ).animateOnPageLoad(animationsMap[
-                                      'containerOnPageLoadAnimation5']!),
+                                  ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation5']!),
                                   Text(
                                     'Aprenda a meditar',
                                     textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyLarge
-                                        .override(
-                                          fontFamily:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyLargeFamily,
+                                    style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                          fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
                                           letterSpacing: 0.0,
                                           fontWeight: FontWeight.w500,
-                                          useGoogleFonts:
-                                              !FlutterFlowTheme.of(context)
-                                                  .bodyLargeIsCustom,
+                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
                                         ),
                                   ),
                                 ],

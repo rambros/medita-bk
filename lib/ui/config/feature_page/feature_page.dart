@@ -1,34 +1,27 @@
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/flutter_flow/flutter_flow_web_view.dart';
 import 'package:flutter/material.dart';
 
-class YoutubePlayerPageWidget extends StatefulWidget {
-  const YoutubePlayerPageWidget({
-    super.key,
-    required this.videoTitle,
-    required this.videoId,
-  });
+class FeaturePageWidget extends StatefulWidget {
+  const FeaturePageWidget({super.key});
 
-  final String? videoTitle;
-  final String? videoId;
-
-  static String routeName = 'youtubePlayerPage';
-  static String routePath = 'youtubePlayerPage';
+  static String routeName = 'featurePage';
+  static String routePath = 'featurePage';
 
   @override
-  State<YoutubePlayerPageWidget> createState() => _YoutubePlayerPageWidgetState();
+  State<FeaturePageWidget> createState() => _FeaturePageWidgetState();
 }
 
-class _YoutubePlayerPageWidgetState extends State<YoutubePlayerPageWidget> {
+class _FeaturePageWidgetState extends State<FeaturePageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
 
-    logFirebaseEvent('screen_view', parameters: {'screen_name': 'youtubePlayerPage'});
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'featurePage'});
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
@@ -70,7 +63,7 @@ class _YoutubePlayerPageWidgetState extends State<YoutubePlayerPageWidget> {
                   },
                 ),
                 title: Text(
-                  widget.videoTitle!,
+                  'Sugestão de Melhoria',
                   style: FlutterFlowTheme.of(context).titleLarge.override(
                         fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
                         color: FlutterFlowTheme.of(context).info,
@@ -87,17 +80,32 @@ class _YoutubePlayerPageWidgetState extends State<YoutubePlayerPageWidget> {
           top: true,
           child: Column(
             mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Expanded(
-                child: SizedBox(
+              Align(
+                alignment: const AlignmentDirectional(0.0, -1.0),
+                child: Container(
                   width: double.infinity,
-                  height: MediaQuery.sizeOf(context).height * 0.8,
-                  child: custom_widgets.YouTubePlayerWidget(
-                    width: double.infinity,
-                    height: MediaQuery.sizeOf(context).height * 0.8,
-                    videoUrl: 'https://www.youtube.com/watch?v=${widget.videoId}',
-                    autoPlay: false,
-                    showControls: false,
+                  height: MediaQuery.sizeOf(context).height * 0.82,
+                  decoration: BoxDecoration(
+                    color: FlutterFlowTheme.of(context).primaryBackground,
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(0.0),
+                      bottomRight: Radius.circular(0.0),
+                      topLeft: Radius.circular(16.0),
+                      topRight: Radius.circular(16.0),
+                    ),
+                  ),
+                  child: const Align(
+                    alignment: AlignmentDirectional(0.0, -1.0),
+                    child: FlutterFlowWebView(
+                      content:
+                          'https://docs.google.com/forms/d/e/1FAIpQLSc8ustIoyimgkNkTtHR1djTF1duIPw182qAP3IFeZuRDbRjzQ/viewform',
+                      bypass: true,
+                      height: 971.0,
+                      verticalScroll: true,
+                      horizontalScroll: false,
+                    ),
                   ),
                 ),
               ),

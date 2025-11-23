@@ -22,9 +22,11 @@ class EntrevistasListViewModel extends ChangeNotifier {
     isLoadingChannel = true;
     notifyListeners();
     try {
+      print('EntrevistasListViewModel: Loading channel info...');
       channel = await _repository.getCanalBrahmaKumaris();
+      print('EntrevistasListViewModel: Channel loaded - ${channel?.title ?? "null"}');
     } catch (error) {
-      // Handle error
+      print('EntrevistasListViewModel: Error loading channel - $error');
     } finally {
       isLoadingChannel = false;
       notifyListeners();
@@ -33,7 +35,9 @@ class EntrevistasListViewModel extends ChangeNotifier {
 
   Future<void> _fetchPage(String? pageKey) async {
     try {
+      print('EntrevistasListViewModel: Fetching page with key: $pageKey');
       final newItems = await _repository.getVideosEntrevistas(pageToken: pageKey);
+      print('EntrevistasListViewModel: Received ${newItems.videos.length} videos, total: ${newItems.totalResults}');
 
       if (pageKey == null) {
         totalVideos = newItems.totalResults;
@@ -47,6 +51,7 @@ class EntrevistasListViewModel extends ChangeNotifier {
         pagingController.appendPage(newItems.videos, newItems.nextPageToken);
       }
     } catch (error) {
+      print('EntrevistasListViewModel: Error fetching page - $error');
       pagingController.error = error;
     }
   }

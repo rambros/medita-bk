@@ -1,11 +1,10 @@
 import '/custom_code/actions/index.dart' as actions;
 import 'package:provider/provider.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'auth/firebase_auth/firebase_user_provider.dart';
 import 'auth/firebase_auth/auth_util.dart';
 
@@ -16,9 +15,9 @@ import 'flutter_flow/flutter_flow_util.dart';
 import 'flutter_flow/internationalization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
+
+import 'dart:ui' as ui;
 
 import '/data/repositories/agenda_repository.dart';
 import '/ui/agenda/agenda_home_page/view_model/agenda_home_view_model.dart';
@@ -35,8 +34,13 @@ import '/ui/video/entrevistas_list_page/view_model/entrevistas_list_view_model.d
 import '/ui/video/canal_viver_list_page/view_model/canal_viver_list_view_model.dart';
 import '/ui/video/youtube_player_page/view_model/youtube_player_view_model.dart';
 
-import '/data/repositories/user_repository.dart';
-import '/ui/config/about_authors_page/view_model/about_authors_view_model.dart';
+import 'data/repositories/user_repository.dart';
+import 'data/repositories/auth_repository.dart';
+import 'ui/config/about_authors_page/view_model/about_authors_view_model.dart';
+import 'ui/config/config_page/view_model/config_view_model.dart';
+import 'package:medita_b_k/ui/config/edit_profile_page/view_model/edit_profile_view_model.dart';
+import 'package:medita_b_k/ui/config/settings_page/view_model/settings_view_model.dart';
+import 'package:medita_b_k/ui/config/delete_account_page/view_model/delete_account_view_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -103,7 +107,27 @@ void main() async {
         update: (context, repo, viewModel) => viewModel ?? YoutubePlayerViewModel(repo),
       ),
       // User Repository and ViewModels
-      Provider(create: (_) => UserRepository()),
+      Provider(create: (context) => UserRepository()),
+      Provider(create: (context) => AuthRepository()),
+      ChangeNotifierProxyProvider<AuthRepository, ConfigViewModel>(
+        create: (context) => ConfigViewModel(
+          authRepository: Provider.of<AuthRepository>(context, listen: false),
+        ),
+        update: (context, authRepository, previous) => ConfigViewModel(authRepository: authRepository),
+      ),
+      ChangeNotifierProxyProvider<UserRepository, EditProfileViewModel>(
+        create: (context) => EditProfileViewModel(
+          userRepository: Provider.of<UserRepository>(context, listen: false),
+        ),
+        update: (context, userRepository, previous) => previous ?? EditProfileViewModel(userRepository: userRepository),
+      ),
+      ChangeNotifierProvider(create: (context) => SettingsViewModel()),
+      ChangeNotifierProxyProvider<AuthRepository, DeleteAccountViewModel>(
+        create: (context) =>
+            DeleteAccountViewModel(authRepository: Provider.of<AuthRepository>(context, listen: false)),
+        update: (context, authRepository, previous) =>
+            previous ?? DeleteAccountViewModel(authRepository: authRepository),
+      ),
       ChangeNotifierProxyProvider<UserRepository, AboutAuthorsViewModel>(
         create: (context) => AboutAuthorsViewModel(repository: context.read<UserRepository>()),
         update: (context, repo, viewModel) => viewModel ?? AboutAuthorsViewModel(repository: repo),
@@ -123,11 +147,11 @@ class MyApp extends StatefulWidget {
   static _MyAppState of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>()!;
 }
 
-class MyAppScrollBehavior extends MaterialScrollBehavior {
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
   @override
-  Set<PointerDeviceKind> get dragDevices => {
-        PointerDeviceKind.touch,
-        PointerDeviceKind.mouse,
+  Set<ui.PointerDeviceKind> get dragDevices => {
+        ui.PointerDeviceKind.touch,
+        ui.PointerDeviceKind.mouse,
       };
 }
 
@@ -189,7 +213,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'MeditaBK',
-      scrollBehavior: MyAppScrollBehavior(),
+      scrollBehavior: MyCustomScrollBehavior(),
       localizationsDelegates: const [
         FFLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,

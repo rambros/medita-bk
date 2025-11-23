@@ -14,9 +14,13 @@ class VideoRepository {
   }
 
   Future<Channel?> getCanalBrahmaKumaris() async {
+    print('VideoRepository: Calling getCanalBrahmaKumaris');
     final response = await YouTubeGroup.canalBrahmaKumarisCall.call();
+    print('VideoRepository: BrahmaKumaris API response succeeded: ${response.succeeded}');
+    print('VideoRepository: BrahmaKumaris API status code: ${response.statusCode}');
     if (response.succeeded) {
       final items = response.jsonBody['items'] as List?;
+      print('VideoRepository: BrahmaKumaris items count: ${items?.length ?? 0}');
       if (items != null && items.isNotEmpty) {
         return Channel.fromJson(items.first);
       }
@@ -30,7 +34,14 @@ class VideoRepository {
   }
 
   Future<VideoListResponse> getVideosEntrevistas({String? pageToken}) async {
+    print('VideoRepository: Calling getVideosEntrevistas with pageToken: $pageToken');
     final response = await YouTubeGroup.videosEntrevistasCall.call(pageToken: pageToken);
+    print('VideoRepository: Entrevistas API response succeeded: ${response.succeeded}');
+    print('VideoRepository: Entrevistas API status code: ${response.statusCode}');
+    if (response.succeeded) {
+      final items = response.jsonBody['items'] as List?;
+      print('VideoRepository: Entrevistas items count: ${items?.length ?? 0}');
+    }
     return _parseVideoListResponse(response);
   }
 
