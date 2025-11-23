@@ -4,7 +4,7 @@ export '/modules/authentication/sign_up/sign_up_widget.dart' show SignUpWidget;
 export '/modules/config/edit_profile_page/edit_profile_page_widget.dart' show EditProfilePageWidget;
 export '/modules/authentication/forgot_password/forgot_password_widget.dart' show ForgotPasswordWidget;
 export '/modules/home_page/home_page_widget.dart' show HomePageWidget;
-export '/modules/user/profile_page/profile_page_widget.dart' show ProfilePageWidget;
+export 'ui/config/profile_page/profile_page.dart' show ProfilePageWidget;
 export '/modules/meditation/meditation_home_page/meditation_home_page_widget.dart' show MeditationHomePageWidget;
 export '/modules/notification/notification_list_page/notification_list_page_widget.dart'
     show NotificationListPageWidget;
@@ -16,16 +16,16 @@ export '/modules/config/app_review_page/app_review_page_widget.dart' show AppRev
 export '/modules/config/settings_page/settings_page_widget.dart' show SettingsPageWidget;
 export '/modules/config/invite_page/invite_page_widget.dart' show InvitePageWidget;
 export '/modules/config/delete_account_page/delete_account_page_widget.dart' show DeleteAccountPageWidget;
-export '/modules/config/about_authors_page/about_authors_page_widget.dart' show AboutAuthorsPageWidget;
+export '/ui/config/about_authors_page/about_authors_page.dart' show AboutAuthorsPageWidget;
 export '/modules/config/alarm_page/alarm_page_widget.dart' show AlarmPageWidget;
 export '/modules/meditation/meditation_details_page/meditation_details_page_widget.dart'
     show MeditationDetailsPageWidget;
 export '/modules/meditation/meditation_play_page/meditation_play_page_widget.dart' show MeditationPlayPageWidget;
 export '/modules/meditation/meditation_list_page/meditation_list_page_widget.dart' show MeditationListPageWidget;
-export '/modules/video/video_home_page/video_home_page_widget.dart' show VideoHomePageWidget;
-export '/modules/video/youtube_player_page/youtube_player_page_widget.dart' show YoutubePlayerPageWidget;
-export '/modules/video/congresso_list_page/congresso_list_page_widget.dart' show CongressoListPageWidget;
-export '/modules/video/entrevistas_list_page/entrevistas_list_page_widget.dart' show EntrevistasListPageWidget;
+export '/ui/video/video_home_page/video_home_page.dart' show VideoHomePageWidget;
+export '/ui/video/youtube_player_page/youtube_player_page.dart' show YoutubePlayerPageWidget;
+export '/ui/video/congresso_list_page/congresso_list_page.dart' show CongressoListPageWidget;
+export '/ui/video/entrevistas_list_page/entrevistas_list_page.dart' show EntrevistasListPageWidget;
 export '/ui/agenda/agenda_home_page/agenda_home_page.dart' show AgendaHomePage;
 export '/modules/mensagens/mensagens_home_page/mensagens_home_page_widget.dart' show MensagensHomePageWidget;
 export '/ui/agenda/agenda_list_page/agenda_list_page.dart' show AgendaListPage;
@@ -53,8 +53,8 @@ export '/modules/playlist/playlist_edit_audios_page/playlist_edit_audios_page_wi
 export '/modules/playlist/playlist_play_page_old/playlist_play_page_old_widget.dart' show PlaylistPlayPageOldWidget;
 export '/modules/mensagens/mensagens_semantic_search_page/mensagens_semantic_search_page_widget.dart'
     show MensagensSemanticSearchPageWidget;
-export '/modules/video/canal_viver_list_page/canal_viver_list_page_widget.dart' show CanalViverListPageWidget;
-export '/modules/video/palestras_list_page/palestras_list_page_widget.dart' show PalestrasListPageWidget;
+export '/ui/video/canal_viver_list_page/canal_viver_list_page.dart' show CanalViverListPageWidget;
+export '/ui/video/palestras_list_page/palestras_list_page.dart' show PalestrasListPageWidget;
 export '/modules/config/support_page/support_page_widget.dart' show SupportPageWidget;
 export '/modules/config/feedback_page/feedback_page_widget.dart' show FeedbackPageWidget;
 export '/modules/config/feature_page/feature_page_widget.dart' show FeaturePageWidget;
@@ -76,4 +76,3 @@ export '/modules/desafio/desafio_onboarding_page/desafio_onboarding_page_widget.
 export '/modules/desafio/diario_meditacao_page/diario_meditacao_page_widget.dart' show DiarioMeditacaoPageWidget;
 export '/modules/desafio/diario_detalhes_page/diario_detalhes_page_widget.dart' show DiarioDetalhesPageWidget;
 export '/modules/desafio/conquistas_page/conquistas_page_widget.dart' show ConquistasPageWidget;
-export '/modules/video/youtube_player_page_copy/youtube_player_page_copy_widget.dart' show YoutubePlayerPageCopyWidget;

@@ -112,7 +112,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             FFRoute(
               name: HomePageWidget.routeName,
               path: HomePageWidget.routePath,
-              builder: (context, params) => params.isEmpty ? NavBarPage(initialPage: 'homePage') : const HomePageWidget(),
+              builder: (context, params) =>
+                  params.isEmpty ? NavBarPage(initialPage: 'homePage') : const HomePageWidget(),
             ),
             FFRoute(
               name: ProfilePageWidget.routeName,
@@ -544,20 +545,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: ConquistasPageWidget.routeName,
               path: ConquistasPageWidget.routePath,
               builder: (context, params) => const ConquistasPageWidget(),
-            ),
-            FFRoute(
-              name: YoutubePlayerPageCopyWidget.routeName,
-              path: YoutubePlayerPageCopyWidget.routePath,
-              builder: (context, params) => YoutubePlayerPageCopyWidget(
-                videoTitle: params.getParam(
-                  'videoTitle',
-                  ParamType.String,
-                ),
-                videoId: params.getParam(
-                  'videoId',
-                  ParamType.String,
-                ),
-              ),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ),

@@ -25,7 +25,7 @@ Future showPickerNumberFormatValue(
   var seconds = (duration % 60).truncate();
   var minutes = (duration / 60).truncate();
   var maxMinutes = (fileType == FileType.silence) ? 59 : minutes;
-  var maxSeconds = (fileType == FileType.silence) ? 59 : minutes;
+  var maxSeconds = (fileType == FileType.silence) ? 59 : seconds;
   Picker(
       footer: const Text(
         'Minutos      Segundos',
@@ -308,17 +308,17 @@ class Picker {
         builder: (BuildContext context) {
           final actions = <Widget>[];
           final theme = Theme.of(context);
-          final cancel = PickerWidgetState._buildButton(
+          final cancelButton = PickerWidgetState._buildButton(
               context, cancelText, cancel, cancelTextStyle, true, theme, () {
             Navigator.pop<List<int>>(context, null);
             if (onCancel != null) {
               onCancel!();
             }
           });
-          if (cancel != null) {
-            actions.add(cancel);
+          if (cancelButton != null) {
+            actions.add(cancelButton);
           }
-          final confirm = PickerWidgetState._buildButton(
+          final confirmButton = PickerWidgetState._buildButton(
               context, confirmText, confirm, confirmTextStyle, false, theme,
               () async {
             if (onConfirmBefore != null &&
@@ -330,8 +330,8 @@ class Picker {
               onConfirm!(this, selecteds);
             }
           });
-          if (confirm != null) {
-            actions.add(confirm);
+          if (confirmButton != null) {
+            actions.add(confirmButton);
           }
           return AlertDialog(
             key: key ?? const Key('picker-dialog'),
@@ -712,13 +712,13 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
       },
       onSelectedItemChanged: (int index) {
         if (length <= 0) return;
-        var index = index % length;
+        final selectedIndex = index % length;
         if (picker.printDebug) {
-          print("onSelectedItemChanged. col: $i, row: $index");
+          print("onSelectedItemChanged. col: $i, row: $selectedIndex");
         }
-        picker.selecteds[i] = index;
+        picker.selecteds[i] = selectedIndex;
         updateScrollController(i);
-        adapter.doSelect(i, index);
+        adapter.doSelect(i, selectedIndex);
         if (picker.changeToFirst) {
           for (int j = i + 1; j < picker.selecteds.length; j++) {
             picker.selecteds[j] = 0;

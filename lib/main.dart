@@ -27,6 +27,17 @@ import '/ui/agenda/event_list_page/view_model/event_list_view_model.dart';
 import '/ui/agenda/event_details_page/view_model/event_details_view_model.dart';
 import '/ui/agenda/agenda_home_page/agenda_home_page.dart';
 
+import '/data/repositories/video_repository.dart';
+import '/ui/video/video_home_page/view_model/video_home_view_model.dart';
+import '/ui/video/palestras_list_page/view_model/palestras_list_view_model.dart';
+import '/ui/video/congresso_list_page/view_model/congresso_list_view_model.dart';
+import '/ui/video/entrevistas_list_page/view_model/entrevistas_list_view_model.dart';
+import '/ui/video/canal_viver_list_page/view_model/canal_viver_list_view_model.dart';
+import '/ui/video/youtube_player_page/view_model/youtube_player_view_model.dart';
+
+import '/data/repositories/user_repository.dart';
+import '/ui/config/about_authors_page/view_model/about_authors_view_model.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoRouter.optionURLReflectsImperativeAPIs = true;
@@ -66,6 +77,37 @@ void main() async {
         update: (context, repo, viewModel) => viewModel ?? EventListViewModel(repository: repo),
       ),
       ChangeNotifierProvider(create: (_) => EventDetailsViewModel()),
+      Provider(create: (_) => VideoRepository()),
+      ChangeNotifierProxyProvider<VideoRepository, VideoHomeViewModel>(
+        create: (context) => VideoHomeViewModel(context.read<VideoRepository>()),
+        update: (context, repo, viewModel) => viewModel ?? VideoHomeViewModel(repo),
+      ),
+      ChangeNotifierProxyProvider<VideoRepository, PalestrasListViewModel>(
+        create: (context) => PalestrasListViewModel(context.read<VideoRepository>()),
+        update: (context, repo, viewModel) => viewModel ?? PalestrasListViewModel(repo),
+      ),
+      ChangeNotifierProxyProvider<VideoRepository, CongressoListViewModel>(
+        create: (context) => CongressoListViewModel(context.read<VideoRepository>()),
+        update: (context, repo, viewModel) => viewModel ?? CongressoListViewModel(repo),
+      ),
+      ChangeNotifierProxyProvider<VideoRepository, EntrevistasListViewModel>(
+        create: (context) => EntrevistasListViewModel(context.read<VideoRepository>()),
+        update: (context, repo, viewModel) => viewModel ?? EntrevistasListViewModel(repo),
+      ),
+      ChangeNotifierProxyProvider<VideoRepository, CanalViverListViewModel>(
+        create: (context) => CanalViverListViewModel(context.read<VideoRepository>()),
+        update: (context, repo, viewModel) => viewModel ?? CanalViverListViewModel(repo),
+      ),
+      ChangeNotifierProxyProvider<VideoRepository, YoutubePlayerViewModel>(
+        create: (context) => YoutubePlayerViewModel(context.read<VideoRepository>()),
+        update: (context, repo, viewModel) => viewModel ?? YoutubePlayerViewModel(repo),
+      ),
+      // User Repository and ViewModels
+      Provider(create: (_) => UserRepository()),
+      ChangeNotifierProxyProvider<UserRepository, AboutAuthorsViewModel>(
+        create: (context) => AboutAuthorsViewModel(repository: context.read<UserRepository>()),
+        update: (context, repo, viewModel) => viewModel ?? AboutAuthorsViewModel(repository: repo),
+      ),
     ],
     child: MyApp(),
   ));

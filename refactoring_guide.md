@@ -754,4 +754,60 @@ void main() {
 
 ---
 
-**Última atualização:** 2025-11-19
+**Última atualização:** 2025-11-23
+
+---
+
+## 📖 Case Study: Video Module Restructuring
+
+The video module was successfully refactored from the old FlutterFlow structure to MVVM:
+
+### Before
+```
+lib/
+  modules/
+    video/
+      video_home_page/
+        video_home_page_widget.dart
+        video_home_view_model.dart
+      palestras_list_page/
+        palestras_list_page_widget.dart
+        palestras_list_view_model.dart
+  backend/
+    repositories/
+      video_repository.dart
+    model/
+      video/
+        video_model.dart
+```
+
+### After
+```
+lib/
+  ui/
+    video/
+      video_home_page/
+        video_home_page.dart
+        view_model/
+          video_home_view_model.dart
+      palestras_list_page/
+        palestras_list_page.dart
+        view_model/
+          palestras_list_view_model.dart
+  data/
+    repositories/
+      video_repository.dart
+  domain/
+    models/
+      video/
+        video_model.dart
+```
+
+### Key Changes
+1. Moved all widgets from `lib/modules/video/` to `lib/ui/video/`
+2. Renamed widget files from `*_widget.dart` to `.dart` (e.g., `video_home_page_widget.dart` → `video_home_page.dart`)
+3. Moved ViewModels to `view_model/` subdirectories within each page folder
+4. Moved `VideoRepository` from `lib/backend/repositories/` to `lib/data/repositories/`
+5. Moved models from `lib/backend/model/video/` to `lib/domain/models/video/`
+6. Updated all imports in moved files and external references
+7. Deleted old `lib/modules/video/` directory

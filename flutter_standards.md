@@ -64,6 +64,28 @@ lib/
   main_development.dart
 ```
 
+**Example: Video Module**
+```text
+lib/
+  ui/
+    video/
+      video_home_page/
+        video_home_page.dart
+        view_model/
+          video_home_view_model.dart
+      palestras_list_page/
+        palestras_list_page.dart
+        view_model/
+          palestras_list_view_model.dart
+  domain/
+    models/
+      video/
+        video_model.dart
+  data/
+    repositories/
+      video_repository.dart
+```
+
 ---
 
 3. UI (View + ViewModel + Commands)
