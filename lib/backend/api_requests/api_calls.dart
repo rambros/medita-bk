@@ -124,6 +124,7 @@ class VideosCongressoCall {
     String? maxResults = '45',
     String? pageToken = '',
   }) async {
+    pageToken ??= '';
     final baseUrl = YouTubeGroup.getBaseUrl();
 
     return ApiManager.instance.makeApiCall(
@@ -136,7 +137,7 @@ class VideosCongressoCall {
         'part': "snippet, contentDetails",
         'playlistId': "PL_imquHBp-AfvhiU7po3bYwdrPdsdWcIx",
         'maxResults': maxResults,
-        'pageToken': pageToken,
+        if (pageToken.isNotEmpty) 'pageToken': pageToken,
       },
       returnBody: true,
       encodeBodyUtf8: false,
@@ -167,6 +168,7 @@ class VideosEntrevistasCall {
     String? maxResults = '45',
     String? pageToken = '',
   }) async {
+    pageToken ??= '';
     final baseUrl = YouTubeGroup.getBaseUrl();
 
     return ApiManager.instance.makeApiCall(
@@ -179,7 +181,7 @@ class VideosEntrevistasCall {
         'part': "snippet, contentDetails",
         'playlistId': "PL_imquHBp-Adfd5zarNNRqLCB3Fto89eM",
         'maxResults': maxResults,
-        'pageToken': pageToken,
+        if (pageToken.isNotEmpty) 'pageToken': pageToken,
       },
       returnBody: true,
       encodeBodyUtf8: false,
@@ -210,6 +212,7 @@ class VideosPalestrasCall {
     String? maxResults = '45',
     String? pageToken = '',
   }) async {
+    pageToken ??= '';
     final baseUrl = YouTubeGroup.getBaseUrl();
 
     return ApiManager.instance.makeApiCall(
@@ -222,7 +225,7 @@ class VideosPalestrasCall {
         'part': "snippet, contentDetails",
         'playlistId': "PL_imquHBp-AciFsIWSmUqtfUKr3Zp_cVD",
         'maxResults': maxResults,
-        'pageToken': pageToken,
+        if (pageToken.isNotEmpty) 'pageToken': pageToken,
       },
       returnBody: true,
       encodeBodyUtf8: false,
@@ -250,7 +253,7 @@ class VideosPalestrasCall {
 
 class GetNumVideosPalestrasCall {
   Future<ApiCallResponse> call({
-    String? maxResults = '0',
+    String? maxResults = '1',
     String? pageToken = '',
   }) async {
     final baseUrl = YouTubeGroup.getBaseUrl();
@@ -296,6 +299,7 @@ class VideosMeditationsCall {
     String? maxResults = '45',
     String? pageToken = '',
   }) async {
+    pageToken ??= '';
     final baseUrl = YouTubeGroup.getBaseUrl();
 
     return ApiManager.instance.makeApiCall(
@@ -308,7 +312,7 @@ class VideosMeditationsCall {
         'part': "snippet, contentDetails",
         'playlistId': "PL_imquHBp-AflY6p2_knipuxmRPwYUOny",
         'maxResults': maxResults,
-        'pageToken': pageToken,
+        if (pageToken.isNotEmpty) 'pageToken': pageToken,
       },
       returnBody: true,
       encodeBodyUtf8: false,

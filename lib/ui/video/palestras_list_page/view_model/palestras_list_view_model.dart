@@ -34,14 +34,19 @@ class PalestrasListViewModel extends ChangeNotifier {
 
   Future<void> _fetchPage(String? pageKey) async {
     try {
+      print('PalestrasListViewModel: Fetching page with pageKey: $pageKey');
       final newItems = await _repository.getVideosPalestras(pageToken: pageKey);
+      print('PalestrasListViewModel: Received ${newItems.videos.length} videos');
+      print('PalestrasListViewModel: Next page token: ${newItems.nextPageToken}');
       final isLastPage = newItems.nextPageToken == null;
       if (isLastPage) {
         pagingController.appendLastPage(newItems.videos);
       } else {
         pagingController.appendPage(newItems.videos, newItems.nextPageToken);
       }
-    } catch (error) {
+    } catch (error, stackTrace) {
+      print('PalestrasListViewModel: Error fetching page: $error');
+      print('PalestrasListViewModel: Stack trace: $stackTrace');
       pagingController.error = error;
     }
   }

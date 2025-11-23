@@ -35,7 +35,14 @@ class VideoRepository {
   }
 
   Future<VideoListResponse> getVideosPalestras({String? pageToken}) async {
+    print('VideoRepository: Calling getVideosPalestras with pageToken: $pageToken');
     final response = await YouTubeGroup.videosPalestrasCall.call(pageToken: pageToken);
+    print('VideoRepository: Palestras API response succeeded: ${response.succeeded}');
+    print('VideoRepository: Palestras API status code: ${response.statusCode}');
+    if (response.succeeded) {
+      final items = response.jsonBody['items'] as List?;
+      print('VideoRepository: Palestras items count: ${items?.length ?? 0}');
+    }
     return _parseVideoListResponse(response);
   }
 
