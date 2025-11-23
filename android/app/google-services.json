@@ -1,0 +1,139 @@
+{
+  "project_info": {
+    "project_number": "12988405371",
+    "firebase_url": "https://meditabk2020.firebaseio.com",
+    "project_id": "meditabk2020",
+    "storage_bucket": "meditabk2020.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:12988405371:android:7dc2c54bfd2da8c2d3b4de",
+        "android_client_info": {
+          "package_name": "app.brahmakumaris.meditabk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "12988405371-0er298fkefikuheqmo00vc6m2s9vbbh9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.brahmakumaris.meditabk",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "12988405371-2v77v33va0cl2ehrnl8bvrq7j21hhv7o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.brahmakumaris.meditabk",
+            "certificate_hash": "513c354a0b5873f9c6069fda477c9ba9f6965a3e"
+          }
+        },
+        {
+          "client_id": "12988405371-9b5811joorb6281v1gb2u588enrf8f37.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.brahmakumaris.meditabk",
+            "certificate_hash": "ec5c00c61bed495d54e361d4cc36e37370199eb0"
+          }
+        },
+        {
+          "client_id": "12988405371-j5d4kheaj13uiviemfaa0l1naji6nuk2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.brahmakumaris.meditabk",
+            "certificate_hash": "e7df0339ccd3848882ed18b3318a4de35d264cdb"
+          }
+        },
+        {
+          "client_id": "12988405371-l7p7og63p1sil13pu7nundijss84eji7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.brahmakumaris.meditabk",
+            "certificate_hash": "abe2f622053704ea4367f7ee6aa8d01bb0c9280c"
+          }
+        },
+        {
+          "client_id": "12988405371-sia7u1cjavbct7l33disvuboe2elm259.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.brahmakumaris.meditabk",
+            "certificate_hash": "d5e2c242734af51b6119025ad7b4060a71c98f59"
+          }
+        },
+        {
+          "client_id": "12988405371-bi5gpdq62f7k9i6iu2gm15j6a1l54566.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzZl9z_ebhPaa6SB77MhDab2kAtCio7_E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "12988405371-bi5gpdq62f7k9i6iu2gm15j6a1l54566.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "12988405371-1ofos0qoihnu71285b2s2v4m581vpqj7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.brahmakumaris.meditabkadmin"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:12988405371:android:467b6f1f3111cd03d3b4de",
+        "android_client_info": {
+          "package_name": "org.brahmakumaris.meditabkadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "12988405371-khlfu9ocm992dnjt4aolm08am3qa54pl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.brahmakumaris.meditabkadmin",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "12988405371-bi5gpdq62f7k9i6iu2gm15j6a1l54566.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzZl9z_ebhPaa6SB77MhDab2kAtCio7_E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "12988405371-bi5gpdq62f7k9i6iu2gm15j6a1l54566.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "12988405371-1ofos0qoihnu71285b2s2v4m581vpqj7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.brahmakumaris.meditabkadmin"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

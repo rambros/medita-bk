@@ -1,0 +1,255 @@
+import 'dart:convert';
+import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart' as timeago;
+import 'lat_lng.dart';
+import 'place.dart';
+import 'uploaded_file.dart';
+import '/backend/backend.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '/backend/schema/structs/index.dart';
+import '/backend/schema/enums/enums.dart';
+import '/auth/firebase_auth/auth_util.dart';
+
+String transformMilliseconds(int milliseconds) {
+  var hundreds = (milliseconds / 10).truncate();
+  var seconds = (hundreds / 100).truncate();
+  var minutes = (seconds / 60).truncate();
+
+  var minuteStr = (minutes % 60).toString().padLeft(2, '0');
+  var secondStr = (seconds % 60).toString().padLeft(2, '0');
+  return '$minuteStr:$secondStr';
+}
+
+String getTodayDateFormated() {
+  DateTime now = DateTime.now();
+  String formattedDate = DateFormat('yyyy-MM-dd').format(now); // dd/MM/yyyy
+  return formattedDate;
+}
+
+String getNotificationImage(String? tipo) {
+  switch (tipo) {
+    case 'Nova Meditação':
+      return 'https://firebasestorage.googleapis.com/v0/b/meditabk2020.appspot.com/o/app_images%2Fstar_escutando_small.png?alt=media&token=5185952f-bd8e-4c79-8125-07b94ac0e23c';
+    case 'Nova Funcionalidade no App':
+      return 'https://firebasestorage.googleapis.com/v0/b/meditabk2020.appspot.com/o/app_images%2Flogo_meditabk_2020.png?alt=media&token=0d5323dc-2355-4790-b530-31ba5fbbd104';
+    case 'Atividade Especial na Agenda':
+      return 'https://firebasestorage.googleapis.com/v0/b/meditabk2020.appspot.com/o/app_images%2Fstar_agenda_small.png?alt=media&token=54ec3310-f0c5-4f57-9405-a88edb81c82f';
+    case 'Aviso Especial':
+      return 'https://firebasestorage.googleapis.com/v0/b/meditabk2020.appspot.com/o/app_images%2Fstar_small.png?alt=media&token=e2375a94-b069-4c88-979f-7a3d82f14a68';
+    default:
+      return 'https://firebasestorage.googleapis.com/v0/b/meditabk2020.appspot.com/o/app_images%2Fstar_small.png?alt=media&token=e2375a94-b069-4c88-979f-7a3d82f14a68';
+  }
+}
+
+String? showTime(DateTime selectedTime) {
+  return DateFormat('HH:mm').format(selectedTime);
+}
+
+String? dataExtenso(String date) {
+  var mouths = [
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro'
+  ];
+
+  try {
+    var datatime = DateTime.parse(date);
+    //return "${datatime.day} de ${mouths[datatime.month-1]} de ${datatime.year} às ${datatime.hour}:${datatime.minute}";
+    return '${datatime.day} de ${mouths[datatime.month - 1]} de ${datatime.year}';
+  } catch (e) {
+    return '';
+  }
+}
+
+String commentDate() {
+  return DateFormat('yyyy-MM-dd').format(DateTime.now()).toString();
+}
+
+List<String> getEbooksCompletados(
+  int etapaCompletada,
+  List<String> listaEbooksDesafio21,
+) {
+  List<String> listaEbooks = [];
+  // Definindo quantos brasões adicionar com base na etapa completada
+  int quantidadeEbooks = 0;
+
+  if (etapaCompletada == 7) {
+    quantidadeEbooks = 3;
+  } else if (etapaCompletada >= 3) {
+    quantidadeEbooks = 2;
+  } else if (etapaCompletada >= 1) {
+    quantidadeEbooks = 1;
+  }
+
+  // Adicionando os brasões à lista
+  for (int i = 0; i < quantidadeEbooks; i++) {
+    listaEbooks.add(listaEbooksDesafio21[i]);
+  }
+
+  return listaEbooks;
+}
+
+int getRandom(int lengthList) {
+  var rnd = math.Random();
+  return rnd.nextInt(lengthList);
+}
+
+List<String> getBrasoesCompletados(
+  int etapaCompletada,
+  List<D21BrasaoModelStruct> listaEtapasBrasoes,
+) {
+  List<String> listaBrasoes = [];
+  // Definindo quantos brasões adicionar com base na etapa completada
+  int quantidadeBrasoes = 0;
+
+  if (etapaCompletada == 7) {
+    quantidadeBrasoes = 3;
+  } else if (etapaCompletada >= 3) {
+    quantidadeBrasoes = 2;
+  } else if (etapaCompletada >= 1) {
+    quantidadeBrasoes = 1;
+  }
+
+  // Adicionando os brasões à lista
+  for (int i = 0; i < quantidadeBrasoes; i++) {
+    listaBrasoes.add(listaEtapasBrasoes[i].brasaoUrl);
+  }
+
+  return listaBrasoes;
+}
+
+String transformSeconds(int duration) {
+  var seconds = (duration % 60).truncate();
+  var minutes = (duration / 60).truncate();
+
+  var minuteStr = minutes.toString();
+  var secondStr = (seconds % 60).toString().padLeft(2, '0');
+  return '${minuteStr}min ${secondStr}seg';
+}
+
+String getAudioType(AudioType type) {
+  var tipo = 'Silêncio';
+  switch (type) {
+    case AudioType.meditation:
+      tipo = 'Meditação Guiada';
+      break;
+    case AudioType.instrument:
+      tipo = 'Som de Instrumento';
+      break;
+    case AudioType.music:
+      tipo = 'Música Instrumental';
+      break;
+    case AudioType.device_music:
+      tipo = 'Música no seu aparelho';
+      break;
+    case AudioType.device_music_invalid:
+      tipo = 'Música não encontrada';
+      break;
+    case AudioType.ambient:
+      tipo = 'Som da Natureza';
+      break;
+    case AudioType.silence:
+      tipo = 'Silêncio';
+      break;
+    default:
+  }
+  return tipo;
+}
+
+String? getStringFromAudioPath(String audioPath) {
+  return audioPath;
+}
+
+String? getStringFromImagePath(String imagePath) {
+  return imagePath;
+}
+
+bool completouMandala(
+  int etapa,
+  int diaCompletado,
+) {
+  return (diaCompletado == (etapa * 3)) ? true : false;
+}
+
+String? getURLBrasao(
+  int diaCompletado,
+  List<D21BrasaoModelStruct> listaBrasao,
+) {
+  switch (diaCompletado) {
+    case 3:
+      return listaBrasao[0].brasaoUrl;
+    case 9:
+      return listaBrasao[1].brasaoUrl;
+    case 21:
+      return listaBrasao[2].brasaoUrl;
+    default:
+      return '';
+  }
+}
+
+List<String>? getMandalasCompletadas(
+  int etapaCompletada,
+  List<D21EtapaModelStruct> listaEtapasMandalas,
+) {
+  List<String> listaMandalas = [];
+  var etapa = 0;
+  while (etapa < etapaCompletada) {
+    listaMandalas.add(listaEtapasMandalas[etapa].listaMandalas[3].mandalaUrl);
+    etapa++;
+  }
+  return listaMandalas;
+}
+
+int getDurationSeconds(String duration) {
+  final formatter = DateFormat('mm:ss');
+  var time = formatter.parse(duration);
+  return (time.minute * 60) + (time.second);
+}
+
+int? getDurationPlaylist(List<AudioModelStruct> listAudios) {
+  var duracaoTotal = listAudios.fold(0, (soma, audio) => soma + audio.duration);
+  return duracaoTotal;
+}
+
+String? getURLMandala(
+  int etapa,
+  int diaCompletado,
+  List<D21EtapaModelStruct> listaEtapasMandalas,
+) {
+  if (diaCompletado <= (etapa * 3 - 3)) {
+    return listaEtapasMandalas[etapa - 1].listaMandalas[0].mandalaUrl;
+  } else if (diaCompletado >= (etapa * 3)) {
+    return listaEtapasMandalas[etapa - 1].listaMandalas[3].mandalaUrl;
+  } else {
+    int indice = diaCompletado % 3; //resto
+    return listaEtapasMandalas[etapa - 1].listaMandalas[indice].mandalaUrl;
+  }
+}
+
+bool checkNextDayMeditation(DateTime? dataMeditation) {
+  // create a functionn that receive a datetime in firebase e check if today is one day after
+  if (dataMeditation == null) {
+    return false;
+  }
+
+  final now = DateTime.now();
+  // Remove time component for date comparison
+  final today = DateTime(now.year, now.month, now.day);
+  final compareDate =
+      DateTime(dataMeditation.year, dataMeditation.month, dataMeditation.day);
+
+  return today.difference(compareDate).inDays >= 1;
+}

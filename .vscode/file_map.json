@@ -1,0 +1,349 @@
+{
+  "app_store_review.dart": {
+    "old_identifier_name": "appStoreReview",
+    "new_identifier_name": "appStoreReview",
+    "type": "A",
+    "is_deleted": false,
+    "original_checksum": "5f3aead8cd6fd796c3ac289baf9d01181e5ecbec529b5d550d7a66e190658da5",
+    "current_checksum": "cba3ac01b488d1ecce98d187d0260c87015e4aa326f90794331e8effa60d81c6"
+  },
+  "change_profile_pic.dart": {
+    "old_identifier_name": "changeProfilePic",
+    "new_identifier_name": "changeProfilePic",
+    "type": "A",
+    "is_deleted": false,
+    "original_checksum": "1b20f663af01964544a68d2df8a5db898ee54e1e634f3faef717e621721ad579",
+    "current_checksum": "15b75999508a721aee0a25c76fb5e67332398148599a46bea9466c3851767a6f"
+  },
+  "check_device_audios.dart": {
+    "old_identifier_name": "checkDeviceAudios",
+    "new_identifier_name": "checkDeviceAudios",
+    "type": "A",
+    "is_deleted": false,
+    "original_checksum": "811d340cbc8c37c32943e3e103ce6f837f613e7f1ea078ca60780ba79c489a82",
+    "current_checksum": "4dc81b6285ce5b49070071eca22c0ece030f18c90fea780253052716379139bd"
+  },
+  "convert_json_to_event_list.dart": {
+    "old_identifier_name": "convertJsonToEventList",
+    "new_identifier_name": "convertJsonToEventList",
+    "type": "A",
+    "is_deleted": false,
+    "original_checksum": "4ac24af7cecebe100032cf447cd12dd5acbc9d6b6aa3bb1580afc959a1840164",
+    "current_checksum": "5a69321e6cab8c20e826213561bc1ee8c5cda9b08862c5cce2b0a1d2d5b62989"
+  },
+  "delete_alarm_notification.dart": {
+    "old_identifier_name": "deleteAlarmNotification",
+    "new_identifier_name": "deleteAlarmNotification",
+    "type": "A",
+    "is_deleted": false,
+    "original_checksum": "45711aba51bd9ce58ac07f8001b3059b87db25c3d30b7dd6d59e397f6dbe5a81",
+    "current_checksum": "9d6a11b2800f713b8c4a5c62a4c7384dfeef3896d9e953401ee72ffb3741ceed"
+  },
+  "delete_invalid_device_audios.dart": {
+    "old_identifier_name": "deleteInvalidDeviceAudios",
+    "new_identifier_name": "deleteInvalidDeviceAudios",
+    "type": "A",
+    "is_deleted": false,
+    "original_checksum": "77902961877360b1484297709a87e2e9df250604051d16df05d9cf3d7eb3a1cf",
+    "current_checksum": "10e3cbb8236ece8c1a81cf3c7bf754adb52cfd857f757213a58368c9d4dbeb8f"
+  },
+  "download_file.dart": {
+    "old_identifier_name": "downloadFile",
+    "new_identifier_name": "downloadFile",
+    "type": "A",
+    "is_deleted": false,
+    "original_checksum": "1a3b5cda9f1f4ff4047e05755f9565dd9254a7711517e1a42a3cb34f3fa864f4",
+    "current_checksum": "9ebd1a6c1eacc491c640eff5d1ac33911ceb1962f3c6fc186e328df92141bbe1"
+  },
+  "get_instrument_sounds.dart": {
+    "old_identifier_name": "getInstrumentSounds",
+    "new_identifier_name": "getInstrumentSounds",
+    "type": "A",
+    "is_deleted": false,
+    "original_checksum": "1c64932a71e0caf87e060762d311c9f32ee357334f6027f5d24f1d5431b48161",
+    "current_checksum": "cf15453bbc04421c832df30f94786e510bd35eadbc84ea892fa8aed2d1d5e709"
+  },
+  "get_version_app.dart": {
+    "old_identifier_name": "getVersionApp",
+    "new_identifier_name": "getVersionApp",
+    "type": "A",
+    "is_deleted": false,
+    "original_checksum": "495322571aecc69c354c89151c84b79e9e2f356df8d0e724d9b843a37533bc38",
+    "current_checksum": "420ab9c4f4645643acb953decf47fa4e7e0bcb70e57d118e66a82a2fcf3d4b81"
+  },
+  "in_app_review.dart": {
+    "old_identifier_name": "inAppReview",
+    "new_identifier_name": "inAppReview",
+    "type": "A",
+    "is_deleted": false,
+    "original_checksum": "9f9e510b65192e066d6a4ac7031c4ba3fbec596c7cb06e71a96c8d3baa9d3e0e",
+    "current_checksum": "462400fcd0955da78f240d6d3b80b9bf5c7c144b85835492c311dc430d0a254c"
+  },
+  "init_audio_player_controller.dart": {
+    "old_identifier_name": "initAudioPlayerController",
+    "new_identifier_name": "initAudioPlayerController",
+    "type": "A",
+    "is_deleted": false,
+    "original_checksum": "89b351d2643383339ef87b2f9557101b814d6aedbe170869c340c00a21232e7c",
+    "current_checksum": "c6c3b22c4269d40042c48fea31551d504e66d7bf47e84ff1869229f8ad72e468"
+  },
+  "init_audio_service.dart": {
+    "old_identifier_name": "initAudioService",
+    "new_identifier_name": "initAudioService",
+    "type": "A",
+    "is_deleted": false,
+    "original_checksum": "322a2a1bf9ddde46fbee2354d5794c9b76157472ac624805075f49ad4d5c41e0",
+    "current_checksum": "22b8dbff54cee4255a78b7f809e276cbe5db93d0f60ae0ed357aee5d27ff3b43"
+  },
+  "initialize_notification_plugin.dart": {
+    "old_identifier_name": "initializeNotificationPlugin",
+    "new_identifier_name": "initializeNotificationPlugin",
+    "type": "A",
+    "is_deleted": false,
+    "original_checksum": "4d3d3823047bdf1460e7cb805df5ba0cc51335534b46513722572e4c9da028cc",
+    "current_checksum": "755994bc6663ad807804cc2469af586154b9f812781f93b914122ea31301115c"
+  },
+  "initialize_time_zone.dart": {
+    "old_identifier_name": "initializeTimeZone",
+    "new_identifier_name": "initializeTimeZone",
+    "type": "A",
+    "is_deleted": false,
+    "original_checksum": "f5b25a2a02d95f42a9085edd0454cd5d6fdd098bcbd614841859c43b395e9a86",
+    "current_checksum": "afcebe5ab63c8acdeabbb4a7afdc40919afa0a5017b03a9719ae31b52e3372e6"
+  },
+  "play_sound.dart": {
+    "old_identifier_name": "playSound",
+    "new_identifier_name": "playSound",
+    "type": "A",
+    "is_deleted": false,
+    "original_checksum": "2fa604aba57a2706ce12e31ebdab6ad16529f2d5f7a5e421d0bdd74e1335878b",
+    "current_checksum": "ebca4fde1ec6d1a9c86db0999aa9779cd282955aaa88c396f3e1a92634d5a28a"
+  },
+  "reorder_items.dart": {
+    "old_identifier_name": "reorderItems",
+    "new_identifier_name": "reorderItems",
+    "type": "A",
+    "is_deleted": false,
+    "original_checksum": "68ce0e8f2534eb368db9b10f75e5fd46e61c3a7be56f85db356adf2a8316f936",
+    "current_checksum": "8d5974a1968e39d02cccbabd92a987639ba5a5990af66217250f62700e9c3994"
+  },
+  "schedule_alarm.dart": {
+    "old_identifier_name": "scheduleAlarm",
+    "new_identifier_name": "scheduleAlarm",
+    "type": "A",
+    "is_deleted": false,
+    "original_checksum": "46780f201f5a4480a6c55bb8fda9d2789840bb8586270f0a9fee9bf24e12238f",
+    "current_checksum": "d5a4feb6d7a0558a2bb7ad57ff1575e464b1bcb1520e72561afdbbd4261e68a7"
+  },
+  "select_audio_file.dart": {
+    "old_identifier_name": "selectAudioFile",
+    "new_identifier_name": "selectAudioFile",
+    "type": "A",
+    "is_deleted": false,
+    "original_checksum": "353ef77920de0e01b2f4ed903ffe684ad0475a61844c66046f49d8066e803cea",
+    "current_checksum": "42e5f3b577fceda3013cfcf0a6542a731f7c342edde59c549edb0c1f9cc92103"
+  },
+  "share_image_and_text.dart": {
+    "old_identifier_name": "shareImageAndText",
+    "new_identifier_name": "shareImageAndText",
+    "type": "A",
+    "is_deleted": false,
+    "original_checksum": "8b971ef5fdaeb59892919b29f44436fb5f397b17cfa748b236c4d7d4de137607",
+    "current_checksum": "6d4f67c45f3b65fff3ae8c423ffa5b9838aa36e6fc5e25aeca6a1d1ce480f6eb"
+  },
+  "show_notification.dart": {
+    "old_identifier_name": "showNotification",
+    "new_identifier_name": "showNotification",
+    "type": "A",
+    "is_deleted": false,
+    "original_checksum": "bbb4232242759b10f4d9b55a6995fd84a3ceae96a75c75c2f67a81f231eea0ae",
+    "current_checksum": "19eceb038e67bf384f6cd2f7085ec61c3f127b3c0394decd522b68619f196795"
+  },
+  "show_picker_number_format_value.dart": {
+    "old_identifier_name": "showPickerNumberFormatValue",
+    "new_identifier_name": "showPickerNumberFormatValue",
+    "type": "A",
+    "is_deleted": false,
+    "original_checksum": "2d9904013d48a4fd7ffbba9f530768cda4ebd830a98b5bf9e61be67686d28a82",
+    "current_checksum": "2360d055abd6bc57d4ee444fbda784af0ad525dba468365044eadf10d6b765f9"
+  },
+  "agenda_widget.dart": {
+    "old_identifier_name": "AgendaWidget",
+    "new_identifier_name": "AgendaWidget",
+    "type": "W",
+    "is_deleted": false,
+    "original_checksum": "1fa1db6200f438c0aca2df8543ce2b7c9290e4d2a82087822bf694c6a8140e2f",
+    "current_checksum": "9edd6216eae36ae59a8c99bf05065baeaba5c8ee145cb1c27cd5242423e75069"
+  },
+  "audio_player_widget.dart": {
+    "old_identifier_name": "AudioPlayerWidget",
+    "new_identifier_name": "AudioPlayerWidget",
+    "type": "W",
+    "is_deleted": false,
+    "original_checksum": "9dd3bd331030806e921d780f3f9c8a78d385df6035da0790a0b1124f35b64a16",
+    "current_checksum": "65eb99b028e465054ba10d3f695d0e2f21401f6a0522177931023a8622cbb208"
+  },
+  "clock_widget.dart": {
+    "old_identifier_name": "ClockWidget",
+    "new_identifier_name": "ClockWidget",
+    "type": "W",
+    "is_deleted": false,
+    "original_checksum": "95e24c6c0a44ee6f3db5278c1dabb56d6bca8021fdfbf987b6a5948d47222390",
+    "current_checksum": "f53e725cf9267d1561a475320c1db2a8e2cc1e8ca1607130c8c817586f7057e7"
+  },
+  "confeti_widget.dart": {
+    "old_identifier_name": "ConfetiWidget",
+    "new_identifier_name": "ConfetiWidget",
+    "type": "W",
+    "is_deleted": false,
+    "original_checksum": "27db09295bfcb12e166047279a80f49d2821469fdacef7c340e30398ba6c55da",
+    "current_checksum": "7386383ca63cb3a8a0213bc39e1aa33516a645a2d84646a17c3d6a81e9338ef7"
+  },
+  "daily_statistics_widget.dart": {
+    "old_identifier_name": "DailyStatisticsWidget",
+    "new_identifier_name": "DailyStatisticsWidget",
+    "type": "W",
+    "is_deleted": false,
+    "original_checksum": "859bb27736bc957fab31f7617b2819103572e6ffbc7a8bf702d3c02edaae9760",
+    "current_checksum": "a450737187cc01f5148a998a5bd21b7bf7ab82cf279e8c588893c2edddb44527"
+  },
+  "desafio_diario_widget.dart": {
+    "old_identifier_name": "DesafioDiarioWidget",
+    "new_identifier_name": "DesafioDiarioWidget",
+    "type": "W",
+    "is_deleted": false,
+    "original_checksum": "1bf36e28629b87e49348683f188fc2bc2908c45b8d96a8694e037e2bcd18c77d",
+    "current_checksum": "8b6a9d60c3840577826574ce414a598893c65fe339d738cf2cbff7557c8bb1ec"
+  },
+  "desafio_onboarding_widget.dart": {
+    "old_identifier_name": "DesafioOnboardingWidget",
+    "new_identifier_name": "DesafioOnboardingWidget",
+    "type": "W",
+    "is_deleted": false,
+    "original_checksum": "0538e9777ad9fac721d31cdc7714d9155e6b7abe1efa6d5676c8022b281f58f2",
+    "current_checksum": "06d1db29231db7cb6fd825cd1cc8d978b6858d9e215608c5c10940e3382a3723"
+  },
+  "event_list_widget.dart": {
+    "old_identifier_name": "EventListWidget",
+    "new_identifier_name": "EventListWidget",
+    "type": "W",
+    "is_deleted": false,
+    "original_checksum": "34a63bdab414938ba7c9a0d6090bf2875c5bc3ae32fb038bb0b1c99209d1eef6",
+    "current_checksum": "d612a2b6cf9f7f9ea7a014907659ac7563aa2f83a8b39bbbb2cbae8ab537c605"
+  },
+  "f_f_audio_player_widget.dart": {
+    "old_identifier_name": "FFAudioPlayerWidget",
+    "new_identifier_name": "FFAudioPlayerWidget",
+    "type": "W",
+    "is_deleted": false,
+    "original_checksum": "7eaead8a7befc83705f1c15f5816e3d8dd84869928b062b6ba72de949fb4eacc",
+    "current_checksum": "2cd4dacc2eaab4d935534a4d8688e0caa6cf38d158cef44b7b98c2bc7f3c2de1"
+  },
+  "f_f_desafio_audio_player_widget.dart": {
+    "old_identifier_name": "FFDesafioAudioPlayerWidget",
+    "new_identifier_name": "FFDesafioAudioPlayerWidget",
+    "type": "W",
+    "is_deleted": false,
+    "original_checksum": "4224efdc6eb3dd84a33338792b41559df55cf12041b7061af2dfe9eff1579649",
+    "current_checksum": "d5ee94d5c7296204aa06d5804bc082c4e477b6e9b3e0cd44328cb1bc3fa37792"
+  },
+  "f_f_playlist_player_widget.dart": {
+    "old_identifier_name": "FFPlaylistPlayerWidget",
+    "new_identifier_name": "FFPlaylistPlayerWidget",
+    "type": "W",
+    "is_deleted": false,
+    "original_checksum": "a6af7d01c0379202249915389f0c32b60709dc7c81726ffacbd7be749f9ffe22",
+    "current_checksum": "63efb872451383a3a69244f9d7e6982961fa199a9e2df7131af16ed6e673b078"
+  },
+  "html_display_widget.dart": {
+    "old_identifier_name": "HtmlDisplayWidget",
+    "new_identifier_name": "HtmlDisplayWidget",
+    "type": "W",
+    "is_deleted": false,
+    "original_checksum": "1c6e51e30136afd6de975a8087f4dd09b82c33d018834b4724d998785a34d77b",
+    "current_checksum": "b10c079d5dabaca4011cdd13adf60f5a9d6cf7fd8880e1ecada7c4e4e2e75c57"
+  },
+  "monthly_statistics_widget.dart": {
+    "old_identifier_name": "MonthlyStatisticsWidget",
+    "new_identifier_name": "MonthlyStatisticsWidget",
+    "type": "W",
+    "is_deleted": false,
+    "original_checksum": "1f9a6eaae748669159f83b9c880bbaab0f93158bdac9eccae2534e0aae5789ef",
+    "current_checksum": "de70ccb899741f56c8fd72a51103222c161dcc3a6cbe4d1f13f55e6d170ffa10"
+  },
+  "playlist_player_widget.dart": {
+    "old_identifier_name": "PlaylistPlayerWidget",
+    "new_identifier_name": "PlaylistPlayerWidget",
+    "type": "W",
+    "is_deleted": false,
+    "original_checksum": "6a8457abbeeca2a043c577d47ad51938eabb7ede159b6ce6d176c399bcb751ce",
+    "current_checksum": "b4022b3d9a3912b13cd0a097ad09ec2755a1a1b4d025f7394b0c668d4fc79bd1"
+  },
+  "weekly_statistics_widget.dart": {
+    "old_identifier_name": "WeeklyStatisticsWidget",
+    "new_identifier_name": "WeeklyStatisticsWidget",
+    "type": "W",
+    "is_deleted": false,
+    "original_checksum": "d038f396d1c908065be5074c67fc08460aa6cce7d0a88f585def1a39eebf557f",
+    "current_checksum": "4d7bab54211afda8784da7b8be7e00241507e30bcd4054fc57e529a600475757"
+  },
+  "yearly_statistics_widget.dart": {
+    "old_identifier_name": "YearlyStatisticsWidget",
+    "new_identifier_name": "YearlyStatisticsWidget",
+    "type": "W",
+    "is_deleted": false,
+    "original_checksum": "a46046c0b06b14eb22713b4de8a3771532de27b6eb02afb2845c1184980f35b7",
+    "current_checksum": "4e54594cfe1fd7a5af0f7b12645f1d4db501c0d913c299f3fd01de531567b817"
+  },
+  "custom_functions.dart": {
+    "old_identifier_name": "CustomFunctions",
+    "new_identifier_name": "CustomFunctions",
+    "type": "F",
+    "is_deleted": false,
+    "original_checksum": "04aa11bea1698a52c5bcf30104ad7c9a8bf9e8a2c136e232c02f8d94fbb6108e",
+    "current_checksum": "04aa11bea1698a52c5bcf30104ad7c9a8bf9e8a2c136e232c02f8d94fbb6108e"
+  },
+  "pubspec.yaml": {
+    "old_identifier_name": "pubspec.yaml",
+    "new_identifier_name": "pubspec.yaml",
+    "type": "D",
+    "is_deleted": false,
+    "original_checksum": "e6bf132eca8a182daedad107b1a6ec5ea239a86f720e28be49b18092f881f5f3",
+    "current_checksum": "84febac13b72350a337a222d0292d03419a333b12da6414c1da64de9b1865901"
+  },
+  "has_internet_access.dart": {
+    "old_identifier_name": "hasInternetAccess",
+    "new_identifier_name": "hasInternetAccess",
+    "type": "A",
+    "is_deleted": false,
+    "current_checksum": "8182202766620b6ef6aa34ae32691850609b4f6b94e69e617387d7233bfd3a1a"
+  },
+  "clear_audio_cache.dart": {
+    "old_identifier_name": "clearAudioCache",
+    "new_identifier_name": "clearAudioCache",
+    "type": "A",
+    "is_deleted": false,
+    "current_checksum": "28b16ae966b36718f8e2ac35bf9cbe259e1d77291d37a000d781a8751c238205"
+  },
+  "get_favorites_meditations.dart": {
+    "old_identifier_name": "getFavoritesMeditations",
+    "new_identifier_name": "getFavoritesMeditations",
+    "type": "A",
+    "is_deleted": false,
+    "current_checksum": "308b11c54529cc3d4e3c040ab2b9ba3a3f6a718dd2ff82bfcb14081c2cc1d7f1"
+  },
+  "is_audio_downloaded.dart": {
+    "old_identifier_name": "isAudioDownloaded",
+    "new_identifier_name": "isAudioDownloaded",
+    "type": "A",
+    "is_deleted": false,
+    "current_checksum": "ca4b40f1dcaae34e317f68d69efce84ba84b1f61bb5095db492992dfaa885c3e"
+  },
+  "you_tube_player_widget.dart": {
+    "old_identifier_name": "YouTubePlayerWidget",
+    "new_identifier_name": "YouTubePlayerWidget",
+    "type": "W",
+    "is_deleted": false,
+    "current_checksum": "bceb7beb5f8eb25e5d7ee233608a92dff464c85146fd4106b39095a32ccbe2e9"
+  }
+}
