@@ -37,22 +37,14 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
     super.initState();
     _model = createModel(context, () => ListaEtapasPageModel());
 
-    logFirebaseEvent('screen_view',
-        parameters: {'screen_name': 'listaEtapasPage'});
-    _model.expandableExpandableController1 =
-        ExpandableController(initialExpanded: false);
-    _model.expandableExpandableController2 =
-        ExpandableController(initialExpanded: false);
-    _model.expandableExpandableController3 =
-        ExpandableController(initialExpanded: false);
-    _model.expandableExpandableController4 =
-        ExpandableController(initialExpanded: false);
-    _model.expandableExpandableController5 =
-        ExpandableController(initialExpanded: false);
-    _model.expandableExpandableController6 =
-        ExpandableController(initialExpanded: false);
-    _model.expandableExpandableController7 =
-        ExpandableController(initialExpanded: false);
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'listaEtapasPage'});
+    _model.expandableExpandableController1 = ExpandableController(initialExpanded: false);
+    _model.expandableExpandableController2 = ExpandableController(initialExpanded: false);
+    _model.expandableExpandableController3 = ExpandableController(initialExpanded: false);
+    _model.expandableExpandableController4 = ExpandableController(initialExpanded: false);
+    _model.expandableExpandableController5 = ExpandableController(initialExpanded: false);
+    _model.expandableExpandableController6 = ExpandableController(initialExpanded: false);
+    _model.expandableExpandableController7 = ExpandableController(initialExpanded: false);
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
@@ -85,18 +77,14 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                   height: MediaQuery.sizeOf(context).height * 1.0,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [
-                        FlutterFlowTheme.of(context).d21Top,
-                        FlutterFlowTheme.of(context).d21Botton
-                      ],
+                      colors: [FlutterFlowTheme.of(context).d21Top, FlutterFlowTheme.of(context).d21Botton],
                       stops: const [0.0, 1.0],
                       begin: const AlignmentDirectional(0.0, -1.0),
                       end: const AlignmentDirectional(0, 1.0),
                     ),
                   ),
                   child: Padding(
-                    padding:
-                        const EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 12.0, 12.0),
+                    padding: const EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 12.0, 12.0),
                     child: SingleChildScrollView(
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
@@ -104,12 +92,10 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                           Align(
                             alignment: const AlignmentDirectional(0.0, 1.0),
                             child: Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  4.0, 0.0, 4.0, 8.0),
+                              padding: const EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 4.0, 8.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   InkWell(
                                     splashColor: Colors.transparent,
@@ -121,12 +107,11 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                         context.pop();
                                       }
                                       context.pushNamed(
-                                        HomePageWidget.routeName,
+                                        HomePage.routeName,
                                         extra: <String, dynamic>{
                                           kTransitionInfoKey: const TransitionInfo(
                                             hasTransition: true,
-                                            transitionType:
-                                                PageTransitionType.fade,
+                                            transitionType: PageTransitionType.fade,
                                             duration: Duration(milliseconds: 0),
                                           ),
                                         },
@@ -140,36 +125,23 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                   ),
                                   Text(
                                     'Desafio 21 dias',
-                                    style: FlutterFlowTheme.of(context)
-                                        .titleLarge
-                                        .override(
-                                          fontFamily:
-                                              FlutterFlowTheme.of(context)
-                                                  .titleLargeFamily,
-                                          color:
-                                              FlutterFlowTheme.of(context).info,
+                                    style: FlutterFlowTheme.of(context).titleLarge.override(
+                                          fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
+                                          color: FlutterFlowTheme.of(context).info,
                                           letterSpacing: 0.0,
-                                          useGoogleFonts:
-                                              !FlutterFlowTheme.of(context)
-                                                  .titleLargeIsCustom,
+                                          useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
                                         ),
                                   ),
-                                  if ((currentUserDocument?.userRole
-                                                  .toList() ??
-                                              [])
-                                          .contains('Tester') ==
-                                      true)
+                                  if ((currentUserDocument?.userRole.toList() ?? []).contains('Tester') == true)
                                     AuthUserStreamWidget(
-                                      builder: (context) =>
-                                          FlutterFlowIconButton(
+                                      builder: (context) => FlutterFlowIconButton(
                                         borderColor: Colors.transparent,
                                         borderRadius: 20.0,
                                         borderWidth: 1.0,
                                         buttonSize: 40.0,
                                         icon: Icon(
                                           Icons.lock_reset_rounded,
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
+                                          color: FlutterFlowTheme.of(context).secondaryBackground,
                                           size: 24.0,
                                         ),
                                         onPressed: () async {
@@ -182,24 +154,17 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                               return WebViewAware(
                                                 child: GestureDetector(
                                                   onTap: () {
-                                                    FocusScope.of(context)
-                                                        .unfocus();
-                                                    FocusManager
-                                                        .instance.primaryFocus
-                                                        ?.unfocus();
+                                                    FocusScope.of(context).unfocus();
+                                                    FocusManager.instance.primaryFocus?.unfocus();
                                                   },
                                                   child: Padding(
-                                                    padding:
-                                                        MediaQuery.viewInsetsOf(
-                                                            context),
-                                                    child:
-                                                        const ConfirmaResetDesafioWidget(),
+                                                    padding: MediaQuery.viewInsetsOf(context),
+                                                    child: const ConfirmaResetDesafioWidget(),
                                                   ),
                                                 ),
                                               );
                                             },
-                                          ).then(
-                                              (value) => safeSetState(() {}));
+                                          ).then((value) => safeSetState(() {}));
                                         },
                                       ),
                                     ),
@@ -221,56 +186,34 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                               ),
                             ),
                             child: Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 4.0, 0.0, 4.0),
+                              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 4.0),
                               child: Container(
                                 width: double.infinity,
                                 color: const Color(0x00000000),
                                 child: ExpandableNotifier(
-                                  controller:
-                                      _model.expandableExpandableController1,
+                                  controller: _model.expandableExpandableController1,
                                   child: ExpandablePanel(
                                     header: Row(
                                       mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  32.0, 0.0, 0.0, 0.0),
+                                          padding: const EdgeInsetsDirectional.fromSTEB(32.0, 0.0, 0.0, 0.0),
                                           child: Text(
                                             'Etapa 1',
-                                            style: FlutterFlowTheme.of(context)
-                                                .titleLarge
-                                                .override(
-                                                  fontFamily:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .titleLargeFamily,
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .info,
+                                            style: FlutterFlowTheme.of(context).titleLarge.override(
+                                                  fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
+                                                  color: FlutterFlowTheme.of(context).info,
                                                   letterSpacing: 0.0,
-                                                  useGoogleFonts:
-                                                      !FlutterFlowTheme.of(
-                                                              context)
-                                                          .titleLargeIsCustom,
+                                                  useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
                                                 ),
                                           ),
                                         ),
                                         ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(0.0),
+                                          borderRadius: BorderRadius.circular(0.0),
                                           child: Image.network(
-                                            functions.getURLMandala(
-                                                1,
-                                                FFAppState()
-                                                    .desafio21
-                                                    .diasCompletados,
-                                                FFAppState()
-                                                    .listaEtapasMandalas
-                                                    .toList())!,
+                                            functions.getURLMandala(1, FFAppState().desafio21.diasCompletados,
+                                                FFAppState().listaEtapasMandalas.toList())!,
                                             width: 30.0,
                                             height: 30.0,
                                             fit: BoxFit.cover,
@@ -286,28 +229,20 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  32.0, 16.0, 32.0, 32.0),
+                                          padding: const EdgeInsetsDirectional.fromSTEB(32.0, 16.0, 32.0, 32.0),
                                           child: Column(
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
                                               wrapWithModel(
                                                 model: _model.getMandalaModel1,
-                                                updateCallback: () =>
-                                                    safeSetState(() {}),
+                                                updateCallback: () => safeSetState(() {}),
                                                 child: GetMandalaWidget(
                                                   etapa: 1,
-                                                  diaCompletado:
-                                                      valueOrDefault<int>(
-                                                    FFAppState()
-                                                        .desafio21
-                                                        .diasCompletados,
+                                                  diaCompletado: valueOrDefault<int>(
+                                                    FFAppState().desafio21.diasCompletados,
                                                     0,
                                                   ),
-                                                  listaEtapasMandalas:
-                                                      FFAppState()
-                                                          .listaEtapasMandalas,
+                                                  listaEtapasMandalas: FFAppState().listaEtapasMandalas,
                                                 ),
                                               ),
                                             ],
@@ -315,24 +250,21 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                         ),
                                         wrapWithModel(
                                           model: _model.cardDiaMeditacaoModel1,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
+                                          updateCallback: () => safeSetState(() {}),
                                           child: const CardDiaMeditacaoWidget(
                                             dia: 1,
                                           ),
                                         ),
                                         wrapWithModel(
                                           model: _model.cardDiaMeditacaoModel2,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
+                                          updateCallback: () => safeSetState(() {}),
                                           child: const CardDiaMeditacaoWidget(
                                             dia: 2,
                                           ),
                                         ),
                                         wrapWithModel(
                                           model: _model.cardDiaMeditacaoModel3,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
+                                          updateCallback: () => safeSetState(() {}),
                                           child: const CardDiaMeditacaoWidget(
                                             dia: 3,
                                           ),
@@ -343,15 +275,12 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                       tapHeaderToExpand: true,
                                       tapBodyToExpand: false,
                                       tapBodyToCollapse: false,
-                                      headerAlignment:
-                                          ExpandablePanelHeaderAlignment.center,
+                                      headerAlignment: ExpandablePanelHeaderAlignment.center,
                                       hasIcon: true,
                                       expandIcon: Icons.chevron_right_rounded,
-                                      collapseIcon:
-                                          Icons.keyboard_arrow_down_rounded,
+                                      collapseIcon: Icons.keyboard_arrow_down_rounded,
                                       iconSize: 24.0,
-                                      iconColor:
-                                          FlutterFlowTheme.of(context).info,
+                                      iconColor: FlutterFlowTheme.of(context).info,
                                       iconPadding: const EdgeInsets.all(8.0),
                                     ),
                                   ),
@@ -373,56 +302,34 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                               ),
                             ),
                             child: Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 4.0, 0.0, 4.0),
+                              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 4.0),
                               child: Container(
                                 width: double.infinity,
                                 color: const Color(0x00000000),
                                 child: ExpandableNotifier(
-                                  controller:
-                                      _model.expandableExpandableController2,
+                                  controller: _model.expandableExpandableController2,
                                   child: ExpandablePanel(
                                     header: Row(
                                       mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  32.0, 0.0, 0.0, 0.0),
+                                          padding: const EdgeInsetsDirectional.fromSTEB(32.0, 0.0, 0.0, 0.0),
                                           child: Text(
                                             'Etapa 2',
-                                            style: FlutterFlowTheme.of(context)
-                                                .titleLarge
-                                                .override(
-                                                  fontFamily:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .titleLargeFamily,
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .info,
+                                            style: FlutterFlowTheme.of(context).titleLarge.override(
+                                                  fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
+                                                  color: FlutterFlowTheme.of(context).info,
                                                   letterSpacing: 0.0,
-                                                  useGoogleFonts:
-                                                      !FlutterFlowTheme.of(
-                                                              context)
-                                                          .titleLargeIsCustom,
+                                                  useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
                                                 ),
                                           ),
                                         ),
                                         ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(0.0),
+                                          borderRadius: BorderRadius.circular(0.0),
                                           child: Image.network(
-                                            functions.getURLMandala(
-                                                2,
-                                                FFAppState()
-                                                    .desafio21
-                                                    .diasCompletados,
-                                                FFAppState()
-                                                    .listaEtapasMandalas
-                                                    .toList())!,
+                                            functions.getURLMandala(2, FFAppState().desafio21.diasCompletados,
+                                                FFAppState().listaEtapasMandalas.toList())!,
                                             width: 30.0,
                                             height: 30.0,
                                             fit: BoxFit.cover,
@@ -438,28 +345,20 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  32.0, 16.0, 32.0, 32.0),
+                                          padding: const EdgeInsetsDirectional.fromSTEB(32.0, 16.0, 32.0, 32.0),
                                           child: Column(
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
                                               wrapWithModel(
                                                 model: _model.getMandalaModel2,
-                                                updateCallback: () =>
-                                                    safeSetState(() {}),
+                                                updateCallback: () => safeSetState(() {}),
                                                 child: GetMandalaWidget(
                                                   etapa: 2,
-                                                  diaCompletado:
-                                                      valueOrDefault<int>(
-                                                    FFAppState()
-                                                        .desafio21
-                                                        .diasCompletados,
+                                                  diaCompletado: valueOrDefault<int>(
+                                                    FFAppState().desafio21.diasCompletados,
                                                     0,
                                                   ),
-                                                  listaEtapasMandalas:
-                                                      FFAppState()
-                                                          .listaEtapasMandalas,
+                                                  listaEtapasMandalas: FFAppState().listaEtapasMandalas,
                                                 ),
                                               ),
                                             ],
@@ -467,24 +366,21 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                         ),
                                         wrapWithModel(
                                           model: _model.cardDiaMeditacaoModel4,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
+                                          updateCallback: () => safeSetState(() {}),
                                           child: const CardDiaMeditacaoWidget(
                                             dia: 4,
                                           ),
                                         ),
                                         wrapWithModel(
                                           model: _model.cardDiaMeditacaoModel5,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
+                                          updateCallback: () => safeSetState(() {}),
                                           child: const CardDiaMeditacaoWidget(
                                             dia: 5,
                                           ),
                                         ),
                                         wrapWithModel(
                                           model: _model.cardDiaMeditacaoModel6,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
+                                          updateCallback: () => safeSetState(() {}),
                                           child: const CardDiaMeditacaoWidget(
                                             dia: 6,
                                           ),
@@ -495,15 +391,12 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                       tapHeaderToExpand: true,
                                       tapBodyToExpand: false,
                                       tapBodyToCollapse: false,
-                                      headerAlignment:
-                                          ExpandablePanelHeaderAlignment.center,
+                                      headerAlignment: ExpandablePanelHeaderAlignment.center,
                                       hasIcon: true,
                                       expandIcon: Icons.chevron_right_rounded,
-                                      collapseIcon:
-                                          Icons.keyboard_arrow_down_rounded,
+                                      collapseIcon: Icons.keyboard_arrow_down_rounded,
                                       iconSize: 24.0,
-                                      iconColor:
-                                          FlutterFlowTheme.of(context).info,
+                                      iconColor: FlutterFlowTheme.of(context).info,
                                       iconPadding: const EdgeInsets.all(8.0),
                                     ),
                                   ),
@@ -525,56 +418,34 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                               ),
                             ),
                             child: Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 4.0, 0.0, 4.0),
+                              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 4.0),
                               child: Container(
                                 width: double.infinity,
                                 color: const Color(0x00000000),
                                 child: ExpandableNotifier(
-                                  controller:
-                                      _model.expandableExpandableController3,
+                                  controller: _model.expandableExpandableController3,
                                   child: ExpandablePanel(
                                     header: Row(
                                       mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  32.0, 0.0, 0.0, 0.0),
+                                          padding: const EdgeInsetsDirectional.fromSTEB(32.0, 0.0, 0.0, 0.0),
                                           child: Text(
                                             'Etapa 3',
-                                            style: FlutterFlowTheme.of(context)
-                                                .titleLarge
-                                                .override(
-                                                  fontFamily:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .titleLargeFamily,
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .info,
+                                            style: FlutterFlowTheme.of(context).titleLarge.override(
+                                                  fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
+                                                  color: FlutterFlowTheme.of(context).info,
                                                   letterSpacing: 0.0,
-                                                  useGoogleFonts:
-                                                      !FlutterFlowTheme.of(
-                                                              context)
-                                                          .titleLargeIsCustom,
+                                                  useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
                                                 ),
                                           ),
                                         ),
                                         ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(0.0),
+                                          borderRadius: BorderRadius.circular(0.0),
                                           child: Image.network(
-                                            functions.getURLMandala(
-                                                3,
-                                                FFAppState()
-                                                    .desafio21
-                                                    .diasCompletados,
-                                                FFAppState()
-                                                    .listaEtapasMandalas
-                                                    .toList())!,
+                                            functions.getURLMandala(3, FFAppState().desafio21.diasCompletados,
+                                                FFAppState().listaEtapasMandalas.toList())!,
                                             width: 30.0,
                                             height: 30.0,
                                             fit: BoxFit.cover,
@@ -590,28 +461,20 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  32.0, 16.0, 32.0, 32.0),
+                                          padding: const EdgeInsetsDirectional.fromSTEB(32.0, 16.0, 32.0, 32.0),
                                           child: Column(
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
                                               wrapWithModel(
                                                 model: _model.getMandalaModel3,
-                                                updateCallback: () =>
-                                                    safeSetState(() {}),
+                                                updateCallback: () => safeSetState(() {}),
                                                 child: GetMandalaWidget(
                                                   etapa: 3,
-                                                  diaCompletado:
-                                                      valueOrDefault<int>(
-                                                    FFAppState()
-                                                        .desafio21
-                                                        .diasCompletados,
+                                                  diaCompletado: valueOrDefault<int>(
+                                                    FFAppState().desafio21.diasCompletados,
                                                     0,
                                                   ),
-                                                  listaEtapasMandalas:
-                                                      FFAppState()
-                                                          .listaEtapasMandalas,
+                                                  listaEtapasMandalas: FFAppState().listaEtapasMandalas,
                                                 ),
                                               ),
                                             ],
@@ -619,24 +482,21 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                         ),
                                         wrapWithModel(
                                           model: _model.cardDiaMeditacaoModel7,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
+                                          updateCallback: () => safeSetState(() {}),
                                           child: const CardDiaMeditacaoWidget(
                                             dia: 7,
                                           ),
                                         ),
                                         wrapWithModel(
                                           model: _model.cardDiaMeditacaoModel8,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
+                                          updateCallback: () => safeSetState(() {}),
                                           child: const CardDiaMeditacaoWidget(
                                             dia: 8,
                                           ),
                                         ),
                                         wrapWithModel(
                                           model: _model.cardDiaMeditacaoModel9,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
+                                          updateCallback: () => safeSetState(() {}),
                                           child: const CardDiaMeditacaoWidget(
                                             dia: 9,
                                           ),
@@ -647,15 +507,12 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                       tapHeaderToExpand: true,
                                       tapBodyToExpand: false,
                                       tapBodyToCollapse: false,
-                                      headerAlignment:
-                                          ExpandablePanelHeaderAlignment.center,
+                                      headerAlignment: ExpandablePanelHeaderAlignment.center,
                                       hasIcon: true,
                                       expandIcon: Icons.chevron_right_rounded,
-                                      collapseIcon:
-                                          Icons.keyboard_arrow_down_rounded,
+                                      collapseIcon: Icons.keyboard_arrow_down_rounded,
                                       iconSize: 24.0,
-                                      iconColor:
-                                          FlutterFlowTheme.of(context).info,
+                                      iconColor: FlutterFlowTheme.of(context).info,
                                       iconPadding: const EdgeInsets.all(8.0),
                                     ),
                                   ),
@@ -677,56 +534,34 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                               ),
                             ),
                             child: Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 4.0, 0.0, 4.0),
+                              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 4.0),
                               child: Container(
                                 width: double.infinity,
                                 color: const Color(0x00000000),
                                 child: ExpandableNotifier(
-                                  controller:
-                                      _model.expandableExpandableController4,
+                                  controller: _model.expandableExpandableController4,
                                   child: ExpandablePanel(
                                     header: Row(
                                       mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  32.0, 0.0, 0.0, 0.0),
+                                          padding: const EdgeInsetsDirectional.fromSTEB(32.0, 0.0, 0.0, 0.0),
                                           child: Text(
                                             'Etapa 4',
-                                            style: FlutterFlowTheme.of(context)
-                                                .titleLarge
-                                                .override(
-                                                  fontFamily:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .titleLargeFamily,
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .info,
+                                            style: FlutterFlowTheme.of(context).titleLarge.override(
+                                                  fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
+                                                  color: FlutterFlowTheme.of(context).info,
                                                   letterSpacing: 0.0,
-                                                  useGoogleFonts:
-                                                      !FlutterFlowTheme.of(
-                                                              context)
-                                                          .titleLargeIsCustom,
+                                                  useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
                                                 ),
                                           ),
                                         ),
                                         ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(0.0),
+                                          borderRadius: BorderRadius.circular(0.0),
                                           child: Image.network(
-                                            functions.getURLMandala(
-                                                4,
-                                                FFAppState()
-                                                    .desafio21
-                                                    .diasCompletados,
-                                                FFAppState()
-                                                    .listaEtapasMandalas
-                                                    .toList())!,
+                                            functions.getURLMandala(4, FFAppState().desafio21.diasCompletados,
+                                                FFAppState().listaEtapasMandalas.toList())!,
                                             width: 30.0,
                                             height: 30.0,
                                             fit: BoxFit.cover,
@@ -742,28 +577,20 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  32.0, 16.0, 32.0, 32.0),
+                                          padding: const EdgeInsetsDirectional.fromSTEB(32.0, 16.0, 32.0, 32.0),
                                           child: Column(
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
                                               wrapWithModel(
                                                 model: _model.getMandalaModel4,
-                                                updateCallback: () =>
-                                                    safeSetState(() {}),
+                                                updateCallback: () => safeSetState(() {}),
                                                 child: GetMandalaWidget(
                                                   etapa: 4,
-                                                  diaCompletado:
-                                                      valueOrDefault<int>(
-                                                    FFAppState()
-                                                        .desafio21
-                                                        .diasCompletados,
+                                                  diaCompletado: valueOrDefault<int>(
+                                                    FFAppState().desafio21.diasCompletados,
                                                     0,
                                                   ),
-                                                  listaEtapasMandalas:
-                                                      FFAppState()
-                                                          .listaEtapasMandalas,
+                                                  listaEtapasMandalas: FFAppState().listaEtapasMandalas,
                                                 ),
                                               ),
                                             ],
@@ -771,24 +598,21 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                         ),
                                         wrapWithModel(
                                           model: _model.cardDiaMeditacaoModel10,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
+                                          updateCallback: () => safeSetState(() {}),
                                           child: const CardDiaMeditacaoWidget(
                                             dia: 10,
                                           ),
                                         ),
                                         wrapWithModel(
                                           model: _model.cardDiaMeditacaoModel11,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
+                                          updateCallback: () => safeSetState(() {}),
                                           child: const CardDiaMeditacaoWidget(
                                             dia: 11,
                                           ),
                                         ),
                                         wrapWithModel(
                                           model: _model.cardDiaMeditacaoModel12,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
+                                          updateCallback: () => safeSetState(() {}),
                                           child: const CardDiaMeditacaoWidget(
                                             dia: 12,
                                           ),
@@ -799,15 +623,12 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                       tapHeaderToExpand: true,
                                       tapBodyToExpand: false,
                                       tapBodyToCollapse: false,
-                                      headerAlignment:
-                                          ExpandablePanelHeaderAlignment.center,
+                                      headerAlignment: ExpandablePanelHeaderAlignment.center,
                                       hasIcon: true,
                                       expandIcon: Icons.chevron_right_rounded,
-                                      collapseIcon:
-                                          Icons.keyboard_arrow_down_rounded,
+                                      collapseIcon: Icons.keyboard_arrow_down_rounded,
                                       iconSize: 24.0,
-                                      iconColor:
-                                          FlutterFlowTheme.of(context).info,
+                                      iconColor: FlutterFlowTheme.of(context).info,
                                       iconPadding: const EdgeInsets.all(8.0),
                                     ),
                                   ),
@@ -829,56 +650,34 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                               ),
                             ),
                             child: Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 4.0, 0.0, 4.0),
+                              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 4.0),
                               child: Container(
                                 width: double.infinity,
                                 color: const Color(0x00000000),
                                 child: ExpandableNotifier(
-                                  controller:
-                                      _model.expandableExpandableController5,
+                                  controller: _model.expandableExpandableController5,
                                   child: ExpandablePanel(
                                     header: Row(
                                       mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  32.0, 0.0, 0.0, 0.0),
+                                          padding: const EdgeInsetsDirectional.fromSTEB(32.0, 0.0, 0.0, 0.0),
                                           child: Text(
                                             'Etapa 5',
-                                            style: FlutterFlowTheme.of(context)
-                                                .titleLarge
-                                                .override(
-                                                  fontFamily:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .titleLargeFamily,
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .info,
+                                            style: FlutterFlowTheme.of(context).titleLarge.override(
+                                                  fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
+                                                  color: FlutterFlowTheme.of(context).info,
                                                   letterSpacing: 0.0,
-                                                  useGoogleFonts:
-                                                      !FlutterFlowTheme.of(
-                                                              context)
-                                                          .titleLargeIsCustom,
+                                                  useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
                                                 ),
                                           ),
                                         ),
                                         ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(0.0),
+                                          borderRadius: BorderRadius.circular(0.0),
                                           child: Image.network(
-                                            functions.getURLMandala(
-                                                5,
-                                                FFAppState()
-                                                    .desafio21
-                                                    .diasCompletados,
-                                                FFAppState()
-                                                    .listaEtapasMandalas
-                                                    .toList())!,
+                                            functions.getURLMandala(5, FFAppState().desafio21.diasCompletados,
+                                                FFAppState().listaEtapasMandalas.toList())!,
                                             width: 30.0,
                                             height: 30.0,
                                             fit: BoxFit.cover,
@@ -894,28 +693,20 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  32.0, 16.0, 32.0, 32.0),
+                                          padding: const EdgeInsetsDirectional.fromSTEB(32.0, 16.0, 32.0, 32.0),
                                           child: Column(
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
                                               wrapWithModel(
                                                 model: _model.getMandalaModel5,
-                                                updateCallback: () =>
-                                                    safeSetState(() {}),
+                                                updateCallback: () => safeSetState(() {}),
                                                 child: GetMandalaWidget(
                                                   etapa: 5,
-                                                  diaCompletado:
-                                                      valueOrDefault<int>(
-                                                    FFAppState()
-                                                        .desafio21
-                                                        .diasCompletados,
+                                                  diaCompletado: valueOrDefault<int>(
+                                                    FFAppState().desafio21.diasCompletados,
                                                     0,
                                                   ),
-                                                  listaEtapasMandalas:
-                                                      FFAppState()
-                                                          .listaEtapasMandalas,
+                                                  listaEtapasMandalas: FFAppState().listaEtapasMandalas,
                                                 ),
                                               ),
                                             ],
@@ -923,24 +714,21 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                         ),
                                         wrapWithModel(
                                           model: _model.cardDiaMeditacaoModel13,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
+                                          updateCallback: () => safeSetState(() {}),
                                           child: const CardDiaMeditacaoWidget(
                                             dia: 13,
                                           ),
                                         ),
                                         wrapWithModel(
                                           model: _model.cardDiaMeditacaoModel14,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
+                                          updateCallback: () => safeSetState(() {}),
                                           child: const CardDiaMeditacaoWidget(
                                             dia: 14,
                                           ),
                                         ),
                                         wrapWithModel(
                                           model: _model.cardDiaMeditacaoModel15,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
+                                          updateCallback: () => safeSetState(() {}),
                                           child: const CardDiaMeditacaoWidget(
                                             dia: 15,
                                           ),
@@ -951,15 +739,12 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                       tapHeaderToExpand: true,
                                       tapBodyToExpand: false,
                                       tapBodyToCollapse: false,
-                                      headerAlignment:
-                                          ExpandablePanelHeaderAlignment.center,
+                                      headerAlignment: ExpandablePanelHeaderAlignment.center,
                                       hasIcon: true,
                                       expandIcon: Icons.chevron_right_rounded,
-                                      collapseIcon:
-                                          Icons.keyboard_arrow_down_rounded,
+                                      collapseIcon: Icons.keyboard_arrow_down_rounded,
                                       iconSize: 24.0,
-                                      iconColor:
-                                          FlutterFlowTheme.of(context).info,
+                                      iconColor: FlutterFlowTheme.of(context).info,
                                       iconPadding: const EdgeInsets.all(8.0),
                                     ),
                                   ),
@@ -981,56 +766,34 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                               ),
                             ),
                             child: Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 4.0, 0.0, 4.0),
+                              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 4.0),
                               child: Container(
                                 width: double.infinity,
                                 color: const Color(0x00000000),
                                 child: ExpandableNotifier(
-                                  controller:
-                                      _model.expandableExpandableController6,
+                                  controller: _model.expandableExpandableController6,
                                   child: ExpandablePanel(
                                     header: Row(
                                       mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  32.0, 0.0, 0.0, 0.0),
+                                          padding: const EdgeInsetsDirectional.fromSTEB(32.0, 0.0, 0.0, 0.0),
                                           child: Text(
                                             'Etapa 6',
-                                            style: FlutterFlowTheme.of(context)
-                                                .titleLarge
-                                                .override(
-                                                  fontFamily:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .titleLargeFamily,
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .info,
+                                            style: FlutterFlowTheme.of(context).titleLarge.override(
+                                                  fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
+                                                  color: FlutterFlowTheme.of(context).info,
                                                   letterSpacing: 0.0,
-                                                  useGoogleFonts:
-                                                      !FlutterFlowTheme.of(
-                                                              context)
-                                                          .titleLargeIsCustom,
+                                                  useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
                                                 ),
                                           ),
                                         ),
                                         ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(0.0),
+                                          borderRadius: BorderRadius.circular(0.0),
                                           child: Image.network(
-                                            functions.getURLMandala(
-                                                6,
-                                                FFAppState()
-                                                    .desafio21
-                                                    .diasCompletados,
-                                                FFAppState()
-                                                    .listaEtapasMandalas
-                                                    .toList())!,
+                                            functions.getURLMandala(6, FFAppState().desafio21.diasCompletados,
+                                                FFAppState().listaEtapasMandalas.toList())!,
                                             width: 30.0,
                                             height: 30.0,
                                             fit: BoxFit.cover,
@@ -1046,28 +809,20 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  32.0, 16.0, 32.0, 32.0),
+                                          padding: const EdgeInsetsDirectional.fromSTEB(32.0, 16.0, 32.0, 32.0),
                                           child: Column(
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
                                               wrapWithModel(
                                                 model: _model.getMandalaModel6,
-                                                updateCallback: () =>
-                                                    safeSetState(() {}),
+                                                updateCallback: () => safeSetState(() {}),
                                                 child: GetMandalaWidget(
                                                   etapa: 6,
-                                                  diaCompletado:
-                                                      valueOrDefault<int>(
-                                                    FFAppState()
-                                                        .desafio21
-                                                        .diasCompletados,
+                                                  diaCompletado: valueOrDefault<int>(
+                                                    FFAppState().desafio21.diasCompletados,
                                                     0,
                                                   ),
-                                                  listaEtapasMandalas:
-                                                      FFAppState()
-                                                          .listaEtapasMandalas,
+                                                  listaEtapasMandalas: FFAppState().listaEtapasMandalas,
                                                 ),
                                               ),
                                             ],
@@ -1075,24 +830,21 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                         ),
                                         wrapWithModel(
                                           model: _model.cardDiaMeditacaoModel16,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
+                                          updateCallback: () => safeSetState(() {}),
                                           child: const CardDiaMeditacaoWidget(
                                             dia: 16,
                                           ),
                                         ),
                                         wrapWithModel(
                                           model: _model.cardDiaMeditacaoModel17,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
+                                          updateCallback: () => safeSetState(() {}),
                                           child: const CardDiaMeditacaoWidget(
                                             dia: 17,
                                           ),
                                         ),
                                         wrapWithModel(
                                           model: _model.cardDiaMeditacaoModel18,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
+                                          updateCallback: () => safeSetState(() {}),
                                           child: const CardDiaMeditacaoWidget(
                                             dia: 18,
                                           ),
@@ -1103,15 +855,12 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                       tapHeaderToExpand: true,
                                       tapBodyToExpand: false,
                                       tapBodyToCollapse: false,
-                                      headerAlignment:
-                                          ExpandablePanelHeaderAlignment.center,
+                                      headerAlignment: ExpandablePanelHeaderAlignment.center,
                                       hasIcon: true,
                                       expandIcon: Icons.chevron_right_rounded,
-                                      collapseIcon:
-                                          Icons.keyboard_arrow_down_rounded,
+                                      collapseIcon: Icons.keyboard_arrow_down_rounded,
                                       iconSize: 24.0,
-                                      iconColor:
-                                          FlutterFlowTheme.of(context).info,
+                                      iconColor: FlutterFlowTheme.of(context).info,
                                       iconPadding: const EdgeInsets.all(8.0),
                                     ),
                                   ),
@@ -1133,56 +882,34 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                               ),
                             ),
                             child: Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 4.0, 0.0, 4.0),
+                              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 4.0),
                               child: Container(
                                 width: double.infinity,
                                 color: const Color(0x00000000),
                                 child: ExpandableNotifier(
-                                  controller:
-                                      _model.expandableExpandableController7,
+                                  controller: _model.expandableExpandableController7,
                                   child: ExpandablePanel(
                                     header: Row(
                                       mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  32.0, 0.0, 0.0, 0.0),
+                                          padding: const EdgeInsetsDirectional.fromSTEB(32.0, 0.0, 0.0, 0.0),
                                           child: Text(
                                             'Etapa 7',
-                                            style: FlutterFlowTheme.of(context)
-                                                .titleLarge
-                                                .override(
-                                                  fontFamily:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .titleLargeFamily,
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .info,
+                                            style: FlutterFlowTheme.of(context).titleLarge.override(
+                                                  fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
+                                                  color: FlutterFlowTheme.of(context).info,
                                                   letterSpacing: 0.0,
-                                                  useGoogleFonts:
-                                                      !FlutterFlowTheme.of(
-                                                              context)
-                                                          .titleLargeIsCustom,
+                                                  useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
                                                 ),
                                           ),
                                         ),
                                         ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(0.0),
+                                          borderRadius: BorderRadius.circular(0.0),
                                           child: Image.network(
-                                            functions.getURLMandala(
-                                                7,
-                                                FFAppState()
-                                                    .desafio21
-                                                    .diasCompletados,
-                                                FFAppState()
-                                                    .listaEtapasMandalas
-                                                    .toList())!,
+                                            functions.getURLMandala(7, FFAppState().desafio21.diasCompletados,
+                                                FFAppState().listaEtapasMandalas.toList())!,
                                             width: 32.0,
                                             height: 32.0,
                                             fit: BoxFit.cover,
@@ -1198,28 +925,20 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  32.0, 16.0, 32.0, 32.0),
+                                          padding: const EdgeInsetsDirectional.fromSTEB(32.0, 16.0, 32.0, 32.0),
                                           child: Column(
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
                                               wrapWithModel(
                                                 model: _model.getMandalaModel7,
-                                                updateCallback: () =>
-                                                    safeSetState(() {}),
+                                                updateCallback: () => safeSetState(() {}),
                                                 child: GetMandalaWidget(
                                                   etapa: 7,
-                                                  diaCompletado:
-                                                      valueOrDefault<int>(
-                                                    FFAppState()
-                                                        .desafio21
-                                                        .diasCompletados,
+                                                  diaCompletado: valueOrDefault<int>(
+                                                    FFAppState().desafio21.diasCompletados,
                                                     0,
                                                   ),
-                                                  listaEtapasMandalas:
-                                                      FFAppState()
-                                                          .listaEtapasMandalas,
+                                                  listaEtapasMandalas: FFAppState().listaEtapasMandalas,
                                                 ),
                                               ),
                                             ],
@@ -1227,24 +946,21 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                         ),
                                         wrapWithModel(
                                           model: _model.cardDiaMeditacaoModel19,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
+                                          updateCallback: () => safeSetState(() {}),
                                           child: const CardDiaMeditacaoWidget(
                                             dia: 19,
                                           ),
                                         ),
                                         wrapWithModel(
                                           model: _model.cardDiaMeditacaoModel20,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
+                                          updateCallback: () => safeSetState(() {}),
                                           child: const CardDiaMeditacaoWidget(
                                             dia: 20,
                                           ),
                                         ),
                                         wrapWithModel(
                                           model: _model.cardDiaMeditacaoModel21,
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
+                                          updateCallback: () => safeSetState(() {}),
                                           child: const CardDiaMeditacaoWidget(
                                             dia: 21,
                                           ),
@@ -1255,15 +971,12 @@ class _ListaEtapasPageWidgetState extends State<ListaEtapasPageWidget> {
                                       tapHeaderToExpand: true,
                                       tapBodyToExpand: false,
                                       tapBodyToCollapse: false,
-                                      headerAlignment:
-                                          ExpandablePanelHeaderAlignment.center,
+                                      headerAlignment: ExpandablePanelHeaderAlignment.center,
                                       hasIcon: true,
                                       expandIcon: Icons.chevron_right_rounded,
-                                      collapseIcon:
-                                          Icons.keyboard_arrow_down_rounded,
+                                      collapseIcon: Icons.keyboard_arrow_down_rounded,
                                       iconSize: 24.0,
-                                      iconColor:
-                                          FlutterFlowTheme.of(context).info,
+                                      iconColor: FlutterFlowTheme.of(context).info,
                                       iconPadding: const EdgeInsets.all(8.0),
                                     ),
                                   ),

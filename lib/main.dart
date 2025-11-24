@@ -19,12 +19,22 @@ import 'index.dart';
 
 import 'dart:ui' as ui;
 
+import '/data/repositories/home_repository.dart';
+import '/ui/home/home_page/view_model/home_view_model.dart';
+
+import '/data/repositories/notification_repository.dart';
+import '/ui/notification/notification_list_page/view_model/notification_list_view_model.dart';
+import '/ui/notification/notification_view_page/view_model/notification_view_view_model.dart';
+
 import '/data/repositories/agenda_repository.dart';
 import '/ui/agenda/agenda_home_page/view_model/agenda_home_view_model.dart';
 import '/ui/agenda/agenda_list_page/view_model/agenda_list_view_model.dart';
 import '/ui/agenda/event_list_page/view_model/event_list_view_model.dart';
 import '/ui/agenda/event_details_page/view_model/event_details_view_model.dart';
-import '/ui/agenda/agenda_home_page/agenda_home_page.dart';
+import '/data/repositories/mensagem_repository.dart';
+import '/ui/mensagens/mensagem_details_page/view_model/mensagem_details_view_model.dart';
+import '/ui/mensagens/mensagem_show_page/view_model/mensagem_show_view_model.dart';
+import '/ui/mensagens/mensagens_semantic_search_page/view_model/mensagens_semantic_search_view_model.dart';
 
 import '/data/repositories/video_repository.dart';
 import '/ui/video/video_home_page/view_model/video_home_view_model.dart';
@@ -41,6 +51,11 @@ import 'ui/config/config_page/view_model/config_view_model.dart';
 import 'package:medita_b_k/ui/config/edit_profile_page/view_model/edit_profile_view_model.dart';
 import 'package:medita_b_k/ui/config/settings_page/view_model/settings_view_model.dart';
 import 'package:medita_b_k/ui/config/delete_account_page/view_model/delete_account_view_model.dart';
+import '/ui/authentication/sign_in/view_model/sign_in_view_model.dart';
+import '/ui/authentication/sign_up/view_model/sign_up_view_model.dart';
+import '/ui/authentication/forgot_password/view_model/forgot_password_view_model.dart';
+import '/ui/authentication/change_email_page/view_model/change_email_view_model.dart';
+import '/ui/authentication/social_login/view_model/social_login_view_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -70,6 +85,23 @@ void main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => appState),
+
+      // Home Module
+      Provider(create: (_) => HomeRepository()),
+      ChangeNotifierProxyProvider<HomeRepository, HomeViewModel>(
+        create: (context) => HomeViewModel(context.read<HomeRepository>()),
+        update: (context, repo, viewModel) => viewModel ?? HomeViewModel(repo),
+      ),
+
+      // Notification Module
+      Provider(create: (_) => NotificationRepository()),
+      ChangeNotifierProxyProvider<NotificationRepository, NotificationListViewModel>(
+        create: (context) => NotificationListViewModel(context.read<NotificationRepository>()),
+        update: (context, repo, viewModel) => viewModel ?? NotificationListViewModel(repo),
+      ),
+      ChangeNotifierProvider(create: (_) => NotificationViewViewModel()),
+
+      // Agenda Module
       Provider(create: (_) => AgendaRepository()),
       ChangeNotifierProvider(create: (_) => AgendaHomeViewModel()),
       ChangeNotifierProxyProvider<AgendaRepository, AgendaListViewModel>(
@@ -81,6 +113,18 @@ void main() async {
         update: (context, repo, viewModel) => viewModel ?? EventListViewModel(repository: repo),
       ),
       ChangeNotifierProvider(create: (_) => EventDetailsViewModel()),
+
+      // Mensagens Module
+      Provider(create: (_) => MensagemRepository()),
+      ChangeNotifierProxyProvider<MensagemRepository, MensagemDetailsViewModel>(
+        create: (context) => MensagemDetailsViewModel(context.read<MensagemRepository>()),
+        update: (context, repo, viewModel) => viewModel ?? MensagemDetailsViewModel(repo),
+      ),
+      ChangeNotifierProvider(create: (_) => MensagemShowViewModel()),
+      ChangeNotifierProxyProvider<MensagemRepository, MensagensSemanticSearchViewModel>(
+        create: (context) => MensagensSemanticSearchViewModel(context.read<MensagemRepository>()),
+        update: (context, repo, viewModel) => viewModel ?? MensagensSemanticSearchViewModel(repo),
+      ),
       Provider(create: (_) => VideoRepository()),
       ChangeNotifierProxyProvider<VideoRepository, VideoHomeViewModel>(
         create: (context) => VideoHomeViewModel(context.read<VideoRepository>()),
@@ -131,6 +175,35 @@ void main() async {
       ChangeNotifierProxyProvider<UserRepository, AboutAuthorsViewModel>(
         create: (context) => AboutAuthorsViewModel(repository: context.read<UserRepository>()),
         update: (context, repo, viewModel) => viewModel ?? AboutAuthorsViewModel(repository: repo),
+      ),
+      // Authentication ViewModels
+      ChangeNotifierProxyProvider<AuthRepository, SignInViewModel>(
+        create: (context) => SignInViewModel(context.read<AuthRepository>()),
+        update: (context, repo, viewModel) => viewModel ?? SignInViewModel(repo),
+      ),
+      ChangeNotifierProxyProvider2<AuthRepository, UserRepository, SignUpViewModel>(
+        create: (context) => SignUpViewModel(
+          context.read<AuthRepository>(),
+          context.read<UserRepository>(),
+        ),
+        update: (context, authRepo, userRepo, viewModel) =>
+            viewModel ??
+            SignUpViewModel(
+              authRepo,
+              userRepo,
+            ),
+      ),
+      ChangeNotifierProxyProvider<AuthRepository, ForgotPasswordViewModel>(
+        create: (context) => ForgotPasswordViewModel(context.read<AuthRepository>()),
+        update: (context, repo, viewModel) => viewModel ?? ForgotPasswordViewModel(repo),
+      ),
+      ChangeNotifierProxyProvider<AuthRepository, ChangeEmailViewModel>(
+        create: (context) => ChangeEmailViewModel(context.read<AuthRepository>()),
+        update: (context, repo, viewModel) => viewModel ?? ChangeEmailViewModel(repo),
+      ),
+      ChangeNotifierProxyProvider<AuthRepository, SocialLoginViewModel>(
+        create: (context) => SocialLoginViewModel(context.read<AuthRepository>()),
+        update: (context, repo, viewModel) => viewModel ?? SocialLoginViewModel(repo),
       ),
     ],
     child: MyApp(),
@@ -271,8 +344,8 @@ class _NavBarPageState extends State<NavBarPage> {
   @override
   Widget build(BuildContext context) {
     final tabs = {
-      'homePage': const HomePageWidget(),
-      'mensagensHomePage': const MensagensHomePageWidget(),
+      'homePage': const HomePage(),
+      'mensagensHomePage': const MensagensHomePage(),
       'meditationHomePage': const MeditationHomePageWidget(),
       'videoHomePage': const VideoHomePageWidget(),
       'agendaHomePage': const AgendaHomePage(),

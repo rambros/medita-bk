@@ -17,12 +17,10 @@ class ConfirmaResetDesafioWidget extends StatefulWidget {
   const ConfirmaResetDesafioWidget({super.key});
 
   @override
-  State<ConfirmaResetDesafioWidget> createState() =>
-      _ConfirmaResetDesafioWidgetState();
+  State<ConfirmaResetDesafioWidget> createState() => _ConfirmaResetDesafioWidgetState();
 }
 
-class _ConfirmaResetDesafioWidgetState
-    extends State<ConfirmaResetDesafioWidget> {
+class _ConfirmaResetDesafioWidgetState extends State<ConfirmaResetDesafioWidget> {
   late ConfirmaResetDesafioModel _model;
 
   @override
@@ -68,29 +66,24 @@ class _ConfirmaResetDesafioWidgetState
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsetsDirectional.fromSTEB(16.0, 32.0, 0.0, 24.0),
+                  padding: const EdgeInsetsDirectional.fromSTEB(16.0, 32.0, 0.0, 24.0),
                   child: Text(
                     'Reinício do Desafio',
                     textAlign: TextAlign.center,
                     style: FlutterFlowTheme.of(context).headlineSmall.override(
-                          fontFamily:
-                              FlutterFlowTheme.of(context).headlineSmallFamily,
+                          fontFamily: FlutterFlowTheme.of(context).headlineSmallFamily,
                           letterSpacing: 0.0,
-                          useGoogleFonts: !FlutterFlowTheme.of(context)
-                              .headlineSmallIsCustom,
+                          useGoogleFonts: !FlutterFlowTheme.of(context).headlineSmallIsCustom,
                         ),
                   ),
                 ),
                 Text(
                   'Confirma o reinício do Desafio de 21 dias?',
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
-                        fontFamily:
-                            FlutterFlowTheme.of(context).bodyMediumFamily,
+                        fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
                         fontSize: 18.0,
                         letterSpacing: 0.0,
-                        useGoogleFonts:
-                            !FlutterFlowTheme.of(context).bodyMediumIsCustom,
+                        useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
                       ),
                 ),
                 Padding(
@@ -99,12 +92,10 @@ class _ConfirmaResetDesafioWidgetState
                     'Todos os dados de progresso serão deletados assim como as mandalas e os brasões.',
                     textAlign: TextAlign.center,
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          fontFamily:
-                              FlutterFlowTheme.of(context).bodyMediumFamily,
+                          fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
                           fontSize: 16.0,
                           letterSpacing: 0.0,
-                          useGoogleFonts:
-                              !FlutterFlowTheme.of(context).bodyMediumIsCustom,
+                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
                         ),
                   ),
                 ),
@@ -118,8 +109,7 @@ class _ConfirmaResetDesafioWidgetState
                       Flexible(
                         flex: 1,
                         child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 32.0, 0.0),
+                          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 32.0, 0.0),
                           child: FFButtonWidget(
                             onPressed: () async {
                               Navigator.pop(context);
@@ -128,22 +118,14 @@ class _ConfirmaResetDesafioWidgetState
                             options: FFButtonOptions(
                               width: 230.0,
                               height: 50.0,
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              iconPadding: const EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              color: FlutterFlowTheme.of(context)
-                                  .primaryBackground,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .titleMedium
-                                  .override(
-                                    fontFamily: FlutterFlowTheme.of(context)
-                                        .titleMediumFamily,
+                              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                              iconPadding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                              color: FlutterFlowTheme.of(context).primaryBackground,
+                              textStyle: FlutterFlowTheme.of(context).titleMedium.override(
+                                    fontFamily: FlutterFlowTheme.of(context).titleMediumFamily,
                                     color: FlutterFlowTheme.of(context).primary,
                                     letterSpacing: 0.0,
-                                    useGoogleFonts:
-                                        !FlutterFlowTheme.of(context)
-                                            .titleMediumIsCustom,
+                                    useGoogleFonts: !FlutterFlowTheme.of(context).titleMediumIsCustom,
                                   ),
                               elevation: 2.0,
                               borderSide: BorderSide(
@@ -158,12 +140,10 @@ class _ConfirmaResetDesafioWidgetState
                       Flexible(
                         flex: 1,
                         child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              32.0, 0.0, 0.0, 0.0),
+                          padding: const EdgeInsetsDirectional.fromSTEB(32.0, 0.0, 0.0, 0.0),
                           child: FFButtonWidget(
                             onPressed: () async {
-                              await currentUserReference!
-                                  .update(createUsersRecordData(
+                              await currentUserReference!.update(createUsersRecordData(
                                 desafio21: createD21ModelStruct(delete: true),
                                 desafio21Started: false,
                               ));
@@ -172,7 +152,7 @@ class _ConfirmaResetDesafioWidgetState
                               safeSetState(() {});
 
                               context.goNamed(
-                                HomePageWidget.routeName,
+                                HomePage.routeName,
                                 extra: <String, dynamic>{
                                   kTransitionInfoKey: const TransitionInfo(
                                     hasTransition: true,
@@ -186,21 +166,14 @@ class _ConfirmaResetDesafioWidgetState
                             options: FFButtonOptions(
                               width: MediaQuery.sizeOf(context).width * 0.85,
                               height: 50.0,
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              iconPadding: const EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
+                              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                              iconPadding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                               color: FlutterFlowTheme.of(context).primary,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .titleMedium
-                                  .override(
-                                    fontFamily: FlutterFlowTheme.of(context)
-                                        .titleMediumFamily,
+                              textStyle: FlutterFlowTheme.of(context).titleMedium.override(
+                                    fontFamily: FlutterFlowTheme.of(context).titleMediumFamily,
                                     color: FlutterFlowTheme.of(context).info,
                                     letterSpacing: 0.0,
-                                    useGoogleFonts:
-                                        !FlutterFlowTheme.of(context)
-                                            .titleMediumIsCustom,
+                                    useGoogleFonts: !FlutterFlowTheme.of(context).titleMediumIsCustom,
                                   ),
                               elevation: 2.0,
                               borderSide: BorderSide(

@@ -116,7 +116,7 @@ class _DonationPageWidgetState extends State<DonationPageWidget> with TickerProv
                                       context.pop();
                                     }
                                     context.pushNamed(
-                                      MensagensSemanticSearchPageWidget.routeName,
+                                      MensagensSemanticSearchPage.routeName,
                                       extra: <String, dynamic>{
                                         kTransitionInfoKey: const TransitionInfo(
                                           hasTransition: true,

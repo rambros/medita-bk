@@ -1,22 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import '/backend/backend.dart';
-import '/backend/schema/structs/index.dart';
 
 import '/auth/base_auth_user_provider.dart';
 
 import '/backend/push_notifications/push_notifications_handler.dart' show PushNotificationsHandler;
+import '/index.dart';
 import '/main.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
-
 import '/flutter_flow/flutter_flow_util.dart';
-import 'serialization_util.dart';
-
-import '/index.dart';
 
 export 'package:go_router/go_router.dart';
 export 'serialization_util.dart';
@@ -82,22 +76,22 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
-      errorBuilder: (context, state) => appStateNotifier.loggedIn ? NavBarPage() : const SociallLoginWidget(),
+      errorBuilder: (context, state) => appStateNotifier.loggedIn ? NavBarPage() : const SocialLoginPage(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
-          builder: (context, _) => appStateNotifier.loggedIn ? NavBarPage() : const SociallLoginWidget(),
+          builder: (context, _) => appStateNotifier.loggedIn ? NavBarPage() : const SocialLoginPage(),
           routes: [
             FFRoute(
-              name: SignInWidget.routeName,
-              path: SignInWidget.routePath,
-              builder: (context, params) => const SignInWidget(),
+              name: SignInPage.routeName,
+              path: SignInPage.routePath,
+              builder: (context, params) => const SignInPage(),
             ),
             FFRoute(
-              name: SignUpWidget.routeName,
-              path: SignUpWidget.routePath,
-              builder: (context, params) => const SignUpWidget(),
+              name: SignUpPage.routeName,
+              path: SignUpPage.routePath,
+              builder: (context, params) => const SignUpPage(),
             ),
             FFRoute(
               name: EditProfilePageWidget.routeName,
@@ -105,15 +99,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => const EditProfilePageWidget(),
             ),
             FFRoute(
-              name: ForgotPasswordWidget.routeName,
-              path: ForgotPasswordWidget.routePath,
-              builder: (context, params) => const ForgotPasswordWidget(),
+              name: ForgotPasswordPage.routeName,
+              path: ForgotPasswordPage.routePath,
+              builder: (context, params) => const ForgotPasswordPage(),
             ),
             FFRoute(
-              name: HomePageWidget.routeName,
-              path: HomePageWidget.routePath,
-              builder: (context, params) =>
-                  params.isEmpty ? NavBarPage(initialPage: 'homePage') : const HomePageWidget(),
+              name: HomePage.routeName,
+              path: HomePage.routePath,
+              builder: (context, params) => params.isEmpty ? NavBarPage(initialPage: 'homePage') : const HomePage(),
             ),
             FFRoute(
               name: ProfilePageWidget.routeName,
@@ -127,14 +120,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   params.isEmpty ? NavBarPage(initialPage: 'meditationHomePage') : const MeditationHomePageWidget(),
             ),
             FFRoute(
-              name: NotificationListPageWidget.routeName,
-              path: NotificationListPageWidget.routePath,
-              builder: (context, params) => const NotificationListPageWidget(),
+              name: NotificationListPage.routeName,
+              path: NotificationListPage.routePath,
+              builder: (context, params) => const NotificationListPage(),
             ),
             FFRoute(
-              name: SociallLoginWidget.routeName,
-              path: SociallLoginWidget.routePath,
-              builder: (context, params) => const SociallLoginWidget(),
+              name: SocialLoginPage.routeName,
+              path: SocialLoginPage.routePath,
+              builder: (context, params) => const SocialLoginPage(),
             ),
             FFRoute(
               name: ConfigPageWidget.routeName,
@@ -147,9 +140,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => const AboutPage(),
             ),
             FFRoute(
-              name: ChangeEmailPageWidget.routeName,
-              path: ChangeEmailPageWidget.routePath,
-              builder: (context, params) => const ChangeEmailPageWidget(),
+              name: ChangeEmailPage.routeName,
+              path: ChangeEmailPage.routePath,
+              builder: (context, params) => const ChangeEmailPage(),
             ),
             FFRoute(
               name: AppReviewPageWidget.routeName,
@@ -248,10 +241,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   params.isEmpty ? NavBarPage(initialPage: 'agendaHomePage') : const AgendaHomePage(),
             ),
             FFRoute(
-              name: MensagensHomePageWidget.routeName,
-              path: MensagensHomePageWidget.routePath,
+              name: MensagensHomePage.routeName,
+              path: MensagensHomePage.routePath,
               builder: (context, params) =>
-                  params.isEmpty ? NavBarPage(initialPage: 'mensagensHomePage') : const MensagensHomePageWidget(),
+                  params.isEmpty ? NavBarPage(initialPage: 'mensagensHomePage') : const MensagensHomePage(),
             ),
             FFRoute(
               name: AgendaListPage.routeName,
@@ -274,14 +267,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => const EventListPage(),
             ),
             FFRoute(
-              name: MensagemDetailsPageWidget.routeName,
-              path: MensagemDetailsPageWidget.routePath,
-              builder: (context, params) => const MensagemDetailsPageWidget(),
+              name: MensagemDetailsPage.routeName,
+              path: MensagemDetailsPage.routePath,
+              builder: (context, params) => const MensagemDetailsPage(),
             ),
             FFRoute(
-              name: MensagemShowPageWidget.routeName,
-              path: MensagemShowPageWidget.routePath,
-              builder: (context, params) => MensagemShowPageWidget(
+              name: MensagemShowPage.routeName,
+              path: MensagemShowPage.routePath,
+              builder: (context, params) => MensagemShowPage(
                 tema: params.getParam(
                   'tema',
                   ParamType.String,
@@ -381,9 +374,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => const PlaylistPlayPageOldWidget(),
             ),
             FFRoute(
-              name: MensagensSemanticSearchPageWidget.routeName,
-              path: MensagensSemanticSearchPageWidget.routePath,
-              builder: (context, params) => const MensagensSemanticSearchPageWidget(),
+              name: MensagensSemanticSearchPage.routeName,
+              path: MensagensSemanticSearchPage.routePath,
+              builder: (context, params) => const MensagensSemanticSearchPage(),
             ),
             FFRoute(
               name: CanalViverListPageWidget.routeName,

@@ -1,17 +1,17 @@
 // Export pages
-export '/modules/authentication/sign_in/sign_in_widget.dart' show SignInWidget;
-export '/modules/authentication/sign_up/sign_up_widget.dart' show SignUpWidget;
+export '/ui/authentication/sign_in/sign_in_page.dart' show SignInPage;
+export '/ui/authentication/sign_up/sign_up_page.dart' show SignUpPage;
 export '/ui/config/edit_profile_page/edit_profile_page.dart' show EditProfilePageWidget;
-export '/modules/authentication/forgot_password/forgot_password_widget.dart' show ForgotPasswordWidget;
-export '/modules/home_page/home_page_widget.dart' show HomePageWidget;
+export '/ui/authentication/forgot_password/forgot_password_page.dart' show ForgotPasswordPage;
+export '/ui/home/home_page/home_page.dart' show HomePage;
 export 'ui/config/profile_page/profile_page.dart' show ProfilePageWidget;
 export '/modules/meditation/meditation_home_page/meditation_home_page_widget.dart' show MeditationHomePageWidget;
-export '/modules/notification/notification_list_page/notification_list_page_widget.dart'
-    show NotificationListPageWidget;
-export '/modules/authentication/sociall_login/sociall_login_widget.dart' show SociallLoginWidget;
+export '/ui/notification/notification_list_page/notification_list_page.dart' show NotificationListPage;
+export '/ui/notification/notification_view_page/notification_view_page.dart' show NotificationViewPage;
+export '/ui/authentication/social_login/social_login_page.dart' show SocialLoginPage;
 export '/ui/config/config_page/config_page.dart' show ConfigPageWidget;
 export '/ui/config/about_page/about_page.dart' show AboutPage;
-export '/modules/authentication/change_email_page/change_email_page_widget.dart' show ChangeEmailPageWidget;
+export '/ui/authentication/change_email_page/change_email_page.dart' show ChangeEmailPage;
 export '/ui/config/app_review_page/app_review_page.dart' show AppReviewPageWidget;
 export '/ui/config/settings_page/settings_page.dart' show SettingsPage;
 export '/ui/config/invite_page/invite_page.dart' show InvitePageWidget;
@@ -27,12 +27,12 @@ export '/ui/video/youtube_player_page/youtube_player_page.dart' show YoutubePlay
 export '/ui/video/congresso_list_page/congresso_list_page.dart' show CongressoListPageWidget;
 export '/ui/video/entrevistas_list_page/entrevistas_list_page.dart' show EntrevistasListPageWidget;
 export '/ui/agenda/agenda_home_page/agenda_home_page.dart' show AgendaHomePage;
-export '/modules/mensagens/mensagens_home_page/mensagens_home_page_widget.dart' show MensagensHomePageWidget;
+export '/ui/mensagens/mensagens_home_page/mensagens_home_page.dart' show MensagensHomePage;
 export '/ui/agenda/agenda_list_page/agenda_list_page.dart' show AgendaListPage;
 export '/ui/agenda/event_details_page/event_details_page.dart' show EventDetailsPage;
 export '/ui/agenda/event_list_page/event_list_page.dart' show EventListPage;
-export '/modules/mensagens/mensagem_details_page/mensagem_details_page_widget.dart' show MensagemDetailsPageWidget;
-export '/modules/mensagens/mensagem_show_page/mensagem_show_page_widget.dart' show MensagemShowPageWidget;
+export '/ui/mensagens/mensagem_details_page/mensagem_details_page.dart' show MensagemDetailsPage;
+export '/ui/mensagens/mensagem_show_page/mensagem_show_page.dart' show MensagemShowPage;
 export '/modules/meditation/meditation_video_list_page/meditation_video_list_page_widget.dart'
     show MeditationVideoListPageWidget;
 export '/modules/meditation/meditation_statistics_page/meditation_statistics_page_widget.dart'
@@ -51,8 +51,8 @@ export '/modules/playlist/playlist_edit_page/playlist_edit_page_widget.dart' sho
 export '/modules/playlist/playlist_edit_audios_page/playlist_edit_audios_page_widget.dart'
     show PlaylistEditAudiosPageWidget;
 export '/modules/playlist/playlist_play_page_old/playlist_play_page_old_widget.dart' show PlaylistPlayPageOldWidget;
-export '/modules/mensagens/mensagens_semantic_search_page/mensagens_semantic_search_page_widget.dart'
-    show MensagensSemanticSearchPageWidget;
+export '/ui/mensagens/mensagens_semantic_search_page/mensagens_semantic_search_page.dart'
+    show MensagensSemanticSearchPage;
 export '/ui/video/canal_viver_list_page/canal_viver_list_page.dart' show CanalViverListPageWidget;
 export '/ui/video/palestras_list_page/palestras_list_page.dart' show PalestrasListPageWidget;
 export '/ui/config/support_page/support_page.dart' show SupportPageWidget;

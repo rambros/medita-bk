@@ -692,7 +692,7 @@ class _ConfigPageWidgetState extends State<ConfigPageWidget> {
                             await viewModel.signOut();
                             GoRouter.of(context).clearRedirectLocation();
 
-                            context.goNamedAuth(SociallLoginWidget.routeName, context.mounted);
+                            context.goNamedAuth(SocialLoginPage.routeName, context.mounted);
                           },
                           text: 'Sair (Logoff)',
                           options: FFButtonOptions(

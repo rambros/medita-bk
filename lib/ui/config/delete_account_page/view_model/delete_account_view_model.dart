@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '/flutter_flow/nav/nav.dart';
 import '/data/repositories/auth_repository.dart';
-import '/modules/authentication/sociall_login/sociall_login_widget.dart';
+import '/ui/authentication/social_login/social_login_page.dart';
 
 class DeleteAccountViewModel extends ChangeNotifier {
   final AuthRepository _authRepository;
@@ -18,7 +18,7 @@ class DeleteAccountViewModel extends ChangeNotifier {
 
       if (context.mounted) {
         GoRouter.of(context).clearRedirectLocation();
-        context.pushNamedAuth(SociallLoginWidget.routeName, context.mounted);
+        context.pushNamedAuth(SocialLoginPage.routeName, context.mounted);
       }
     }
   }
