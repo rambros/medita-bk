@@ -2,15 +2,11 @@ import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
-import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'meditation_card_model.dart';
 export 'meditation_card_model.dart';
 
@@ -153,13 +149,11 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
                       ),
                       maxLines: 2,
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            fontFamily:
-                                FlutterFlowTheme.of(context).bodyMediumFamily,
+                            fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
                             fontSize: 13.0,
                             letterSpacing: 0.0,
                             fontWeight: FontWeight.bold,
-                            useGoogleFonts: !FlutterFlowTheme.of(context)
-                                .bodyMediumIsCustom,
+                            useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
                           ),
                     ),
                     Text(
@@ -168,13 +162,11 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
                         'author',
                       ),
                       style: FlutterFlowTheme.of(context).bodySmall.override(
-                            fontFamily:
-                                FlutterFlowTheme.of(context).bodySmallFamily,
+                            fontFamily: FlutterFlowTheme.of(context).bodySmallFamily,
                             letterSpacing: 0.0,
                             fontWeight: FontWeight.w500,
                             fontStyle: FontStyle.italic,
-                            useGoogleFonts:
-                                !FlutterFlowTheme.of(context).bodySmallIsCustom,
+                            useGoogleFonts: !FlutterFlowTheme.of(context).bodySmallIsCustom,
                           ),
                     ),
                     Align(
@@ -197,17 +189,12 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
                               ),
                               textAlign: TextAlign.start,
                               maxLines: 2,
-                              style: FlutterFlowTheme.of(context)
-                                  .bodySmall
-                                  .override(
-                                    fontFamily: FlutterFlowTheme.of(context)
-                                        .bodySmallFamily,
+                              style: FlutterFlowTheme.of(context).bodySmall.override(
+                                    fontFamily: FlutterFlowTheme.of(context).bodySmallFamily,
                                     fontSize: 11.0,
                                     letterSpacing: 0.0,
                                     fontWeight: FontWeight.normal,
-                                    useGoogleFonts:
-                                        !FlutterFlowTheme.of(context)
-                                            .bodySmallIsCustom,
+                                    useGoogleFonts: !FlutterFlowTheme.of(context).bodySmallIsCustom,
                                   ),
                             ),
                           ],
@@ -215,8 +202,7 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
                       ),
                     ),
                     Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 8.0, 0.0),
+                      padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 8.0, 0.0),
                       child: Container(
                         width: MediaQuery.sizeOf(context).width * 1.0,
                         height: 20.0,
@@ -232,28 +218,18 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
                                 '${widget.docMeditation!.audioDuration.substring(0, 2)}min',
                                 'min',
                               ),
-                              style: FlutterFlowTheme.of(context)
-                                  .bodySmall
-                                  .override(
-                                    fontFamily: FlutterFlowTheme.of(context)
-                                        .bodySmallFamily,
+                              style: FlutterFlowTheme.of(context).bodySmall.override(
+                                    fontFamily: FlutterFlowTheme.of(context).bodySmallFamily,
                                     letterSpacing: 0.0,
-                                    useGoogleFonts:
-                                        !FlutterFlowTheme.of(context)
-                                            .bodySmallIsCustom,
+                                    useGoogleFonts: !FlutterFlowTheme.of(context).bodySmallIsCustom,
                                   ),
                             ),
                             Text(
                               '${widget.docMeditation?.numPlayed.toString()} reproduções',
-                              style: FlutterFlowTheme.of(context)
-                                  .bodySmall
-                                  .override(
-                                    fontFamily: FlutterFlowTheme.of(context)
-                                        .bodySmallFamily,
+                              style: FlutterFlowTheme.of(context).bodySmall.override(
+                                    fontFamily: FlutterFlowTheme.of(context).bodySmallFamily,
                                     letterSpacing: 0.0,
-                                    useGoogleFonts:
-                                        !FlutterFlowTheme.of(context)
-                                            .bodySmallIsCustom,
+                                    useGoogleFonts: !FlutterFlowTheme.of(context).bodySmallIsCustom,
                                   ),
                             ),
                             if (_model.isDownloaded == true)
@@ -265,8 +241,7 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
                             Container(
                               height: 20.0,
                               decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context)
-                                    .primaryBackground,
+                                color: FlutterFlowTheme.of(context).primaryBackground,
                               ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -274,41 +249,29 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
                                 children: [
                                   Text(
                                     valueOrDefault<String>(
-                                      widget.docMeditation?.numLiked
-                                          .toString(),
+                                      widget.docMeditation?.numLiked.toString(),
                                       '5',
                                     ),
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodySmall
-                                        .override(
-                                          fontFamily:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodySmallFamily,
+                                    style: FlutterFlowTheme.of(context).bodySmall.override(
+                                          fontFamily: FlutterFlowTheme.of(context).bodySmallFamily,
                                           letterSpacing: 0.0,
-                                          useGoogleFonts:
-                                              !FlutterFlowTheme.of(context)
-                                                  .bodySmallIsCustom,
+                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodySmallIsCustom,
                                         ),
                                   ),
                                   Builder(
                                     builder: (context) {
-                                      if ((currentUserDocument?.favorites
-                                                      .toList() ??
-                                                  [])
-                                              .contains(widget.docMeditation
-                                                  ?.reference.id) ==
+                                      if ((currentUserDocument?.favorites.toList() ?? [])
+                                              .contains(widget.docMeditation?.reference.id) ==
                                           true) {
                                         return Icon(
                                           Icons.favorite,
-                                          color: FlutterFlowTheme.of(context)
-                                              .primary,
+                                          color: FlutterFlowTheme.of(context).primary,
                                           size: 16.0,
                                         );
                                       } else {
                                         return Icon(
                                           Icons.favorite_border,
-                                          color: FlutterFlowTheme.of(context)
-                                              .primary,
+                                          color: FlutterFlowTheme.of(context).primary,
                                           size: 16.0,
                                         );
                                       }

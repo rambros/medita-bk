@@ -5,7 +5,7 @@ export '/ui/config/edit_profile_page/edit_profile_page.dart' show EditProfilePag
 export '/ui/authentication/forgot_password/forgot_password_page.dart' show ForgotPasswordPage;
 export '/ui/home/home_page/home_page.dart' show HomePage;
 export 'ui/config/profile_page/profile_page.dart' show ProfilePageWidget;
-export '/modules/meditation/meditation_home_page/meditation_home_page_widget.dart' show MeditationHomePageWidget;
+export '/ui/meditation/meditation_home_page/meditation_home_page.dart' show MeditationHomePageWidget;
 export '/ui/notification/notification_list_page/notification_list_page.dart' show NotificationListPage;
 export '/ui/notification/notification_view_page/notification_view_page.dart' show NotificationViewPage;
 export '/ui/authentication/social_login/social_login_page.dart' show SocialLoginPage;
@@ -18,10 +18,9 @@ export '/ui/config/invite_page/invite_page.dart' show InvitePageWidget;
 export '/ui/config/delete_account_page/delete_account_page.dart' show DeleteAccountPage;
 export '/ui/config/about_authors_page/about_authors_page.dart' show AboutAuthorsPageWidget;
 export '/ui/config/alarm_page/alarm_page.dart' show AlarmPageWidget;
-export '/modules/meditation/meditation_details_page/meditation_details_page_widget.dart'
-    show MeditationDetailsPageWidget;
-export '/modules/meditation/meditation_play_page/meditation_play_page_widget.dart' show MeditationPlayPageWidget;
-export '/modules/meditation/meditation_list_page/meditation_list_page_widget.dart' show MeditationListPageWidget;
+export '/ui/meditation/meditation_details_page/meditation_details_page.dart' show MeditationDetailsPageWidget;
+export '/ui/meditation/meditation_play_page/meditation_play_page.dart' show MeditationPlayPageWidget;
+export '/ui/meditation/meditation_list_page/meditation_list_page.dart' show MeditationListPageWidget;
 export '/ui/video/video_home_page/video_home_page.dart' show VideoHomePageWidget;
 export '/ui/video/youtube_player_page/youtube_player_page.dart' show YoutubePlayerPageWidget;
 export '/ui/video/congresso_list_page/congresso_list_page.dart' show CongressoListPageWidget;
@@ -33,10 +32,8 @@ export '/ui/agenda/event_details_page/event_details_page.dart' show EventDetails
 export '/ui/agenda/event_list_page/event_list_page.dart' show EventListPage;
 export '/ui/mensagens/mensagem_details_page/mensagem_details_page.dart' show MensagemDetailsPage;
 export '/ui/mensagens/mensagem_show_page/mensagem_show_page.dart' show MensagemShowPage;
-export '/modules/meditation/meditation_video_list_page/meditation_video_list_page_widget.dart'
-    show MeditationVideoListPageWidget;
-export '/modules/meditation/meditation_statistics_page/meditation_statistics_page_widget.dart'
-    show MeditationStatisticsPageWidget;
+export '/ui/meditation/meditation_video_list_page/meditation_video_list_page.dart' show MeditationVideoListPage;
+export '/ui/meditation/meditation_statistics_page/meditation_statistics_page.dart' show MeditationStatisticsPageWidget;
 export '/modules/playlist/playlist_list_page/playlist_list_page_widget.dart' show PlaylistListPageWidget;
 export '/modules/playlist/playlist_details_page/playlist_details_page_widget.dart' show PlaylistDetailsPageWidget;
 export '/modules/playlist/playlist_add_audios_page/playlist_add_audios_page_widget.dart'
@@ -60,8 +57,7 @@ export '/ui/config/feedback_page/feedback_page.dart' show FeedbackPageWidget;
 export '/ui/config/feature_page/feature_page.dart' show FeaturePageWidget;
 export '/ui/config/donation_page/donation_page.dart' show DonationPageWidget;
 export '/modules/playlist/playlist_play_page/playlist_play_page_widget.dart' show PlaylistPlayPageWidget;
-export '/modules/meditation/meditation_play_page_old/meditation_play_page_old_widget.dart'
-    show MeditationPlayPageOldWidget;
+
 export '/modules/playlist/playlist_audio_play_page/playlist_audio_play_page_widget.dart'
     show PlaylistAudioPlayPageWidget;
 export '/modules/desafio/home_desafio_page/home_desafio_page_widget.dart' show HomeDesafioPageWidget;

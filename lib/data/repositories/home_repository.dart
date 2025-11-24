@@ -1,6 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '/backend/backend.dart';
-import '/backend/schema/structs/index.dart';
 
 /// Repository for home page data access
 /// Centralizes Firestore queries for users, Desafio 21, and settings

@@ -1,10 +1,7 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/index.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'back_button_model.dart';
 export 'back_button_model.dart';
 
@@ -68,8 +65,7 @@ class _BackButtonWidgetState extends State<BackButtonWidget> {
                   fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
                   color: Colors.white,
                   letterSpacing: 0.0,
-                  useGoogleFonts:
-                      !FlutterFlowTheme.of(context).titleSmallIsCustom,
+                  useGoogleFonts: !FlutterFlowTheme.of(context).titleSmallIsCustom,
                 ),
             elevation: 0.0,
             borderSide: const BorderSide(

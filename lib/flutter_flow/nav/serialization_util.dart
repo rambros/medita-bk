@@ -29,8 +29,7 @@ String placeToString(FFPlace place) => jsonEncode({
       'zipCode': place.zipCode,
     });
 
-String uploadedFileToString(FFUploadedFile uploadedFile) =>
-    uploadedFile.serialize();
+String uploadedFileToString(FFUploadedFile uploadedFile) => uploadedFile.serialize();
 
 const _kDocIdDelimeter = '|';
 String _serializeDocumentReference(DocumentReference ref) {
@@ -158,8 +157,7 @@ FFPlace placeFromString(String placeStr) {
   );
 }
 
-FFUploadedFile uploadedFileFromString(String uploadedFileStr) =>
-    FFUploadedFile.deserialize(uploadedFileStr);
+FFUploadedFile uploadedFileFromString(String uploadedFileStr) => FFUploadedFile.deserialize(uploadedFileStr);
 
 DocumentReference _deserializeDocumentReference(
   String refStr,
@@ -210,7 +208,7 @@ dynamic deserializeParam<T>(
       }
       return paramValues
           .whereType<String>()
-          .map((p) => p as String)
+          .map((p) => p)
           .map((p) => deserializeParam<T>(
                 p,
                 paramType,
@@ -233,9 +231,7 @@ dynamic deserializeParam<T>(
         return param == 'true';
       case ParamType.DateTime:
         final milliseconds = int.tryParse(param);
-        return milliseconds != null
-            ? DateTime.fromMillisecondsSinceEpoch(milliseconds)
-            : null;
+        return milliseconds != null ? DateTime.fromMillisecondsSinceEpoch(milliseconds) : null;
       case ParamType.DateTimeRange:
         return dateTimeRangeFromString(param);
       case ParamType.LatLng:
@@ -271,9 +267,7 @@ Future<dynamic> Function(String) getDoc(
   List<String> collectionNamePath,
   RecordBuilder recordBuilder,
 ) {
-  return (String ids) => _deserializeDocumentReference(ids, collectionNamePath)
-      .get()
-      .then((s) => recordBuilder(s));
+  return (String ids) => _deserializeDocumentReference(ids, collectionNamePath).get().then((s) => recordBuilder(s));
 }
 
 Future<List<T>> Function(String) getDocList<T>(
@@ -284,13 +278,11 @@ Future<List<T>> Function(String) getDocList<T>(
     List<String> docIds = [];
     try {
       final ids = json.decode(idsList) as Iterable;
-      docIds = ids.whereType<String>().map((d) => d as String).toList();
+      docIds = ids.whereType<String>().map((d) => d).toList();
     } catch (_) {}
     return Future.wait(
       docIds.map(
-        (ids) => _deserializeDocumentReference(ids, collectionNamePath)
-            .get()
-            .then((s) => recordBuilder(s)),
+        (ids) => _deserializeDocumentReference(ids, collectionNamePath).get().then((s) => recordBuilder(s)),
       ),
     ).then((docs) => docs.where((d) => d != null).map((d) => d!).toList());
   };

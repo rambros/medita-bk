@@ -71,8 +71,7 @@ class WeeklyStatisticsWidget extends StatefulWidget {
 }
 
 class _WeeklyStatisticsWidgetState extends State<WeeklyStatisticsWidget> {
-  List<MeditationLogStruct> listLogsFromRepository =
-      FFAppState().meditationLogList;
+  List<MeditationLogStruct> listLogsFromRepository = FFAppState().meditationLogList;
   List<WeeklyLog?> listWeeklyLog = List.filled(12, WeeklyLog()); // 12 weeks
 
   List<CartesianSeries<dynamic, dynamic>>? _seriesTimeListW;
@@ -103,10 +102,8 @@ class _WeeklyStatisticsWidgetState extends State<WeeklyStatisticsWidget> {
   String get numberMedSessionsW => _numberMedSessionsW.toString();
   String get dailyAverageSessionsW => _dailyAverageSessionsW.toStringAsFixed(1);
   String get greaterNumDailySessionsW => _greaterNumDailySessionsW.toString();
-  String get greaterSequenceOfDaysWithSessionW =>
-      _greaterSequenceOfDaysWithSessionW.toString();
-  String get actualSequenceOfDaysWithSessionW =>
-      _actualSequenceOfDaysWithSessionW.toString();
+  String get greaterSequenceOfDaysWithSessionW => _greaterSequenceOfDaysWithSessionW.toString();
+  String get actualSequenceOfDaysWithSessionW => _actualSequenceOfDaysWithSessionW.toString();
 
   String _roundTime(int time) {
     var duration = Duration(seconds: time);
@@ -129,8 +126,7 @@ class _WeeklyStatisticsWidgetState extends State<WeeklyStatisticsWidget> {
 
   List<MeditationLogStruct> _getLastWeeks(List<MeditationLogStruct> logs) {
     var now = DateTime.now();
-    var weeks =
-        now.subtract(const Duration(days: (7 * 11))); //[0..11] == 12 weeks
+    var weeks = now.subtract(const Duration(days: (7 * 11))); //[0..11] == 12 weeks
     var tempLogs = logs.where((log) => log.date!.isAfter(weeks)).toList();
     return tempLogs;
   }
@@ -186,9 +182,7 @@ class _WeeklyStatisticsWidgetState extends State<WeeklyStatisticsWidget> {
         _numberMedSessionsW++;
       }
 
-      if (log.date!.year != yearSessionTemp ||
-          log.date!.month != monthSessionTemp ||
-          log.date!.day != daySessionTemp) {
+      if (log.date!.year != yearSessionTemp || log.date!.month != monthSessionTemp || log.date!.day != daySessionTemp) {
         numDaysWithSessionW++;
         daySessionTemp = log.date!.day;
         monthSessionTemp = log.date!.month;
@@ -196,30 +190,23 @@ class _WeeklyStatisticsWidgetState extends State<WeeklyStatisticsWidget> {
       }
 
       // insert values in the day that is in list -> search in day atribute
-      var index = listWeeklyLog.indexWhere((value) => (value!.week ==
-          getDate(log.date!.subtract(Duration(days: log.date!.weekday - 1)))));
+      var index = listWeeklyLog
+          .indexWhere((value) => (value!.week == getDate(log.date!.subtract(Duration(days: log.date!.weekday - 1)))));
 
-      listWeeklyLog[index]!.totalTime =
-          listWeeklyLog[index]!.totalTime! + log.duration;
-      listWeeklyLog[index]!.medTime = log.type == 'guided'
-          ? listWeeklyLog[index]!.medTime! + log.duration
-          : listWeeklyLog[index]!.medTime;
-      listWeeklyLog[index]!.timerTime = log.type == 'timer'
-          ? listWeeklyLog[index]!.timerTime! + log.duration
-          : listWeeklyLog[index]!.timerTime;
-      listWeeklyLog[index]!.medSession = log.type == 'guided'
-          ? listWeeklyLog[index]!.medSession! + 1
-          : listWeeklyLog[index]!.medSession;
-      listWeeklyLog[index]!.timerSession = log.type == 'timer'
-          ? listWeeklyLog[index]!.timerSession! + 1
-          : listWeeklyLog[index]!.timerSession!;
+      listWeeklyLog[index]!.totalTime = listWeeklyLog[index]!.totalTime! + log.duration;
+      listWeeklyLog[index]!.medTime =
+          log.type == 'guided' ? listWeeklyLog[index]!.medTime! + log.duration : listWeeklyLog[index]!.medTime;
+      listWeeklyLog[index]!.timerTime =
+          log.type == 'timer' ? listWeeklyLog[index]!.timerTime! + log.duration : listWeeklyLog[index]!.timerTime;
+      listWeeklyLog[index]!.medSession =
+          log.type == 'guided' ? listWeeklyLog[index]!.medSession! + 1 : listWeeklyLog[index]!.medSession;
+      listWeeklyLog[index]!.timerSession =
+          log.type == 'timer' ? listWeeklyLog[index]!.timerSession! + 1 : listWeeklyLog[index]!.timerSession!;
       listWeeklyLog[index]!.sessions = listWeeklyLog[index]!.sessions! + 1;
 
       // insert values in the day that is in list -> search in day atribute
       var indexDay = listDays.indexWhere((value) =>
-          value.day!.day == log.date!.day &&
-          value.day!.month == log.date!.month &&
-          value.day!.year == log.date!.year);
+          value.day!.day == log.date!.day && value.day!.month == log.date!.month && value.day!.year == log.date!.year);
       listDays[indexDay].sessions = listDays[indexDay].sessions! + 1;
     }
     _numberSessionsW = listLogs.length;
@@ -264,8 +251,7 @@ class _WeeklyStatisticsWidgetState extends State<WeeklyStatisticsWidget> {
     }
 
     listSequences.sort((a, b) => b.compareTo(a));
-    _greaterSequenceOfDaysWithSessionW =
-        listSequences.isNotEmpty ? listSequences[0] : 0;
+    _greaterSequenceOfDaysWithSessionW = listSequences.isNotEmpty ? listSequences[0] : 0;
 
     var listTemp = List.from(listDays);
     listTemp.sort((a, b) => b.sessions.compareTo(a.sessions));
@@ -280,11 +266,9 @@ class _WeeklyStatisticsWidgetState extends State<WeeklyStatisticsWidget> {
       StackedColumnSeries<WeeklyLog?, String>(
         name: 'Timer',
         dataSource: listWeeklyLog,
-        xValueMapper: (WeeklyLog? log, _) =>
-            '${log!.week!.day}/${log.week!.month}',
+        xValueMapper: (WeeklyLog? log, _) => '${log!.week!.day}/${log.week!.month}',
         yValueMapper: (WeeklyLog? log, _) => log!.timerTime! ~/ 60,
-        dataLabelMapper: (WeeklyLog? log, _) =>
-            (log!.timerTime! ~/ 60).toString(),
+        dataLabelMapper: (WeeklyLog? log, _) => (log!.timerTime! ~/ 60).toString(),
         dataLabelSettings: DataLabelSettings(
             isVisible: false,
             showZeroValue: false,
@@ -296,11 +280,9 @@ class _WeeklyStatisticsWidgetState extends State<WeeklyStatisticsWidget> {
       StackedColumnSeries<WeeklyLog?, String>(
         name: 'Conduzida',
         dataSource: listWeeklyLog,
-        xValueMapper: (WeeklyLog? log, _) =>
-            '${log!.week!.day}/${log.week!.month}',
+        xValueMapper: (WeeklyLog? log, _) => '${log!.week!.day}/${log.week!.month}',
         yValueMapper: (WeeklyLog? log, _) => log!.medTime! ~/ 60,
-        dataLabelMapper: (WeeklyLog? log, _) =>
-            (log!.medTime! ~/ 60).toString(),
+        dataLabelMapper: (WeeklyLog? log, _) => (log!.medTime! ~/ 60).toString(),
         dataLabelSettings: DataLabelSettings(
             isVisible: false,
             showZeroValue: false,
@@ -317,8 +299,7 @@ class _WeeklyStatisticsWidgetState extends State<WeeklyStatisticsWidget> {
       StackedColumnSeries<WeeklyLog?, String>(
         name: 'Timer',
         dataSource: listWeeklyLog,
-        xValueMapper: (WeeklyLog? log, _) =>
-            '${log!.week!.day}/${log.week!.month}',
+        xValueMapper: (WeeklyLog? log, _) => '${log!.week!.day}/${log.week!.month}',
         yValueMapper: (WeeklyLog? log, _) => log!.timerSession,
         dataLabelMapper: (WeeklyLog? log, _) => (log!.timerSession).toString(),
         dataLabelSettings: DataLabelSettings(
@@ -332,8 +313,7 @@ class _WeeklyStatisticsWidgetState extends State<WeeklyStatisticsWidget> {
       StackedColumnSeries<WeeklyLog?, String>(
         name: 'Conduzida',
         dataSource: listWeeklyLog,
-        xValueMapper: (WeeklyLog? log, _) =>
-            '${log!.week!.day}/${log.week!.month}',
+        xValueMapper: (WeeklyLog? log, _) => '${log!.week!.day}/${log.week!.month}',
         yValueMapper: (WeeklyLog? log, _) => log!.medSession,
         dataLabelMapper: (WeeklyLog? log, _) => (log!.medSession).toString(),
         dataLabelSettings: DataLabelSettings(
@@ -368,77 +348,63 @@ class _WeeklyStatisticsWidgetState extends State<WeeklyStatisticsWidget> {
             ),
             _seriesTimeListW != null
                 ? Center(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: ExcludeSemantics(
-                        child: SizedBox(
-                            height: 250,
-                            width: MediaQuery.of(context).size.width * 0.95,
-                            child: SfCartesianChart(
-                              series: _seriesTimeListW!,
-                              primaryYAxis: const NumericAxis(
-                                labelFormat: '{value}',
-                                isVisible: true,
+                    child: SizedBox(
+                        height: 250,
+                        width: MediaQuery.of(context).size.width * 0.95,
+                        child: ExcludeSemantics(
+                          child: SfCartesianChart(
+                            series: _seriesTimeListW!,
+                            primaryYAxis: const NumericAxis(
+                              labelFormat: '{value}',
+                              isVisible: true,
+                            ),
+                            primaryXAxis: const CategoryAxis(
+                              interval: 1,
+                              majorGridLines: MajorGridLines(width: 0),
+                              title: AxisTitle(
+                                text: 'semana',
                               ),
-                              primaryXAxis: const CategoryAxis(
-                                interval: 1,
-                                majorGridLines: MajorGridLines(width: 0),
-                                title: AxisTitle(
-                                  text: 'semana',
-                                ),
-                                labelRotation: 315,
-                              ),
-                              plotAreaBackgroundColor: Colors.grey[100],
-                              title: const ChartTitle(
-                                text: 'Tempo por semana (minutos)',
-                                textStyle: TextStyle(fontSize: 16),
-                              ),
-                              legend: const Legend(
-                                isVisible: false,
-                                title: LegendTitle(text: 'timer'),
-                              ),
-                              tooltipBehavior: TooltipBehavior(enable: true),
-                            )),
-                      ),
-                    ),
+                              labelRotation: 315,
+                            ),
+                            plotAreaBackgroundColor: Colors.grey[100],
+                            title: const ChartTitle(
+                              text: 'Tempo por semana (minutos)',
+                              textStyle: TextStyle(fontSize: 16),
+                            ),
+                            tooltipBehavior: TooltipBehavior(enable: true),
+                          ),
+                        )),
                   )
                 : const SizedBox(height: 6),
             _seriesSessionsListW != null
                 ? Center(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: ExcludeSemantics(
-                        child: SizedBox(
-                            height: 250,
-                            width: MediaQuery.of(context).size.width * 0.95,
-                            child: SfCartesianChart(
-                              series: _seriesSessionsListW!,
-                              primaryYAxis: const NumericAxis(
-                                labelFormat: '{value}',
-                                isVisible: true,
+                    child: SizedBox(
+                        height: 250,
+                        width: MediaQuery.of(context).size.width * 0.95,
+                        child: ExcludeSemantics(
+                          child: SfCartesianChart(
+                            series: _seriesSessionsListW!,
+                            primaryYAxis: const NumericAxis(
+                              labelFormat: '{value}',
+                              isVisible: true,
+                            ),
+                            primaryXAxis: const CategoryAxis(
+                              interval: 1,
+                              majorGridLines: MajorGridLines(width: 0),
+                              title: AxisTitle(
+                                text: 'semana',
                               ),
-                              primaryXAxis: const CategoryAxis(
-                                interval: 1,
-                                majorGridLines: MajorGridLines(width: 0),
-                                title: AxisTitle(
-                                  text: 'semana',
-                                ),
-                                labelRotation: 315,
-                              ),
-                              plotAreaBackgroundColor: Colors.grey[100],
-                              title: const ChartTitle(
-                                text: 'Sessões por semana',
-                                textStyle: TextStyle(fontSize: 16),
-                              ),
-                              // Enable legend
-                              legend: const Legend(
-                                isVisible: false,
-                                title: LegendTitle(text: 'timer'),
-                              ),
-                              tooltipBehavior: TooltipBehavior(enable: true),
-                            )),
-                      ),
-                    ),
+                              labelRotation: 315,
+                            ),
+                            plotAreaBackgroundColor: Colors.grey[100],
+                            title: const ChartTitle(
+                              text: 'Sessões por semana',
+                              textStyle: TextStyle(fontSize: 16),
+                            ),
+                            // Enable legend
+                            tooltipBehavior: TooltipBehavior(enable: true),
+                          ),
+                        )),
                   )
                 : const SizedBox(height: 6),
             Padding(
@@ -446,43 +412,27 @@ class _WeeklyStatisticsWidgetState extends State<WeeklyStatisticsWidget> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Sequencias contínuas',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+                  const Text('Sequencias contínuas', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
                   const SizedBox(height: 6),
-                  _showLine(
-                      title: 'Dias consecutivos - atual',
-                      value: actualSequenceOfDaysWithSessionW),
-                  _showLine(
-                      title: 'Maior sequencia de dias consecutivos',
-                      value: greaterSequenceOfDaysWithSessionW),
+                  _showLine(title: 'Dias consecutivos - atual', value: actualSequenceOfDaysWithSessionW),
+                  _showLine(title: 'Maior sequencia de dias consecutivos', value: greaterSequenceOfDaysWithSessionW),
                   const SizedBox(height: 24),
-                  const Text('Tempo',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+                  const Text('Tempo', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
                   const SizedBox(height: 6),
                   _showLine(title: 'Total', value: totalTimeW),
                   _showLine(title: 'Timer', value: totalTimeTimerW),
                   _showLine(title: 'Meditação conduzida', value: totalTimeMedW),
                   _showLine(title: 'Média diária', value: dailyAverageTimeW),
                   _showLine(title: 'Duração média', value: averageSessionTimeW),
-                  _showLine(
-                      title: 'Sessão de duração mais longa',
-                      value: longestSessionW),
+                  _showLine(title: 'Sessão de duração mais longa', value: longestSessionW),
                   const SizedBox(height: 24),
-                  const Text('Sessões',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+                  const Text('Sessões', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
                   const SizedBox(height: 6),
                   _showLine(title: 'Total', value: numberSessionsW),
                   _showLine(title: 'Timer', value: numberTimerSessionsW),
-                  _showLine(
-                      title: 'Meditação conduzida', value: numberMedSessionsW),
-                  _showLine(
-                      title: 'Frequencia diária', value: dailyAverageSessionsW),
-                  _showLine(
-                      title: 'Maior número em único dia',
-                      value: greaterNumDailySessionsW),
+                  _showLine(title: 'Meditação conduzida', value: numberMedSessionsW),
+                  _showLine(title: 'Frequencia diária', value: dailyAverageSessionsW),
+                  _showLine(title: 'Maior número em único dia', value: greaterNumDailySessionsW),
                 ],
               ),
             )

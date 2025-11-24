@@ -49,9 +49,7 @@ class DailyLog {
       return -1;
     }
 
-    if ((day!.day == other.day) &&
-        (day!.month == other.month) &&
-        (day!.year == other.year)) {
+    if ((day!.day == other.day) && (day!.month == other.month) && (day!.year == other.year)) {
       return 0;
     }
 
@@ -74,8 +72,7 @@ class DailyStatisticsWidget extends StatefulWidget {
 }
 
 class _DailyStatisticsWidgetState extends State<DailyStatisticsWidget> {
-  List<MeditationLogStruct> listLogsFromRepository =
-      FFAppState().meditationLogList;
+  List<MeditationLogStruct> listLogsFromRepository = FFAppState().meditationLogList;
   List<DailyLog?> listDailyLog = List.filled(14, DailyLog()); // 14 days
 
   List<CartesianSeries<dynamic, dynamic>>? _seriesTimeListD;
@@ -106,10 +103,8 @@ class _DailyStatisticsWidgetState extends State<DailyStatisticsWidget> {
   String get numberMedSessionsD => _numberMedSessionsD.toString();
   String get dailyAverageSessionsD => _dailyAverageSessionsD.toStringAsFixed(1);
   String get greaterNumDailySessionsD => _greaterNumDailySessionsD.toString();
-  String get greaterSequenceOfDaysWithSessionD =>
-      _greaterSequenceOfDaysWithSessionD.toString();
-  String get actualSequenceOfDaysWithSessionD =>
-      _actualSequenceOfDaysWithSessionD.toString();
+  String get greaterSequenceOfDaysWithSessionD => _greaterSequenceOfDaysWithSessionD.toString();
+  String get actualSequenceOfDaysWithSessionD => _actualSequenceOfDaysWithSessionD.toString();
 
   String _roundTime(int time) {
     var duration = Duration(seconds: time);
@@ -124,8 +119,7 @@ class _DailyStatisticsWidgetState extends State<DailyStatisticsWidget> {
 
   List<MeditationLogStruct> _getLastDays(List<MeditationLogStruct> logs) {
     var now = DateTime.now();
-    var days =
-        now.subtract(const Duration(days: 13, hours: 0)); // [0..13] = 14 dias
+    var days = now.subtract(const Duration(days: 13, hours: 0)); // [0..13] = 14 dias
     var tempLogs = logs.where((log) => log.date!.isAfter(days)).toList();
     return tempLogs;
   }
@@ -165,9 +159,7 @@ class _DailyStatisticsWidgetState extends State<DailyStatisticsWidget> {
         _numberMedSessionsD++;
       }
 
-      if (log.date!.year != yearSessionTemp ||
-          log.date!.month != monthSessionTemp ||
-          log.date!.day != daySessionTemp) {
+      if (log.date!.year != yearSessionTemp || log.date!.month != monthSessionTemp || log.date!.day != daySessionTemp) {
         numDaysWithSession++;
         daySessionTemp = log.date!.day;
         monthSessionTemp = log.date!.month;
@@ -176,33 +168,24 @@ class _DailyStatisticsWidgetState extends State<DailyStatisticsWidget> {
 
       // insert values in the day that is in list -> search in day atribute
       var index = listDailyLog.indexWhere((value) =>
-          value!.day!.day == log.date!.day &&
-          value.day!.month == log.date!.month &&
-          value.day!.year == log.date!.year);
+          value!.day!.day == log.date!.day && value.day!.month == log.date!.month && value.day!.year == log.date!.year);
 
-      listDailyLog[index]!.totalTime =
-          listDailyLog[index]!.totalTime! + log.duration;
-      listDailyLog[index]!.medTime = log.type == 'guided'
-          ? listDailyLog[index]!.medTime! + log.duration
-          : listDailyLog[index]!.medTime;
-      listDailyLog[index]!.timerTime = log.type == 'timer'
-          ? listDailyLog[index]!.timerTime! + log.duration
-          : listDailyLog[index]!.timerTime;
-      listDailyLog[index]!.medSession = log.type == 'guided'
-          ? listDailyLog[index]!.medSession! + 1
-          : listDailyLog[index]!.medSession;
-      listDailyLog[index]!.timerSession = log.type == 'timer'
-          ? listDailyLog[index]!.timerSession! + 1
-          : listDailyLog[index]!.timerSession!;
+      listDailyLog[index]!.totalTime = listDailyLog[index]!.totalTime! + log.duration;
+      listDailyLog[index]!.medTime =
+          log.type == 'guided' ? listDailyLog[index]!.medTime! + log.duration : listDailyLog[index]!.medTime;
+      listDailyLog[index]!.timerTime =
+          log.type == 'timer' ? listDailyLog[index]!.timerTime! + log.duration : listDailyLog[index]!.timerTime;
+      listDailyLog[index]!.medSession =
+          log.type == 'guided' ? listDailyLog[index]!.medSession! + 1 : listDailyLog[index]!.medSession;
+      listDailyLog[index]!.timerSession =
+          log.type == 'timer' ? listDailyLog[index]!.timerSession! + 1 : listDailyLog[index]!.timerSession!;
       listDailyLog[index]!.sessions = listDailyLog[index]!.sessions! + 1;
     }
     _numberSessionsD = listLogs.length;
     if (_numberSessionsD > 0) {
       _averageSessionTimeD = _totalTimeD ~/ _numberSessionsD;
-      _dailyAverageTimeD =
-          numDaysWithSession == 0 ? 0 : _totalTimeD ~/ numDaysWithSession;
-      _dailyAverageSessionsD =
-          numDaysWithSession == 0 ? 0 : _numberSessionsD / numDaysWithSession;
+      _dailyAverageTimeD = numDaysWithSession == 0 ? 0 : _totalTimeD ~/ numDaysWithSession;
+      _dailyAverageSessionsD = numDaysWithSession == 0 ? 0 : _numberSessionsD / numDaysWithSession;
 
       listLogs.sort((a, b) => b.duration.compareTo(a.duration));
       _longestSessionD = listLogs[0].duration;
@@ -240,8 +223,7 @@ class _DailyStatisticsWidgetState extends State<DailyStatisticsWidget> {
     }
 
     listSequences.sort((a, b) => b.compareTo(a));
-    _greaterSequenceOfDaysWithSessionD =
-        listSequences.isNotEmpty ? listSequences[0] : 0;
+    _greaterSequenceOfDaysWithSessionD = listSequences.isNotEmpty ? listSequences[0] : 0;
 
     var listTempTest = List.from(listDailyLog);
 
@@ -259,8 +241,7 @@ class _DailyStatisticsWidgetState extends State<DailyStatisticsWidget> {
         dataSource: listDailyLog,
         xValueMapper: (DailyLog? log, _) => log!.day,
         yValueMapper: (DailyLog? log, _) => log!.timerTime! ~/ 60,
-        dataLabelMapper: (DailyLog? log, _) =>
-            (log!.totalTime! ~/ 60).toString(),
+        dataLabelMapper: (DailyLog? log, _) => (log!.totalTime! ~/ 60).toString(),
         dataLabelSettings: DataLabelSettings(
             isVisible: false,
             showZeroValue: false,
@@ -274,8 +255,7 @@ class _DailyStatisticsWidgetState extends State<DailyStatisticsWidget> {
         dataSource: listDailyLog,
         xValueMapper: (DailyLog? log, _) => log!.day,
         yValueMapper: (DailyLog? log, _) => log!.medTime! ~/ 60,
-        dataLabelMapper: (DailyLog? log, _) =>
-            (log!.totalTime! ~/ 60).toString(),
+        dataLabelMapper: (DailyLog? log, _) => (log!.totalTime! ~/ 60).toString(),
         dataLabelSettings: DataLabelSettings(
             isVisible: false,
             showZeroValue: false,
@@ -343,80 +323,64 @@ class _DailyStatisticsWidgetState extends State<DailyStatisticsWidget> {
               ),
               _seriesTimeListD != null
                   ? Center(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: ExcludeSemantics(
-                          child: SizedBox(
-                              height: 250,
-                              width: MediaQuery.of(context).size.width * 0.95,
-                              child: SfCartesianChart(
-                                series: _seriesTimeListD!,
-                                primaryYAxis: const NumericAxis(
-                                  labelFormat: '{value}',
-                                  isVisible: true,
+                      child: SizedBox(
+                          height: 250,
+                          width: MediaQuery.of(context).size.width * 0.95,
+                          child: ExcludeSemantics(
+                            child: SfCartesianChart(
+                              series: _seriesTimeListD!,
+                              primaryYAxis: const NumericAxis(
+                                labelFormat: '{value}',
+                                isVisible: true,
+                              ),
+                              primaryXAxis: DateTimeAxis(
+                                dateFormat: DateFormat.d(),
+                                intervalType: DateTimeIntervalType.days,
+                                interval: 1,
+                                majorGridLines: const MajorGridLines(width: 0),
+                                title: const AxisTitle(
+                                  text: 'dia do mês',
                                 ),
-                                primaryXAxis: DateTimeAxis(
-                                  dateFormat: DateFormat.d(),
-                                  intervalType: DateTimeIntervalType.days,
-                                  interval: 1,
-                                  majorGridLines:
-                                      const MajorGridLines(width: 0),
-                                  title: const AxisTitle(
-                                    text: 'dia do mês',
-                                  ),
-                                ),
-                                plotAreaBackgroundColor: Colors.grey[100],
-                                title: const ChartTitle(
-                                  text: 'Tempo por dia (minutos)',
-                                  textStyle: TextStyle(fontSize: 16),
-                                ),
-                                legend: const Legend(
-                                  isVisible: false,
-                                  title: LegendTitle(text: 'timer'),
-                                ),
-                                tooltipBehavior: TooltipBehavior(enable: true),
-                              )),
-                        ),
-                      ),
+                              ),
+                              plotAreaBackgroundColor: Colors.grey[100],
+                              title: const ChartTitle(
+                                text: 'Tempo por dia (minutos)',
+                                textStyle: TextStyle(fontSize: 16),
+                              ),
+                              tooltipBehavior: TooltipBehavior(enable: true),
+                            ),
+                          )),
                     )
                   : const SizedBox(height: 6),
               _seriesSessionsListD != null
                   ? Center(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: ExcludeSemantics(
-                          child: SizedBox(
-                              height: 250,
-                              width: MediaQuery.of(context).size.width * 0.95,
-                              child: SfCartesianChart(
-                                series: _seriesSessionsListD!,
-                                primaryYAxis: const NumericAxis(
-                                  labelFormat: '{value}',
-                                  isVisible: true,
+                      child: SizedBox(
+                          height: 250,
+                          width: MediaQuery.of(context).size.width * 0.95,
+                          child: ExcludeSemantics(
+                            child: SfCartesianChart(
+                              series: _seriesSessionsListD!,
+                              primaryYAxis: const NumericAxis(
+                                labelFormat: '{value}',
+                                isVisible: true,
+                              ),
+                              primaryXAxis: DateTimeAxis(
+                                dateFormat: DateFormat.d(),
+                                intervalType: DateTimeIntervalType.days,
+                                interval: 1,
+                                majorGridLines: const MajorGridLines(width: 0),
+                                title: const AxisTitle(
+                                  text: 'dia do mês',
                                 ),
-                                primaryXAxis: DateTimeAxis(
-                                  dateFormat: DateFormat.d(),
-                                  intervalType: DateTimeIntervalType.days,
-                                  interval: 1,
-                                  majorGridLines:
-                                      const MajorGridLines(width: 0),
-                                  title: const AxisTitle(
-                                    text: 'dia do mês',
-                                  ),
-                                ),
-                                plotAreaBackgroundColor: Colors.grey[100],
-                                title: const ChartTitle(
-                                  text: 'Sessões por dia',
-                                  textStyle: TextStyle(fontSize: 16),
-                                ),
-                                legend: const Legend(
-                                  isVisible: false,
-                                  title: LegendTitle(text: 'timer'),
-                                ),
-                                tooltipBehavior: TooltipBehavior(enable: true),
-                              )),
-                        ),
-                      ),
+                              ),
+                              plotAreaBackgroundColor: Colors.grey[100],
+                              title: const ChartTitle(
+                                text: 'Sessões por dia',
+                                textStyle: TextStyle(fontSize: 16),
+                              ),
+                              tooltipBehavior: TooltipBehavior(enable: true),
+                            ),
+                          )),
                     )
                   : const SizedBox(height: 6),
               Padding(
@@ -424,46 +388,27 @@ class _DailyStatisticsWidgetState extends State<DailyStatisticsWidget> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Sequencia contínuas',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w600)),
+                    const Text('Sequencia contínuas', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
                     const SizedBox(height: 6),
-                    _showLine(
-                        title: 'Dias consecutivos - atual',
-                        value: actualSequenceOfDaysWithSessionD),
-                    _showLine(
-                        title: 'Maior sequencia de dias consecutivos',
-                        value: greaterSequenceOfDaysWithSessionD),
+                    _showLine(title: 'Dias consecutivos - atual', value: actualSequenceOfDaysWithSessionD),
+                    _showLine(title: 'Maior sequencia de dias consecutivos', value: greaterSequenceOfDaysWithSessionD),
                     const SizedBox(height: 24),
-                    const Text('Tempo',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w600)),
+                    const Text('Tempo', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
                     const SizedBox(height: 6),
                     _showLine(title: 'Total', value: totalTimeD),
                     _showLine(title: 'Timer', value: totalTimeTimerD),
-                    _showLine(
-                        title: 'Meditação conduzida', value: totalTimeMedD),
+                    _showLine(title: 'Meditação conduzida', value: totalTimeMedD),
                     _showLine(title: 'Média diária', value: dailyAverageTimeD),
-                    _showLine(
-                        title: 'Duração média', value: averageSessionTimeD),
-                    _showLine(
-                        title: 'Sessão mais longa', value: longestSessionD),
+                    _showLine(title: 'Duração média', value: averageSessionTimeD),
+                    _showLine(title: 'Sessão mais longa', value: longestSessionD),
                     const SizedBox(height: 24),
-                    const Text('Sessões',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w600)),
+                    const Text('Sessões', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
                     const SizedBox(height: 6),
                     _showLine(title: 'Total', value: numberSessionsD),
                     _showLine(title: 'Timer', value: numberTimerSessionsD),
-                    _showLine(
-                        title: 'Meditação conduzida',
-                        value: numberMedSessionsD),
-                    _showLine(
-                        title: 'Frequencia diária',
-                        value: dailyAverageSessionsD),
-                    _showLine(
-                        title: 'Maior número em único dia',
-                        value: greaterNumDailySessionsD),
+                    _showLine(title: 'Meditação conduzida', value: numberMedSessionsD),
+                    _showLine(title: 'Frequencia diária', value: dailyAverageSessionsD),
+                    _showLine(title: 'Maior número em único dia', value: greaterNumDailySessionsD),
                   ],
                 ),
               )

@@ -66,11 +66,6 @@ class _ProfilePageWidgetState extends State<ProfilePageWidget> with TickerProvid
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {

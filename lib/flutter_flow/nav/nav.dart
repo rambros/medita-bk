@@ -76,12 +76,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
-      errorBuilder: (context, state) => appStateNotifier.loggedIn ? NavBarPage() : const SocialLoginPage(),
+      errorBuilder: (context, state) => appStateNotifier.loggedIn ? const NavBarPage() : const SocialLoginPage(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
-          builder: (context, _) => appStateNotifier.loggedIn ? NavBarPage() : const SocialLoginPage(),
+          builder: (context, _) => appStateNotifier.loggedIn ? const NavBarPage() : const SocialLoginPage(),
           routes: [
             FFRoute(
               name: SignInPage.routeName,
@@ -106,7 +106,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             FFRoute(
               name: HomePage.routeName,
               path: HomePage.routePath,
-              builder: (context, params) => params.isEmpty ? NavBarPage(initialPage: 'homePage') : const HomePage(),
+              builder: (context, params) =>
+                  params.isEmpty ? const NavBarPage(initialPage: 'homePage') : const HomePage(),
             ),
             FFRoute(
               name: ProfilePageWidget.routeName,
@@ -116,8 +117,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             FFRoute(
               name: MeditationHomePageWidget.routeName,
               path: MeditationHomePageWidget.routePath,
-              builder: (context, params) =>
-                  params.isEmpty ? NavBarPage(initialPage: 'meditationHomePage') : const MeditationHomePageWidget(),
+              builder: (context, params) => params.isEmpty
+                  ? const NavBarPage(initialPage: 'meditationHomePage')
+                  : const MeditationHomePageWidget(),
             ),
             FFRoute(
               name: NotificationListPage.routeName,
@@ -208,7 +210,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: VideoHomePageWidget.routeName,
               path: VideoHomePageWidget.routePath,
               builder: (context, params) =>
-                  params.isEmpty ? NavBarPage(initialPage: 'videoHomePage') : const VideoHomePageWidget(),
+                  params.isEmpty ? const NavBarPage(initialPage: 'videoHomePage') : const VideoHomePageWidget(),
             ),
             FFRoute(
               name: YoutubePlayerPageWidget.routeName,
@@ -238,13 +240,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: AgendaHomePage.routeName,
               path: AgendaHomePage.routePath,
               builder: (context, params) =>
-                  params.isEmpty ? NavBarPage(initialPage: 'agendaHomePage') : const AgendaHomePage(),
+                  params.isEmpty ? const NavBarPage(initialPage: 'agendaHomePage') : const AgendaHomePage(),
             ),
             FFRoute(
               name: MensagensHomePage.routeName,
               path: MensagensHomePage.routePath,
               builder: (context, params) =>
-                  params.isEmpty ? NavBarPage(initialPage: 'mensagensHomePage') : const MensagensHomePage(),
+                  params.isEmpty ? const NavBarPage(initialPage: 'mensagensHomePage') : const MensagensHomePage(),
             ),
             FFRoute(
               name: AgendaListPage.routeName,
@@ -286,9 +288,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: MeditationVideoListPageWidget.routeName,
-              path: MeditationVideoListPageWidget.routePath,
-              builder: (context, params) => const MeditationVideoListPageWidget(),
+              name: MeditationVideoListPage.routeName,
+              path: MeditationVideoListPage.routePath,
+              builder: (context, params) => const MeditationVideoListPage(),
             ),
             FFRoute(
               name: MeditationStatisticsPageWidget.routeName,
@@ -412,19 +414,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: PlaylistPlayPageWidget.routeName,
               path: PlaylistPlayPageWidget.routePath,
               builder: (context, params) => const PlaylistPlayPageWidget(),
-            ),
-            FFRoute(
-              name: MeditationPlayPageOldWidget.routeName,
-              path: MeditationPlayPageOldWidget.routePath,
-              asyncParams: {
-                'meditationDoc': getDoc(['meditations'], MeditationsRecord.fromSnapshot),
-              },
-              builder: (context, params) => MeditationPlayPageOldWidget(
-                meditationDoc: params.getParam(
-                  'meditationDoc',
-                  ParamType.Document,
-                ),
-              ),
             ),
             FFRoute(
               name: PlaylistAudioPlayPageWidget.routeName,

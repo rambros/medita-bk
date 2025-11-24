@@ -1,11 +1,7 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import 'dart:ui';
-import '/index.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'title_page_model.dart';
 export 'title_page_model.dart';
 
@@ -64,8 +60,7 @@ class _TitlePageWidgetState extends State<TitlePageWidget> {
                   fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
                   color: Colors.white,
                   letterSpacing: 0.0,
-                  useGoogleFonts:
-                      !FlutterFlowTheme.of(context).titleSmallIsCustom,
+                  useGoogleFonts: !FlutterFlowTheme.of(context).titleSmallIsCustom,
                 ),
             elevation: 2.0,
             borderSide: const BorderSide(
@@ -87,8 +82,7 @@ class _TitlePageWidgetState extends State<TitlePageWidget> {
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: FlutterFlowTheme.of(context).headlineMediumFamily,
                   letterSpacing: 0.0,
-                  useGoogleFonts:
-                      !FlutterFlowTheme.of(context).headlineMediumIsCustom,
+                  useGoogleFonts: !FlutterFlowTheme.of(context).headlineMediumIsCustom,
                 ),
           ),
         ),

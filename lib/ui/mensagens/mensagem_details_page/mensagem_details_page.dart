@@ -57,11 +57,6 @@ class _MensagemDetailsPageState extends State<MensagemDetailsPage> with TickerPr
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Consumer<MensagemDetailsViewModel>(
       builder: (context, viewModel, child) {

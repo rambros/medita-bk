@@ -5,7 +5,6 @@ import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'view_model/about_authors_view_model.dart';
 
 class AboutAuthorsPageWidget extends StatefulWidget {

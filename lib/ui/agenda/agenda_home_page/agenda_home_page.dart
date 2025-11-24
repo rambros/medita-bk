@@ -2,15 +2,11 @@ import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import 'dart:ui';
 import '/actions/actions.dart' as action_blocks;
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-
-import '../agenda_list_page/agenda_list_page.dart';
-import '../event_list_page/event_list_page.dart';
 
 class AgendaHomePage extends StatefulWidget {
   const AgendaHomePage({super.key});

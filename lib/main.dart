@@ -44,6 +44,10 @@ import '/ui/video/entrevistas_list_page/view_model/entrevistas_list_view_model.d
 import '/ui/video/canal_viver_list_page/view_model/canal_viver_list_view_model.dart';
 import '/ui/video/youtube_player_page/view_model/youtube_player_view_model.dart';
 
+import '/backend/repositories/meditation/meditation_repository.dart';
+import '/ui/meditation/meditation_home_page/view_model/meditation_home_view_model.dart';
+import '/ui/meditation/meditation_list_page/view_model/meditation_list_view_model.dart';
+
 import 'data/repositories/user_repository.dart';
 import 'data/repositories/auth_repository.dart';
 import 'ui/config/about_authors_page/view_model/about_authors_view_model.dart';
@@ -149,6 +153,14 @@ void main() async {
       ChangeNotifierProxyProvider<VideoRepository, YoutubePlayerViewModel>(
         create: (context) => YoutubePlayerViewModel(context.read<VideoRepository>()),
         update: (context, repo, viewModel) => viewModel ?? YoutubePlayerViewModel(repo),
+      ),
+
+      // Meditation Module
+      Provider<MeditationRepository>(create: (_) => MeditationRepositoryImpl()),
+      ChangeNotifierProvider(create: (_) => MeditationHomeViewModel()),
+      ChangeNotifierProxyProvider<MeditationRepository, MeditationListViewModel>(
+        create: (context) => MeditationListViewModel(meditationRepository: context.read<MeditationRepository>()),
+        update: (context, repo, viewModel) => viewModel ?? MeditationListViewModel(meditationRepository: repo),
       ),
       // User Repository and ViewModels
       Provider(create: (context) => UserRepository()),

@@ -1,11 +1,7 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
-import 'dart:ui';
 import '/index.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'select_brasao_test_model.dart';
 export 'select_brasao_test_model.dart';
 
@@ -86,11 +82,9 @@ class _SelectBrasaoTestWidgetState extends State<SelectBrasaoTestWidget> {
                   Text(
                     'Escolha  Brasão para testar',
                     style: FlutterFlowTheme.of(context).headlineSmall.override(
-                          fontFamily:
-                              FlutterFlowTheme.of(context).headlineSmallFamily,
+                          fontFamily: FlutterFlowTheme.of(context).headlineSmallFamily,
                           letterSpacing: 0.0,
-                          useGoogleFonts: !FlutterFlowTheme.of(context)
-                              .headlineSmallIsCustom,
+                          useGoogleFonts: !FlutterFlowTheme.of(context).headlineSmallIsCustom,
                         ),
                   ),
                 ],
@@ -105,8 +99,7 @@ class _SelectBrasaoTestWidgetState extends State<SelectBrasaoTestWidget> {
                 scrollDirection: Axis.vertical,
                 children: [
                   Padding(
-                    padding:
-                        const EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
+                    padding: const EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
                     child: InkWell(
                       splashColor: Colors.transparent,
                       focusColor: Colors.transparent,
@@ -126,8 +119,7 @@ class _SelectBrasaoTestWidgetState extends State<SelectBrasaoTestWidget> {
                       child: Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
+                          color: FlutterFlowTheme.of(context).secondaryBackground,
                           borderRadius: BorderRadius.circular(8.0),
                           border: Border.all(
                             color: FlutterFlowTheme.of(context).alternate,
@@ -135,23 +127,17 @@ class _SelectBrasaoTestWidgetState extends State<SelectBrasaoTestWidget> {
                           ),
                         ),
                         child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              16.0, 12.0, 8.0, 12.0),
+                          padding: const EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 8.0, 12.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 'Cobre - Paz',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyLarge
-                                    .override(
-                                      fontFamily: FlutterFlowTheme.of(context)
-                                          .bodyLargeFamily,
+                                style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                      fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
                                       letterSpacing: 0.0,
-                                      useGoogleFonts:
-                                          !FlutterFlowTheme.of(context)
-                                              .bodyLargeIsCustom,
+                                      useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
                                     ),
                               ),
                               const Icon(
@@ -166,8 +152,7 @@ class _SelectBrasaoTestWidgetState extends State<SelectBrasaoTestWidget> {
                     ),
                   ),
                   Padding(
-                    padding:
-                        const EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
+                    padding: const EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
                     child: InkWell(
                       splashColor: Colors.transparent,
                       focusColor: Colors.transparent,
@@ -187,8 +172,7 @@ class _SelectBrasaoTestWidgetState extends State<SelectBrasaoTestWidget> {
                       child: Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
+                          color: FlutterFlowTheme.of(context).secondaryBackground,
                           borderRadius: BorderRadius.circular(8.0),
                           border: Border.all(
                             color: FlutterFlowTheme.of(context).alternate,
@@ -196,23 +180,17 @@ class _SelectBrasaoTestWidgetState extends State<SelectBrasaoTestWidget> {
                           ),
                         ),
                         child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              16.0, 12.0, 8.0, 12.0),
+                          padding: const EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 8.0, 12.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 'Prata - Alegria',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyLarge
-                                    .override(
-                                      fontFamily: FlutterFlowTheme.of(context)
-                                          .bodyLargeFamily,
+                                style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                      fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
                                       letterSpacing: 0.0,
-                                      useGoogleFonts:
-                                          !FlutterFlowTheme.of(context)
-                                              .bodyLargeIsCustom,
+                                      useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
                                     ),
                               ),
                               const Icon(
@@ -227,8 +205,7 @@ class _SelectBrasaoTestWidgetState extends State<SelectBrasaoTestWidget> {
                     ),
                   ),
                   Padding(
-                    padding:
-                        const EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
+                    padding: const EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
                     child: InkWell(
                       splashColor: Colors.transparent,
                       focusColor: Colors.transparent,
@@ -248,8 +225,7 @@ class _SelectBrasaoTestWidgetState extends State<SelectBrasaoTestWidget> {
                       child: Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
+                          color: FlutterFlowTheme.of(context).secondaryBackground,
                           borderRadius: BorderRadius.circular(8.0),
                           border: Border.all(
                             color: FlutterFlowTheme.of(context).alternate,
@@ -257,23 +233,17 @@ class _SelectBrasaoTestWidgetState extends State<SelectBrasaoTestWidget> {
                           ),
                         ),
                         child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              16.0, 12.0, 8.0, 12.0),
+                          padding: const EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 8.0, 12.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 'Ouro - Equilibrio',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyLarge
-                                    .override(
-                                      fontFamily: FlutterFlowTheme.of(context)
-                                          .bodyLargeFamily,
+                                style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                      fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
                                       letterSpacing: 0.0,
-                                      useGoogleFonts:
-                                          !FlutterFlowTheme.of(context)
-                                              .bodyLargeIsCustom,
+                                      useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
                                     ),
                               ),
                               const Icon(

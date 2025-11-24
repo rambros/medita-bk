@@ -80,7 +80,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                         useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
                       ),
                 ),
-                actions: [],
+                actions: const [],
                 centerTitle: true,
                 elevation: 2.0,
               )
@@ -92,9 +92,9 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Align(
-                  alignment: AlignmentDirectional(0.0, 0.0),
+                  alignment: const AlignmentDirectional(0.0, 0.0),
                   child: Padding(
-                    padding: EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Text(
                       getJsonField(
                         widget.eventDoc,
@@ -113,7 +113,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                 ),
                 Flexible(
                   child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 32.0),
+                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 32.0),
                     child: custom_widgets.HtmlDisplayWidget(
                       width: MediaQuery.sizeOf(context).width * 1.0,
                       height: MediaQuery.sizeOf(context).height * 0.9,

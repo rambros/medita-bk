@@ -3,11 +3,9 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
-import 'dart:ui';
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'select_mandala_test_model.dart';
 export 'select_mandala_test_model.dart';
@@ -16,8 +14,7 @@ class SelectMandalaTestWidget extends StatefulWidget {
   const SelectMandalaTestWidget({super.key});
 
   @override
-  State<SelectMandalaTestWidget> createState() =>
-      _SelectMandalaTestWidgetState();
+  State<SelectMandalaTestWidget> createState() => _SelectMandalaTestWidgetState();
 }
 
 class _SelectMandalaTestWidgetState extends State<SelectMandalaTestWidget> {
@@ -92,22 +89,18 @@ class _SelectMandalaTestWidgetState extends State<SelectMandalaTestWidget> {
                   Text(
                     'Escolha  Mandala para testar',
                     style: FlutterFlowTheme.of(context).headlineSmall.override(
-                          fontFamily:
-                              FlutterFlowTheme.of(context).headlineSmallFamily,
+                          fontFamily: FlutterFlowTheme.of(context).headlineSmallFamily,
                           letterSpacing: 0.0,
-                          useGoogleFonts: !FlutterFlowTheme.of(context)
-                              .headlineSmallIsCustom,
+                          useGoogleFonts: !FlutterFlowTheme.of(context).headlineSmallIsCustom,
                         ),
                   ),
                   Padding(
-                    padding:
-                        const EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 32.0),
+                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 32.0),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         FlutterFlowDropDown<int>(
-                          controller: _model.dropDownValueController ??=
-                              FormFieldController<int>(
+                          controller: _model.dropDownValueController ??= FormFieldController<int>(
                             _model.dropDownValue ??= 0,
                           ),
                           options: List<int>.from([0, 1, 2, 3, 4, 5, 6]),
@@ -120,19 +113,14 @@ class _SelectMandalaTestWidgetState extends State<SelectMandalaTestWidget> {
                             'Mandala 6',
                             'Mandala 7'
                           ],
-                          onChanged: (val) =>
-                              safeSetState(() => _model.dropDownValue = val),
+                          onChanged: (val) => safeSetState(() => _model.dropDownValue = val),
                           width: 410.0,
                           height: 51.0,
-                          textStyle: FlutterFlowTheme.of(context)
-                              .bodyMedium
-                              .override(
-                                fontFamily: FlutterFlowTheme.of(context)
-                                    .bodyMediumFamily,
+                          textStyle: FlutterFlowTheme.of(context).bodyMedium.override(
+                                fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
                                 fontSize: 16.0,
                                 letterSpacing: 0.0,
-                                useGoogleFonts: !FlutterFlowTheme.of(context)
-                                    .bodyMediumIsCustom,
+                                useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
                               ),
                           hintText: 'Selecione numero da mandala',
                           icon: Icon(
@@ -140,14 +128,12 @@ class _SelectMandalaTestWidgetState extends State<SelectMandalaTestWidget> {
                             color: FlutterFlowTheme.of(context).secondaryText,
                             size: 24.0,
                           ),
-                          fillColor:
-                              FlutterFlowTheme.of(context).secondaryBackground,
+                          fillColor: FlutterFlowTheme.of(context).secondaryBackground,
                           elevation: 2.0,
                           borderColor: Colors.transparent,
                           borderWidth: 0.0,
                           borderRadius: 8.0,
-                          margin: const EdgeInsetsDirectional.fromSTEB(
-                              12.0, 0.0, 12.0, 0.0),
+                          margin: const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
                           hidesUnderline: true,
                           isOverButton: false,
                           isSearchable: false,
@@ -160,8 +146,7 @@ class _SelectMandalaTestWidgetState extends State<SelectMandalaTestWidget> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                            0.0, 16.0, 0.0, 16.0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 16.0),
                         child: FFButtonWidget(
                           onPressed: () async {
                             context.pushNamed(
@@ -176,12 +161,8 @@ class _SelectMandalaTestWidgetState extends State<SelectMandalaTestWidget> {
                                   ParamType.int,
                                 ),
                                 'parmMandalaUrl': serializeParam(
-                                  functions.getURLMandala(
-                                      (_model.dropDownValue!) + 1,
-                                      (_model.dropDownValue!) * 3 + 3,
-                                      FFAppState()
-                                          .listaEtapasMandalas
-                                          .toList()),
+                                  functions.getURLMandala((_model.dropDownValue!) + 1, (_model.dropDownValue!) * 3 + 3,
+                                      FFAppState().listaEtapasMandalas.toList()),
                                   ParamType.String,
                                 ),
                               }.withoutNulls,
@@ -191,20 +172,14 @@ class _SelectMandalaTestWidgetState extends State<SelectMandalaTestWidget> {
                           options: FFButtonOptions(
                             width: MediaQuery.sizeOf(context).width * 0.85,
                             height: 50.0,
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
-                            iconPadding: const EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
+                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                            iconPadding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                             color: FlutterFlowTheme.of(context).primary,
-                            textStyle: FlutterFlowTheme.of(context)
-                                .titleMedium
-                                .override(
-                                  fontFamily: FlutterFlowTheme.of(context)
-                                      .titleMediumFamily,
+                            textStyle: FlutterFlowTheme.of(context).titleMedium.override(
+                                  fontFamily: FlutterFlowTheme.of(context).titleMediumFamily,
                                   color: FlutterFlowTheme.of(context).info,
                                   letterSpacing: 0.0,
-                                  useGoogleFonts: !FlutterFlowTheme.of(context)
-                                      .titleMediumIsCustom,
+                                  useGoogleFonts: !FlutterFlowTheme.of(context).titleMediumIsCustom,
                                 ),
                             elevation: 2.0,
                             borderSide: BorderSide(

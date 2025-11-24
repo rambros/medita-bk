@@ -15,12 +15,10 @@ class SelectBrasaoOrMandalaTestWidget extends StatefulWidget {
   const SelectBrasaoOrMandalaTestWidget({super.key});
 
   @override
-  State<SelectBrasaoOrMandalaTestWidget> createState() =>
-      _SelectBrasaoOrMandalaTestWidgetState();
+  State<SelectBrasaoOrMandalaTestWidget> createState() => _SelectBrasaoOrMandalaTestWidgetState();
 }
 
-class _SelectBrasaoOrMandalaTestWidgetState
-    extends State<SelectBrasaoOrMandalaTestWidget> {
+class _SelectBrasaoOrMandalaTestWidgetState extends State<SelectBrasaoOrMandalaTestWidget> {
   late SelectBrasaoOrMandalaTestModel _model;
 
   @override
@@ -90,11 +88,9 @@ class _SelectBrasaoOrMandalaTestWidgetState
                   Text(
                     'Escolha  o que testar',
                     style: FlutterFlowTheme.of(context).headlineSmall.override(
-                          fontFamily:
-                              FlutterFlowTheme.of(context).headlineSmallFamily,
+                          fontFamily: FlutterFlowTheme.of(context).headlineSmallFamily,
                           letterSpacing: 0.0,
-                          useGoogleFonts: !FlutterFlowTheme.of(context)
-                              .headlineSmallIsCustom,
+                          useGoogleFonts: !FlutterFlowTheme.of(context).headlineSmallIsCustom,
                         ),
                   ),
                 ],
@@ -110,8 +106,7 @@ class _SelectBrasaoOrMandalaTestWidgetState
                 children: [
                   Builder(
                     builder: (context) => Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
+                      padding: const EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
                       child: InkWell(
                         splashColor: Colors.transparent,
                         focusColor: Colors.transparent,
@@ -125,12 +120,11 @@ class _SelectBrasaoOrMandalaTestWidgetState
                                 elevation: 0,
                                 insetPadding: EdgeInsets.zero,
                                 backgroundColor: Colors.transparent,
-                                alignment: const AlignmentDirectional(0.0, 0.0)
-                                    .resolve(Directionality.of(context)),
-                                child: WebViewAware(
+                                alignment: const AlignmentDirectional(0.0, 0.0).resolve(Directionality.of(context)),
+                                child: const WebViewAware(
                                   child: SizedBox(
                                     height: 400.0,
-                                    child: const SelectMandalaTestWidget(),
+                                    child: SelectMandalaTestWidget(),
                                   ),
                                 ),
                               );
@@ -140,8 +134,7 @@ class _SelectBrasaoOrMandalaTestWidgetState
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
+                            color: FlutterFlowTheme.of(context).secondaryBackground,
                             borderRadius: BorderRadius.circular(8.0),
                             border: Border.all(
                               color: FlutterFlowTheme.of(context).alternate,
@@ -149,23 +142,17 @@ class _SelectBrasaoOrMandalaTestWidgetState
                             ),
                           ),
                           child: Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                16.0, 12.0, 8.0, 12.0),
+                            padding: const EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 8.0, 12.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                   'Mandalas',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyLarge
-                                      .override(
-                                        fontFamily: FlutterFlowTheme.of(context)
-                                            .bodyLargeFamily,
+                                  style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                        fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
                                         letterSpacing: 0.0,
-                                        useGoogleFonts:
-                                            !FlutterFlowTheme.of(context)
-                                                .bodyLargeIsCustom,
+                                        useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
                                       ),
                                 ),
                                 const Icon(
@@ -182,8 +169,7 @@ class _SelectBrasaoOrMandalaTestWidgetState
                   ),
                   Builder(
                     builder: (context) => Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
+                      padding: const EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
                       child: InkWell(
                         splashColor: Colors.transparent,
                         focusColor: Colors.transparent,
@@ -197,12 +183,11 @@ class _SelectBrasaoOrMandalaTestWidgetState
                                 elevation: 0,
                                 insetPadding: EdgeInsets.zero,
                                 backgroundColor: Colors.transparent,
-                                alignment: const AlignmentDirectional(0.0, 0.0)
-                                    .resolve(Directionality.of(context)),
-                                child: WebViewAware(
+                                alignment: const AlignmentDirectional(0.0, 0.0).resolve(Directionality.of(context)),
+                                child: const WebViewAware(
                                   child: SizedBox(
                                     height: 400.0,
-                                    child: const SelectBrasaoTestWidget(),
+                                    child: SelectBrasaoTestWidget(),
                                   ),
                                 ),
                               );
@@ -212,8 +197,7 @@ class _SelectBrasaoOrMandalaTestWidgetState
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
+                            color: FlutterFlowTheme.of(context).secondaryBackground,
                             borderRadius: BorderRadius.circular(8.0),
                             border: Border.all(
                               color: FlutterFlowTheme.of(context).alternate,
@@ -221,23 +205,17 @@ class _SelectBrasaoOrMandalaTestWidgetState
                             ),
                           ),
                           child: Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                16.0, 12.0, 8.0, 12.0),
+                            padding: const EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 8.0, 12.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                   'Brasões',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyLarge
-                                      .override(
-                                        fontFamily: FlutterFlowTheme.of(context)
-                                            .bodyLargeFamily,
+                                  style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                        fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
                                         letterSpacing: 0.0,
-                                        useGoogleFonts:
-                                            !FlutterFlowTheme.of(context)
-                                                .bodyLargeIsCustom,
+                                        useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
                                       ),
                                 ),
                                 const Icon(

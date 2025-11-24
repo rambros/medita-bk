@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
-import 'flutter_flow_util.dart';
 
 Widget wrapWithModel<T extends FlutterFlowModel>({
   required T model,
@@ -120,8 +119,7 @@ class FlutterFlowDynamicModels<T extends FlutterFlowModel> {
   }
 
   S? getValueAtIndex<S>(int index, S? Function(T) getValue) {
-    final uniqueKey =
-        _childrenIndexes.entries.firstWhereOrNull((e) => e.value == index)?.key;
+    final uniqueKey = _childrenIndexes.entries.firstWhereOrNull((e) => e.value == index)?.key;
     return getValueForKey(uniqueKey, getValue);
   }
 
@@ -171,6 +169,5 @@ T? _getDefaultValue<T>() {
 }
 
 extension TextValidationExtensions on String? Function(BuildContext, String?)? {
-  String? Function(String?)? asValidator(BuildContext context) =>
-      this != null ? (val) => this!(context, val) : null;
+  String? Function(String?)? asValidator(BuildContext context) => this != null ? (val) => this!(context, val) : null;
 }

@@ -71,8 +71,7 @@ class YearlyStatisticsWidget extends StatefulWidget {
 }
 
 class _YearlyStatisticsWidgetState extends State<YearlyStatisticsWidget> {
-  List<MeditationLogStruct> listLogsFromRepository =
-      FFAppState().meditationLogList;
+  List<MeditationLogStruct> listLogsFromRepository = FFAppState().meditationLogList;
   var numYears = 4;
   late List<YearlyLog?> listYearlyLog; // 12 months
 
@@ -104,10 +103,8 @@ class _YearlyStatisticsWidgetState extends State<YearlyStatisticsWidget> {
   String get numberMedSessionsY => _numberMedSessionsY.toString();
   String get dailyAverageSessionsY => _dailyAverageSessionsY.toStringAsFixed(1);
   String get greaterNumDailySessionsY => _greaterNumDailySessionsY.toString();
-  String get greaterSequenceOfDaysWithSessionY =>
-      _greaterSequenceOfDaysWithSessionY.toString();
-  String get actualSequenceOfDaysWithSessionY =>
-      _actualSequenceOfDaysWithSessionY.toString();
+  String get greaterSequenceOfDaysWithSessionY => _greaterSequenceOfDaysWithSessionY.toString();
+  String get actualSequenceOfDaysWithSessionY => _actualSequenceOfDaysWithSessionY.toString();
 
   List<ChartSeries>? get seriesTimeListY => _seriesTimeListY;
   List<ChartSeries>? get seriesSessionsListY => _seriesSessionsListY;
@@ -189,9 +186,7 @@ class _YearlyStatisticsWidgetState extends State<YearlyStatisticsWidget> {
         _numberMedSessionsY++;
       }
 
-      if (log.date!.year != yearSessionTemp ||
-          log.date!.month != monthSessionTemp ||
-          log.date!.day != daySessionTemp) {
+      if (log.date!.year != yearSessionTemp || log.date!.month != monthSessionTemp || log.date!.day != daySessionTemp) {
         numDaysWithSessionY++;
         daySessionTemp = log.date!.day;
         monthSessionTemp = log.date!.month;
@@ -199,30 +194,22 @@ class _YearlyStatisticsWidgetState extends State<YearlyStatisticsWidget> {
       }
 
       // insert values in the day that is in list -> search in day atribute
-      var index =
-          listYearlyLog.indexWhere((value) => (value.year == log.date!.year));
+      var index = listYearlyLog.indexWhere((value) => (value.year == log.date!.year));
 
-      listYearlyLog[index].totalTime =
-          listYearlyLog[index].totalTime! + log.duration;
-      listYearlyLog[index].medTime = log.type == 'guided'
-          ? listYearlyLog[index].medTime! + log.duration
-          : listYearlyLog[index].medTime;
-      listYearlyLog[index].timerTime = log.type == 'timer'
-          ? listYearlyLog[index].timerTime! + log.duration
-          : listYearlyLog[index].timerTime;
-      listYearlyLog[index].medSession = log.type == 'guided'
-          ? listYearlyLog[index].medSession! + 1
-          : listYearlyLog[index].medSession;
-      listYearlyLog[index].timerSession = log.type == 'timer'
-          ? listYearlyLog[index].timerSession! + 1
-          : listYearlyLog[index].timerSession!;
+      listYearlyLog[index].totalTime = listYearlyLog[index].totalTime! + log.duration;
+      listYearlyLog[index].medTime =
+          log.type == 'guided' ? listYearlyLog[index].medTime! + log.duration : listYearlyLog[index].medTime;
+      listYearlyLog[index].timerTime =
+          log.type == 'timer' ? listYearlyLog[index].timerTime! + log.duration : listYearlyLog[index].timerTime;
+      listYearlyLog[index].medSession =
+          log.type == 'guided' ? listYearlyLog[index].medSession! + 1 : listYearlyLog[index].medSession;
+      listYearlyLog[index].timerSession =
+          log.type == 'timer' ? listYearlyLog[index].timerSession! + 1 : listYearlyLog[index].timerSession!;
       listYearlyLog[index].sessions = listYearlyLog[index].sessions! + 1;
 
       // insert values in the day that is in list -> search in day atribute
       var indexDay = listDays.indexWhere((value) =>
-          value.day!.day == log.date!.day &&
-          value.day!.month == log.date!.month &&
-          value.day!.year == log.date!.year);
+          value.day!.day == log.date!.day && value.day!.month == log.date!.month && value.day!.year == log.date!.year);
       listDays[indexDay].sessions = listDays[indexDay].sessions! + 1;
     }
     _numberSessionsY = listLogs.length;
@@ -280,8 +267,7 @@ class _YearlyStatisticsWidgetState extends State<YearlyStatisticsWidget> {
         dataSource: listYearlyLog,
         xValueMapper: (YearlyLog? log, _) => log!.year.toString(),
         yValueMapper: (YearlyLog? log, _) => log!.timerTime! ~/ 3600,
-        dataLabelMapper: (YearlyLog? log, _) =>
-            (log!.timerTime! ~/ 3600).toString(),
+        dataLabelMapper: (YearlyLog? log, _) => (log!.timerTime! ~/ 3600).toString(),
         dataLabelSettings: DataLabelSettings(
             isVisible: false,
             showZeroValue: false,
@@ -295,8 +281,7 @@ class _YearlyStatisticsWidgetState extends State<YearlyStatisticsWidget> {
         dataSource: listYearlyLog,
         xValueMapper: (YearlyLog? log, _) => log!.year.toString(),
         yValueMapper: (YearlyLog? log, _) => log!.medTime! ~/ 3600,
-        dataLabelMapper: (YearlyLog? log, _) =>
-            (log!.medTime! ~/ 3600).toString(),
+        dataLabelMapper: (YearlyLog? log, _) => (log!.medTime! ~/ 3600).toString(),
         dataLabelSettings: DataLabelSettings(
             isVisible: false,
             showZeroValue: false,
@@ -363,76 +348,62 @@ class _YearlyStatisticsWidgetState extends State<YearlyStatisticsWidget> {
               ),
               _seriesTimeListY != null
                   ? Center(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: ExcludeSemantics(
-                          child: SizedBox(
-                              height: 250,
-                              width: MediaQuery.of(context).size.width * 0.95,
-                              child: SfCartesianChart(
-                                series: _seriesTimeListY!,
-                                primaryYAxis: const NumericAxis(
-                                  labelFormat: '{value}',
-                                  isVisible: true,
+                      child: SizedBox(
+                          height: 250,
+                          width: MediaQuery.of(context).size.width * 0.95,
+                          child: ExcludeSemantics(
+                            child: SfCartesianChart(
+                              series: _seriesTimeListY!,
+                              primaryYAxis: const NumericAxis(
+                                labelFormat: '{value}',
+                                isVisible: true,
+                              ),
+                              primaryXAxis: const CategoryAxis(
+                                interval: 1,
+                                majorGridLines: MajorGridLines(width: 0),
+                                title: AxisTitle(
+                                  text: 'ano',
                                 ),
-                                primaryXAxis: const CategoryAxis(
-                                  interval: 1,
-                                  majorGridLines: MajorGridLines(width: 0),
-                                  title: AxisTitle(
-                                    text: 'ano',
-                                  ),
-                                ),
-                                plotAreaBackgroundColor: Colors.grey[100],
-                                title: const ChartTitle(
-                                  text: 'Tempo por ano (horas)',
-                                  textStyle: TextStyle(fontSize: 16),
-                                ),
-                                // Enable legend
-                                legend: const Legend(
-                                  isVisible: false,
-                                  title: LegendTitle(text: 'timer'),
-                                ),
-                                tooltipBehavior: TooltipBehavior(enable: true),
-                              )),
-                        ),
-                      ),
+                                labelRotation: 315,
+                              ),
+                              plotAreaBackgroundColor: Colors.grey[100],
+                              title: const ChartTitle(
+                                text: 'Tempo por ano (minutos)',
+                                textStyle: TextStyle(fontSize: 16),
+                              ),
+                              tooltipBehavior: TooltipBehavior(enable: true),
+                            ),
+                          )),
                     )
                   : const SizedBox(height: 6),
               _seriesSessionsListY != null
                   ? Center(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: ExcludeSemantics(
-                          child: SizedBox(
-                              height: 250,
-                              width: MediaQuery.of(context).size.width * 0.95,
-                              child: SfCartesianChart(
-                                series: _seriesSessionsListY!,
-                                primaryYAxis: const NumericAxis(
-                                  labelFormat: '{value}',
-                                  isVisible: true,
+                      child: SizedBox(
+                          height: 250,
+                          width: MediaQuery.of(context).size.width * 0.95,
+                          child: ExcludeSemantics(
+                            child: SfCartesianChart(
+                              series: _seriesSessionsListY!,
+                              primaryYAxis: const NumericAxis(
+                                labelFormat: '{value}',
+                                isVisible: true,
+                              ),
+                              primaryXAxis: const CategoryAxis(
+                                interval: 1,
+                                majorGridLines: MajorGridLines(width: 0),
+                                title: AxisTitle(
+                                  text: 'ano',
                                 ),
-                                primaryXAxis: const CategoryAxis(
-                                  interval: 1,
-                                  majorGridLines: MajorGridLines(width: 0),
-                                  title: AxisTitle(
-                                    text: 'mês',
-                                  ),
-                                ),
-                                plotAreaBackgroundColor: Colors.grey[100],
-                                title: const ChartTitle(
-                                  text: 'Sessões por ano',
-                                  textStyle: TextStyle(fontSize: 16),
-                                ),
-                                // Enable legend
-                                legend: const Legend(
-                                  isVisible: false,
-                                  title: LegendTitle(text: 'timer'),
-                                ),
-                                tooltipBehavior: TooltipBehavior(enable: true),
-                              )),
-                        ),
-                      ),
+                                labelRotation: 315,
+                              ),
+                              plotAreaBackgroundColor: Colors.grey[100],
+                              title: const ChartTitle(
+                                text: 'Sessões por ano',
+                                textStyle: TextStyle(fontSize: 16),
+                              ),
+                              tooltipBehavior: TooltipBehavior(enable: true),
+                            ),
+                          )),
                     )
                   : const SizedBox(height: 6),
               Padding(
@@ -440,46 +411,27 @@ class _YearlyStatisticsWidgetState extends State<YearlyStatisticsWidget> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Sequencias contínuas',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w600)),
+                    const Text('Sequencias contínuas', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
                     const SizedBox(height: 6),
-                    _showLine(
-                        title: 'Dias consecutivos - atual',
-                        value: actualSequenceOfDaysWithSessionY),
-                    _showLine(
-                        title: 'Maior sequencia de dias consecutivos',
-                        value: greaterSequenceOfDaysWithSessionY),
+                    _showLine(title: 'Dias consecutivos - atual', value: actualSequenceOfDaysWithSessionY),
+                    _showLine(title: 'Maior sequencia de dias consecutivos', value: greaterSequenceOfDaysWithSessionY),
                     const SizedBox(height: 24),
-                    const Text('Tempo',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w600)),
+                    const Text('Tempo', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
                     const SizedBox(height: 6),
                     _showLine(title: 'Total', value: totalTimeY),
                     _showLine(title: 'Timer', value: totalTimeTimerY),
-                    _showLine(
-                        title: 'Meditação conduzida', value: totalTimeMedY),
+                    _showLine(title: 'Meditação conduzida', value: totalTimeMedY),
                     _showLine(title: 'Média diária', value: dailyAverageTimeY),
-                    _showLine(
-                        title: 'Duração média', value: averageSessionTimeY),
-                    _showLine(
-                        title: 'Sessão mais longa', value: longestSessionY),
+                    _showLine(title: 'Duração média', value: averageSessionTimeY),
+                    _showLine(title: 'Sessão mais longa', value: longestSessionY),
                     const SizedBox(height: 24),
-                    const Text('Sessões',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w600)),
+                    const Text('Sessões', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
                     const SizedBox(height: 6),
                     _showLine(title: 'Total', value: numberSessionsY),
                     _showLine(title: 'Timer', value: numberTimerSessionsY),
-                    _showLine(
-                        title: 'Meditação conduzida',
-                        value: numberMedSessionsY),
-                    _showLine(
-                        title: 'Frequencia diária',
-                        value: dailyAverageSessionsY),
-                    _showLine(
-                        title: 'Maior número em único dia',
-                        value: greaterNumDailySessionsY),
+                    _showLine(title: 'Meditação conduzida', value: numberMedSessionsY),
+                    _showLine(title: 'Frequencia diária', value: dailyAverageSessionsY),
+                    _showLine(title: 'Maior número em único dia', value: greaterNumDailySessionsY),
                   ],
                 ),
               )

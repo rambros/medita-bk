@@ -30,8 +30,7 @@ export 'dart:math' show min, max;
 export 'dart:typed_data' show Uint8List;
 export 'dart:convert' show jsonEncode, jsonDecode;
 export 'package:intl/intl.dart';
-export 'package:cloud_firestore/cloud_firestore.dart'
-    show DocumentReference, FirebaseFirestore;
+export 'package:cloud_firestore/cloud_firestore.dart' show DocumentReference, FirebaseFirestore;
 export 'package:page_transition/page_transition.dart';
 export 'custom_icons.dart' show FFIcons;
 export 'internationalization.dart' show FFLocalizations;
@@ -84,8 +83,7 @@ Future downloadFile({
   FFUploadedFile? uploadedFile,
 }) async {
   var bytes = uploadedFile?.bytes;
-  var extension = getExtensionFromFilename(filename) ??
-      getExtensionFromFilename(uploadedFile?.name ?? '');
+  var extension = getExtensionFromFilename(filename) ?? getExtensionFromFilename(uploadedFile?.name ?? '');
 
   if (url == null && bytes == null) {
     throw 'No file/url to download';
@@ -98,8 +96,7 @@ Future downloadFile({
 
   // First, check if the extension is specified in the filename to avoid needing
   // to scan the file to determine the mime type and extension
-  mimeType = mime.lookupMimeType(filename) ??
-      mime.lookupMimeType(uploadedFile?.name ?? '');
+  mimeType = mime.lookupMimeType(filename) ?? mime.lookupMimeType(uploadedFile?.name ?? '');
 
   // If a URL is provided, download the file and determine the mime type from
   // the response headers.
@@ -119,14 +116,10 @@ Future downloadFile({
     }
   }
 
-  MimeType mimeTypeObj =
-      MimeType.values.firstWhereOrNull((e) => e.type == mimeType) ??
-          MimeType.other;
+  MimeType mimeTypeObj = MimeType.values.firstWhereOrNull((e) => e.type == mimeType) ?? MimeType.other;
 
   // Extract base filename without extension for consistent handling
-  final baseFilename = filename.contains('.')
-      ? filename.substring(0, filename.lastIndexOf('.'))
-      : filename;
+  final baseFilename = filename.contains('.') ? filename.substring(0, filename.lastIndexOf('.')) : filename;
   final fileExtension = extension ?? mime.extensionFromMime(mimeType ?? '');
 
   if (kIsWeb) {
@@ -220,8 +213,7 @@ String formatNumber(
       break;
     case FormatType.custom:
       final hasLocale = locale != null && locale.isNotEmpty;
-      formattedValue =
-          NumberFormat(format, hasLocale ? locale : null).format(value);
+      formattedValue = NumberFormat(format, hasLocale ? locale : null).format(value);
   }
 
   if (formattedValue.isEmpty) {
@@ -229,9 +221,7 @@ String formatNumber(
   }
 
   if (currency != null) {
-    final currencySymbol = currency.isNotEmpty
-        ? currency
-        : NumberFormat.simpleCurrency().format(0.0).substring(0, 1);
+    final currencySymbol = currency.isNotEmpty ? currency : NumberFormat.simpleCurrency().format(0.0).substring(0, 1);
     formattedValue = '$currencySymbol$formattedValue';
   }
 
@@ -289,9 +279,7 @@ dynamic getJsonField(
   }
   final value = field.first.value;
   if (isForList) {
-    return value is! Iterable
-        ? [value]
-        : (value is List ? value : value.toList());
+    return value is! Iterable ? [value] : (value is List ? value : value.toList());
   }
   return value;
 }
@@ -312,8 +300,7 @@ bool get isWeb => kIsWeb;
 const kBreakpointSmall = 479.0;
 const kBreakpointMedium = 767.0;
 const kBreakpointLarge = 991.0;
-bool isMobileWidth(BuildContext context) =>
-    MediaQuery.sizeOf(context).width < kBreakpointSmall;
+bool isMobileWidth(BuildContext context) => MediaQuery.sizeOf(context).width < kBreakpointSmall;
 bool responsiveVisibility({
   required BuildContext context,
   bool phone = true,
@@ -346,32 +333,25 @@ extension FFTextEditingControllerExt on TextEditingController? {
 }
 
 extension IterableExt<T> on Iterable<T> {
-  List<T> sortedList<S extends Comparable>(
-      {S Function(T)? keyOf, bool desc = false}) {
-    final sortedAscending = toList()
-      ..sort(keyOf == null ? null : ((a, b) => keyOf(a).compareTo(keyOf(b))));
+  List<T> sortedList<S extends Comparable>({S Function(T)? keyOf, bool desc = false}) {
+    final sortedAscending = toList()..sort(keyOf == null ? null : ((a, b) => keyOf(a).compareTo(keyOf(b))));
     if (desc) {
       return sortedAscending.reversed.toList();
     }
     return sortedAscending;
   }
 
-  List<S> mapIndexed<S>(S Function(int, T) func) => toList()
-      .asMap()
-      .map((index, value) => MapEntry(index, func(index, value)))
-      .values
-      .toList();
+  List<S> mapIndexed<S>(S Function(int, T) func) =>
+      toList().asMap().map((index, value) => MapEntry(index, func(index, value))).values.toList();
 }
 
 extension StringDocRef on String {
   DocumentReference get ref => FirebaseFirestore.instance.doc(this);
 }
 
-void setAppLanguage(BuildContext context, String language) =>
-    MyApp.of(context).setLocale(language);
+void setAppLanguage(BuildContext context, String language) => MyApp.of(context).setLocale(language);
 
-void setDarkModeSetting(BuildContext context, ThemeMode themeMode) =>
-    MyApp.of(context).setThemeMode(themeMode);
+void setDarkModeSetting(BuildContext context, ThemeMode themeMode) => MyApp.of(context).setThemeMode(themeMode);
 
 void showSnackbar(
   BuildContext context,
@@ -385,12 +365,12 @@ void showSnackbar(
       content: Row(
         children: [
           if (loading)
-            Padding(
-              padding: const EdgeInsetsDirectional.only(end: 10.0),
+            const Padding(
+              padding: EdgeInsetsDirectional.only(end: 10.0),
               child: SizedBox(
                 height: 20,
                 width: 20,
-                child: const CircularProgressIndicator(
+                child: CircularProgressIndicator(
                   color: Colors.white,
                 ),
               ),
@@ -405,9 +385,7 @@ void showSnackbar(
 
 extension FFStringExt on String {
   String maybeHandleOverflow({int? maxChars, String replacement = ''}) =>
-      maxChars != null && length > maxChars
-          ? replaceRange(maxChars, null, replacement)
-          : this;
+      maxChars != null && length > maxChars ? replaceRange(maxChars, null, replacement) : this;
 
   String toCapitalization(TextCapitalization textCapitalization) {
     switch (textCapitalization) {
@@ -429,16 +407,13 @@ extension ListFilterExt<T> on Iterable<T?> {
 
 extension MapFilterExtensions<T> on Map<String, T?> {
   Map<String, T> get withoutNulls => Map.fromEntries(
-        entries
-            .where((e) => e.value != null)
-            .map((e) => MapEntry(e.key, e.value as T)),
+        entries.where((e) => e.value != null).map((e) => MapEntry(e.key, e.value as T)),
       );
 }
 
 extension MapListContainsExt on List<dynamic> {
-  bool containsMap(dynamic map) => map is Map
-      ? any((e) => e is Map && const DeepCollectionEquality().equals(e, map))
-      : contains(map);
+  bool containsMap(dynamic map) =>
+      map is Map ? any((e) => e is Map && const DeepCollectionEquality().equals(e, map)) : contains(map);
 }
 
 extension ListDivideExt<T extends Widget> on Iterable<T> {
@@ -446,23 +421,17 @@ extension ListDivideExt<T extends Widget> on Iterable<T> {
 
   List<Widget> divide(Widget t, {bool Function(int)? filterFn}) => isEmpty
       ? []
-      : (enumerate
-          .map((e) => [e.value, if (filterFn == null || filterFn(e.key)) t])
-          .expand((i) => i)
-          .toList()
+      : (enumerate.map((e) => [e.value, if (filterFn == null || filterFn(e.key)) t]).expand((i) => i).toList()
         ..removeLast());
 
   List<Widget> around(Widget t) => addToStart(t).addToEnd(t);
 
-  List<Widget> addToStart(Widget t) =>
-      enumerate.map((e) => e.value).toList()..insert(0, t);
+  List<Widget> addToStart(Widget t) => enumerate.map((e) => e.value).toList()..insert(0, t);
 
-  List<Widget> addToEnd(Widget t) =>
-      enumerate.map((e) => e.value).toList()..add(t);
+  List<Widget> addToEnd(Widget t) => enumerate.map((e) => e.value).toList()..add(t);
 
   List<Padding> paddingTopEach(double val) =>
-      map((w) => Padding(padding: EdgeInsets.only(top: val), child: w))
-          .toList();
+      map((w) => Padding(padding: EdgeInsets.only(top: val), child: w)).toList();
 }
 
 extension StatefulWidgetExtensions on State<StatefulWidget> {
@@ -548,7 +517,5 @@ extension ListUniqueExt<T> on Iterable<T> {
   }
 }
 
-String getCurrentRoute(BuildContext context) =>
-    context.mounted ? MyApp.of(context).getRoute() : '';
-List<String> getCurrentRouteStack(BuildContext context) =>
-    context.mounted ? MyApp.of(context).getRouteStack() : [];
+String getCurrentRoute(BuildContext context) => context.mounted ? MyApp.of(context).getRoute() : '';
+List<String> getCurrentRouteStack(BuildContext context) => context.mounted ? MyApp.of(context).getRouteStack() : [];
