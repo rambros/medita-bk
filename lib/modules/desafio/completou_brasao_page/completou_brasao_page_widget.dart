@@ -4,7 +4,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
-import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/ui/core/widgets/confeti_widget.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/material.dart';
@@ -88,7 +88,7 @@ class _CompletouBrasaoPageWidgetState extends State<CompletouBrasaoPageWidget> {
                         child: SizedBox(
                           width: 360.0,
                           height: 660.0,
-                          child: const custom_widgets.ConfetiWidget(
+                          child: const ConfetiWidget(
                             width: 360.0,
                             height: 660.0,
                           ),

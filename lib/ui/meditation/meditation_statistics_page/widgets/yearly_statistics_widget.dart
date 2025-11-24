@@ -5,14 +5,12 @@ import '/backend/schema/enums/enums.dart';
 import '/actions/actions.dart' as action_blocks;
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import 'index.dart'; // Imports other custom widgets
 import '/custom_code/actions/index.dart'; // Imports custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
 import 'package:flutter/material.dart';
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-import 'index.dart'; // Imports other custom widgets
 
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -36,8 +34,8 @@ class DailyLog {
   });
 }
 
-class MonthlyLog {
-  String? month;
+class YearlyLog {
+  int? year;
   int? totalTime;
   int? timerTime;
   int? medTime;
@@ -45,8 +43,8 @@ class MonthlyLog {
   int? medSession;
   int? timerSession;
 
-  MonthlyLog({
-    this.month,
+  YearlyLog({
+    this.year,
     this.totalTime,
     this.timerTime,
     this.medTime,
@@ -56,8 +54,8 @@ class MonthlyLog {
   });
 }
 
-class MonthlyStatisticsWidget extends StatefulWidget {
-  const MonthlyStatisticsWidget({
+class YearlyStatisticsWidget extends StatefulWidget {
+  const YearlyStatisticsWidget({
     super.key,
     this.width,
     this.height,
@@ -67,46 +65,47 @@ class MonthlyStatisticsWidget extends StatefulWidget {
   final double? height;
 
   @override
-  _MonthlyStatisticsWidgetState createState() => _MonthlyStatisticsWidgetState();
+  _YearlyStatisticsWidgetState createState() => _YearlyStatisticsWidgetState();
 }
 
-class _MonthlyStatisticsWidgetState extends State<MonthlyStatisticsWidget> {
+class _YearlyStatisticsWidgetState extends State<YearlyStatisticsWidget> {
   List<MeditationLogStruct> listLogsFromRepository = FFAppState().meditationLogList;
-  List<MonthlyLog?> listMonthlyLog = List.filled(12, MonthlyLog()); // 12 months
+  var numYears = 4;
+  late List<YearlyLog?> listYearlyLog; // 12 months
 
-  List<CartesianSeries<dynamic, dynamic>>? _seriesTimeListM;
-  List<CartesianSeries<dynamic, dynamic>>? _seriesSessionsListM;
+  List<CartesianSeries<dynamic, dynamic>>? _seriesTimeListY;
+  List<CartesianSeries<dynamic, dynamic>>? _seriesSessionsListY;
 
-  var _totalTimeM = 0;
-  var _totalTimeTimerM = 0;
-  var _totalTimeMedM = 0;
-  var _dailyAverageTimeM = 0;
-  var _averageSessionTimeM = 0;
-  int? _longestSessionM = 0;
-  var _numberSessionsM = 0;
-  var _numberTimerSessionsM = 0;
-  var _numberMedSessionsM = 0;
-  var _dailyAverageSessionsM = 0.0;
-  int? _greaterNumDailySessionsM = 0;
-  var _greaterSequenceOfDaysWithSessionM = 0;
-  var _actualSequenceOfDaysWithSessionM = 0;
+  var _totalTimeY = 0;
+  var _totalTimeTimerY = 0;
+  var _totalTimeMedY = 0;
+  var _dailyAverageTimeY = 0;
+  var _averageSessionTimeY = 0;
+  int? _longestSessionY = 0;
+  var _numberSessionsY = 0;
+  var _numberTimerSessionsY = 0;
+  var _numberMedSessionsY = 0;
+  var _dailyAverageSessionsY = 0.0;
+  int? _greaterNumDailySessionsY = 0;
+  var _greaterSequenceOfDaysWithSessionY = 0;
+  var _actualSequenceOfDaysWithSessionY = 0;
 
-  String get totalTimeM => _roundTime(_totalTimeM);
-  String get totalTimeTimerM => _roundTime(_totalTimeTimerM);
-  String get totalTimeMedM => _roundTime(_totalTimeMedM);
-  String get dailyAverageTimeM => _roundTime(_dailyAverageTimeM);
-  String get averageSessionTimeM => _roundTime(_averageSessionTimeM);
-  String get longestSessionM => _roundTime(_longestSessionM!);
-  String get numberSessionsM => _numberSessionsM.toString();
-  String get numberTimerSessionsM => _numberTimerSessionsM.toString();
-  String get numberMedSessionsM => _numberMedSessionsM.toString();
-  String get dailyAverageSessionsM => _dailyAverageSessionsM.toStringAsFixed(1);
-  String get greaterNumDailySessionsM => _greaterNumDailySessionsM.toString();
-  String get greaterSequenceOfDaysWithSessionM => _greaterSequenceOfDaysWithSessionM.toString();
-  String get actualSequenceOfDaysWithSessionM => _actualSequenceOfDaysWithSessionM.toString();
+  String get totalTimeY => _roundTime(_totalTimeY);
+  String get totalTimeTimerY => _roundTime(_totalTimeTimerY);
+  String get totalTimeMedY => _roundTime(_totalTimeMedY);
+  String get dailyAverageTimeY => _roundTime(_dailyAverageTimeY);
+  String get averageSessionTimeY => _roundTime(_averageSessionTimeY);
+  String get longestSessionY => _roundTime(_longestSessionY!);
+  String get numberSessionsY => _numberSessionsY.toString();
+  String get numberTimerSessionsY => _numberTimerSessionsY.toString();
+  String get numberMedSessionsY => _numberMedSessionsY.toString();
+  String get dailyAverageSessionsY => _dailyAverageSessionsY.toStringAsFixed(1);
+  String get greaterNumDailySessionsY => _greaterNumDailySessionsY.toString();
+  String get greaterSequenceOfDaysWithSessionY => _greaterSequenceOfDaysWithSessionY.toString();
+  String get actualSequenceOfDaysWithSessionY => _actualSequenceOfDaysWithSessionY.toString();
 
-  List<ChartSeries>? get seriesTimeListM => _seriesTimeListM;
-  List<ChartSeries>? get seriesSessionsListM => _seriesSessionsListM;
+  List<ChartSeries>? get seriesTimeListY => _seriesTimeListY;
+  List<ChartSeries>? get seriesSessionsListY => _seriesSessionsListY;
 
   String _roundTime(int time) {
     var duration = Duration(seconds: time);
@@ -121,10 +120,10 @@ class _MonthlyStatisticsWidgetState extends State<MonthlyStatisticsWidget> {
     return strHour + strMinutes + strSeconds;
   }
 
-  List<MeditationLogStruct> _getLastMonths(List<MeditationLogStruct> logs) {
+  List<MeditationLogStruct> _getLastYears(List<MeditationLogStruct> logs) {
     var now = DateTime.now();
-    var Months = now.subtract(const Duration(days: 365 - 1)); //[0..364] = 12 meses
-    var tempLogs = logs.where((log) => log.date!.isAfter(Months)).toList();
+    var months = now.subtract(Duration(days: 365 * numYears));
+    var tempLogs = logs.where((log) => log.date!.isAfter(months)).toList();
     return tempLogs;
   }
 
@@ -138,24 +137,24 @@ class _MonthlyStatisticsWidgetState extends State<MonthlyStatisticsWidget> {
 
   DateTime getDate(DateTime d) => DateTime(d.year, d.month, d.day);
 
-  void _calculateStatisticsM(List<MeditationLogStruct> listLogs) {
+  void _calculateStatisticsY(List<MeditationLogStruct> listLogs) {
     var daySessionTemp = 0;
     var monthSessionTemp = 0;
     var yearSessionTemp = 0;
-    var numDaysWithSessionM = 0;
+    var numDaysWithSessionY = 0;
 
     if (listLogs.isEmpty) {
       return;
     }
 
-    listLogs = _getLastMonths(listLogs);
+    listLogs = _getLastYears(listLogs);
 
-    // List to accumulate logs in months -> to display graphics
-    var month = DateTime.now().month;
+    // List to accumulate logs in years -> to display graphics
+    var listYearlyLog = List.filled(numYears, YearlyLog());
     var year = DateTime.now().year;
-    for (var i = 0; i < listMonthlyLog.length; i++) {
-      listMonthlyLog[i] = MonthlyLog(
-        month: year.toString() + addZeros(month),
+    for (var i = 0; i < listYearlyLog.length; i++) {
+      listYearlyLog[i] = YearlyLog(
+        year: year--,
         totalTime: 0,
         timerTime: 0,
         medTime: 0,
@@ -163,16 +162,10 @@ class _MonthlyStatisticsWidgetState extends State<MonthlyStatisticsWidget> {
         timerSession: 0,
         sessions: 0,
       );
-      if (month == 1) {
-        month = 12;
-        year--;
-      } else {
-        month--;
-      }
     }
 
     // temp List to accumulate logs in days to calculate sequences
-    var listDays = List.filled(365, DailyLog());
+    var listDays = List.filled(365 * numYears, DailyLog());
     for (var i = 0; i < listDays.length; i++) {
       listDays[i] = DailyLog(
         day: DateTime.now().subtract(Duration(days: i)),
@@ -181,50 +174,49 @@ class _MonthlyStatisticsWidgetState extends State<MonthlyStatisticsWidget> {
     }
 
     for (var log in listLogs) {
-      _totalTimeM = _totalTimeM + log.duration;
+      _totalTimeY = _totalTimeY + log.duration;
 
       if (log.type == 'timer') {
-        _totalTimeTimerM = _totalTimeTimerM + log.duration;
-        _numberTimerSessionsM++;
+        _totalTimeTimerY = _totalTimeTimerY + log.duration;
+        _numberTimerSessionsY++;
       } else {
-        _totalTimeMedM = _totalTimeMedM + log.duration;
-        _numberMedSessionsM++;
+        _totalTimeMedY = _totalTimeMedY + log.duration;
+        _numberMedSessionsY++;
       }
 
       if (log.date!.year != yearSessionTemp || log.date!.month != monthSessionTemp || log.date!.day != daySessionTemp) {
-        numDaysWithSessionM++;
+        numDaysWithSessionY++;
         daySessionTemp = log.date!.day;
         monthSessionTemp = log.date!.month;
         yearSessionTemp = log.date!.year;
       }
 
       // insert values in the day that is in list -> search in day atribute
-      var index =
-          listMonthlyLog.indexWhere((value) => (value!.month == log.date!.year.toString() + addZeros(log.date!.month)));
+      var index = listYearlyLog.indexWhere((value) => (value.year == log.date!.year));
 
-      listMonthlyLog[index]!.totalTime = listMonthlyLog[index]!.totalTime! + log.duration;
-      listMonthlyLog[index]!.medTime =
-          log.type == 'guided' ? listMonthlyLog[index]!.medTime! + log.duration : listMonthlyLog[index]!.medTime;
-      listMonthlyLog[index]!.timerTime =
-          log.type == 'timer' ? listMonthlyLog[index]!.timerTime! + log.duration : listMonthlyLog[index]!.timerTime;
-      listMonthlyLog[index]!.medSession =
-          log.type == 'guided' ? listMonthlyLog[index]!.medSession! + 1 : listMonthlyLog[index]!.medSession;
-      listMonthlyLog[index]!.timerSession =
-          log.type == 'timer' ? listMonthlyLog[index]!.timerSession! + 1 : listMonthlyLog[index]!.timerSession!;
-      listMonthlyLog[index]!.sessions = listMonthlyLog[index]!.sessions! + 1;
+      listYearlyLog[index].totalTime = listYearlyLog[index].totalTime! + log.duration;
+      listYearlyLog[index].medTime =
+          log.type == 'guided' ? listYearlyLog[index].medTime! + log.duration : listYearlyLog[index].medTime;
+      listYearlyLog[index].timerTime =
+          log.type == 'timer' ? listYearlyLog[index].timerTime! + log.duration : listYearlyLog[index].timerTime;
+      listYearlyLog[index].medSession =
+          log.type == 'guided' ? listYearlyLog[index].medSession! + 1 : listYearlyLog[index].medSession;
+      listYearlyLog[index].timerSession =
+          log.type == 'timer' ? listYearlyLog[index].timerSession! + 1 : listYearlyLog[index].timerSession!;
+      listYearlyLog[index].sessions = listYearlyLog[index].sessions! + 1;
 
       // insert values in the day that is in list -> search in day atribute
       var indexDay = listDays.indexWhere((value) =>
           value.day!.day == log.date!.day && value.day!.month == log.date!.month && value.day!.year == log.date!.year);
       listDays[indexDay].sessions = listDays[indexDay].sessions! + 1;
     }
-    _numberSessionsM = listLogs.length;
-    _averageSessionTimeM = _totalTimeM ~/ listLogs.length;
-    _dailyAverageTimeM = _totalTimeM ~/ numDaysWithSessionM;
-    _dailyAverageSessionsM = _numberSessionsM / numDaysWithSessionM;
+    _numberSessionsY = listLogs.length;
+    _averageSessionTimeY = _totalTimeY ~/ listLogs.length;
+    _dailyAverageTimeY = _totalTimeY ~/ numDaysWithSessionY;
+    _dailyAverageSessionsY = _numberSessionsY / numDaysWithSessionY;
 
     listLogs.sort((a, b) => b.duration.compareTo(a.duration));
-    _longestSessionM = listLogs[0].duration;
+    _longestSessionY = listLogs[0].duration;
 
     // calculate the sequences of days with sessions
     var numDay = 0;
@@ -252,31 +244,28 @@ class _MonthlyStatisticsWidgetState extends State<MonthlyStatisticsWidget> {
     }
 
     if (isSequenceActive) {
-      _actualSequenceOfDaysWithSessionM = listSequences[0] ?? 1;
+      _actualSequenceOfDaysWithSessionY = listSequences[0] ?? 1;
     } else {
-      _actualSequenceOfDaysWithSessionM = 0;
+      _actualSequenceOfDaysWithSessionY = 0;
     }
 
     listSequences.sort((a, b) => b.compareTo(a));
-    _greaterSequenceOfDaysWithSessionM = listSequences[0];
+    _greaterSequenceOfDaysWithSessionY = listSequences[0];
 
     var listTemp = List.from(listDays);
     listTemp.sort((a, b) => b.sessions.compareTo(a.sessions));
-    _greaterNumDailySessionsM = listTemp[0].sessions;
+    _greaterNumDailySessionsY = listTemp[0].sessions;
 
     // reorganize for graphics in UI
-    listMonthlyLog.sort((a, b) => a!.month!.compareTo(b!.month!));
+    listYearlyLog.sort((a, b) => a.year!.compareTo(b.year!));
 
-    //_seriesTimeListM = List<ChartSeries<MonthlyLog, String>>();
-    //_seriesTimeListM = <ChartSeries<MonthlyLog?, String>>[
-
-    _seriesTimeListM = [
-      StackedColumnSeries<MonthlyLog?, String>(
+    _seriesTimeListY = [
+      StackedColumnSeries<YearlyLog?, String>(
         name: 'Timer',
-        dataSource: listMonthlyLog,
-        xValueMapper: (MonthlyLog? log, _) => log!.month!.substring(4),
-        yValueMapper: (MonthlyLog? log, _) => log!.timerTime! ~/ 60,
-        dataLabelMapper: (MonthlyLog? log, _) => (log!.timerTime! ~/ 60).toString(),
+        dataSource: listYearlyLog,
+        xValueMapper: (YearlyLog? log, _) => log!.year.toString(),
+        yValueMapper: (YearlyLog? log, _) => log!.timerTime! ~/ 3600,
+        dataLabelMapper: (YearlyLog? log, _) => (log!.timerTime! ~/ 3600).toString(),
         dataLabelSettings: DataLabelSettings(
             isVisible: false,
             showZeroValue: false,
@@ -285,12 +274,12 @@ class _MonthlyStatisticsWidgetState extends State<MonthlyStatisticsWidget> {
             textStyle: const TextStyle(fontSize: 10),
             showCumulativeValues: true),
       ),
-      StackedColumnSeries<MonthlyLog?, String>(
+      StackedColumnSeries<YearlyLog?, String>(
         name: 'Conduzida',
-        dataSource: listMonthlyLog,
-        xValueMapper: (MonthlyLog? log, _) => log!.month!.substring(4),
-        yValueMapper: (MonthlyLog? log, _) => log!.medTime! ~/ 60,
-        dataLabelMapper: (MonthlyLog? log, _) => (log!.medTime! ~/ 60).toString(),
+        dataSource: listYearlyLog,
+        xValueMapper: (YearlyLog? log, _) => log!.year.toString(),
+        yValueMapper: (YearlyLog? log, _) => log!.medTime! ~/ 3600,
+        dataLabelMapper: (YearlyLog? log, _) => (log!.medTime! ~/ 3600).toString(),
         dataLabelSettings: DataLabelSettings(
             isVisible: false,
             showZeroValue: false,
@@ -299,17 +288,16 @@ class _MonthlyStatisticsWidgetState extends State<MonthlyStatisticsWidget> {
             textStyle: const TextStyle(fontSize: 10),
             showCumulativeValues: true),
       ),
-    ] as List<CartesianSeries<dynamic, dynamic>>;
+    ];
 
     //_seriesSessionsListM = List<ChartSeries<MonthlyLog, String>>();
-    //_seriesSessionsListM = <ChartSeries<MonthlyLog?, String>>[
-    _seriesSessionsListM = [
-      StackedColumnSeries<MonthlyLog?, String>(
+    _seriesSessionsListY = [
+      StackedColumnSeries<YearlyLog?, String>(
         name: 'Timer',
-        dataSource: listMonthlyLog,
-        xValueMapper: (MonthlyLog? log, _) => log!.month!.substring(4),
-        yValueMapper: (MonthlyLog? log, _) => log!.timerSession,
-        dataLabelMapper: (MonthlyLog? log, _) => (log!.timerSession).toString(),
+        dataSource: listYearlyLog,
+        xValueMapper: (YearlyLog? log, _) => log!.year.toString(),
+        yValueMapper: (YearlyLog? log, _) => log!.timerSession,
+        dataLabelMapper: (YearlyLog? log, _) => (log!.timerSession).toString(),
         dataLabelSettings: DataLabelSettings(
             isVisible: false,
             showZeroValue: false,
@@ -318,12 +306,12 @@ class _MonthlyStatisticsWidgetState extends State<MonthlyStatisticsWidget> {
             textStyle: const TextStyle(fontSize: 10),
             showCumulativeValues: true),
       ),
-      StackedColumnSeries<MonthlyLog?, String>(
+      StackedColumnSeries<YearlyLog?, String>(
         name: 'Conduzida',
-        dataSource: listMonthlyLog,
-        xValueMapper: (MonthlyLog? log, _) => log!.month!.substring(4),
-        yValueMapper: (MonthlyLog? log, _) => log!.medSession,
-        dataLabelMapper: (MonthlyLog? log, _) => (log!.medSession).toString(),
+        dataSource: listYearlyLog,
+        xValueMapper: (YearlyLog? log, _) => log!.year.toString(),
+        yValueMapper: (YearlyLog? log, _) => log!.medSession,
+        dataLabelMapper: (YearlyLog? log, _) => (log!.medSession).toString(),
         dataLabelSettings: DataLabelSettings(
             isVisible: false,
             showZeroValue: false,
@@ -332,14 +320,12 @@ class _MonthlyStatisticsWidgetState extends State<MonthlyStatisticsWidget> {
             textStyle: const TextStyle(fontSize: 10),
             showCumulativeValues: true),
       ),
-    ].cast<CartesianSeries>();
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_seriesTimeListM == null || _seriesSessionsListM == null) {
-      _calculateStatisticsM(listLogsFromRepository);
-    }
+    _seriesTimeListY ?? _calculateStatisticsY(listLogsFromRepository);
     return SingleChildScrollView(
       child: Container(
         color: FlutterFlowTheme.of(context).primaryBackground,
@@ -353,19 +339,19 @@ class _MonthlyStatisticsWidgetState extends State<MonthlyStatisticsWidget> {
                 child: Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Text(
-                    'Últimos 12 meses',
+                    'Últimos anos',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
                   ),
                 ),
               ),
-              _seriesTimeListM != null
+              _seriesTimeListY != null
                   ? Center(
                       child: SizedBox(
                           height: 250,
                           width: MediaQuery.of(context).size.width * 0.95,
                           child: ExcludeSemantics(
                             child: SfCartesianChart(
-                              series: _seriesTimeListM!,
+                              series: _seriesTimeListY!,
                               primaryYAxis: const NumericAxis(
                                 labelFormat: '{value}',
                                 isVisible: true,
@@ -374,13 +360,13 @@ class _MonthlyStatisticsWidgetState extends State<MonthlyStatisticsWidget> {
                                 interval: 1,
                                 majorGridLines: MajorGridLines(width: 0),
                                 title: AxisTitle(
-                                  text: 'mês',
+                                  text: 'ano',
                                 ),
                                 labelRotation: 315,
                               ),
                               plotAreaBackgroundColor: Colors.grey[100],
                               title: const ChartTitle(
-                                text: 'Tempo por mês (minutos)',
+                                text: 'Tempo por ano (minutos)',
                                 textStyle: TextStyle(fontSize: 16),
                               ),
                               tooltipBehavior: TooltipBehavior(enable: true),
@@ -388,14 +374,14 @@ class _MonthlyStatisticsWidgetState extends State<MonthlyStatisticsWidget> {
                           )),
                     )
                   : const SizedBox(height: 6),
-              _seriesSessionsListM != null
+              _seriesSessionsListY != null
                   ? Center(
                       child: SizedBox(
                           height: 250,
                           width: MediaQuery.of(context).size.width * 0.95,
                           child: ExcludeSemantics(
                             child: SfCartesianChart(
-                              series: _seriesSessionsListM!,
+                              series: _seriesSessionsListY!,
                               primaryYAxis: const NumericAxis(
                                 labelFormat: '{value}',
                                 isVisible: true,
@@ -404,13 +390,13 @@ class _MonthlyStatisticsWidgetState extends State<MonthlyStatisticsWidget> {
                                 interval: 1,
                                 majorGridLines: MajorGridLines(width: 0),
                                 title: AxisTitle(
-                                  text: 'mês',
+                                  text: 'ano',
                                 ),
                                 labelRotation: 315,
                               ),
                               plotAreaBackgroundColor: Colors.grey[100],
                               title: const ChartTitle(
-                                text: 'Sessões por mês',
+                                text: 'Sessões por ano',
                                 textStyle: TextStyle(fontSize: 16),
                               ),
                               tooltipBehavior: TooltipBehavior(enable: true),
@@ -425,25 +411,25 @@ class _MonthlyStatisticsWidgetState extends State<MonthlyStatisticsWidget> {
                   children: [
                     const Text('Sequencias contínuas', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
                     const SizedBox(height: 6),
-                    _showLine(title: 'Dias consecutivos - atual', value: actualSequenceOfDaysWithSessionM),
-                    _showLine(title: 'Maior sequencia de dias consecutivos', value: greaterSequenceOfDaysWithSessionM),
+                    _showLine(title: 'Dias consecutivos - atual', value: actualSequenceOfDaysWithSessionY),
+                    _showLine(title: 'Maior sequencia de dias consecutivos', value: greaterSequenceOfDaysWithSessionY),
                     const SizedBox(height: 24),
                     const Text('Tempo', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
                     const SizedBox(height: 6),
-                    _showLine(title: 'Total', value: totalTimeM),
-                    _showLine(title: 'Timer', value: totalTimeTimerM),
-                    _showLine(title: 'Meditação conduzida', value: totalTimeMedM),
-                    _showLine(title: 'Média diária', value: dailyAverageTimeM),
-                    _showLine(title: 'Duração média', value: averageSessionTimeM),
-                    _showLine(title: 'Sessão mais longa', value: longestSessionM),
+                    _showLine(title: 'Total', value: totalTimeY),
+                    _showLine(title: 'Timer', value: totalTimeTimerY),
+                    _showLine(title: 'Meditação conduzida', value: totalTimeMedY),
+                    _showLine(title: 'Média diária', value: dailyAverageTimeY),
+                    _showLine(title: 'Duração média', value: averageSessionTimeY),
+                    _showLine(title: 'Sessão mais longa', value: longestSessionY),
                     const SizedBox(height: 24),
                     const Text('Sessões', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
                     const SizedBox(height: 6),
-                    _showLine(title: 'Total', value: numberSessionsM),
-                    _showLine(title: 'Timer', value: numberTimerSessionsM),
-                    _showLine(title: 'Meditação conduzida', value: numberMedSessionsM),
-                    _showLine(title: 'Frequencia diária', value: dailyAverageSessionsM),
-                    _showLine(title: 'Maior número em único dia', value: greaterNumDailySessionsM),
+                    _showLine(title: 'Total', value: numberSessionsY),
+                    _showLine(title: 'Timer', value: numberTimerSessionsY),
+                    _showLine(title: 'Meditação conduzida', value: numberMedSessionsY),
+                    _showLine(title: 'Frequencia diária', value: dailyAverageSessionsY),
+                    _showLine(title: 'Maior número em único dia', value: greaterNumDailySessionsY),
                   ],
                 ),
               )

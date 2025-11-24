@@ -5,18 +5,11 @@ import '/backend/schema/enums/enums.dart';
 import '/actions/actions.dart' as action_blocks;
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import 'index.dart'; // Imports other custom widgets
 import '/custom_code/actions/index.dart'; // Imports custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
 import 'package:flutter/material.dart';
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
-
-import 'index.dart'; // Imports other custom widgets
-
-import 'index.dart'; // Imports other custom widgets
-
-import 'index.dart'; // Imports other custom widgets
 
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
@@ -25,7 +18,6 @@ import 'package:audio_session/audio_session.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:path/path.dart' as path;
 
 Stopwatch globalWatch = Stopwatch();
 
@@ -196,47 +188,33 @@ void showSliderDialog({
   );
 }
 
-class PlaylistPlayerWidget extends StatefulWidget {
-  const PlaylistPlayerWidget({
+class AudioPlayerWidget extends StatefulWidget {
+  const AudioPlayerWidget({
     super.key,
     this.width,
     this.height,
     required this.audioTitle,
+    required this.audioUrl,
     required this.audioArt,
     this.colorButton,
-    required this.listAudios,
   });
 
   final double? width;
   final double? height;
   final String audioTitle;
+  final String audioUrl;
   final String audioArt;
   final Color? colorButton;
-  final List<AudioModelStruct> listAudios;
 
   @override
-  _PlaylistPlayerWidgetState createState() => _PlaylistPlayerWidgetState();
+  _AudioPlayerWidgetState createState() => _AudioPlayerWidgetState();
 }
 
-class _PlaylistPlayerWidgetState extends State<PlaylistPlayerWidget> {
-  //static int _nextMediaId = 0;
-  //int _addedCount = 0;
+class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
+  static final int _nextMediaId = 0;
   late AudioPlayer _player;
-  final ConcatenatingAudioSource _playlist = ConcatenatingAudioSource(children: []);
-
-  // final isFirstSongNotifier = ValueNotifier<bool>(true);
-  // final isLastSongNotifier = ValueNotifier<bool>(true);
-  // final currentSongTitleNotifier = ValueNotifier<String>('');
-  // final currentIndexTitleNotifier = ValueNotifier<int>(0);
-  // final playlistNotifier = ValueNotifier<List<String>>([]);
-
-  Stream<PositionData> get _positionDataStream =>
-      Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
-          _player.positionStream,
-          _player.bufferedPositionStream,
-          _player.durationStream,
-          (position, bufferedPosition, duration) => PositionData(
-              position, bufferedPosition, duration ?? Duration.zero));
+  ConcatenatingAudioSource _playlist = ConcatenatingAudioSource(children: []);
+  final int _addedCount = 0;
 
   @override
   void initState() {
@@ -246,26 +224,23 @@ class _PlaylistPlayerWidgetState extends State<PlaylistPlayerWidget> {
       statusBarColor: Colors.black,
     ));
     _init();
-    _player.play();
-  }
-
-  @override
-  void dispose() {
-    _player.dispose();
-    globalWatch.stop();
-    FFAppState().addToMeditationLogList(MeditationLogStruct(
-        duration: globalWatch.elapsed.inSeconds,
-        date: DateTime.now(),
-        type: 'guided'));
-    globalWatch.reset();
-    super.dispose();
   }
 
   Future<void> _init() async {
     final session = await AudioSession.instance;
     await session.configure(const AudioSessionConfiguration.speech());
-    await _loadPlaylist(widget.listAudios);
-    //currentSongTitleNotifier.value = widget.listAudios[0].title;
+
+    _playlist = ConcatenatingAudioSource(children: [
+      AudioSource.uri(
+        Uri.parse(widget.audioUrl),
+        tag: MediaItem(
+          id: 'GoodWishes',
+          album: 'GoodWishes Album',
+          title: widget.audioTitle,
+          artUri: Uri.parse(widget.audioArt),
+        ),
+      ),
+    ]);
 
     // Listen to errors during playback.
     _player.playbackEventStream.listen((event) {},
@@ -281,62 +256,25 @@ class _PlaylistPlayerWidgetState extends State<PlaylistPlayerWidget> {
     }
   }
 
-  Future<void> _loadPlaylist(List<AudioModelStruct> listAudios) async {
-    final mediaItems = widget.listAudios
-        .map((audio) => MediaItem(
-              id: audio.id,
-              album: audio.author,
-              artist: audio.author,
-              title: audio.title,
-              duration: Duration(seconds: audio.duration),
-              extras: {
-                'url': audio.fileLocation,
-                'audioType': audio.audioType,
-                'fileType': audio.fileType,
-              },
-            ))
-        .toList();
-    final listAudioSource = mediaItems.map(_createAudioSource);
-    await _playlist.addAll(listAudioSource.toList());
+  @override
+  void dispose() {
+    _player.dispose();
+    globalWatch.stop();
+    FFAppState().addToMeditationLogList(MeditationLogStruct(
+        duration: globalWatch.elapsed.inSeconds,
+        date: DateTime.now(),
+        type: 'guided'));
+    globalWatch.reset();
+    super.dispose();
   }
 
-  IndexedAudioSource _createAudioSource(MediaItem mediaItem) {
-    if (mediaItem.extras!['fileType'] == FileType.asset) {
-      var caminhoCompleto = mediaItem.extras!['url'];
-      var nomeArquivo = path.basename(caminhoCompleto);
-      return AudioSource.uri(
-        //Uri.parse('asset:///assets/${mediaItem.extras!['url']}'),
-        Uri.parse('asset:///assets/audios/$nomeArquivo'),
-        tag: mediaItem,
-      );
-    }
-    if (mediaItem.extras!['audioType'] == AudioType.silence) {
-      return ClippingAudioSource(
-          start: const Duration(seconds: 0),
-          end: Duration(seconds: mediaItem.duration!.inSeconds),
-          tag: mediaItem,
-          child: AudioSource.uri(
-            Uri.parse(
-              'asset:///assets/audios/silence60.m4a',
-            ),
-            tag: mediaItem,
-          ));
-    }
-    if (mediaItem.extras!['audioType'] == AudioType.device_music) {
-      return ClippingAudioSource(
-          start: const Duration(seconds: 0),
-          end: Duration(seconds: mediaItem.duration!.inSeconds),
-          tag: mediaItem,
-          child: AudioSource.uri(
-            Uri.file(mediaItem.extras!['url']),
-            tag: mediaItem,
-          ));
-    }
-    return AudioSource.uri(
-      Uri.parse(mediaItem.extras!['url']),
-      tag: mediaItem,
-    );
-  }
+  Stream<PositionData> get _positionDataStream =>
+      Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
+          _player.positionStream,
+          _player.bufferedPositionStream,
+          _player.durationStream,
+          (position, bufferedPosition, duration) => PositionData(
+              position, bufferedPosition, duration ?? Duration.zero));
 
   @override
   Widget build(BuildContext context) {
@@ -348,21 +286,7 @@ class _PlaylistPlayerWidgetState extends State<PlaylistPlayerWidget> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          StreamBuilder<SequenceState?>(
-            stream: _player.sequenceStateStream,
-            builder: (context, snapshot) {
-              if (snapshot.data == null) return const SizedBox();
-              final index = snapshot.data!.currentIndex;
-              return Text(
-                widget.listAudios[index].title,
-                style: FlutterFlowTheme.of(context).bodyMedium.override(
-                      fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
-                      fontSize: 14.0,
-                      color: Colors.white,
-                    ),
-              );
-            },
-          ),
+          ControlButtons(_player, colorButton: widget.colorButton),
           StreamBuilder<PositionData>(
             stream: _positionDataStream,
             builder: (context, snapshot) {
@@ -379,7 +303,6 @@ class _PlaylistPlayerWidgetState extends State<PlaylistPlayerWidget> {
               );
             },
           ),
-          ControlButtons(_player, colorButton: widget.colorButton),
           const SizedBox(height: 8.0),
         ],
       ),
@@ -403,38 +326,11 @@ class ControlButtons extends StatelessWidget {
     globalWatch.stop();
   }
 
-  void _skipToNext() async {
-    await player.seekToNext();
-  }
-
-  void _skipToPrevious() async {
-    await player.seekToPrevious();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        StreamBuilder<int?>(
-            stream: player.currentIndexStream,
-            builder: (context, snapshot) {
-              if (snapshot.data == null) return const SizedBox();
-              if (snapshot.data! >= 0 && player.hasNext) {
-                return IconButton(
-                  icon: const Icon(Icons.skip_next),
-                  iconSize: 64.0,
-                  color: Colors.white,
-                  onPressed: _skipToNext,
-                );
-              } else {
-                return const SizedBox(
-                  width: 64.0,
-                  height: 64.0,
-                );
-              }
-            }),
         StreamBuilder<PlayerState>(
           stream: player.playerStateStream,
           builder: (context, snapshot) {
@@ -473,24 +369,6 @@ class ControlButtons extends StatelessWidget {
             }
           },
         ),
-        StreamBuilder<int?>(
-            stream: player.currentIndexStream,
-            builder: (context, snapshot) {
-              if (snapshot.data == null) return const SizedBox();
-              if (snapshot.data! >= 0 && player.hasPrevious) {
-                return IconButton(
-                  icon: const Icon(Icons.skip_previous),
-                  iconSize: 64.0,
-                  color: Colors.white,
-                  onPressed: _skipToPrevious,
-                );
-              } else {
-                return const SizedBox(
-                  width: 64.0,
-                  height: 64.0,
-                );
-              }
-            }),
       ],
     );
   }

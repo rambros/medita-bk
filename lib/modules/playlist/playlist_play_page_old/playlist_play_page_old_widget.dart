@@ -5,7 +5,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
-import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/ui/core/widgets/playlist_player_widget.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -256,7 +256,7 @@ class _PlaylistPlayPageOldWidgetState extends State<PlaylistPlayPageOldWidget> {
                           child: SizedBox(
                             width: 600.0,
                             height: 600.0,
-                            child: custom_widgets.PlaylistPlayerWidget(
+                            child: PlaylistPlayerWidget(
                               width: 600.0,
                               height: 600.0,
                               audioTitle: FFAppState().tempPlaylist.title,

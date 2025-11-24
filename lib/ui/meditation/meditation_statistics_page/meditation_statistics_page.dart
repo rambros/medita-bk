@@ -2,7 +2,10 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'dart:ui';
-import '/custom_code/widgets/index.dart' as custom_widgets;
+import 'widgets/daily_statistics_widget.dart';
+import 'widgets/weekly_statistics_widget.dart';
+import 'widgets/monthly_statistics_widget.dart';
+import 'widgets/yearly_statistics_widget.dart';
 import 'package:flutter/material.dart';
 
 class MeditationStatisticsPageWidget extends StatefulWidget {
@@ -123,10 +126,10 @@ class _MeditationStatisticsPageWidgetState extends State<MeditationStatisticsPag
               child: TabBarView(
                 controller: _tabBarController,
                 children: const [
-                  custom_widgets.DailyStatisticsWidget(),
-                  custom_widgets.WeeklyStatisticsWidget(),
-                  custom_widgets.MonthlyStatisticsWidget(),
-                  custom_widgets.YearlyStatisticsWidget(),
+                  DailyStatisticsWidget(),
+                  WeeklyStatisticsWidget(),
+                  MonthlyStatisticsWidget(),
+                  YearlyStatisticsWidget(),
                 ],
               ),
             ),

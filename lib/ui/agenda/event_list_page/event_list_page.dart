@@ -1,7 +1,7 @@
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/ui/agenda/widgets/event_list_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -110,7 +110,7 @@ class _EventListPageState extends State<EventListPage> {
                                 child: SizedBox(
                                   width: MediaQuery.sizeOf(context).width * 1.0,
                                   height: MediaQuery.sizeOf(context).height * 0.96,
-                                  child: custom_widgets.EventListWidget(
+                                  child: EventListWidget(
                                     width: MediaQuery.sizeOf(context).width * 1.0,
                                     height: MediaQuery.sizeOf(context).height * 0.96,
                                     listEvents: viewModel.events,

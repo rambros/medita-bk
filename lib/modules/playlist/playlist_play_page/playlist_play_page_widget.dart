@@ -5,7 +5,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
-import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/ui/core/widgets/f_f_playlist_player_widget.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -33,8 +33,7 @@ class _PlaylistPlayPageWidgetState extends State<PlaylistPlayPageWidget> {
     super.initState();
     _model = createModel(context, () => PlaylistPlayPageModel());
 
-    logFirebaseEvent('screen_view',
-        parameters: {'screen_name': 'playlistPlayPage'});
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'playlistPlayPage'});
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
@@ -79,12 +78,10 @@ class _PlaylistPlayPageWidgetState extends State<PlaylistPlayPageWidget> {
                 title: Text(
                   'Playlist',
                   style: FlutterFlowTheme.of(context).titleLarge.override(
-                        fontFamily:
-                            FlutterFlowTheme.of(context).titleLargeFamily,
+                        fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
                         color: FlutterFlowTheme.of(context).info,
                         letterSpacing: 0.0,
-                        useGoogleFonts:
-                            !FlutterFlowTheme.of(context).titleLargeIsCustom,
+                        useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
                       ),
                 ),
                 actions: const [],
@@ -122,42 +119,32 @@ class _PlaylistPlayPageWidgetState extends State<PlaylistPlayPageWidget> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              24.0, 16.0, 24.0, 8.0),
+                          padding: const EdgeInsetsDirectional.fromSTEB(24.0, 16.0, 24.0, 8.0),
                           child: Text(
                             FFAppState().tempPlaylist.title,
                             textAlign: TextAlign.center,
                             maxLines: 2,
-                            style: FlutterFlowTheme.of(context)
-                                .titleLarge
-                                .override(
-                                  fontFamily: FlutterFlowTheme.of(context)
-                                      .titleLargeFamily,
+                            style: FlutterFlowTheme.of(context).titleLarge.override(
+                                  fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
                                   color: FlutterFlowTheme.of(context).info,
                                   letterSpacing: 0.0,
                                   fontWeight: FontWeight.w600,
-                                  useGoogleFonts: !FlutterFlowTheme.of(context)
-                                      .titleLargeIsCustom,
+                                  useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
                                 ),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              24.0, 0.0, 24.0, 8.0),
+                          padding: const EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 8.0),
                           child: Text(
                             'Duração total desta playlist  ${functions.transformSeconds(FFAppState().tempPlaylist.duration)}',
                             textAlign: TextAlign.center,
                             maxLines: 2,
-                            style: FlutterFlowTheme.of(context)
-                                .titleLarge
-                                .override(
-                                  fontFamily: FlutterFlowTheme.of(context)
-                                      .titleLargeFamily,
+                            style: FlutterFlowTheme.of(context).titleLarge.override(
+                                  fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
                                   color: FlutterFlowTheme.of(context).info,
                                   fontSize: 14.0,
                                   letterSpacing: 0.0,
-                                  useGoogleFonts: !FlutterFlowTheme.of(context)
-                                      .titleLargeIsCustom,
+                                  useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
                                 ),
                           ),
                         ),
@@ -165,70 +152,44 @@ class _PlaylistPlayPageWidgetState extends State<PlaylistPlayPageWidget> {
                           height: 400.0,
                           decoration: const BoxDecoration(),
                           child: Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                16.0, 16.0, 16.0, 0.0),
+                            padding: const EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 16.0, 0.0),
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   'Lista de áudios desta playlist',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: FlutterFlowTheme.of(context)
-                                            .bodyMediumFamily,
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryBackground,
+                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                        fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
+                                        color: FlutterFlowTheme.of(context).primaryBackground,
                                         fontSize: 16.0,
                                         letterSpacing: 0.0,
                                         fontWeight: FontWeight.w500,
-                                        useGoogleFonts:
-                                            !FlutterFlowTheme.of(context)
-                                                .bodyMediumIsCustom,
+                                        useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
                                       ),
                                 ),
                                 Expanded(
                                   child: Padding(
-                                    padding: const EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 0.0, 0.0, 16.0),
+                                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
                                     child: Builder(
                                       builder: (context) {
-                                        final listAudiosChecked = FFAppState()
-                                            .listAudiosReadyToPlay
-                                            .toList();
+                                        final listAudiosChecked = FFAppState().listAudiosReadyToPlay.toList();
 
                                         return ListView.separated(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 8.0),
+                                          padding: const EdgeInsets.symmetric(vertical: 8.0),
                                           shrinkWrap: true,
                                           scrollDirection: Axis.vertical,
                                           itemCount: listAudiosChecked.length,
-                                          separatorBuilder: (_, __) =>
-                                              const SizedBox(height: 8.0),
-                                          itemBuilder: (context,
-                                              listAudiosCheckedIndex) {
-                                            final listAudiosCheckedItem =
-                                                listAudiosChecked[
-                                                    listAudiosCheckedIndex];
+                                          separatorBuilder: (_, __) => const SizedBox(height: 8.0),
+                                          itemBuilder: (context, listAudiosCheckedIndex) {
+                                            final listAudiosCheckedItem = listAudiosChecked[listAudiosCheckedIndex];
                                             return Text(
                                               '${listAudiosCheckedItem.title} - ${functions.transformSeconds(listAudiosCheckedItem.duration)}',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    fontFamily:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMediumFamily,
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryBackground,
+                                              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                    fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
+                                                    color: FlutterFlowTheme.of(context).primaryBackground,
                                                     letterSpacing: 0.0,
-                                                    useGoogleFonts:
-                                                        !FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMediumIsCustom,
+                                                    useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
                                                   ),
                                             );
                                           },
@@ -246,8 +207,7 @@ class _PlaylistPlayPageWidgetState extends State<PlaylistPlayPageWidget> {
                     Flexible(
                       flex: 2,
                       child: Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
                         child: Container(
                           width: 600.0,
                           height: 180.0,
@@ -255,7 +215,7 @@ class _PlaylistPlayPageWidgetState extends State<PlaylistPlayPageWidget> {
                           child: SizedBox(
                             width: 400.0,
                             height: 400.0,
-                            child: custom_widgets.FFPlaylistPlayerWidget(
+                            child: FFPlaylistPlayerWidget(
                               width: 400.0,
                               height: 400.0,
                               playlistTitle: FFAppState().tempPlaylist.title,

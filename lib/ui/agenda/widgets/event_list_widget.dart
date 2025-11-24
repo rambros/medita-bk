@@ -5,7 +5,6 @@ import '/backend/schema/enums/enums.dart';
 import '/actions/actions.dart' as action_blocks;
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import 'index.dart'; // Imports other custom widgets
 import '/custom_code/actions/index.dart'; // Imports custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
 import 'package:flutter/material.dart';
@@ -53,8 +52,8 @@ class EventDataSource extends CalendarDataSource {
   }
 }
 
-class AgendaWidget extends StatefulWidget {
-  const AgendaWidget({
+class EventListWidget extends StatefulWidget {
+  const EventListWidget({
     super.key,
     this.width,
     this.height,
@@ -66,10 +65,10 @@ class AgendaWidget extends StatefulWidget {
   final List<EventModelStruct>? listEvents;
 
   @override
-  _AgendaWidgetState createState() => _AgendaWidgetState();
+  _EventListWidgetState createState() => _EventListWidgetState();
 }
 
-class _AgendaWidgetState extends State<AgendaWidget> {
+class _EventListWidgetState extends State<EventListWidget> {
   @override
   Widget build(BuildContext bigContext) {
     //var teste = widget.listEvents[0].toSerializableMap();
@@ -101,38 +100,28 @@ class _AgendaWidgetState extends State<AgendaWidget> {
               firstDayOfWeek: 1,
               showNavigationArrow: true,
               appointmentTimeTextFormat: 'Hm',
-              view: CalendarView.month,
+              view: CalendarView.schedule,
               dataSource: EventDataSource(snapshot.data),
-              monthViewSettings: MonthViewSettings(
-                //navigationDirection: MonthNavigationDirection.horizontal,
-                //appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
-                showAgenda: true,
-                agendaStyle: AgendaStyle(
-                  //backgroundColor: Color(0xFF066cccc),
-                  appointmentTextStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black54,
-                  ),
-                  dateTextStyle: TextStyle(
-                    fontStyle: FontStyle.italic,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  dayTextStyle: TextStyle(
-                    fontStyle: FontStyle.normal,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Theme.of(context).primaryColor,
-                  ),
+              scheduleViewSettings: ScheduleViewSettings(
+                hideEmptyScheduleWeek: true,
+                appointmentTextStyle: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black54,
                 ),
-                //agendaViewHeight: 200,
-                dayFormat: 'EEE',
+                monthHeaderSettings: MonthHeaderSettings(
+                    monthFormat: 'MMMM yyyy',
+                    height: 90,
+                    textAlign: TextAlign.left,
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                    monthTextStyle: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w400)),
               ),
               onTap: (details) async {
                 if ((details.targetElement == CalendarElement.appointment ||
-                    details.targetElement == CalendarElement.agenda)) {
+                    details.targetElement == CalendarElement.viewHeader)) {
                   var event = details.appointments![0] as EventModelStruct;
                   var eventJson = jsonEncode(event.toMap());
 

@@ -5,7 +5,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:math';
 import 'dart:ui';
-import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/ui/core/widgets/f_f_audio_player_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -30,12 +30,10 @@ class PlaylistAudioPlayPageWidget extends StatefulWidget {
   static String routePath = 'playlistAudioPlayPage';
 
   @override
-  State<PlaylistAudioPlayPageWidget> createState() =>
-      _PlaylistAudioPlayPageWidgetState();
+  State<PlaylistAudioPlayPageWidget> createState() => _PlaylistAudioPlayPageWidgetState();
 }
 
-class _PlaylistAudioPlayPageWidgetState
-    extends State<PlaylistAudioPlayPageWidget> with TickerProviderStateMixin {
+class _PlaylistAudioPlayPageWidgetState extends State<PlaylistAudioPlayPageWidget> with TickerProviderStateMixin {
   late PlaylistAudioPlayPageModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -47,8 +45,7 @@ class _PlaylistAudioPlayPageWidgetState
     super.initState();
     _model = createModel(context, () => PlaylistAudioPlayPageModel());
 
-    logFirebaseEvent('screen_view',
-        parameters: {'screen_name': 'playlistAudioPlayPage'});
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'playlistAudioPlayPage'});
     animationsMap.addAll({
       'imageOnPageLoadAnimation': AnimationInfo(
         loop: true,
@@ -111,12 +108,10 @@ class _PlaylistAudioPlayPageWidgetState
                 title: Text(
                   'Música selecionada',
                   style: FlutterFlowTheme.of(context).titleLarge.override(
-                        fontFamily:
-                            FlutterFlowTheme.of(context).titleLargeFamily,
+                        fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
                         color: FlutterFlowTheme.of(context).info,
                         letterSpacing: 0.0,
-                        useGoogleFonts:
-                            !FlutterFlowTheme.of(context).titleLargeIsCustom,
+                        useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
                       ),
                 ),
                 actions: const [],
@@ -152,8 +147,7 @@ class _PlaylistAudioPlayPageWidgetState
                     Flexible(
                       flex: 2,
                       child: Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                            24.0, 38.0, 24.0, 32.0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(24.0, 38.0, 24.0, 32.0),
                         child: Text(
                           valueOrDefault<String>(
                             widget.title,
@@ -161,15 +155,11 @@ class _PlaylistAudioPlayPageWidgetState
                           ),
                           textAlign: TextAlign.center,
                           maxLines: 2,
-                          style: FlutterFlowTheme.of(context)
-                              .titleLarge
-                              .override(
-                                fontFamily: FlutterFlowTheme.of(context)
-                                    .titleLargeFamily,
+                          style: FlutterFlowTheme.of(context).titleLarge.override(
+                                fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
                                 color: FlutterFlowTheme.of(context).info,
                                 letterSpacing: 0.0,
-                                useGoogleFonts: !FlutterFlowTheme.of(context)
-                                    .titleLargeIsCustom,
+                                useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
                               ),
                         ),
                       ),
@@ -184,7 +174,7 @@ class _PlaylistAudioPlayPageWidgetState
                         child: SizedBox(
                           width: 600.0,
                           height: 600.0,
-                          child: custom_widgets.FFAudioPlayerWidget(
+                          child: FFAudioPlayerWidget(
                             width: 600.0,
                             height: 600.0,
                             audioTitle: widget.title!,

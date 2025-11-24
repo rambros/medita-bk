@@ -4,7 +4,7 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'dart:ui';
-import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/ui/core/widgets/f_f_audio_player_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -159,7 +159,7 @@ class _MeditationPlayPageWidgetState extends State<MeditationPlayPageWidget> wit
                         child: SizedBox(
                           width: 600.0,
                           height: 600.0,
-                          child: custom_widgets.FFAudioPlayerWidget(
+                          child: FFAudioPlayerWidget(
                             width: 600.0,
                             height: 600.0,
                             audioTitle: widget.meditationDoc!.title,

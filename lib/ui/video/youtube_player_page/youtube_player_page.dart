@@ -1,7 +1,7 @@
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/ui/core/widgets/you_tube_player_widget.dart';
 import 'package:flutter/material.dart';
 
 class YoutubePlayerPageWidget extends StatefulWidget {
@@ -92,7 +92,7 @@ class _YoutubePlayerPageWidgetState extends State<YoutubePlayerPageWidget> {
                 child: SizedBox(
                   width: double.infinity,
                   height: MediaQuery.sizeOf(context).height * 0.8,
-                  child: custom_widgets.YouTubePlayerWidget(
+                  child: YouTubePlayerWidget(
                     width: double.infinity,
                     height: MediaQuery.sizeOf(context).height * 0.8,
                     videoUrl: 'https://www.youtube.com/watch?v=${widget.videoId}',

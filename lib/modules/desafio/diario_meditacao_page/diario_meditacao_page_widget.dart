@@ -6,7 +6,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
-import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/ui/desafio/widgets/desafio_diario_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,8 +21,7 @@ class DiarioMeditacaoPageWidget extends StatefulWidget {
   static String routePath = 'diarioMeditacaoPage';
 
   @override
-  State<DiarioMeditacaoPageWidget> createState() =>
-      _DiarioMeditacaoPageWidgetState();
+  State<DiarioMeditacaoPageWidget> createState() => _DiarioMeditacaoPageWidgetState();
 }
 
 class _DiarioMeditacaoPageWidgetState extends State<DiarioMeditacaoPageWidget> {
@@ -35,13 +34,10 @@ class _DiarioMeditacaoPageWidgetState extends State<DiarioMeditacaoPageWidget> {
     super.initState();
     _model = createModel(context, () => DiarioMeditacaoPageModel());
 
-    logFirebaseEvent('screen_view',
-        parameters: {'screen_name': 'diarioMeditacaoPage'});
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'diarioMeditacaoPage'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.listaMeditacoes = currentUserDocument!.desafio21.d21Meditations
-          .toList()
-          .cast<D21MeditationModelStruct>();
+      _model.listaMeditacoes = currentUserDocument!.desafio21.d21Meditations.toList().cast<D21MeditationModelStruct>();
       safeSetState(() {});
     });
 
@@ -74,18 +70,14 @@ class _DiarioMeditacaoPageWidgetState extends State<DiarioMeditacaoPageWidget> {
                 child: Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [
-                        FlutterFlowTheme.of(context).d21Top,
-                        FlutterFlowTheme.of(context).d21Botton
-                      ],
+                      colors: [FlutterFlowTheme.of(context).d21Top, FlutterFlowTheme.of(context).d21Botton],
                       stops: const [0.0, 1.0],
                       begin: const AlignmentDirectional(0.0, -1.0),
                       end: const AlignmentDirectional(0, 1.0),
                     ),
                   ),
                   child: Padding(
-                    padding:
-                        const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 12.0),
+                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 12.0),
                     child: SingleChildScrollView(
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
@@ -93,12 +85,10 @@ class _DiarioMeditacaoPageWidgetState extends State<DiarioMeditacaoPageWidget> {
                           Align(
                             alignment: const AlignmentDirectional(0.0, 1.0),
                             child: Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  16.0, 0.0, 16.0, 0.0),
+                              padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   InkWell(
                                     splashColor: Colors.transparent,
@@ -116,18 +106,11 @@ class _DiarioMeditacaoPageWidgetState extends State<DiarioMeditacaoPageWidget> {
                                   ),
                                   Text(
                                     'Desafio 21 dias',
-                                    style: FlutterFlowTheme.of(context)
-                                        .titleLarge
-                                        .override(
-                                          fontFamily:
-                                              FlutterFlowTheme.of(context)
-                                                  .titleLargeFamily,
-                                          color:
-                                              FlutterFlowTheme.of(context).info,
+                                    style: FlutterFlowTheme.of(context).titleLarge.override(
+                                          fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
+                                          color: FlutterFlowTheme.of(context).info,
                                           letterSpacing: 0.0,
-                                          useGoogleFonts:
-                                              !FlutterFlowTheme.of(context)
-                                                  .titleLargeIsCustom,
+                                          useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
                                         ),
                                   ),
                                   FlutterFlowIconButton(
@@ -149,30 +132,21 @@ class _DiarioMeditacaoPageWidgetState extends State<DiarioMeditacaoPageWidget> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                0.0, 32.0, 0.0, 0.0),
+                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 32.0, 0.0, 0.0),
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsetsDirectional.fromSTEB(
-                                      8.0, 0.0, 8.0, 32.0),
+                                  padding: const EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 32.0),
                                   child: Text(
                                     'Diário de meditação',
                                     textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context)
-                                        .titleLarge
-                                        .override(
-                                          fontFamily:
-                                              FlutterFlowTheme.of(context)
-                                                  .titleLargeFamily,
-                                          color:
-                                              FlutterFlowTheme.of(context).info,
+                                    style: FlutterFlowTheme.of(context).titleLarge.override(
+                                          fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
+                                          color: FlutterFlowTheme.of(context).info,
                                           fontSize: 32.0,
                                           letterSpacing: 0.0,
-                                          useGoogleFonts:
-                                              !FlutterFlowTheme.of(context)
-                                                  .titleLargeIsCustom,
+                                          useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
                                         ),
                                   ),
                                 ),
@@ -180,55 +154,37 @@ class _DiarioMeditacaoPageWidgetState extends State<DiarioMeditacaoPageWidget> {
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsetsDirectional.fromSTEB(
-                                          16.0, 0.0, 16.0, 0.0),
+                                      padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
                                       child: Material(
                                         color: Colors.transparent,
                                         elevation: 4.0,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
+                                          borderRadius: BorderRadius.circular(8.0),
                                         ),
                                         child: Container(
                                           width: double.infinity,
                                           decoration: BoxDecoration(
                                             gradient: const LinearGradient(
-                                              colors: [
-                                                Color(0xCC83193F),
-                                                Color(0xCBB0373E)
-                                              ],
+                                              colors: [Color(0xCC83193F), Color(0xCBB0373E)],
                                               stops: [0.0, 1.0],
-                                              begin: AlignmentDirectional(
-                                                  0.0, -1.0),
+                                              begin: AlignmentDirectional(0.0, -1.0),
                                               end: AlignmentDirectional(0, 1.0),
                                             ),
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
+                                            borderRadius: BorderRadius.circular(8.0),
                                           ),
                                           child: Padding(
-                                            padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 0.0, 0.0, 16.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.start,
                                               children: [
                                                 SizedBox(
                                                   width: double.infinity,
-                                                  height:
-                                                      MediaQuery.sizeOf(context)
-                                                              .height *
-                                                          0.6,
-                                                  child: custom_widgets
-                                                      .DesafioDiarioWidget(
+                                                  height: MediaQuery.sizeOf(context).height * 0.6,
+                                                  child: DesafioDiarioWidget(
                                                     width: double.infinity,
-                                                    height: MediaQuery.sizeOf(
-                                                                context)
-                                                            .height *
-                                                        0.6,
-                                                    listD21Meditations:
-                                                        _model.listaMeditacoes,
+                                                    height: MediaQuery.sizeOf(context).height * 0.6,
+                                                    listD21Meditations: _model.listaMeditacoes,
                                                   ),
                                                 ),
                                               ],
@@ -240,23 +196,15 @@ class _DiarioMeditacaoPageWidgetState extends State<DiarioMeditacaoPageWidget> {
                                   ],
                                 ),
                                 Padding(
-                                  padding: const EdgeInsetsDirectional.fromSTEB(
-                                      16.0, 24.0, 16.0, 0.0),
+                                  padding: const EdgeInsetsDirectional.fromSTEB(16.0, 24.0, 16.0, 0.0),
                                   child: Text(
                                     'Clique na data escolhida e veja as suas conquistas',
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          fontFamily:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyMediumFamily,
-                                          color:
-                                              FlutterFlowTheme.of(context).info,
+                                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                          fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
+                                          color: FlutterFlowTheme.of(context).info,
                                           fontSize: 16.0,
                                           letterSpacing: 0.0,
-                                          useGoogleFonts:
-                                              !FlutterFlowTheme.of(context)
-                                                  .bodyMediumIsCustom,
+                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
                                         ),
                                   ),
                                 ),

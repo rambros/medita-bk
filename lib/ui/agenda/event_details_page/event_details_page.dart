@@ -2,7 +2,7 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'dart:ui';
-import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/ui/core/widgets/html_display_widget.dart';
 import 'package:flutter/material.dart';
 
 class EventDetailsPage extends StatefulWidget {
@@ -114,7 +114,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                 Flexible(
                   child: Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 32.0),
-                    child: custom_widgets.HtmlDisplayWidget(
+                    child: HtmlDisplayWidget(
                       width: MediaQuery.sizeOf(context).width * 1.0,
                       height: MediaQuery.sizeOf(context).height * 0.9,
                       description: getJsonField(

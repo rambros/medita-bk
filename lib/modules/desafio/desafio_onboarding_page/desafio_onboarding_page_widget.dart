@@ -5,7 +5,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
-import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/ui/desafio/widgets/desafio_onboarding_widget.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -142,7 +142,7 @@ class _DesafioOnboardingPageWidgetState
                                 width: double.infinity,
                                 height:
                                     MediaQuery.sizeOf(context).height * 0.75,
-                                child: custom_widgets.DesafioOnboardingWidget(
+                                child: DesafioOnboardingWidget(
                                   width: double.infinity,
                                   height:
                                       MediaQuery.sizeOf(context).height * 0.75,

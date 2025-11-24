@@ -6,7 +6,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
-import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/ui/desafio/widgets/f_f_desafio_audio_player_widget.dart';
 import '/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
@@ -241,7 +241,7 @@ class _DesafioPlayPageWidgetState extends State<DesafioPlayPageWidget> {
                           child: SizedBox(
                             width: 620.0,
                             height: 620.0,
-                            child: custom_widgets.FFDesafioAudioPlayerWidget(
+                            child: FFDesafioAudioPlayerWidget(
                               width: 620.0,
                               height: 620.0,
                               audioTitle: FFAppState()
