@@ -21,4 +21,5 @@
     "http",
     "net"
   ],
+  "debug.toolBarLocation": "floating"
 }

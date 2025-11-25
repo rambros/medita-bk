@@ -7,7 +7,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
-import '/custom_code/actions/index.dart' as actions;
+import '/core/utils/media/audio_utils.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -32,8 +32,7 @@ class PlaylistDetailsPageWidget extends StatefulWidget {
   static String routePath = 'playlistDetailsPage';
 
   @override
-  State<PlaylistDetailsPageWidget> createState() =>
-      _PlaylistDetailsPageWidgetState();
+  State<PlaylistDetailsPageWidget> createState() => _PlaylistDetailsPageWidgetState();
 }
 
 class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
@@ -46,13 +45,11 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
     super.initState();
     _model = createModel(context, () => PlaylistDetailsPageModel());
 
-    logFirebaseEvent('screen_view',
-        parameters: {'screen_name': 'playlistDetailsPage'});
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'playlistDetailsPage'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.playlist = (currentUserDocument?.playlists.toList() ?? [])
-          .elementAtOrNull(widget.playlistIndex);
-      _model.newListAudios = await actions.checkDeviceAudios(
+      _model.playlist = (currentUserDocument?.playlists.toList() ?? []).elementAtOrNull(widget.playlistIndex);
+      _model.newListAudios = await AudioUtils.checkDeviceAudios(
         _model.playlist!.audios.toList(),
       );
       _model.updatePlaylistStruct(
@@ -108,12 +105,10 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
                 title: Text(
                   'Detalhes da Playlist',
                   style: FlutterFlowTheme.of(context).titleLarge.override(
-                        fontFamily:
-                            FlutterFlowTheme.of(context).titleLargeFamily,
+                        fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
                         color: FlutterFlowTheme.of(context).info,
                         letterSpacing: 0.0,
-                        useGoogleFonts:
-                            !FlutterFlowTheme.of(context).titleLargeIsCustom,
+                        useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
                       ),
                 ),
                 actions: const [],
@@ -137,11 +132,9 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
                     ),
                     textAlign: TextAlign.center,
                     style: FlutterFlowTheme.of(context).headlineMedium.override(
-                          fontFamily:
-                              FlutterFlowTheme.of(context).headlineMediumFamily,
+                          fontFamily: FlutterFlowTheme.of(context).headlineMediumFamily,
                           letterSpacing: 0.0,
-                          useGoogleFonts: !FlutterFlowTheme.of(context)
-                              .headlineMediumIsCustom,
+                          useGoogleFonts: !FlutterFlowTheme.of(context).headlineMediumIsCustom,
                         ),
                   ),
                 ),
@@ -173,14 +166,11 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
                         hoverColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         onTap: () async {
-                          _model.checkedListAudios =
-                              await actions.deleteInvalidDeviceAudios(
+                          _model.checkedListAudios = await AudioUtils.deleteInvalidDeviceAudios(
                             _model.playlist!.audios.toList(),
                           );
-                          FFAppState().listAudiosReadyToPlay = _model
-                              .checkedListAudios!
-                              .toList()
-                              .cast<AudioModelStruct>();
+                          FFAppState().listAudiosReadyToPlay =
+                              _model.checkedListAudios!.toList().cast<AudioModelStruct>();
 
                           context.pushNamed(
                             PlaylistPlayPageWidget.routeName,
@@ -210,31 +200,24 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 8.0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 8.0),
                         child: Text(
                           FFAppState().tempPlaylist.description,
                           textAlign: TextAlign.center,
                           maxLines: 3,
-                          style: FlutterFlowTheme.of(context)
-                              .bodySmall
-                              .override(
-                                fontFamily: FlutterFlowTheme.of(context)
-                                    .bodySmallFamily,
+                          style: FlutterFlowTheme.of(context).bodySmall.override(
+                                fontFamily: FlutterFlowTheme.of(context).bodySmallFamily,
                                 letterSpacing: 0.0,
-                                useGoogleFonts: !FlutterFlowTheme.of(context)
-                                    .bodySmallIsCustom,
+                                useGoogleFonts: !FlutterFlowTheme.of(context).bodySmallIsCustom,
                               ),
                         ),
                       ),
                       Text(
                         'Duração total desta playlist  ${functions.transformSeconds(FFAppState().tempPlaylist.duration)}',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily:
-                                  FlutterFlowTheme.of(context).bodyMediumFamily,
+                              fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
                               letterSpacing: 0.0,
-                              useGoogleFonts: !FlutterFlowTheme.of(context)
-                                  .bodyMediumIsCustom,
+                              useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
                             ),
                       ),
                     ],
@@ -244,8 +227,7 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
                   padding: const EdgeInsetsDirectional.fromSTEB(16.0, 8.0, 16.0, 8.0),
                   child: Builder(
                     builder: (context) {
-                      final listAudios =
-                          FFAppState().tempPlaylist.audios.toList();
+                      final listAudios = FFAppState().tempPlaylist.audios.toList();
 
                       return ListView.separated(
                         padding: const EdgeInsets.fromLTRB(
@@ -267,8 +249,7 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
                               width: MediaQuery.sizeOf(context).width * 1.0,
                               height: 70.0,
                               decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
+                                color: FlutterFlowTheme.of(context).secondaryBackground,
                                 borderRadius: BorderRadius.circular(12.0),
                                 border: Border.all(
                                   color: FlutterFlowTheme.of(context).primary,
@@ -276,47 +257,31 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
                                 ),
                               ),
                               child: Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                    8.0, 8.0, 8.0, 8.0),
+                                padding: const EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 8.0),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       listAudiosItem.title,
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMediumFamily,
+                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                            fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
                                             letterSpacing: 0.0,
                                             fontWeight: FontWeight.w600,
-                                            useGoogleFonts:
-                                                !FlutterFlowTheme.of(context)
-                                                    .bodyMediumIsCustom,
+                                            useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
                                           ),
                                     ),
                                     Text(
-                                      listAudiosItem.audioType ==
-                                              AudioType.device_music_invalid
+                                      listAudiosItem.audioType == AudioType.device_music_invalid
                                           ? functions.getAudioType(listAudiosItem.audioType)
                                           : '${functions.getAudioType(listAudiosItem.audioType)} - ${functions.transformSeconds(listAudiosItem.duration)}',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMediumFamily,
+                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                            fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
                                             letterSpacing: 0.0,
-                                            useGoogleFonts:
-                                                !FlutterFlowTheme.of(context)
-                                                    .bodyMediumIsCustom,
+                                            useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
                                           ),
                                     ),
-                                  ]
-                                      .divide(const SizedBox(height: 4.0))
-                                      .around(const SizedBox(height: 4.0)),
+                                  ].divide(const SizedBox(height: 4.0)).around(const SizedBox(height: 4.0)),
                                 ),
                               ),
                             ),
@@ -327,8 +292,7 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
                   ),
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 16.0, 24.0),
+                  padding: const EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 16.0, 24.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -336,8 +300,7 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
                       Expanded(
                         flex: 1,
                         child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 16.0, 0.0),
+                          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 16.0, 0.0),
                           child: FFButtonWidget(
                             onPressed: () async {
                               await currentUserReference!.update({
@@ -360,13 +323,11 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
                                   content: Text(
                                     'Playlist removida com sucesso',
                                     style: TextStyle(
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
+                                      color: FlutterFlowTheme.of(context).primaryText,
                                     ),
                                   ),
                                   duration: const Duration(milliseconds: 4000),
-                                  backgroundColor:
-                                      FlutterFlowTheme.of(context).secondary,
+                                  backgroundColor: FlutterFlowTheme.of(context).secondary,
                                 ),
                               );
                               context.safePop();
@@ -374,22 +335,14 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
                             text: 'Remover',
                             options: FFButtonOptions(
                               height: 40.0,
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  24.0, 0.0, 24.0, 0.0),
-                              iconPadding: const EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              color: FlutterFlowTheme.of(context)
-                                  .primaryBackground,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .titleSmall
-                                  .override(
-                                    fontFamily: FlutterFlowTheme.of(context)
-                                        .titleSmallFamily,
+                              padding: const EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
+                              iconPadding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                              color: FlutterFlowTheme.of(context).primaryBackground,
+                              textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                                    fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
                                     color: FlutterFlowTheme.of(context).primary,
                                     letterSpacing: 0.0,
-                                    useGoogleFonts:
-                                        !FlutterFlowTheme.of(context)
-                                            .titleSmallIsCustom,
+                                    useGoogleFonts: !FlutterFlowTheme.of(context).titleSmallIsCustom,
                                   ),
                               elevation: 0.0,
                               borderSide: BorderSide(
@@ -404,8 +357,7 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
                       Expanded(
                         flex: 1,
                         child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              16.0, 0.0, 0.0, 0.0),
+                          padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 0.0, 0.0),
                           child: FFButtonWidget(
                             onPressed: () async {
                               if (Navigator.of(context).canPop()) {
@@ -435,21 +387,14 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
                             text: 'Editar',
                             options: FFButtonOptions(
                               height: 40.0,
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  24.0, 0.0, 24.0, 0.0),
-                              iconPadding: const EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
+                              padding: const EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
+                              iconPadding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                               color: FlutterFlowTheme.of(context).primary,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .titleSmall
-                                  .override(
-                                    fontFamily: FlutterFlowTheme.of(context)
-                                        .titleSmallFamily,
+                              textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                                    fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
                                     color: Colors.white,
                                     letterSpacing: 0.0,
-                                    useGoogleFonts:
-                                        !FlutterFlowTheme.of(context)
-                                            .titleSmallIsCustom,
+                                    useGoogleFonts: !FlutterFlowTheme.of(context).titleSmallIsCustom,
                                   ),
                               elevation: 3.0,
                               borderSide: const BorderSide(

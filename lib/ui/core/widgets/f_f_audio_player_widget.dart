@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 
 // Imports other custom widgets
 
-import '/custom_code/actions/init_audio_player_controller.dart';
+import '/core/controllers/index.dart';
+import 'audio_player_controls.dart';
 import 'package:flutter/services.dart';
 
 class FFAudioPlayerWidget extends StatefulWidget {
@@ -77,14 +78,15 @@ class FFAudioPlayerWidgetState extends State<FFAudioPlayerWidget> {
     try {
       await audioPlayerController.download(widget.audioUrl);
     } finally {
-      final cached = await audioPlayerController.isCached(widget.audioUrl);
-      if (!mounted) {
-        return;
+      if (mounted) {
+        final cached = await audioPlayerController.isCached(widget.audioUrl);
+        if (mounted) {
+          setState(() {
+            _isDownloaded = cached;
+            _isDownloading = false;
+          });
+        }
       }
-      setState(() {
-        _isDownloaded = cached;
-        _isDownloading = false;
-      });
     }
   }
 

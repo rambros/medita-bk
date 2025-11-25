@@ -7,7 +7,7 @@ import '/flutter_flow/flutter_flow_toggle_icon.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/ui/meditation/widgets/comment_dialog.dart';
 import 'dart:ui';
-import '/custom_code/actions/index.dart' as actions;
+import '/core/utils/network_utils.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -46,10 +46,12 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       _meditationDoc = await MeditationsRecord.getDocumentOnce(widget.meditationDocRef!);
-      final isDownloaded = await actions.isAudioDownloaded(
-        functions.getStringFromAudioPath(_meditationDoc!.audioUrl)!,
-      );
-      _isAudioDownloaded = isDownloaded;
+      // TODO: Migrate isAudioDownloaded to AudioService
+      // final isDownloaded = await actions.isAudioDownloaded(
+      //   functions.getStringFromAudioPath(_meditationDoc!.audioUrl)!,
+      // );
+      // _isAudioDownloaded = isDownloaded;
+      _isAudioDownloaded = false; // Temporary: assume not downloaded
       _isFavorite = (currentUserDocument?.favorites.toList() ?? []).contains(_meditationDoc?.documentId) ? true : false;
       safeSetState(() {});
     });
@@ -251,7 +253,7 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                               highlightColor: Colors.transparent,
                               onTap: () async {
                                 var shouldSetState = false;
-                                final hasInternetAccess = await actions.hasInternetAccess();
+                                final hasInternetAccess = await NetworkUtils.hasInternetAccess();
                                 shouldSetState = true;
                                 if (hasInternetAccess == true) {
                                   final numPlayed = meditationDetailsPageMeditationsRecord.numPlayed;

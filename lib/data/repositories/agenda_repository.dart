@@ -1,6 +1,6 @@
 import '/backend/api_requests/api_manager.dart';
 import '/backend/schema/structs/index.dart';
-import '/custom_code/actions/index.dart' as actions;
+import '/domain/agenda/services/agenda_service.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
 class AgendaRepository {
@@ -29,7 +29,7 @@ class AgendaRepository {
       );
 
       if (data != null) {
-        return await actions.convertJsonToEventList(data);
+        return AgendaService.convertJsonToEventList(data);
       }
     }
 

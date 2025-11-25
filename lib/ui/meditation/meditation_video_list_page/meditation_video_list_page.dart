@@ -1,7 +1,7 @@
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/actions/actions.dart' as action_blocks;
+import '/ui/core/actions/actions.dart' as action_blocks;
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -25,11 +25,11 @@ class _MeditationVideoListPageState extends State<MeditationVideoListPage> {
   @override
   void initState() {
     super.initState();
-    
+
     _viewModel = MeditationVideoListViewModel();
 
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'meditationVideoListPage'});
-    
+
     // On page load actions
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       await action_blocks.checkInternetAccess(context);
@@ -138,7 +138,7 @@ class _MeditationVideoListPageState extends State<MeditationVideoListPage> {
                         children: [
                           // Channel Info Card
                           _buildChannelInfoCard(context, viewModel),
-                          
+
                           // Videos List
                           Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),

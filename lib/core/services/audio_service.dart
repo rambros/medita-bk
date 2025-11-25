@@ -1,53 +1,45 @@
-// Automatic FlutterFlow imports
-import '/backend/schema/enums/enums.dart';
-// Imports other custom actions
-// Imports custom functions
-import 'package:flutter/material.dart';
-// Begin custom action code
-// DO NOT REMOVE OR MODIFY THE CODE ABOVE!
-
-// Imports other custom actions
-
-// Imports other custom actions
 import 'dart:io';
+import 'package:audio_service/audio_service.dart';
+import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_cache/just_audio_cache.dart';
+import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:audio_service/audio_service.dart';
-import 'package:just_audio/just_audio.dart';
-import 'package:just_audio_cache/just_audio_cache.dart';
-// ignore: depend_on_referenced_packages
-import 'package:path/path.dart' as path;
+import '/backend/schema/enums/enums.dart';
 
-// Future initAudioService() async {
-//  await JustAudioBackground.init(
-//    androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
-//    androidNotificationChannelName: 'Audio playback',
-//    androidNotificationOngoing: true,
-//  );
-// }
-
+/// Global audio handler instance for background audio playback
 late AudioHandler globalAudioHandler;
 
-Future initAudioService() async {
-  globalAudioHandler = await AudioService.init(
-    builder: () => MyAudioHandler(),
-    config: const AudioServiceConfig(
-      androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
-      androidNotificationChannelName: 'Audio Service Demo',
-      androidNotificationOngoing: true,
-      androidStopForegroundOnPause: true,
-    ),
-  );
+/// Audio service for managing background audio playback with caching support
+class MeditaBKAudioService {
+  /// Initialize the audio service
+  ///
+  /// This must be called before using any audio functionality.
+  /// Creates a global [AudioHandler] instance for background playback.
+  static Future<void> initialize() async {
+    globalAudioHandler = await AudioService.init(
+      builder: () => _AudioHandler(),
+      config: const AudioServiceConfig(
+        androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
+        androidNotificationChannelName: 'Audio Service Demo',
+        androidNotificationOngoing: true,
+        androidStopForegroundOnPause: true,
+      ),
+    );
+  }
 }
 
-class MyAudioHandler extends BaseAudioHandler {
+/// Custom audio handler for managing playback, queue, and caching
+class _AudioHandler extends BaseAudioHandler {
   final _player = AudioPlayer();
-  final _playlist =
-      ConcatenatingAudioSource(children: [], useLazyPreparation: false);
+  final _playlist = ConcatenatingAudioSource(
+    children: [],
+    useLazyPreparation: false,
+  );
 
-  MyAudioHandler() {
-    //print('entrei no construtor do AudioHandler');
+  _AudioHandler() {
     _loadEmptyPlaylist();
     _notifyAudioHandlerAboutPlaybackEvents();
     _listenForDurationChanges();
@@ -59,14 +51,13 @@ class MyAudioHandler extends BaseAudioHandler {
     try {
       await _player.setAudioSource(_playlist);
     } catch (e) {
-      print('Error: $e');
+      debugPrint('Error loading empty playlist: $e');
     }
   }
 
   void _notifyAudioHandlerAboutPlaybackEvents() {
     _player.playbackEventStream.listen((PlaybackEvent event) {
       final playing = _player.playing;
-      //print('processing state-> $playbackState');
       playbackState.add(playbackState.value.copyWith(
         controls: [
           MediaControl.skipToPrevious,
@@ -90,9 +81,7 @@ class MyAudioHandler extends BaseAudioHandler {
           LoopMode.one: AudioServiceRepeatMode.one,
           LoopMode.all: AudioServiceRepeatMode.all,
         }[_player.loopMode]!,
-        shuffleMode: (_player.shuffleModeEnabled)
-            ? AudioServiceShuffleMode.all
-            : AudioServiceShuffleMode.none,
+        shuffleMode: (_player.shuffleModeEnabled) ? AudioServiceShuffleMode.all : AudioServiceShuffleMode.none,
         playing: playing,
         updatePosition: _player.position,
         bufferedPosition: _player.bufferedPosition,
@@ -141,17 +130,9 @@ class MyAudioHandler extends BaseAudioHandler {
 
   @override
   Future<void> addQueueItems(List<MediaItem> mediaItems) async {
-    // manage Just Audio
-
     final sources = await Future.wait(mediaItems.map(_createAudioSource));
     await _playlist.addAll(sources);
 
-    //final audioSource = mediaItems.map(_createAudioSource);
-    //await _playlist.addAll(audioSource.toList());
-
-    //print ('queue ${queue.value}');
-
-    // notify system
     final newQueue = queue.value..addAll(mediaItems);
     queue.add(newQueue);
   }
@@ -161,52 +142,10 @@ class MyAudioHandler extends BaseAudioHandler {
     final source = await _createAudioSource(mediaItem);
     await _playlist.add(source);
 
-    // manage Just Audio
-    //final audioSource = _createAudioSource(mediaItem);
-    //await _playlist.add(audioSource);
-
-    // notify system
     final newQueue = queue.value..add(mediaItem);
     queue.add(newQueue);
-    //print ('queue ${queue.value}');
   }
 
-  // IndexedAudioSource _createAudioSource(MediaItem mediaItem) {
-  //   if (mediaItem.extras!['fileType'] == 'asset') {
-  //     return AudioSource.uri(
-  //       Uri.parse('asset:///assets/${mediaItem.extras!['url']}'),
-  //       tag: mediaItem,
-  //     );
-  //   }
-  //   if (mediaItem.extras!['audioType'] == 'silence') {
-  //     return ClippingAudioSource(
-  //         start: const Duration(seconds: 0),
-  //         end: Duration(seconds: mediaItem.duration!.inSeconds),
-  //         tag: mediaItem,
-  //         child: AudioSource.uri(
-  //           Uri.parse(
-  //             'asset:///assets/sounds/background/silence60.m4a',
-  //           ),
-  //           tag: mediaItem,
-  //         ));
-  //   }
-  //   if (mediaItem.extras!['audioType'] == 'device_music') {
-  //     return ClippingAudioSource(
-  //         start: const Duration(seconds: 0),
-  //         end: Duration(seconds: mediaItem.duration!.inSeconds),
-  //         tag: mediaItem,
-  //         child: AudioSource.uri(
-  //           Uri.file(mediaItem.extras!['url']),
-  //           tag: mediaItem,
-  //         ));
-  //   }
-  //   return AudioSource.uri(
-  //     Uri.parse(mediaItem.extras!['url']),
-  //     tag: mediaItem,
-  //   );
-  // }
-
-  //IndexedAudioSource _createAudioSource(MediaItem mediaItem) {
   Future<IndexedAudioSource> _createAudioSource(MediaItem mediaItem) async {
     final extras = mediaItem.extras ?? {};
     final url = extras['url'] as String?;
@@ -221,38 +160,42 @@ class MyAudioHandler extends BaseAudioHandler {
         tag: mediaItem,
       );
     }
+
     if (extras['audioType'] == AudioType.silence.toString()) {
       return ClippingAudioSource(
-          start: const Duration(seconds: 0),
-          end: Duration(seconds: mediaItem.duration!.inSeconds),
+        start: const Duration(seconds: 0),
+        end: Duration(seconds: mediaItem.duration!.inSeconds),
+        tag: mediaItem,
+        child: AudioSource.uri(
+          Uri.parse('asset:///assets/audios/silence60.m4a'),
           tag: mediaItem,
-          child: AudioSource.uri(
-            Uri.parse(
-              'asset:///assets/audios/silence60.m4a',
-            ),
-            tag: mediaItem,
-          ));
+        ),
+      );
     }
-    if (mediaItem.extras!['audioType'] == AudioType.device_music.toString()) {
+
+    if (extras['audioType'] == AudioType.device_music.toString()) {
       if (url == null) {
         throw ArgumentError('Device music requires local file path');
       }
       return ClippingAudioSource(
-          start: const Duration(seconds: 0),
-          end: Duration(seconds: mediaItem.duration!.inSeconds),
+        start: const Duration(seconds: 0),
+        end: Duration(seconds: mediaItem.duration!.inSeconds),
+        tag: mediaItem,
+        child: AudioSource.uri(
+          Uri.file(url),
           tag: mediaItem,
-          child: AudioSource.uri(
-            Uri.file(mediaItem.extras!['url']),
-            tag: mediaItem,
-          ));
+        ),
+      );
     }
-    /* testa se audio esta no cache */
+
+    // Check if audio is in cache
     if (url != null) {
       final cached = await _resolveCachedPath(url);
       if (cached != null && File(cached).existsSync()) {
         return AudioSource.uri(Uri.file(cached), tag: mediaItem);
       }
     }
+
     if (url == null) {
       throw ArgumentError('MediaItem url is required');
     }
@@ -260,6 +203,7 @@ class MyAudioHandler extends BaseAudioHandler {
     return AudioSource.uri(Uri.parse(url), tag: mediaItem);
   }
 
+  // Cache management methods
   Future<String> _cacheFilePath(String url) async {
     final directory = await _cacheDirectory();
     final fileName = _cacheFileName(url);
@@ -283,8 +227,7 @@ class MyAudioHandler extends BaseAudioHandler {
   String _cacheFileName(String url) {
     final uri = Uri.parse(url);
     final decodedBase = Uri.decodeComponent(path.basename(uri.path));
-    final baseName =
-        decodedBase.isNotEmpty ? decodedBase : uri.path.replaceAll('/', '_');
+    final baseName = decodedBase.isNotEmpty ? decodedBase : uri.path.replaceAll('/', '_');
     final host = uri.host.replaceAll(RegExp(r'[\\/:*?"<>|]'), '_');
     final rawName = [
       if (host.isNotEmpty) host,
@@ -366,19 +309,13 @@ class MyAudioHandler extends BaseAudioHandler {
   }
 
   String _sanitizeFileName(String value) {
-    final sanitized = value
-        .replaceAll('%2F', '_')
-        .replaceAll(RegExp(r'[\\/:*?"<>|]'), '_')
-        .replaceAll('%', '_');
+    final sanitized = value.replaceAll('%2F', '_').replaceAll(RegExp(r'[\\/:*?"<>|]'), '_').replaceAll('%', '_');
     return sanitized.replaceAll(RegExp('_+'), '_');
   }
 
   @override
   Future<void> removeQueueItemAt(int index) async {
-    // manage Just Audio
     await _playlist.removeAt(index);
-
-    // notify system
     final newQueue = queue.value..removeAt(index);
     queue.add(newQueue);
   }
@@ -476,8 +413,8 @@ class MyAudioHandler extends BaseAudioHandler {
         await _cacheDirectory();
         return true;
       case 'dispose':
-        await _player.dispose(); // release resources
-        await super.stop(); // dispose system audio controls
+        await _player.dispose();
+        await super.stop();
         return true;
       default:
         return super.customAction(name, extras);
@@ -487,65 +424,17 @@ class MyAudioHandler extends BaseAudioHandler {
   @override
   Future<void> stop() async {
     await _player.seek(Duration.zero, index: 0);
-    //await _playlist.removeAt(_playlist.length - 1); //apenas este ativo
     await _playlist.clear();
-
-    // Release any audio decoders back to the system
-    await _player.stop(); //is good if you plan to start the player again
-    // Set the audio_service state to `idle` to deactivate the notification.
-
-    //await _player.dispose();
+    await _player.stop();
 
     playbackState.add(playbackState.value.copyWith(
       processingState: AudioProcessingState.idle,
     ));
-    await super.stop(); //dispose system audio controls
+    await super.stop();
   }
 
   @override
   Future<void> onTaskRemoved() async {
     await stop();
   }
-
-  Future<File> _resolveCacheFile(String url) async {
-    final docs = await getApplicationDocumentsDirectory();
-    final cacheDir = Directory(path.join(docs.path, 'audio_cache'));
-    if (!cacheDir.existsSync()) {
-      cacheDir.createSync(recursive: true);
-    }
-    final fileName = _cacheKey(url);
-    return File(path.join(cacheDir.path, fileName));
-  }
-
-  String _cacheKey(String url) {
-    final uri = Uri.parse(url);
-    if (uri.pathSegments.isEmpty) {
-      return uri.host;
-    }
-    return uri.pathSegments.join('_');
-  }
-
-  Future<void> _persistCacheMapping(String url, String path) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(url, path);
-    prefs.setString(_cacheKey(url), path);
-  }
-
-  Future<void> _purgeEntry(String url) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.remove(url);
-    prefs.remove(_cacheKey(url));
-  }
-}
-
-class AudioMetadata {
-  final String album;
-  final String artist;
-  final String title;
-
-  AudioMetadata({
-    required this.album,
-    required this.artist,
-    required this.title,
-  });
 }

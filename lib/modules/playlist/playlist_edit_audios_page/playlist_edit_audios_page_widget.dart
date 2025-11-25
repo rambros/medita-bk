@@ -7,7 +7,8 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/modules/playlist/select_audio_dialog/select_audio_dialog_widget.dart';
 import 'dart:ui';
-import '/custom_code/actions/index.dart' as actions;
+import '/core/utils/media/audio_utils.dart';
+import '/ui/core/utils/ui_utils.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -29,12 +30,10 @@ class PlaylistEditAudiosPageWidget extends StatefulWidget {
   static String routePath = 'playlistEditAudiosPage';
 
   @override
-  State<PlaylistEditAudiosPageWidget> createState() =>
-      _PlaylistEditAudiosPageWidgetState();
+  State<PlaylistEditAudiosPageWidget> createState() => _PlaylistEditAudiosPageWidgetState();
 }
 
-class _PlaylistEditAudiosPageWidgetState
-    extends State<PlaylistEditAudiosPageWidget> {
+class _PlaylistEditAudiosPageWidgetState extends State<PlaylistEditAudiosPageWidget> {
   late PlaylistEditAudiosPageModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -44,20 +43,17 @@ class _PlaylistEditAudiosPageWidgetState
     super.initState();
     _model = createModel(context, () => PlaylistEditAudiosPageModel());
 
-    logFirebaseEvent('screen_view',
-        parameters: {'screen_name': 'playlistEditAudiosPage'});
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'playlistEditAudiosPage'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.playlist = (currentUserDocument?.playlists.toList() ?? [])
-          .elementAtOrNull(widget.playlistIndex!);
+      _model.playlist = (currentUserDocument?.playlists.toList() ?? []).elementAtOrNull(widget.playlistIndex!);
       safeSetState(() {});
       // joga os audios para a varaiavel de app listSelectedAudios para ser editado no edit audios se o usuário selecionar.
       //
       // É esta variavel que será salva
-      FFAppState().listAudiosSelected =
-          _model.playlist!.audios.toList().cast<AudioModelStruct>();
+      FFAppState().listAudiosSelected = _model.playlist!.audios.toList().cast<AudioModelStruct>();
       safeSetState(() {});
-      _model.editListAudios = await actions.checkDeviceAudios(
+      _model.editListAudios = await AudioUtils.checkDeviceAudios(
         _model.playlist!.audios.toList(),
       );
       _model.updatePlaylistStruct(
@@ -112,12 +108,10 @@ class _PlaylistEditAudiosPageWidgetState
                 title: Text(
                   'Editar áudios da Playlist',
                   style: FlutterFlowTheme.of(context).titleLarge.override(
-                        fontFamily:
-                            FlutterFlowTheme.of(context).titleLargeFamily,
+                        fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
                         color: FlutterFlowTheme.of(context).info,
                         letterSpacing: 0.0,
-                        useGoogleFonts:
-                            !FlutterFlowTheme.of(context).titleLargeIsCustom,
+                        useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
                       ),
                 ),
                 actions: const [],
@@ -141,8 +135,7 @@ class _PlaylistEditAudiosPageWidgetState
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 16.0),
+                      padding: const EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 16.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -160,12 +153,10 @@ class _PlaylistEditAudiosPageWidgetState
                                       child: GestureDetector(
                                         onTap: () {
                                           FocusScope.of(context).unfocus();
-                                          FocusManager.instance.primaryFocus
-                                              ?.unfocus();
+                                          FocusManager.instance.primaryFocus?.unfocus();
                                         },
                                         child: Padding(
-                                          padding:
-                                              MediaQuery.viewInsetsOf(context),
+                                          padding: MediaQuery.viewInsetsOf(context),
                                           child: const SelectAudioDialogWidget(),
                                         ),
                                       ),
@@ -176,21 +167,14 @@ class _PlaylistEditAudiosPageWidgetState
                               text: 'Incluir Som/Música/Silêncio',
                               options: FFButtonOptions(
                                 height: 40.0,
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                    24.0, 0.0, 24.0, 0.0),
-                                iconPadding: const EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 0.0),
+                                padding: const EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
+                                iconPadding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                                 color: FlutterFlowTheme.of(context).primary,
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .titleSmall
-                                    .override(
-                                      fontFamily: FlutterFlowTheme.of(context)
-                                          .titleSmallFamily,
+                                textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                                      fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
                                       color: Colors.white,
                                       letterSpacing: 0.0,
-                                      useGoogleFonts:
-                                          !FlutterFlowTheme.of(context)
-                                              .titleSmallIsCustom,
+                                      useGoogleFonts: !FlutterFlowTheme.of(context).titleSmallIsCustom,
                                     ),
                                 elevation: 3.0,
                                 borderSide: const BorderSide(
@@ -209,8 +193,7 @@ class _PlaylistEditAudiosPageWidgetState
                       children: [
                         Builder(
                           builder: (context) {
-                            final listAudios =
-                                FFAppState().listAudiosSelected.toList();
+                            final listAudios = FFAppState().listAudiosSelected.toList();
 
                             return InkWell(
                               splashColor: Colors.transparent,
@@ -220,147 +203,85 @@ class _PlaylistEditAudiosPageWidgetState
                               onLongPress: () async {},
                               child: ReorderableListView.builder(
                                 padding: EdgeInsets.zero,
-                                proxyDecorator: (Widget child, int index,
-                                        Animation<double> animation) =>
-                                    Material(
-                                        color: Colors.transparent,
-                                        child: child),
+                                proxyDecorator: (Widget child, int index, Animation<double> animation) =>
+                                    Material(color: Colors.transparent, child: child),
                                 shrinkWrap: true,
                                 scrollDirection: Axis.vertical,
                                 itemCount: listAudios.length,
                                 itemBuilder: (context, listAudiosIndex) {
-                                  final listAudiosItem =
-                                      listAudios[listAudiosIndex];
+                                  final listAudiosItem = listAudios[listAudiosIndex];
                                   return Container(
-                                    key: ValueKey("ListView_3afznwpi" '_' +
-                                        listAudiosIndex.toString()),
+                                    key: ValueKey("ListView_3afznwpi" '_' + listAudiosIndex.toString()),
                                     child: Align(
                                       alignment: const AlignmentDirectional(0.0, 0.0),
                                       child: Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 4.0, 0.0, 4.0),
+                                        padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 4.0),
                                         child: Container(
                                           width: double.infinity,
                                           decoration: BoxDecoration(
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryBackground,
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
+                                            color: FlutterFlowTheme.of(context).secondaryBackground,
+                                            borderRadius: BorderRadius.circular(8.0),
                                             border: Border.all(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primary,
+                                              color: FlutterFlowTheme.of(context).primary,
                                               width: 2.0,
                                             ),
                                           ),
-                                          alignment:
-                                              const AlignmentDirectional(0.0, 0.0),
+                                          alignment: const AlignmentDirectional(0.0, 0.0),
                                           child: Align(
-                                            alignment:
-                                                const AlignmentDirectional(0.0, 0.0),
+                                            alignment: const AlignmentDirectional(0.0, 0.0),
                                             child: Padding(
-                                              padding: const EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      12.0, 8.0, 8.0, 8.0),
+                                              padding: const EdgeInsetsDirectional.fromSTEB(12.0, 8.0, 8.0, 8.0),
                                               child: Row(
                                                 mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
+                                                mainAxisAlignment: MainAxisAlignment.start,
                                                 children: [
                                                   Expanded(
                                                     child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
+                                                      mainAxisSize: MainAxisSize.max,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
                                                         Padding(
                                                           padding:
-                                                              const EdgeInsetsDirectional
-                                                                  .fromSTEB(
-                                                                      0.0,
-                                                                      0.0,
-                                                                      0.0,
-                                                                      2.0),
+                                                              const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 2.0),
                                                           child: Text(
-                                                            functions.getAudioType(
-                                                                listAudiosItem
-                                                                    .audioType),
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  fontFamily: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMediumFamily,
-                                                                  fontSize:
-                                                                      12.0,
-                                                                  letterSpacing:
-                                                                      0.0,
+                                                            functions.getAudioType(listAudiosItem.audioType),
+                                                            style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                                  fontFamily:
+                                                                      FlutterFlowTheme.of(context).bodyMediumFamily,
+                                                                  fontSize: 12.0,
+                                                                  letterSpacing: 0.0,
                                                                   useGoogleFonts:
-                                                                      !FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodyMediumIsCustom,
+                                                                      !FlutterFlowTheme.of(context).bodyMediumIsCustom,
                                                                 ),
                                                           ),
                                                         ),
                                                         Padding(
                                                           padding:
-                                                              const EdgeInsetsDirectional
-                                                                  .fromSTEB(
-                                                                      0.0,
-                                                                      0.0,
-                                                                      0.0,
-                                                                      2.0),
+                                                              const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 2.0),
                                                           child: Text(
-                                                            listAudiosItem
-                                                                .title,
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodyLarge
-                                                                .override(
-                                                                  fontFamily: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyLargeFamily,
-                                                                  fontSize:
-                                                                      12.0,
-                                                                  letterSpacing:
-                                                                      0.0,
+                                                            listAudiosItem.title,
+                                                            style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                                                  fontFamily:
+                                                                      FlutterFlowTheme.of(context).bodyLargeFamily,
+                                                                  fontSize: 12.0,
+                                                                  letterSpacing: 0.0,
                                                                   useGoogleFonts:
-                                                                      !FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodyLargeIsCustom,
+                                                                      !FlutterFlowTheme.of(context).bodyLargeIsCustom,
                                                                 ),
                                                           ),
                                                         ),
                                                         Padding(
                                                           padding:
-                                                              const EdgeInsetsDirectional
-                                                                  .fromSTEB(
-                                                                      0.0,
-                                                                      0.0,
-                                                                      0.0,
-                                                                      2.0),
+                                                              const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 2.0),
                                                           child: Text(
-                                                            functions.transformSeconds(
-                                                                listAudiosItem
-                                                                    .duration),
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  fontFamily: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMediumFamily,
-                                                                  fontSize:
-                                                                      12.0,
-                                                                  letterSpacing:
-                                                                      0.0,
+                                                            functions.transformSeconds(listAudiosItem.duration),
+                                                            style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                                  fontFamily:
+                                                                      FlutterFlowTheme.of(context).bodyMediumFamily,
+                                                                  fontSize: 12.0,
+                                                                  letterSpacing: 0.0,
                                                                   useGoogleFonts:
-                                                                      !FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodyMediumIsCustom,
+                                                                      !FlutterFlowTheme.of(context).bodyMediumIsCustom,
                                                                 ),
                                                           ),
                                                         ),
@@ -368,26 +289,17 @@ class _PlaylistEditAudiosPageWidgetState
                                                     ),
                                                   ),
                                                   InkWell(
-                                                    splashColor:
-                                                        Colors.transparent,
-                                                    focusColor:
-                                                        Colors.transparent,
-                                                    hoverColor:
-                                                        Colors.transparent,
-                                                    highlightColor:
-                                                        Colors.transparent,
+                                                    splashColor: Colors.transparent,
+                                                    focusColor: Colors.transparent,
+                                                    hoverColor: Colors.transparent,
+                                                    highlightColor: Colors.transparent,
                                                     onTap: () async {
-                                                      FFAppState()
-                                                          .removeAtIndexFromListAudiosSelected(
-                                                              listAudiosIndex);
+                                                      FFAppState().removeAtIndexFromListAudiosSelected(listAudiosIndex);
                                                       safeSetState(() {});
                                                     },
                                                     child: Icon(
                                                       Icons.delete,
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primary,
+                                                      color: FlutterFlowTheme.of(context).primary,
                                                       size: 32.0,
                                                     ),
                                                   ),
@@ -400,17 +312,13 @@ class _PlaylistEditAudiosPageWidgetState
                                     ),
                                   );
                                 },
-                                onReorder: (int reorderableOldIndex,
-                                    int reorderableNewIndex) async {
-                                  _model.newList = await actions.reorderItems(
+                                onReorder: (int reorderableOldIndex, int reorderableNewIndex) async {
+                                  _model.newList = await UIUtils.reorderItems(
                                     listAudios.toList(),
                                     reorderableNewIndex,
                                     reorderableOldIndex,
                                   );
-                                  FFAppState().listAudiosSelected = _model
-                                      .newList!
-                                      .toList()
-                                      .cast<AudioModelStruct>();
+                                  FFAppState().listAudiosSelected = _model.newList!.toList().cast<AudioModelStruct>();
                                   safeSetState(() {});
 
                                   safeSetState(() {});
@@ -426,45 +334,30 @@ class _PlaylistEditAudiosPageWidgetState
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 8.0, 0.0, 4.0),
+                                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 4.0),
                                     child: Text(
                                       '(Arraste para deletar, pressione para ordenar)',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMediumFamily,
+                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                            fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
                                             fontSize: 12.0,
                                             letterSpacing: 0.0,
-                                            useGoogleFonts:
-                                                !FlutterFlowTheme.of(context)
-                                                    .bodyMediumIsCustom,
+                                            useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
                                           ),
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 4.0, 0.0, 4.0),
+                                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 4.0),
                                     child: Text(
                                       'Esta playlist está com uma duração de ${functions.transformSeconds(functions.getDurationPlaylist(FFAppState().listAudiosSelected.toList())!)}',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMediumFamily,
+                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                            fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
                                             letterSpacing: 0.0,
-                                            useGoogleFonts:
-                                                !FlutterFlowTheme.of(context)
-                                                    .bodyMediumIsCustom,
+                                            useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
                                           ),
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsetsDirectional.fromSTEB(
-                                        32.0, 16.0, 32.0, 16.0),
+                                    padding: const EdgeInsetsDirectional.fromSTEB(32.0, 16.0, 32.0, 16.0),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
@@ -476,36 +369,21 @@ class _PlaylistEditAudiosPageWidgetState
                                             text: 'Continuar',
                                             options: FFButtonOptions(
                                               height: 40.0,
-                                              padding: const EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      24.0, 0.0, 24.0, 0.0),
-                                              iconPadding: const EdgeInsetsDirectional
-                                                  .fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primary,
-                                              textStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleSmall
-                                                      .override(
-                                                        fontFamily:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .titleSmallFamily,
-                                                        color: Colors.white,
-                                                        letterSpacing: 0.0,
-                                                        useGoogleFonts:
-                                                            !FlutterFlowTheme
-                                                                    .of(context)
-                                                                .titleSmallIsCustom,
-                                                      ),
+                                              padding: const EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
+                                              iconPadding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                              color: FlutterFlowTheme.of(context).primary,
+                                              textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                                                    fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
+                                                    color: Colors.white,
+                                                    letterSpacing: 0.0,
+                                                    useGoogleFonts: !FlutterFlowTheme.of(context).titleSmallIsCustom,
+                                                  ),
                                               elevation: 3.0,
                                               borderSide: const BorderSide(
                                                 color: Colors.transparent,
                                                 width: 1.0,
                                               ),
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
+                                              borderRadius: BorderRadius.circular(8.0),
                                             ),
                                           ),
                                         ),
@@ -516,20 +394,14 @@ class _PlaylistEditAudiosPageWidgetState
                               );
                             } else {
                               return Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 16.0, 0.0, 0.0),
+                                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
                                 child: Text(
                                   'Monte sua Playlist incluindo sons e músicas.',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: FlutterFlowTheme.of(context)
-                                            .bodyMediumFamily,
+                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                        fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
                                         letterSpacing: 0.0,
                                         fontWeight: FontWeight.w500,
-                                        useGoogleFonts:
-                                            !FlutterFlowTheme.of(context)
-                                                .bodyMediumIsCustom,
+                                        useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
                                       ),
                                 ),
                               );

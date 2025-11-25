@@ -2,7 +2,7 @@ import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/custom_code/actions/index.dart' as actions;
+import '/core/utils/media/audio_utils.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +38,7 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
 
     // On component load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.isAudioDownloaded = await actions.isAudioDownloaded(
+      _model.isAudioDownloaded = await AudioUtils.isAudioDownloaded(
         functions.getStringFromAudioPath(widget.docMeditation!.audioUrl)!,
       );
       _model.isDownloaded = _model.isAudioDownloaded!;

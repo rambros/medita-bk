@@ -1,4 +1,5 @@
-import '/custom_code/actions/index.dart' as actions;
+import '/core/services/audio_service.dart';
+import '/core/services/notification_service.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +17,7 @@ import 'flutter_flow/internationalization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'index.dart';
+import '/core/controllers/index.dart';
 
 import 'dart:ui' as ui;
 
@@ -68,23 +70,20 @@ void main() async {
 
   await initFirebase();
 
-  // Start initial custom actions code
-  await actions.initializeNotificationPlugin();
-  // End initial custom actions code
+  // Initialize services
+  await MeditaBKAudioService.initialize();
+  final notificationService = NotificationService();
+  await notificationService.initialize();
 
   await FlutterFlowTheme.initialize();
 
   final appState = FFAppState(); // Initialize FFAppState
-  await appState.initializePersistedState();
+  await appState.initializePersistedState(); // Initialize SharedPreferences
+  await initAudioPlayerController();
 
   if (!kIsWeb) {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   }
-
-  // Start final custom actions code
-  await actions.initAudioService();
-  await actions.initAudioPlayerController();
-  // End final custom actions code
 
   runApp(MultiProvider(
     providers: [

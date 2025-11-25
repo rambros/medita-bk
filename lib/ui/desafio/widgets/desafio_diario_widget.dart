@@ -2,16 +2,13 @@
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 import '/backend/schema/enums/enums.dart';
-import '/actions/actions.dart' as action_blocks;
+import '/ui/core/actions/actions.dart' as action_blocks;
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/custom_code/actions/index.dart'; // Imports custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
 import 'package:flutter/material.dart';
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
-
-
 
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -65,8 +62,7 @@ class _DesafioDiarioWidgetState extends State<DesafioDiarioWidget> {
     return FutureBuilder(
       //future: Future.value(widget.listD21Meditations),
       future: Future.value(widget.listD21Meditations),
-      builder: (BuildContext context,
-          AsyncSnapshot<List<D21MeditationModelStruct>?> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<List<D21MeditationModelStruct>?> snapshot) {
         if (!snapshot.hasData) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -85,8 +81,7 @@ class _DesafioDiarioWidgetState extends State<DesafioDiarioWidget> {
             ),
           );
         } else {
-          widget.listD21Meditations!
-              .removeWhere((item) => item.dateCompleted == null);
+          widget.listD21Meditations!.removeWhere((item) => item.dateCompleted == null);
           return Container(
             padding: const EdgeInsets.all(8),
             child: SfCalendar(
@@ -97,14 +92,11 @@ class _DesafioDiarioWidgetState extends State<DesafioDiarioWidget> {
               //cellBorderColor: Colors.white30,
               view: CalendarView.month,
               viewHeaderStyle: ViewHeaderStyle(
-                dayTextStyle: TextStyle(
-                    color: FlutterFlowTheme.of(context).info, fontSize: 14),
-                dateTextStyle: TextStyle(
-                    color: FlutterFlowTheme.of(context).info, fontSize: 14),
+                dayTextStyle: TextStyle(color: FlutterFlowTheme.of(context).info, fontSize: 14),
+                dateTextStyle: TextStyle(color: FlutterFlowTheme.of(context).info, fontSize: 14),
               ),
               headerStyle: CalendarHeaderStyle(
-                textStyle: TextStyle(
-                    color: FlutterFlowTheme.of(context).info, fontSize: 24),
+                textStyle: TextStyle(color: FlutterFlowTheme.of(context).info, fontSize: 24),
                 textAlign: TextAlign.justify,
               ),
               selectionDecoration: BoxDecoration(
@@ -117,18 +109,12 @@ class _DesafioDiarioWidgetState extends State<DesafioDiarioWidget> {
                 showAgenda: false,
                 dayFormat: 'EEE',
                 monthCellStyle: MonthCellStyle(
-                  textStyle: TextStyle(
-                      fontStyle: FontStyle.normal,
-                      fontSize: 18,
-                      color: FlutterFlowTheme.of(context).info),
-                  trailingDatesTextStyle: TextStyle(
-                      fontStyle: FontStyle.normal,
-                      fontSize: 18,
-                      color: FlutterFlowTheme.of(context).info),
-                  leadingDatesTextStyle: TextStyle(
-                      fontStyle: FontStyle.normal,
-                      fontSize: 18,
-                      color: FlutterFlowTheme.of(context).info),
+                  textStyle:
+                      TextStyle(fontStyle: FontStyle.normal, fontSize: 18, color: FlutterFlowTheme.of(context).info),
+                  trailingDatesTextStyle:
+                      TextStyle(fontStyle: FontStyle.normal, fontSize: 18, color: FlutterFlowTheme.of(context).info),
+                  leadingDatesTextStyle:
+                      TextStyle(fontStyle: FontStyle.normal, fontSize: 18, color: FlutterFlowTheme.of(context).info),
                 ),
               ),
 
@@ -163,8 +149,7 @@ class _DesafioDiarioWidgetState extends State<DesafioDiarioWidget> {
 Widget monthCellBuilder(BuildContext context, MonthCellDetails details) {
   final String diaCalendario = details.date.day.toString();
   if (details.appointments.isNotEmpty) {
-    D21MeditationModelStruct d21meditation =
-        details.appointments[0] as D21MeditationModelStruct;
+    D21MeditationModelStruct d21meditation = details.appointments[0] as D21MeditationModelStruct;
     final int d21Dia = d21meditation.dia;
     if ((d21Dia == 3) | (d21Dia == 9) | (d21Dia == 21)) {
       return DiaComBrasao(dia: diaCalendario);

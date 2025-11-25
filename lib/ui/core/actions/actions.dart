@@ -4,7 +4,7 @@ import '/backend/schema/enums/enums.dart';
 import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/custom_code/actions/index.dart' as actions;
+import '/core/utils/network_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
 
@@ -12,7 +12,7 @@ Future checkInternetAccess(BuildContext context) async {
   bool? hasIntenetAccess;
   bool? hasIntenetAccess2;
 
-  hasIntenetAccess = await actions.hasInternetAccess();
+  hasIntenetAccess = await NetworkUtils.hasInternetAccess();
   FFAppState().hasInternetAccess = hasIntenetAccess;
   while (FFAppState().hasInternetAccess == false) {
     await showDialog(
@@ -33,7 +33,7 @@ Future checkInternetAccess(BuildContext context) async {
         );
       },
     );
-    hasIntenetAccess2 = await actions.hasInternetAccess();
+    hasIntenetAccess2 = await NetworkUtils.hasInternetAccess();
     FFAppState().hasInternetAccess = hasIntenetAccess2;
   }
 }

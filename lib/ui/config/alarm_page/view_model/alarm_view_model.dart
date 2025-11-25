@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/custom_code/actions/index.dart' as actions;
+import '/core/services/notification_service.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 
 class AlarmViewModel extends ChangeNotifier {
@@ -56,7 +56,8 @@ class AlarmViewModel extends ChangeNotifier {
       notifyListeners();
 
       if (context.mounted) {
-        await actions.scheduleAlarm(
+        final notificationService = NotificationService();
+        await notificationService.scheduleAlarm(
           context,
           timeSelected!.millisecondsSinceEpoch.hashCode,
           timeSelected!,
@@ -79,9 +80,8 @@ class AlarmViewModel extends ChangeNotifier {
   }
 
   Future<void> removeAlarm(BuildContext context, int index, AlarmTimeStruct alarmListItem) async {
-    await actions.deleteAlarmNotification(
-      alarmListItem.key,
-    );
+    final notificationService = NotificationService();
+    await notificationService.deleteAlarm(alarmListItem.key);
     FFAppState().removeAtIndexFromAlarms(index);
     notifyListeners();
 

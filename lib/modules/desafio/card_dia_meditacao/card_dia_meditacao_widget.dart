@@ -3,7 +3,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/modules/desafio/status_meditacao/status_meditacao_widget.dart';
 import 'dart:ui';
-import '/custom_code/actions/index.dart' as actions;
+import '/core/utils/media/audio_utils.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -41,12 +41,9 @@ class _CardDiaMeditacaoWidgetState extends State<CardDiaMeditacaoWidget> {
 
     // On component load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.isAudioDownloaded = await actions.isAudioDownloaded(
-        functions.getStringFromAudioPath(FFAppState()
-            .desafio21
-            .d21Meditations
-            .elementAtOrNull(widget.dia - 1)!
-            .audioUrl)!,
+      _model.isAudioDownloaded = await AudioUtils.isAudioDownloaded(
+        functions
+            .getStringFromAudioPath(FFAppState().desafio21.d21Meditations.elementAtOrNull(widget.dia - 1)!.audioUrl)!,
       );
       _model.isDownloaded = _model.isAudioDownloaded!;
       safeSetState(() {});
@@ -93,11 +90,7 @@ class _CardDiaMeditacaoWidgetState extends State<CardDiaMeditacaoWidget> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
                         child: Image.network(
-                          FFAppState()
-                              .desafio21
-                              .d21Meditations
-                              .elementAtOrNull(widget.dia - 1)!
-                              .imageUrl,
+                          FFAppState().desafio21.d21Meditations.elementAtOrNull(widget.dia - 1)!.imageUrl,
                           width: 200.0,
                           height: 203.0,
                           fit: BoxFit.cover,
@@ -111,8 +104,7 @@ class _CardDiaMeditacaoWidgetState extends State<CardDiaMeditacaoWidget> {
                   child: Container(
                     decoration: const BoxDecoration(),
                     child: Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 12.0),
+                      padding: const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 12.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -126,17 +118,12 @@ class _CardDiaMeditacaoWidgetState extends State<CardDiaMeditacaoWidget> {
                               ),
                               maxLines: 2,
                               minFontSize: 14.0,
-                              style: FlutterFlowTheme.of(context)
-                                  .labelLarge
-                                  .override(
-                                    fontFamily: FlutterFlowTheme.of(context)
-                                        .labelLargeFamily,
+                              style: FlutterFlowTheme.of(context).labelLarge.override(
+                                    fontFamily: FlutterFlowTheme.of(context).labelLargeFamily,
                                     color: FlutterFlowTheme.of(context).info,
                                     fontSize: 18.0,
                                     letterSpacing: 0.0,
-                                    useGoogleFonts:
-                                        !FlutterFlowTheme.of(context)
-                                            .labelLargeIsCustom,
+                                    useGoogleFonts: !FlutterFlowTheme.of(context).labelLargeIsCustom,
                                   ),
                             ),
                           AutoSizeText(
@@ -145,16 +132,12 @@ class _CardDiaMeditacaoWidgetState extends State<CardDiaMeditacaoWidget> {
                             ),
                             maxLines: 2,
                             minFontSize: 14.0,
-                            style: FlutterFlowTheme.of(context)
-                                .labelLarge
-                                .override(
-                                  fontFamily: FlutterFlowTheme.of(context)
-                                      .labelLargeFamily,
+                            style: FlutterFlowTheme.of(context).labelLarge.override(
+                                  fontFamily: FlutterFlowTheme.of(context).labelLargeFamily,
                                   color: FlutterFlowTheme.of(context).info,
                                   fontSize: 18.0,
                                   letterSpacing: 0.0,
-                                  useGoogleFonts: !FlutterFlowTheme.of(context)
-                                      .labelLargeIsCustom,
+                                  useGoogleFonts: !FlutterFlowTheme.of(context).labelLargeIsCustom,
                                 ),
                           ),
                           AutoSizeText(
@@ -164,16 +147,12 @@ class _CardDiaMeditacaoWidgetState extends State<CardDiaMeditacaoWidget> {
                             ),
                             maxLines: 2,
                             minFontSize: 14.0,
-                            style: FlutterFlowTheme.of(context)
-                                .labelLarge
-                                .override(
-                                  fontFamily: FlutterFlowTheme.of(context)
-                                      .labelLargeFamily,
+                            style: FlutterFlowTheme.of(context).labelLarge.override(
+                                  fontFamily: FlutterFlowTheme.of(context).labelLargeFamily,
                                   color: FlutterFlowTheme.of(context).info,
                                   fontSize: 18.0,
                                   letterSpacing: 0.0,
-                                  useGoogleFonts: !FlutterFlowTheme.of(context)
-                                      .labelLargeIsCustom,
+                                  useGoogleFonts: !FlutterFlowTheme.of(context).labelLargeIsCustom,
                                 ),
                           ),
                           Row(
@@ -182,24 +161,15 @@ class _CardDiaMeditacaoWidgetState extends State<CardDiaMeditacaoWidget> {
                             children: [
                               Text(
                                 functions.transformSeconds(valueOrDefault<int>(
-                                  FFAppState()
-                                      .desafio21
-                                      .d21Meditations
-                                      .elementAtOrNull(widget.dia - 1)
-                                      ?.audioDuration,
+                                  FFAppState().desafio21.d21Meditations.elementAtOrNull(widget.dia - 1)?.audioDuration,
                                   120,
                                 )),
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: FlutterFlowTheme.of(context)
-                                          .bodyMediumFamily,
+                                style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                      fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
                                       color: FlutterFlowTheme.of(context).info,
                                       fontSize: 16.0,
                                       letterSpacing: 0.0,
-                                      useGoogleFonts:
-                                          !FlutterFlowTheme.of(context)
-                                              .bodyMediumIsCustom,
+                                      useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
                                     ),
                               ),
                               if (_model.isDownloaded == true)
@@ -229,11 +199,8 @@ class _CardDiaMeditacaoWidgetState extends State<CardDiaMeditacaoWidget> {
                         model: _model.statusMeditacaoModel,
                         updateCallback: () => safeSetState(() {}),
                         child: StatusMeditacaoWidget(
-                          statusMeditacao: FFAppState()
-                              .desafio21
-                              .d21Meditations
-                              .elementAtOrNull(widget.dia - 1)!
-                              .meditationStatus,
+                          statusMeditacao:
+                              FFAppState().desafio21.d21Meditations.elementAtOrNull(widget.dia - 1)!.meditationStatus,
                           dia: widget.dia,
                         ),
                       ),

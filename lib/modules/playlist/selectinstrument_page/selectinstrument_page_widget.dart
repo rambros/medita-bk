@@ -5,7 +5,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
-import '/custom_code/actions/index.dart' as actions;
+import '/core/utils/media/audio_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,12 +20,10 @@ class SelectinstrumentPageWidget extends StatefulWidget {
   static String routePath = 'selectInstrumentPage';
 
   @override
-  State<SelectinstrumentPageWidget> createState() =>
-      _SelectinstrumentPageWidgetState();
+  State<SelectinstrumentPageWidget> createState() => _SelectinstrumentPageWidgetState();
 }
 
-class _SelectinstrumentPageWidgetState
-    extends State<SelectinstrumentPageWidget> {
+class _SelectinstrumentPageWidgetState extends State<SelectinstrumentPageWidget> {
   late SelectinstrumentPageModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -35,13 +33,11 @@ class _SelectinstrumentPageWidgetState
     super.initState();
     _model = createModel(context, () => SelectinstrumentPageModel());
 
-    logFirebaseEvent('screen_view',
-        parameters: {'screen_name': 'selectinstrumentPage'});
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'selectinstrumentPage'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.listSounds = await actions.getInstrumentSounds();
-      _model.instrumentsSounds =
-          _model.listSounds!.toList().cast<AudioModelStruct>();
+      _model.listSounds = await AudioUtils.getInstrumentSounds();
+      _model.instrumentsSounds = _model.listSounds!.toList().cast<AudioModelStruct>();
       safeSetState(() {});
     });
 
@@ -87,9 +83,8 @@ class _SelectinstrumentPageWidgetState
                     ),
                     onPressed: () async {
                       if (_model.isSelected && (_model.selectedIndex > 0)) {
-                        FFAppState().addToListAudiosSelected(_model
-                            .instrumentsSounds
-                            .elementAtOrNull(_model.selectedIndex)!);
+                        FFAppState()
+                            .addToListAudiosSelected(_model.instrumentsSounds.elementAtOrNull(_model.selectedIndex)!);
                         safeSetState(() {});
                       }
                       context.pop();
@@ -98,12 +93,10 @@ class _SelectinstrumentPageWidgetState
                   title: Text(
                     'Sons para a playlist',
                     style: FlutterFlowTheme.of(context).titleLarge.override(
-                          fontFamily:
-                              FlutterFlowTheme.of(context).titleLargeFamily,
+                          fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
                           color: FlutterFlowTheme.of(context).info,
                           letterSpacing: 0.0,
-                          useGoogleFonts:
-                              !FlutterFlowTheme.of(context).titleLargeIsCustom,
+                          useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
                         ),
                   ),
                   actions: const [],
@@ -127,25 +120,19 @@ class _SelectinstrumentPageWidgetState
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                            0.0, 24.0, 0.0, 16.0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 16.0),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Text(
                               'Sons de Instrumentos',
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: FlutterFlowTheme.of(context)
-                                        .bodyMediumFamily,
+                              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
                                     fontSize: 20.0,
                                     letterSpacing: 0.0,
                                     fontWeight: FontWeight.bold,
-                                    useGoogleFonts:
-                                        !FlutterFlowTheme.of(context)
-                                            .bodyMediumIsCustom,
+                                    useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
                                   ),
                             ),
                           ],
@@ -158,97 +145,64 @@ class _SelectinstrumentPageWidgetState
                             Expanded(
                               child: Builder(
                                 builder: (context) {
-                                  final instrumentSound =
-                                      _model.instrumentsSounds.toList();
+                                  final instrumentSound = _model.instrumentsSounds.toList();
 
                                   return ListView.separated(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 4.0),
+                                    padding: const EdgeInsets.symmetric(vertical: 4.0),
                                     scrollDirection: Axis.vertical,
                                     itemCount: instrumentSound.length,
-                                    separatorBuilder: (_, __) =>
-                                        const SizedBox(height: 4.0),
-                                    itemBuilder:
-                                        (context, instrumentSoundIndex) {
-                                      final instrumentSoundItem =
-                                          instrumentSound[instrumentSoundIndex];
+                                    separatorBuilder: (_, __) => const SizedBox(height: 4.0),
+                                    itemBuilder: (context, instrumentSoundIndex) {
+                                      final instrumentSoundItem = instrumentSound[instrumentSoundIndex];
                                       return Align(
-                                        alignment:
-                                            const AlignmentDirectional(0.0, 0.0),
+                                        alignment: const AlignmentDirectional(0.0, 0.0),
                                         child: Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  8.0, 8.0, 8.0, 0.0),
+                                          padding: const EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 0.0),
                                           child: Container(
                                             width: double.infinity,
                                             decoration: BoxDecoration(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryBackground,
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
+                                              color: FlutterFlowTheme.of(context).secondaryBackground,
+                                              borderRadius: BorderRadius.circular(8.0),
                                               border: Border.all(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primary,
+                                                color: FlutterFlowTheme.of(context).primary,
                                                 width: 2.0,
                                               ),
                                             ),
-                                            alignment:
-                                                const AlignmentDirectional(0.0, 0.0),
+                                            alignment: const AlignmentDirectional(0.0, 0.0),
                                             child: Align(
-                                              alignment: const AlignmentDirectional(
-                                                  0.0, 0.0),
+                                              alignment: const AlignmentDirectional(0.0, 0.0),
                                               child: Padding(
-                                                padding: const EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        12.0, 8.0, 8.0, 8.0),
+                                                padding: const EdgeInsetsDirectional.fromSTEB(12.0, 8.0, 8.0, 8.0),
                                                 child: InkWell(
-                                                  splashColor:
-                                                      Colors.transparent,
-                                                  focusColor:
-                                                      Colors.transparent,
-                                                  hoverColor:
-                                                      Colors.transparent,
-                                                  highlightColor:
-                                                      Colors.transparent,
+                                                  splashColor: Colors.transparent,
+                                                  focusColor: Colors.transparent,
+                                                  hoverColor: Colors.transparent,
+                                                  highlightColor: Colors.transparent,
                                                   onTap: () async {
                                                     _model.isSelected = true;
-                                                    _model.selectedIndex =
-                                                        instrumentSoundIndex;
+                                                    _model.selectedIndex = instrumentSoundIndex;
                                                     safeSetState(() {});
-                                                    await actions.playSound(
+                                                    await AudioUtils.playSound(
                                                       instrumentSoundItem,
                                                     );
                                                   },
                                                   child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
+                                                    mainAxisSize: MainAxisSize.max,
+                                                    mainAxisAlignment: MainAxisAlignment.start,
                                                     children: [
                                                       Expanded(
                                                         child: Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
+                                                          mainAxisSize: MainAxisSize.max,
                                                           children: [
                                                             Text(
-                                                              instrumentSoundItem
-                                                                  .title,
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyLarge
-                                                                  .override(
+                                                              instrumentSoundItem.title,
+                                                              style: FlutterFlowTheme.of(context).bodyLarge.override(
                                                                     fontFamily:
-                                                                        FlutterFlowTheme.of(context)
-                                                                            .bodyLargeFamily,
-                                                                    fontSize:
-                                                                        18.0,
-                                                                    letterSpacing:
-                                                                        0.0,
+                                                                        FlutterFlowTheme.of(context).bodyLargeFamily,
+                                                                    fontSize: 18.0,
+                                                                    letterSpacing: 0.0,
                                                                     useGoogleFonts:
-                                                                        !FlutterFlowTheme.of(context)
-                                                                            .bodyLargeIsCustom,
+                                                                        !FlutterFlowTheme.of(context).bodyLargeIsCustom,
                                                                   ),
                                                             ),
                                                           ],
@@ -256,25 +210,17 @@ class _SelectinstrumentPageWidgetState
                                                       ),
                                                       Builder(
                                                         builder: (context) {
-                                                          if ((_model.isSelected ==
-                                                                  true) &&
-                                                              (instrumentSoundIndex ==
-                                                                  _model
-                                                                      .selectedIndex)) {
+                                                          if ((_model.isSelected == true) &&
+                                                              (instrumentSoundIndex == _model.selectedIndex)) {
                                                             return Icon(
                                                               Icons.play_circle,
-                                                              color: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .primary,
+                                                              color: FlutterFlowTheme.of(context).primary,
                                                               size: 30.0,
                                                             );
                                                           } else {
                                                             return Icon(
-                                                              Icons
-                                                                  .play_circle_outline,
-                                                              color: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .primary,
+                                                              Icons.play_circle_outline,
+                                                              color: FlutterFlowTheme.of(context).primary,
                                                               size: 30.0,
                                                             );
                                                           }

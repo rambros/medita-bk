@@ -1,26 +1,16 @@
-// Automatic FlutterFlow imports
-import '/backend/backend.dart';
-import '/backend/schema/structs/index.dart';
-import '/flutter_flow/flutter_flow_util.dart';
-// Imports other custom actions
-import '/flutter_flow/custom_functions.dart'; // Imports custom functions
 import 'package:flutter/material.dart';
-// Begin custom action code
-// DO NOT REMOVE OR MODIFY THE CODE ABOVE!
-
-// Imports other custom actions
-
-// Imports other custom actions
-
-import 'init_audio_service.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
-import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import '/backend/schema/structs/index.dart';
+import '/core/services/index.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/custom_functions.dart';
 
-late Stopwatch globalWatch;
+// Global instance
 late AudioPlayerController globalAudioPlayerController;
+late Stopwatch globalWatch;
 
-Future initAudioPlayerController() async {
+Future<void> initAudioPlayerController() async {
   globalWatch = Stopwatch();
   globalAudioPlayerController = AudioPlayerController();
   final session = await AudioSession.instance;
@@ -58,31 +48,6 @@ class ProgressBarState {
   final Duration total;
 }
 
-class AudioProgressBar extends StatelessWidget {
-  const AudioProgressBar({super.key});
-  @override
-  Widget build(BuildContext context) {
-    final playerController = globalAudioPlayerController;
-    return ValueListenableBuilder<ProgressBarState>(
-      valueListenable: playerController.progressNotifier,
-      builder: (_, value, __) {
-        return ProgressBar(
-          progress: value.current,
-          buffered: value.buffered,
-          total: value.total,
-          onSeek: playerController.seek,
-          baseBarColor: Colors.white10,
-          bufferedBarColor: Colors.white30,
-          progressBarColor: Colors.white,
-          thumbColor: Colors.white,
-          timeLabelTextStyle: const TextStyle(
-              fontSize: 18, color: Colors.white, fontWeight: FontWeight.w600),
-        );
-      },
-    );
-  }
-}
-
 class RepeatButtonNotifier extends ValueNotifier<RepeatState> {
   RepeatButtonNotifier() : super(_initialValue);
   static const _initialValue = RepeatState.off;
@@ -98,174 +63,6 @@ enum RepeatState {
   repeatSong,
   repeatPlaylist,
 }
-
-class PlayButton extends StatelessWidget {
-  const PlayButton({super.key});
-  @override
-  Widget build(BuildContext context) {
-    final playerController = globalAudioPlayerController;
-    return ValueListenableBuilder<ButtonState>(
-      valueListenable: playerController.playButtonNotifier,
-      // ignore: missing_return
-      builder: (_, value, __) {
-        switch (value) {
-          case ButtonState.loading:
-            return Container(
-              margin: const EdgeInsets.all(8.0),
-              width: 56.0,
-              height: 64.0,
-              //color: Colors.black,
-              child: const CircularProgressIndicator(
-                color: Colors.white,
-              ),
-            );
-          case ButtonState.paused:
-            return IconButton(
-              icon: const Icon(Icons.play_arrow),
-              iconSize: 68.0,
-              color: Colors.white,
-              onPressed: playerController.play,
-            );
-          case ButtonState.playing:
-            return IconButton(
-              icon: const Icon(Icons.pause),
-              iconSize: 64.0,
-              color: Colors.white,
-              onPressed: playerController.pause,
-            );
-        }
-      },
-    );
-  }
-}
-
-class RepeatButton extends StatelessWidget {
-  const RepeatButton({super.key});
-  @override
-  Widget build(BuildContext context) {
-    final playerController = globalAudioPlayerController;
-    return ValueListenableBuilder<RepeatState>(
-      valueListenable: playerController.repeatButtonNotifier,
-      builder: (context, value, child) {
-        late Icon icon;
-        switch (value) {
-          case RepeatState.off:
-            icon = const Icon(Icons.repeat, color: Colors.grey);
-            break;
-          case RepeatState.repeatSong:
-            icon = const Icon(Icons.repeat_one);
-            break;
-          case RepeatState.repeatPlaylist:
-            icon = const Icon(Icons.repeat);
-            break;
-        }
-        return IconButton(
-          icon: icon,
-          onPressed: playerController.repeat,
-        );
-      },
-    );
-  }
-}
-
-class PreviousSongButton extends StatelessWidget {
-  const PreviousSongButton({super.key});
-  @override
-  Widget build(BuildContext context) {
-    final playerController = globalAudioPlayerController;
-    return ValueListenableBuilder<bool>(
-      valueListenable: playerController.isFirstSongNotifier,
-      builder: (_, isFirst, __) {
-        return IconButton(
-          icon: const Icon(Icons.skip_previous),
-          iconSize: 56.0,
-          color: Colors.white,
-          onPressed: (isFirst) ? null : playerController.previous,
-        );
-      },
-    );
-  }
-}
-
-class NextSongButton extends StatelessWidget {
-  const NextSongButton({super.key});
-  @override
-  Widget build(BuildContext context) {
-    final playerController = globalAudioPlayerController;
-    return ValueListenableBuilder<bool>(
-      valueListenable: playerController.isLastSongNotifier,
-      builder: (_, isLast, __) {
-        return IconButton(
-          icon: const Icon(Icons.skip_next),
-          iconSize: 56.0,
-          color: Colors.white,
-          onPressed: (isLast) ? null : playerController.next,
-        );
-      },
-    );
-  }
-}
-
-class CurrentSongTitle extends StatelessWidget {
-  const CurrentSongTitle({super.key});
-  @override
-  Widget build(BuildContext context) {
-    final playerController = globalAudioPlayerController;
-    final listAudios = playerController.listAudios;
-    return ValueListenableBuilder<int>(
-      valueListenable: playerController.currentIndexTitleNotifier,
-      builder: (_, index, __) {
-        return Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: Text(
-            listAudios[index].title ?? 'Carregando...',
-            style: const TextStyle(fontSize: 20, color: Colors.white),
-          ),
-        );
-      },
-    );
-  }
-}
-
-// class CompletedSongButton extends StatelessWidget {
-//   const CompletedSongButton({super.key, required this.nextActionFunction});
-//   final Function() nextActionFunction;
-//   @override
-//   Widget build(BuildContext context) {
-//     final playerController = globalAudioPlayerController;
-//     return ValueListenableBuilder<bool>(
-//       valueListenable: playerController.completedSongNotifier,
-//       builder: (_, isCompleted, __) {
-//         return isCompleted
-//             ? ElevatedButton(
-//                 onPressed: nextActionFunction,
-//                 style: ElevatedButton.styleFrom(
-//                   backgroundColor: const Color(0xFFF9A61A),
-//                   elevation: 3.0,
-//                   padding: const EdgeInsetsDirectional.fromSTEB(
-//                       24.0, 0.0, 24.0, 0.0),
-//                   fixedSize: const Size.fromHeight(40.0),
-//                   shape: RoundedRectangleBorder(
-//                     borderRadius: BorderRadius.circular(8.0),
-//                     side:
-//                         const BorderSide(color: Colors.transparent, width: 1.0),
-//                   ),
-//                 ),
-//                 child: Text(
-//                   'Avançar',
-//                   style: FlutterFlowTheme.of(context).titleSmall.override(
-//                         fontFamily:
-//                             FlutterFlowTheme.of(context).titleSmallFamily,
-//                         color: Colors.white,
-//                         letterSpacing: 0.0,
-//                       ),
-//                 ),
-//               )
-//             : const SizedBox();
-//       },
-//     );
-//   }
-// }
 
 class PlaylistModel {
   final String? id;
@@ -357,8 +154,8 @@ class AudioPlayerController {
         .map((audio) => MediaItem(
               id: getRandom(99999).toString(),
               album: 'MeditaBk Meditações',
-              artist: audio.author ?? 'Brahma Kumaris',
-              title: audio.title ?? 'Meditação',
+              artist: audio.author,
+              title: audio.title,
               artUri: Uri.tryParse(model.urlImage!),
               duration: Duration(seconds: audio.duration),
               extras: {
@@ -392,8 +189,7 @@ class AudioPlayerController {
       final isPlaying = playbackState.playing;
       final processingState = playbackState.processingState;
       //print(processingState);
-      if (processingState == AudioProcessingState.loading ||
-          processingState == AudioProcessingState.buffering) {
+      if (processingState == AudioProcessingState.loading || processingState == AudioProcessingState.buffering) {
         playButtonNotifier.value = ButtonState.loading;
       } else if (!isPlaying) {
         playButtonNotifier.value = ButtonState.paused;
@@ -521,10 +317,8 @@ class AudioPlayerController {
 
   void stop() {
     globalWatch.stop();
-    FFAppState().addToMeditationLogList(MeditationLogStruct(
-        duration: globalWatch.elapsed.inSeconds,
-        date: DateTime.now(),
-        type: 'guided'));
+    FFAppState().addToMeditationLogList(
+        MeditationLogStruct(duration: globalWatch.elapsed.inSeconds, date: DateTime.now(), type: 'guided'));
     clearMusicTitle();
     globalWatch.reset();
     _audioHandler.stop();
@@ -535,26 +329,9 @@ class AudioPlayerController {
     _updateSkipButtons();
   }
 
-  Future<bool> isCached(String url) async =>
-      await _audioHandler.customAction('isCached', {'url': url}) == true;
+  Future<bool> isCached(String url) async => await _audioHandler.customAction('isCached', {'url': url}) == true;
 
-  Future<void> download(String url) =>
-      _audioHandler.customAction('cacheAudio', {'url': url});
+  Future<void> download(String url) => _audioHandler.customAction('cacheAudio', {'url': url});
 
   Future<void> clearDownloads() => _audioHandler.customAction('clearCache');
-
-  // void saveStatistics(PlaylistModel model) async {
-  //   var duration = watch.elapsed.inSeconds;
-  //   final df = DateFormat('yyyy-MM-dd');
-  //   final tf = DateFormat('hh:mm');
-  //   final dateMeditation = df.format(DateTime.now());
-  //   final timeMeditation = tf.format(DateTime.now());
-
-  //   FFAppState().addToMeditationLogList(MeditationLogStruct(
-  //       duration: globalWatch.elapsed.inSeconds,
-  //       date: DateTime.now(),
-  //       type: 'guided'));
-
-  //   watch.stop();
-  // }
 }

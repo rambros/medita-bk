@@ -7,7 +7,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/index.dart';
-import '/actions/actions.dart' as action_blocks;
+import '/ui/core/actions/actions.dart' as action_blocks;
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
 import 'view_model/home_view_model.dart';

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
-import '/custom_code/actions/index.dart' as actions;
+import '/core/utils/file_utils.dart';
+import '/core/services/index.dart';
 
 class SettingsViewModel extends ChangeNotifier {
   String _appVersion = '';
@@ -12,7 +13,7 @@ class SettingsViewModel extends ChangeNotifier {
   }
 
   Future<void> _loadVersion() async {
-    _appVersion = await actions.getVersionApp();
+    _appVersion = await FileUtils.getAppVersion();
     notifyListeners();
   }
 
@@ -41,7 +42,7 @@ class SettingsViewModel extends ChangeNotifier {
   }
 
   Future<void> deleteDownloads(BuildContext context) async {
-    await actions.clearAudioCache();
+    await globalAudioHandler.customAction('clearCache');
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(

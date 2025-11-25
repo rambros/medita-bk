@@ -5,7 +5,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '/actions/actions.dart' as action_blocks;
+import '/ui/core/actions/actions.dart' as action_blocks;
 
 class MensagensHomePage extends StatefulWidget {
   const MensagensHomePage({super.key});

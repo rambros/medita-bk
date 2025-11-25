@@ -1,5 +1,5 @@
 import '/backend/backend.dart';
-import '/custom_code/actions/index.dart' as actions;
+import '/domain/meditation/services/meditation_service.dart';
 
 abstract class MeditationRepository {
   Stream<List<MeditationsRecord>> getMeditations();
@@ -63,6 +63,6 @@ class MeditationRepositoryImpl implements MeditationRepository {
 
   @override
   Future<List<MeditationsRecord>> getFavoriteMeditations(String userId) async {
-    return await actions.getFavoritesMeditations(userId);
+    return MeditationService.getFavoritesMeditations(userId);
   }
 }

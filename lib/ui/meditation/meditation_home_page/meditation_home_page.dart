@@ -4,7 +4,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
 import 'dart:ui';
-import '/actions/actions.dart' as action_blocks;
+import '/ui/core/actions/actions.dart' as action_blocks;
 import '/index.dart';
 import '/ui/meditation/meditation_video_list_page/meditation_video_list_page.dart';
 import '/ui/meditation/meditation_statistics_page/meditation_statistics_page.dart';

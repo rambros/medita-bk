@@ -3,7 +3,7 @@ import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/data/repositories/home_repository.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/actions/actions.dart' as action_blocks;
+import '/ui/core/actions/actions.dart' as action_blocks;
 
 /// ViewModel for HomePage
 /// Manages state and business logic for the home page

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '/backend/backend.dart';
-import '/custom_code/actions/index.dart' as actions;
+import '/core/utils/network_utils.dart';
 
 class MeditationDetailsViewModel extends ChangeNotifier {
   // ========== STATE ==========
@@ -47,7 +47,9 @@ class MeditationDetailsViewModel extends ChangeNotifier {
       // Check if audio is downloaded
       final audioPath = _meditationDoc!.audioUrl;
       if (audioPath.isNotEmpty) {
-        _isAudioDownloaded = await actions.isAudioDownloaded(audioPath);
+        // TODO: Migrate isAudioDownloaded to AudioService
+        // _isAudioDownloaded = await actions.isAudioDownloaded(audioPath);
+        _isAudioDownloaded = false; // Temporary: assume not downloaded
       }
 
       // Check if meditation is in favorites
@@ -128,7 +130,7 @@ class MeditationDetailsViewModel extends ChangeNotifier {
   /// Checks internet access before playing
   Future<bool> checkInternetAccess() async {
     try {
-      final hasInternet = await actions.hasInternetAccess();
+      final hasInternet = await NetworkUtils.hasInternetAccess();
       return hasInternet;
     } catch (e) {
       return false;

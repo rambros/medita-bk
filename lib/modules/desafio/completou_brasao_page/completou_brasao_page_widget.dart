@@ -3,7 +3,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
-import '/custom_code/actions/index.dart' as actions;
+import '/ui/core/utils/ui_utils.dart';
 import '/ui/core/widgets/confeti_widget.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
@@ -25,8 +25,7 @@ class CompletouBrasaoPageWidget extends StatefulWidget {
   static String routePath = 'completouBrasaoPage';
 
   @override
-  State<CompletouBrasaoPageWidget> createState() =>
-      _CompletouBrasaoPageWidgetState();
+  State<CompletouBrasaoPageWidget> createState() => _CompletouBrasaoPageWidgetState();
 }
 
 class _CompletouBrasaoPageWidgetState extends State<CompletouBrasaoPageWidget> {
@@ -39,8 +38,7 @@ class _CompletouBrasaoPageWidgetState extends State<CompletouBrasaoPageWidget> {
     super.initState();
     _model = createModel(context, () => CompletouBrasaoPageModel());
 
-    logFirebaseEvent('screen_view',
-        parameters: {'screen_name': 'completouBrasaoPage'});
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'completouBrasaoPage'});
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
@@ -72,10 +70,7 @@ class _CompletouBrasaoPageWidgetState extends State<CompletouBrasaoPageWidget> {
                 child: Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [
-                        FlutterFlowTheme.of(context).d21Top,
-                        FlutterFlowTheme.of(context).d21Botton
-                      ],
+                      colors: [FlutterFlowTheme.of(context).d21Top, FlutterFlowTheme.of(context).d21Botton],
                       stops: const [0.0, 1.0],
                       begin: const AlignmentDirectional(0.0, -1.0),
                       end: const AlignmentDirectional(0, 1.0),
@@ -95,8 +90,7 @@ class _CompletouBrasaoPageWidgetState extends State<CompletouBrasaoPageWidget> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                            0.0, 12.0, 0.0, 12.0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 12.0),
                         child: SingleChildScrollView(
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
@@ -104,34 +98,23 @@ class _CompletouBrasaoPageWidgetState extends State<CompletouBrasaoPageWidget> {
                               Align(
                                 alignment: const AlignmentDirectional(0.0, 1.0),
                                 child: Padding(
-                                  padding: const EdgeInsetsDirectional.fromSTEB(
-                                      16.0, 0.0, 16.0, 0.0),
+                                  padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Icon(
                                         Icons.chevron_left,
-                                        color:
-                                            FlutterFlowTheme.of(context).info,
+                                        color: FlutterFlowTheme.of(context).info,
                                         size: 32.0,
                                       ),
                                       Text(
                                         'Desafio 21 dias',
-                                        style: FlutterFlowTheme.of(context)
-                                            .titleLarge
-                                            .override(
-                                              fontFamily:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleLargeFamily,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .info,
+                                        style: FlutterFlowTheme.of(context).titleLarge.override(
+                                              fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
+                                              color: FlutterFlowTheme.of(context).info,
                                               letterSpacing: 0.0,
-                                              useGoogleFonts:
-                                                  !FlutterFlowTheme.of(context)
-                                                      .titleLargeIsCustom,
+                                              useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
                                             ),
                                       ),
                                       FlutterFlowIconButton(
@@ -153,8 +136,7 @@ class _CompletouBrasaoPageWidgetState extends State<CompletouBrasaoPageWidget> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 32.0, 0.0, 0.0),
+                                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 32.0, 0.0, 0.0),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
@@ -162,104 +144,61 @@ class _CompletouBrasaoPageWidgetState extends State<CompletouBrasaoPageWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  16.0, 0.0, 16.0, 0.0),
+                                          padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
                                           child: Material(
                                             color: Colors.transparent,
                                             elevation: 4.0,
                                             shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
+                                              borderRadius: BorderRadius.circular(8.0),
                                             ),
                                             child: Container(
                                               width: double.infinity,
                                               decoration: BoxDecoration(
                                                 gradient: const LinearGradient(
-                                                  colors: [
-                                                    Color(0xCC83193F),
-                                                    Color(0xCBB0373E)
-                                                  ],
+                                                  colors: [Color(0xCC83193F), Color(0xCBB0373E)],
                                                   stops: [0.0, 1.0],
-                                                  begin: AlignmentDirectional(
-                                                      0.0, -1.0),
-                                                  end: AlignmentDirectional(
-                                                      0, 1.0),
+                                                  begin: AlignmentDirectional(0.0, -1.0),
+                                                  end: AlignmentDirectional(0, 1.0),
                                                 ),
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
+                                                borderRadius: BorderRadius.circular(8.0),
                                               ),
                                               child: Column(
                                                 mainAxisSize: MainAxisSize.min,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
+                                                mainAxisAlignment: MainAxisAlignment.start,
                                                 children: [
                                                   Padding(
-                                                    padding:
-                                                        const EdgeInsetsDirectional
-                                                            .fromSTEB(0.0, 20.0,
-                                                                0.0, 0.0),
+                                                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
                                                     child: Text(
                                                       'Brasão conquistado!',
-                                                      style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .labelLarge
-                                                              .override(
-                                                                fontFamily: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .labelLargeFamily,
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .info,
-                                                                fontSize: 22.0,
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                useGoogleFonts:
-                                                                    !FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .labelLargeIsCustom,
-                                                              ),
+                                                      style: FlutterFlowTheme.of(context).labelLarge.override(
+                                                            fontFamily: FlutterFlowTheme.of(context).labelLargeFamily,
+                                                            color: FlutterFlowTheme.of(context).info,
+                                                            fontSize: 22.0,
+                                                            letterSpacing: 0.0,
+                                                            useGoogleFonts:
+                                                                !FlutterFlowTheme.of(context).labelLargeIsCustom,
+                                                          ),
                                                     ),
                                                   ),
                                                   Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: [
                                                       Padding(
                                                         padding:
-                                                            const EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    0.0,
-                                                                    24.0,
-                                                                    0.0,
-                                                                    16.0),
+                                                            const EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 16.0),
                                                         child: ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      8.0),
+                                                          borderRadius: BorderRadius.circular(8.0),
                                                           child: Image.network(
                                                             FFAppState()
                                                                 .desafio21
                                                                 .listaBrasoes
-                                                                .elementAtOrNull(
-                                                                    widget
-                                                                        .indiceBrasao!)!
+                                                                .elementAtOrNull(widget.indiceBrasao!)!
                                                                 .brasaoUrl,
-                                                            width: MediaQuery.sizeOf(
-                                                                            context)
-                                                                        .height <
-                                                                    800.0
+                                                            width: MediaQuery.sizeOf(context).height < 800.0
                                                                 ? 150.0
                                                                 : 250.0,
-                                                            height: MediaQuery.sizeOf(
-                                                                            context)
-                                                                        .height <
-                                                                    800.0
+                                                            height: MediaQuery.sizeOf(context).height < 800.0
                                                                 ? 150.0
                                                                 : 250.0,
                                                             fit: BoxFit.cover,
@@ -270,102 +209,57 @@ class _CompletouBrasaoPageWidgetState extends State<CompletouBrasaoPageWidget> {
                                                   ),
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsetsDirectional
-                                                            .fromSTEB(16.0, 0.0,
-                                                                16.0, 16.0),
+                                                        const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 16.0),
                                                     child: Text(
                                                       FFAppState()
                                                           .desafio21
                                                           .listaBrasoes
-                                                          .elementAtOrNull(widget
-                                                              .indiceBrasao!)!
+                                                          .elementAtOrNull(widget.indiceBrasao!)!
                                                           .header,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .titleLarge
-                                                              .override(
-                                                                fontFamily: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .titleLargeFamily,
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .info,
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                useGoogleFonts:
-                                                                    !FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .titleLargeIsCustom,
-                                                              ),
+                                                      textAlign: TextAlign.center,
+                                                      style: FlutterFlowTheme.of(context).titleLarge.override(
+                                                            fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
+                                                            color: FlutterFlowTheme.of(context).info,
+                                                            letterSpacing: 0.0,
+                                                            useGoogleFonts:
+                                                                !FlutterFlowTheme.of(context).titleLargeIsCustom,
+                                                          ),
                                                     ),
                                                   ),
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsetsDirectional
-                                                            .fromSTEB(16.0, 0.0,
-                                                                16.0, 16.0),
+                                                        const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 16.0),
                                                     child: Text(
                                                       FFAppState()
                                                           .desafio21
                                                           .listaBrasoes
-                                                          .elementAtOrNull(widget
-                                                              .indiceBrasao!)!
+                                                          .elementAtOrNull(widget.indiceBrasao!)!
                                                           .descricao,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .labelLarge
-                                                              .override(
-                                                                fontFamily: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .labelLargeFamily,
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .info,
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                useGoogleFonts:
-                                                                    !FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .labelLargeIsCustom,
-                                                              ),
+                                                      textAlign: TextAlign.center,
+                                                      style: FlutterFlowTheme.of(context).labelLarge.override(
+                                                            fontFamily: FlutterFlowTheme.of(context).labelLargeFamily,
+                                                            color: FlutterFlowTheme.of(context).info,
+                                                            letterSpacing: 0.0,
+                                                            useGoogleFonts:
+                                                                !FlutterFlowTheme.of(context).labelLargeIsCustom,
+                                                          ),
                                                     ),
                                                   ),
                                                   Padding(
-                                                    padding:
-                                                        const EdgeInsetsDirectional
-                                                            .fromSTEB(0.0, 0.0,
-                                                                0.0, 16.0),
+                                                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
                                                     child: Text(
                                                       FFAppState()
                                                           .desafio21
                                                           .listaBrasoes
-                                                          .elementAtOrNull(widget
-                                                              .indiceBrasao!)!
+                                                          .elementAtOrNull(widget.indiceBrasao!)!
                                                           .premio,
-                                                      style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyLarge
-                                                              .override(
-                                                                fontFamily: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyLargeFamily,
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .info,
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                useGoogleFonts:
-                                                                    !FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyLargeIsCustom,
-                                                              ),
+                                                      style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                                            fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
+                                                            color: FlutterFlowTheme.of(context).info,
+                                                            letterSpacing: 0.0,
+                                                            useGoogleFonts:
+                                                                !FlutterFlowTheme.of(context).bodyLargeIsCustom,
+                                                          ),
                                                     ),
                                                   ),
                                                 ],
@@ -374,44 +268,30 @@ class _CompletouBrasaoPageWidgetState extends State<CompletouBrasaoPageWidget> {
                                           ),
                                         ),
                                         Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  16.0, 0.0, 16.0, 0.0),
+                                          padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                             children: [
                                               Expanded(
                                                 flex: 1,
                                                 child: Padding(
-                                                  padding: const EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          0.0, 20.0, 0.0, 0.0),
+                                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
                                                   child: FFButtonWidget(
                                                     onPressed: () async {
                                                       context.pushNamed(
-                                                        VisualizarPremioPageWidget
-                                                            .routeName,
+                                                        VisualizarPremioPageWidget.routeName,
                                                         queryParameters: {
-                                                          'indiceBrasao':
-                                                              serializeParam(
-                                                            widget
-                                                                .indiceBrasao,
+                                                          'indiceBrasao': serializeParam(
+                                                            widget.indiceBrasao,
                                                             ParamType.int,
                                                           ),
                                                         }.withoutNulls,
-                                                        extra: <String,
-                                                            dynamic>{
-                                                          kTransitionInfoKey:
-                                                              const TransitionInfo(
+                                                        extra: <String, dynamic>{
+                                                          kTransitionInfoKey: const TransitionInfo(
                                                             hasTransition: true,
-                                                            transitionType:
-                                                                PageTransitionType
-                                                                    .fade,
-                                                            duration: Duration(
-                                                                milliseconds:
-                                                                    0),
+                                                            transitionType: PageTransitionType.fade,
+                                                            duration: Duration(milliseconds: 0),
                                                           ),
                                                         },
                                                       );
@@ -420,49 +300,23 @@ class _CompletouBrasaoPageWidgetState extends State<CompletouBrasaoPageWidget> {
                                                     options: FFButtonOptions(
                                                       height: 40.0,
                                                       padding:
-                                                          const EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  24.0,
-                                                                  0.0,
-                                                                  24.0,
-                                                                  0.0),
+                                                          const EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
                                                       iconPadding:
-                                                          const EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0),
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .info,
-                                                      textStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .titleSmall
-                                                              .override(
-                                                                fontFamily: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .titleSmallFamily,
-                                                                color: const Color(
-                                                                    0xFFF9A61A),
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                useGoogleFonts:
-                                                                    !FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .titleSmallIsCustom,
-                                                              ),
+                                                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                                      color: FlutterFlowTheme.of(context).info,
+                                                      textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                                                            fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
+                                                            color: const Color(0xFFF9A61A),
+                                                            letterSpacing: 0.0,
+                                                            useGoogleFonts:
+                                                                !FlutterFlowTheme.of(context).titleSmallIsCustom,
+                                                          ),
                                                       elevation: 3.0,
                                                       borderSide: const BorderSide(
-                                                        color:
-                                                            Colors.transparent,
+                                                        color: Colors.transparent,
                                                         width: 1.0,
                                                       ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.0),
+                                                      borderRadius: BorderRadius.circular(8.0),
                                                     ),
                                                   ),
                                                 ),
@@ -470,21 +324,15 @@ class _CompletouBrasaoPageWidgetState extends State<CompletouBrasaoPageWidget> {
                                               Expanded(
                                                 flex: 1,
                                                 child: Padding(
-                                                  padding: const EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          0.0, 20.0, 0.0, 0.0),
+                                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
                                                   child: FFButtonWidget(
                                                     onPressed: () async {
-                                                      await actions
-                                                          .shareImageAndText(
-                                                        functions.getStringFromImagePath(
-                                                            FFAppState()
-                                                                .desafio21
-                                                                .listaBrasoes
-                                                                .elementAtOrNull(
-                                                                    widget
-                                                                        .indiceBrasao!)!
-                                                                .brasaoUrl)!,
+                                                      await UIUtils.shareImageAndText(
+                                                        functions.getStringFromImagePath(FFAppState()
+                                                            .desafio21
+                                                            .listaBrasoes
+                                                            .elementAtOrNull(widget.indiceBrasao!)!
+                                                            .brasaoUrl)!,
                                                         '${FFAppState().desafio21.listaBrasoes.elementAtOrNull(widget.indiceBrasao!)?.textoConquistaBrasao} Baixe no link a seguir o  App MEDITABK da Brahma Kumaris, é 100% gratuito.${'\n'}https://c5dad.app.link/meditabk',
                                                       );
                                                     },
@@ -492,49 +340,23 @@ class _CompletouBrasaoPageWidgetState extends State<CompletouBrasaoPageWidget> {
                                                     options: FFButtonOptions(
                                                       height: 40.0,
                                                       padding:
-                                                          const EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  24.0,
-                                                                  0.0,
-                                                                  24.0,
-                                                                  0.0),
+                                                          const EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
                                                       iconPadding:
-                                                          const EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0),
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .info,
-                                                      textStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .titleSmall
-                                                              .override(
-                                                                fontFamily: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .titleSmallFamily,
-                                                                color: const Color(
-                                                                    0xFFF9A61A),
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                useGoogleFonts:
-                                                                    !FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .titleSmallIsCustom,
-                                                              ),
+                                                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                                      color: FlutterFlowTheme.of(context).info,
+                                                      textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                                                            fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
+                                                            color: const Color(0xFFF9A61A),
+                                                            letterSpacing: 0.0,
+                                                            useGoogleFonts:
+                                                                !FlutterFlowTheme.of(context).titleSmallIsCustom,
+                                                          ),
                                                       elevation: 3.0,
                                                       borderSide: const BorderSide(
-                                                        color:
-                                                            Colors.transparent,
+                                                        color: Colors.transparent,
                                                         width: 1.0,
                                                       ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.0),
+                                                      borderRadius: BorderRadius.circular(8.0),
                                                     ),
                                                   ),
                                                 ),
@@ -543,32 +365,22 @@ class _CompletouBrasaoPageWidgetState extends State<CompletouBrasaoPageWidget> {
                                           ),
                                         ),
                                         Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  16.0, 0.0, 16.0, 0.0),
+                                          padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                             children: [
                                               Padding(
-                                                padding: const EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        0.0, 20.0, 0.0, 0.0),
+                                                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
                                                 child: FFButtonWidget(
                                                   onPressed: () async {
                                                     context.goNamed(
-                                                      HomeDesafioPageWidget
-                                                          .routeName,
+                                                      HomeDesafioPageWidget.routeName,
                                                       extra: <String, dynamic>{
-                                                        kTransitionInfoKey:
-                                                            const TransitionInfo(
+                                                        kTransitionInfoKey: const TransitionInfo(
                                                           hasTransition: true,
-                                                          transitionType:
-                                                              PageTransitionType
-                                                                  .fade,
-                                                          duration: Duration(
-                                                              milliseconds: 0),
+                                                          transitionType: PageTransitionType.fade,
+                                                          duration: Duration(milliseconds: 0),
                                                         ),
                                                       },
                                                     );
@@ -577,42 +389,23 @@ class _CompletouBrasaoPageWidgetState extends State<CompletouBrasaoPageWidget> {
                                                   options: FFButtonOptions(
                                                     width: 200.0,
                                                     height: 40.0,
-                                                    padding:
-                                                        const EdgeInsetsDirectional
-                                                            .fromSTEB(24.0, 0.0,
-                                                                24.0, 0.0),
+                                                    padding: const EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
                                                     iconPadding:
-                                                        const EdgeInsetsDirectional
-                                                            .fromSTEB(0.0, 0.0,
-                                                                0.0, 0.0),
+                                                        const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                                                     color: const Color(0xFFF9A61A),
-                                                    textStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .titleSmall
-                                                            .override(
-                                                              fontFamily:
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .titleSmallFamily,
-                                                              color: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .info,
-                                                              letterSpacing:
-                                                                  0.0,
-                                                              useGoogleFonts:
-                                                                  !FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .titleSmallIsCustom,
-                                                            ),
+                                                    textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                                                          fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
+                                                          color: FlutterFlowTheme.of(context).info,
+                                                          letterSpacing: 0.0,
+                                                          useGoogleFonts:
+                                                              !FlutterFlowTheme.of(context).titleSmallIsCustom,
+                                                        ),
                                                     elevation: 3.0,
                                                     borderSide: const BorderSide(
                                                       color: Colors.transparent,
                                                       width: 1.0,
                                                     ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.0),
+                                                    borderRadius: BorderRadius.circular(8.0),
                                                   ),
                                                 ),
                                               ),

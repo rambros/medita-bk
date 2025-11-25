@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 
 // Imports other custom widgets
 
-import '/custom_code/actions/init_audio_player_controller.dart';
+import '/core/controllers/index.dart';
+import '../../core/widgets/audio_player_controls.dart';
 import 'package:flutter/services.dart';
 
 class FFDesafioAudioPlayerWidget extends StatefulWidget {
@@ -33,12 +34,10 @@ class FFDesafioAudioPlayerWidget extends StatefulWidget {
   final Future Function() nextActionFunction;
 
   @override
-  FFDesafioAudioPlayerWidgetState createState() =>
-      FFDesafioAudioPlayerWidgetState();
+  FFDesafioAudioPlayerWidgetState createState() => FFDesafioAudioPlayerWidgetState();
 }
 
-class FFDesafioAudioPlayerWidgetState
-    extends State<FFDesafioAudioPlayerWidget> {
+class FFDesafioAudioPlayerWidgetState extends State<FFDesafioAudioPlayerWidget> {
   late final AudioPlayerController audioPlayerController;
   bool _isDownloaded = false;
   bool _isDownloading = false;
@@ -84,14 +83,15 @@ class FFDesafioAudioPlayerWidgetState
     try {
       await audioPlayerController.download(widget.audioUrl);
     } finally {
-      final cached = await audioPlayerController.isCached(widget.audioUrl);
-      if (!mounted) {
-        return;
+      if (mounted) {
+        final cached = await audioPlayerController.isCached(widget.audioUrl);
+        if (mounted) {
+          setState(() {
+            _isDownloaded = cached;
+            _isDownloading = false;
+          });
+        }
       }
-      setState(() {
-        _isDownloaded = cached;
-        _isDownloading = false;
-      });
     }
   }
 

@@ -2,7 +2,7 @@
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 import '/backend/schema/enums/enums.dart';
-import '/actions/actions.dart' as action_blocks;
+import '/ui/core/actions/actions.dart' as action_blocks;
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'index.dart'; // Imports other custom actions
@@ -29,19 +29,14 @@ Future showPickerNumberFormatValue(
   Picker(
       footer: const Text(
         'Minutos      Segundos',
-        style: TextStyle(
-            fontSize: 20, color: Colors.black54, fontWeight: FontWeight.w400),
+        style: TextStyle(fontSize: 20, color: Colors.black54, fontWeight: FontWeight.w400),
       ),
       cancelText: 'Cancelar',
-      cancelTextStyle: TextStyle(
-          fontSize: 18,
-          color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.w700),
+      cancelTextStyle:
+          TextStyle(fontSize: 18, color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.w700),
       confirmText: 'Confirmar',
-      confirmTextStyle: TextStyle(
-          fontSize: 18,
-          color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.w700),
+      confirmTextStyle:
+          TextStyle(fontSize: 18, color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.w700),
       magnification: 1.5,
       itemExtent: 38,
       height: 200,
@@ -65,8 +60,7 @@ Future showPickerNumberFormatValue(
       title: const Center(
         child: Text(
           'Duração do timer',
-          style: TextStyle(
-              fontSize: 24, color: Colors.black54, fontWeight: FontWeight.w700),
+          style: TextStyle(fontSize: 24, color: Colors.black54, fontWeight: FontWeight.w700),
         ),
       ),
       selectedTextStyle: TextStyle(
@@ -84,27 +78,23 @@ Future showPickerNumberFormatValue(
 }
 
 /// Picker selected callback.
-typedef PickerSelectedCallback = void Function(
-    Picker picker, int index, List<int> selected);
+typedef PickerSelectedCallback = void Function(Picker picker, int index, List<int> selected);
 
 /// Picker confirm callback.
-typedef PickerConfirmCallback = void Function(
-    Picker picker, List<int> selected);
+typedef PickerConfirmCallback = void Function(Picker picker, List<int> selected);
 
 /// Picker confirm before callback.
-typedef PickerConfirmBeforeCallback = Future<bool> Function(
-    Picker picker, List<int> selected);
+typedef PickerConfirmBeforeCallback = Future<bool> Function(Picker picker, List<int> selected);
 
 /// Picker value format callback.
 typedef PickerValueFormat<T> = String Function(T value);
 
 /// Picker widget builder
-typedef PickerWidgetBuilder = Widget Function(
-    BuildContext context, Widget pickerWidget);
+typedef PickerWidgetBuilder = Widget Function(BuildContext context, Widget pickerWidget);
 
 /// Picker build item, If 'null' is returned, the default build is used
-typedef PickerItemBuilder = Widget? Function(BuildContext context, String? text,
-    Widget? child, bool selected, int col, int index);
+typedef PickerItemBuilder = Widget? Function(
+    BuildContext context, String? text, Widget? child, bool selected, int col, int index);
 
 /// Picker
 class Picker {
@@ -141,10 +131,7 @@ class Picker {
   /// Height of list item
   final double itemExtent;
 
-  final TextStyle? textStyle,
-      cancelTextStyle,
-      confirmTextStyle,
-      selectedTextStyle;
+  final TextStyle? textStyle, cancelTextStyle, confirmTextStyle, selectedTextStyle;
   final TextAlign textAlign;
   final IconThemeData? selectedIconTheme;
 
@@ -246,8 +233,7 @@ class Picker {
     _widget = PickerWidget(
       key: key ?? ValueKey(this),
       data: this,
-      child:
-          _PickerWidget(picker: this, themeData: themeData, isModal: isModal),
+      child: _PickerWidget(picker: this, themeData: themeData, isModal: isModal),
     );
     return _widget!;
   }
@@ -298,18 +284,15 @@ class Picker {
 
   /// show dialog picker
   Future<List<int>?> showDialog(BuildContext context,
-      {bool barrierDismissible = true,
-      Color? backgroundColor,
-      PickerWidgetBuilder? builder,
-      Key? key}) {
+      {bool barrierDismissible = true, Color? backgroundColor, PickerWidgetBuilder? builder, Key? key}) {
     return Dialog.showDialog<List<int>>(
         context: context,
         barrierDismissible: barrierDismissible,
         builder: (BuildContext context) {
           final actions = <Widget>[];
           final theme = Theme.of(context);
-          final cancelButton = PickerWidgetState._buildButton(
-              context, cancelText, cancel, cancelTextStyle, true, theme, () {
+          final cancelButton =
+              PickerWidgetState._buildButton(context, cancelText, cancel, cancelTextStyle, true, theme, () {
             Navigator.pop<List<int>>(context, null);
             if (onCancel != null) {
               onCancel!();
@@ -318,11 +301,9 @@ class Picker {
           if (cancelButton != null) {
             actions.add(cancelButton);
           }
-          final confirmButton = PickerWidgetState._buildButton(
-              context, confirmText, confirm, confirmTextStyle, false, theme,
-              () async {
-            if (onConfirmBefore != null &&
-                !(await onConfirmBefore!(this, selecteds))) {
+          final confirmButton =
+              PickerWidgetState._buildButton(context, confirmText, confirm, confirmTextStyle, false, theme, () async {
+            if (onConfirmBefore != null && !(await onConfirmBefore!(this, selecteds))) {
               return; // Cancel;
             }
             Navigator.pop<List<int>>(context, selecteds);
@@ -338,9 +319,7 @@ class Picker {
             title: title,
             backgroundColor: backgroundColor,
             actions: actions,
-            content: builder == null
-                ? makePicker(theme)
-                : builder(context, makePicker(theme)),
+            content: builder == null ? makePicker(theme) : builder(context, makePicker(theme)),
           );
         });
   }
@@ -381,15 +360,13 @@ class Picker {
     }
   }
 
-  static ButtonStyle _getButtonStyle(ButtonThemeData? theme,
-          [isCancelButton = false]) =>
-      TextButton.styleFrom(
-          minimumSize: Size(theme?.minWidth ?? 0.0, 42),
-          textStyle: TextStyle(
-            fontSize: Picker.DefaultTextSize,
-            color: isCancelButton ? null : theme?.colorScheme?.secondary,
-          ),
-          padding: theme?.padding);
+  static ButtonStyle _getButtonStyle(ButtonThemeData? theme, [isCancelButton = false]) => TextButton.styleFrom(
+      minimumSize: Size(theme?.minWidth ?? 0.0, 42),
+      textStyle: TextStyle(
+        fontSize: Picker.DefaultTextSize,
+        color: isCancelButton ? null : theme?.colorScheme?.secondary,
+      ),
+      padding: theme?.padding);
 }
 
 /// 分隔符
@@ -417,12 +394,10 @@ class PickerWidget<T> extends InheritedWidget {
   final Picker data;
   const PickerWidget({super.key, required this.data, required super.child});
   @override
-  bool updateShouldNotify(covariant PickerWidget oldWidget) =>
-      oldWidget.data != data;
+  bool updateShouldNotify(covariant PickerWidget oldWidget) => oldWidget.data != data;
 
   static PickerWidget of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<PickerWidget>()
-        as PickerWidget;
+    return context.dependOnInheritedWidgetOfExactType<PickerWidget>() as PickerWidget;
   }
 }
 
@@ -430,12 +405,10 @@ class _PickerWidget<T> extends StatefulWidget {
   final Picker picker;
   final ThemeData? themeData;
   final bool isModal;
-  const _PickerWidget(
-      {super.key, required this.picker, this.themeData, required this.isModal});
+  const _PickerWidget({super.key, required this.picker, this.themeData, required this.isModal});
 
   @override
-  PickerWidgetState createState() =>
-      PickerWidgetState<T>(picker: this.picker, themeData: this.themeData);
+  PickerWidgetState createState() => PickerWidgetState<T>(picker: this.picker, themeData: this.themeData);
 }
 
 class PickerWidgetState<T> extends State<_PickerWidget> {
@@ -455,8 +428,7 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
 
     if (scrollController.isEmpty) {
       for (int i = 0; i < picker._maxLevel; i++) {
-        scrollController
-            .add(FixedExtentScrollController(initialItem: picker.selecteds[i]));
+        scrollController.add(FixedExtentScrollController(initialItem: picker.selecteds[i]));
         _keys.add(null);
       }
     }
@@ -488,9 +460,7 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
       if (picker.builderHeader != null) {
         body.add(picker.headerDecoration == null
             ? picker.builderHeader!(context)
-            : DecoratedBox(
-                decoration: picker.headerDecoration!,
-                child: picker.builderHeader!(context)));
+            : DecoratedBox(decoration: picker.headerDecoration!, child: picker.builderHeader!(context)));
       } else {
         body.add(DecoratedBox(
           decoration: picker.headerDecoration ??
@@ -544,8 +514,8 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
     theme ??= Theme.of(context);
     List<Widget> items = [];
 
-    final cancel = _buildButton(context, picker.cancelText, picker.cancel,
-        picker.cancelTextStyle, true, theme, () => picker.doCancel(context));
+    final cancel = _buildButton(
+        context, picker.cancelText, picker.cancel, picker.cancelTextStyle, true, theme, () => picker.doCancel(context));
     if (cancel != null) {
       items.add(cancel);
     }
@@ -563,8 +533,8 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
               child: picker.title!),
     ));
 
-    final confirm = _buildButton(context, picker.confirmText, picker.confirm,
-        picker.confirmTextStyle, false, theme, () => picker.doConfirm(context));
+    final confirm = _buildButton(context, picker.confirmText, picker.confirm, picker.confirmTextStyle, false, theme,
+        () => picker.doConfirm(context));
     if (confirm != null) {
       items.add(confirm);
     }
@@ -573,14 +543,8 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
     return items;
   }
 
-  static Widget? _buildButton(
-      BuildContext context,
-      String? text,
-      Widget? widget,
-      TextStyle? textStyle,
-      bool isCancel,
-      ThemeData? theme,
-      VoidCallback? onPressed) {
+  static Widget? _buildButton(BuildContext context, String? text, Widget? widget, TextStyle? textStyle, bool isCancel,
+      ThemeData? theme, VoidCallback? onPressed) {
     if (widget == null) {
       String? txt = text ?? (isCancel ? "Cancelar" : "Confirmar");
       if (txt == null || txt.isEmpty) {
@@ -594,9 +558,7 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
               textScaleFactor: MediaQuery.of(context).textScaleFactor,
               style: textStyle));
     } else {
-      return textStyle == null
-          ? widget
-          : DefaultTextStyle(style: textStyle, child: widget);
+      return textStyle == null ? widget : DefaultTextStyle(style: textStyle, child: widget);
     }
   }
 
@@ -636,28 +598,23 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
                       if (picker.printDebug) print("builder. col: $i");
 
                       // 上一次是空列表
-                      final lastIsEmpty = scrollController[i].hasClients &&
-                          !scrollController[i].position.hasContentDimensions;
+                      final lastIsEmpty =
+                          scrollController[i].hasClients && !scrollController[i].position.hasContentDimensions;
 
                       final length = adapter.length;
-                      final view0 = _buildCupertinoPicker(context, i, length,
-                          adapter, lastIsEmpty ? ValueKey(length) : null);
+                      final view0 =
+                          _buildCupertinoPicker(context, i, length, adapter, lastIsEmpty ? ValueKey(length) : null);
 
-                      if (lastIsEmpty ||
-                          (!picker.changeToFirst &&
-                              picker.selecteds[i] >= length)) {
+                      if (lastIsEmpty || (!picker.changeToFirst && picker.selecteds[i] >= length)) {
                         Timer(const Duration(milliseconds: 100), () {
                           if (!mounted) return;
                           if (picker.printDebug) print("timer last");
                           var len = adapter.length;
                           var index = (len < length ? len : length) - 1;
-                          if (scrollController[i]
-                              .position
-                              .hasContentDimensions) {
+                          if (scrollController[i].position.hasContentDimensions) {
                             scrollController[i].jumpToItem(index);
                           } else {
-                            scrollController[i] = FixedExtentScrollController(
-                                initialItem: index);
+                            scrollController[i] = FixedExtentScrollController(initialItem: index);
                             if (_keys[i] != null) {
                               _keys[i]!(() {});
                             }
@@ -693,8 +650,7 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
     return items;
   }
 
-  Widget _buildCupertinoPicker(BuildContext context, int i, int length,
-      PickerAdapter adapter, Key? key) {
+  Widget _buildCupertinoPicker(BuildContext context, int i, int length, PickerAdapter adapter, Key? key) {
     return CupertinoPicker.builder(
       key: key,
       backgroundColor: picker.backgroundColor,
@@ -756,8 +712,7 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
     _changing = true;
     for (int j = 0; j < picker.selecteds.length; j++) {
       if (j != col) {
-        if (scrollController[j].hasClients &&
-            scrollController[j].position.hasContentDimensions) {
+        if (scrollController[j].hasClients && scrollController[j].position.hasContentDimensions) {
           scrollController[j].position.notifyListeners();
         }
       }
@@ -798,10 +753,7 @@ abstract class PickerAdapter<T> {
                 TextStyle(
                     color: Colors.black87,
                     fontFamily: picker?.state?.context != null
-                        ? Theme.of(picker!.state!.context)
-                            .textTheme
-                            .headlineSmall!
-                            .fontFamily
+                        ? Theme.of(picker!.state!.context).textTheme.headlineSmall!.fontFamily
                         : "",
                     fontSize: Picker.DefaultTextSize),
             child: child != null
@@ -812,16 +764,13 @@ abstract class PickerAdapter<T> {
                       )
                     : child)
                 : Text(text ?? "",
-                    textScaleFactor: picker!.textScaleFactor,
-                    style: (isSel ? picker!.selectedTextStyle : null))));
+                    textScaleFactor: picker!.textScaleFactor, style: (isSel ? picker!.selectedTextStyle : null))));
   }
 
-  Widget makeTextEx(
-      Widget? child, String text, Widget? postfix, Widget? suffix, bool isSel) {
+  Widget makeTextEx(Widget? child, String text, Widget? postfix, Widget? suffix, bool isSel) {
     List<Widget> items = [];
     if (postfix != null) items.add(postfix);
-    items.add(
-        child ?? Text(text, style: (isSel ? picker!.selectedTextStyle : null)));
+    items.add(child ?? Text(text, style: (isSel ? picker!.selectedTextStyle : null)));
     if (suffix != null) items.add(suffix);
 
     Color? txtColor = Colors.black87;
@@ -841,8 +790,7 @@ abstract class PickerAdapter<T> {
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
             textAlign: picker!.textAlign,
-            style: picker!.textStyle ??
-                TextStyle(color: txtColor, fontSize: txtSize),
+            style: picker!.textStyle ?? TextStyle(color: txtColor, fontSize: txtSize),
             child: Wrap(
               children: items,
             )));
@@ -905,8 +853,7 @@ class PickerDataAdapter<T> extends PickerAdapter<T> {
   int _col = 0;
   final bool isArray;
 
-  PickerDataAdapter(
-      {List? pickerData, List<PickerItem<T>>? data, this.isArray = false}) {
+  PickerDataAdapter({List? pickerData, List<PickerItem<T>>? data, this.isArray = false}) {
     this.data = data ?? <PickerItem<T>>[];
     _parseData(pickerData);
   }
@@ -1024,8 +971,7 @@ class PickerDataAdapter<T> extends PickerAdapter<T> {
     final PickerItem item = _datas![index];
     final isSel = index == picker!.selecteds[_col];
     if (picker!.onBuilderItem != null) {
-      final v = picker!.onBuilderItem!(
-          context, item.value.toString(), item.text, isSel, _col, index);
+      final v = picker!.onBuilderItem!(context, item.value.toString(), item.text, isSel, _col, index);
       if (v != null) return makeText(v, null, isSel);
     }
     if (item.text != null) {
@@ -1041,8 +987,7 @@ class PickerDataAdapter<T> extends PickerAdapter<T> {
                   : item.text!)
           : item.text!;
     }
-    return makeText(
-        item.text, item.text != null ? null : item.value.toString(), isSel);
+    return makeText(item.text, item.text != null ? null : item.value.toString(), isSel);
   }
 
   @override
@@ -1063,9 +1008,7 @@ class PickerDataAdapter<T> extends PickerAdapter<T> {
     if (isArray) {
       for (int i = 0; i < sLen; i++) {
         int j = picker!.selecteds[i];
-        if (j < 0 ||
-            data[i].children == null ||
-            j >= data[i].children!.length) {
+        if (j < 0 || data[i].children == null || j >= data[i].children!.length) {
           break;
         }
         items.add(data[i].children![j].value as T);
@@ -1135,9 +1078,7 @@ class NumberPickerColumn {
   }
 
   String getValueText(int index) {
-    return onFormatValue == null
-        ? "${valueOf(index)}"
-        : onFormatValue!(valueOf(index));
+    return onFormatValue == null ? "${valueOf(index)}" : onFormatValue!(valueOf(index));
   }
 
   int count() {

@@ -2,10 +2,9 @@
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 import '/backend/schema/enums/enums.dart';
-import '/actions/actions.dart' as action_blocks;
+import '/ui/core/actions/actions.dart' as action_blocks;
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/custom_code/actions/index.dart'; // Imports custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
 import 'package:flutter/material.dart';
 // Begin custom widget code
@@ -33,16 +32,9 @@ class ClockFace extends StatelessWidget {
           aspectRatio: 0.75,
           child: Container(
             width: double.infinity,
-            decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Color(0xfff4f9fd),
-                boxShadow: [
-                  BoxShadow(
-                      offset: Offset(8.0, 0),
-                      blurRadius: 13,
-                      spreadRadius: 1,
-                      color: Color(0xffd3e0f0))
-                ]),
+            decoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0xfff4f9fd), boxShadow: [
+              BoxShadow(offset: Offset(8.0, 0), blurRadius: 13, spreadRadius: 1, color: Color(0xffd3e0f0))
+            ]),
           ),
         ),
       ),
@@ -65,12 +57,10 @@ class ClockHands extends StatelessWidget {
             padding: const EdgeInsets.all(20.0),
             child: Stack(fit: StackFit.expand, children: <Widget>[
               CustomPaint(
-                painter: HourHandPainter(
-                    hours: dateTime!.hour, minutes: dateTime!.minute),
+                painter: HourHandPainter(hours: dateTime!.hour, minutes: dateTime!.minute),
               ),
               CustomPaint(
-                painter: MinuteHandPainter(
-                    minutes: dateTime!.minute, seconds: dateTime!.second),
+                painter: MinuteHandPainter(minutes: dateTime!.minute, seconds: dateTime!.second),
               ),
               CustomPaint(
                 painter: SecondHandPainter(seconds: dateTime!.second),
@@ -95,20 +85,7 @@ class ClockDialPainter extends CustomPainter {
   final double tickLength = 8.0;
   final double tickWidth = 3.0;
 
-  final romanNumeralList = [
-    'XII',
-    'I',
-    'II',
-    'III',
-    'IV',
-    'V',
-    'VI',
-    'VII',
-    'VIII',
-    'IX',
-    'X',
-    'XI'
-  ];
+  final romanNumeralList = ['XII', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI'];
 
   ClockDialPainter({this.clockText = ClockText.roman})
       : tickPaint = Paint(),
@@ -137,8 +114,7 @@ class ClockDialPainter extends CustomPainter {
       //make the length and stroke of the tick marker longer and thicker depending
       tickMarkLength = tickLength;
       tickPaint.strokeWidth = tickWidth;
-      canvas.drawLine(Offset(0.0, -radius),
-          Offset(0.0, -radius + tickMarkLength), tickPaint);
+      canvas.drawLine(Offset(0.0, -radius), Offset(0.0, -radius + tickMarkLength), tickPaint);
 
       canvas.rotate(angle);
     }
@@ -173,9 +149,8 @@ class HourHandPainter extends CustomPainter {
     canvas.translate(radius, radius);
 
     //checks if hour is greater than 12 before calculating rotation
-    canvas.rotate(hours! >= 12
-        ? 2 * pi * ((hours! - 12) / 12 + (minutes! / 720))
-        : 2 * pi * ((hours! / 12) + (minutes! / 720)));
+    canvas.rotate(
+        hours! >= 12 ? 2 * pi * ((hours! - 12) / 12 + (minutes! / 720)) : 2 * pi * ((hours! / 12) + (minutes! / 720)));
 
     Path path = Path();
     //hour hand stem
@@ -349,11 +324,7 @@ class _ClockWidgetState extends State<ClockWidget> {
             blurRadius: 0.0,
             color: widget.shadowColor,
           ),
-          BoxShadow(
-              offset: const Offset(0.0, 5.0),
-              color: widget.circleColor,
-              blurRadius: 10,
-              spreadRadius: -8)
+          BoxShadow(offset: const Offset(0.0, 5.0), color: widget.circleColor, blurRadius: 10, spreadRadius: -8)
         ],
       ),
       child: Stack(

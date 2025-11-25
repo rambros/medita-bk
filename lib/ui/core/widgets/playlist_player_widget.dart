@@ -2,17 +2,12 @@
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 import '/backend/schema/enums/enums.dart';
-import '/actions/actions.dart' as action_blocks;
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/custom_code/actions/index.dart'; // Imports custom actions
-import '/flutter_flow/custom_functions.dart'; // Imports custom functions
 import 'package:flutter/material.dart';
+import 'seek_bar.dart';
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
-
-
-
 
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
@@ -23,174 +18,7 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:path/path.dart' as path;
 
-Stopwatch globalWatch = Stopwatch();
-
-class SeekBar extends StatefulWidget {
-  final Duration duration;
-  final Duration position;
-  final Duration bufferedPosition;
-  final ValueChanged<Duration>? onChanged;
-  final ValueChanged<Duration>? onChangeEnd;
-  final Color? color;
-
-  const SeekBar({
-    super.key,
-    required this.duration,
-    required this.position,
-    required this.bufferedPosition,
-    this.onChanged,
-    this.onChangeEnd,
-    this.color,
-  });
-
-  @override
-  SeekBarState createState() => SeekBarState();
-}
-
-class SeekBarState extends State<SeekBar> {
-  double? _dragValue;
-  late SliderThemeData _sliderThemeData;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    _sliderThemeData = SliderTheme.of(context).copyWith(
-      trackHeight: 2.0,
-      activeTrackColor: widget.color ?? Colors.blue.shade100,
-      thumbColor: widget.color ?? Colors.blue.shade100,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        SliderTheme(
-          data: _sliderThemeData.copyWith(
-            thumbShape: const RoundSliderThumbShape(
-              enabledThumbRadius: 0.0,
-            ),
-            activeTrackColor: widget.color ?? Colors.blue.shade100,
-            inactiveTrackColor: Colors.grey.shade300,
-          ),
-          child: ExcludeSemantics(
-            child: Slider(
-              min: 0.0,
-              max: widget.duration.inMilliseconds.toDouble(),
-              value: min(widget.bufferedPosition.inMilliseconds.toDouble(),
-                  widget.duration.inMilliseconds.toDouble()),
-              onChanged: (value) {
-                setState(() {
-                  _dragValue = value;
-                });
-                if (widget.onChanged != null) {
-                  widget.onChanged!(Duration(milliseconds: value.round()));
-                }
-              },
-              onChangeEnd: (value) {
-                if (widget.onChangeEnd != null) {
-                  widget.onChangeEnd!(Duration(milliseconds: value.round()));
-                }
-                _dragValue = null;
-              },
-            ),
-          ),
-        ),
-        SliderTheme(
-          data: _sliderThemeData.copyWith(
-            inactiveTrackColor: Colors.transparent,
-          ),
-          child: Slider(
-            min: 0.0,
-            max: widget.duration.inMilliseconds.toDouble(),
-            value: min(_dragValue ?? widget.position.inMilliseconds.toDouble(),
-                widget.duration.inMilliseconds.toDouble()),
-            onChanged: (value) {
-              setState(() {
-                _dragValue = value;
-              });
-              if (widget.onChanged != null) {
-                widget.onChanged!(Duration(milliseconds: value.round()));
-              }
-            },
-            onChangeEnd: (value) {
-              if (widget.onChangeEnd != null) {
-                widget.onChangeEnd!(Duration(milliseconds: value.round()));
-              }
-              _dragValue = null;
-            },
-          ),
-        ),
-        Positioned(
-          right: 16.0,
-          bottom: -5.0,
-          child: Text(
-            RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
-                    .firstMatch("$_remaining")
-                    ?.group(1) ??
-                '$_remaining',
-            style: Theme.of(context).textTheme.bodyLarge!.override(
-                  fontFamily: 'Poppins',
-                  fontSize: 16.0,
-                  color: widget.color ?? Colors.blue.shade100,
-                ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Duration get _remaining => widget.duration - widget.position;
-}
-
-class PositionData {
-  final Duration position;
-  final Duration bufferedPosition;
-  final Duration duration;
-
-  PositionData(this.position, this.bufferedPosition, this.duration);
-}
-
-void showSliderDialog({
-  required BuildContext context,
-  required String title,
-  required int divisions,
-  required double min,
-  required double max,
-  String valueSuffix = '',
-  required Stream<double> stream,
-  required ValueChanged<double> onChanged,
-}) {
-  showDialog<void>(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: Text(title, textAlign: TextAlign.center),
-      content: StreamBuilder<double>(
-        stream: stream,
-        builder: (context, snapshot) => SizedBox(
-          height: 100.0,
-          child: Column(
-            children: [
-              Text('${snapshot.data?.toStringAsFixed(1)}$valueSuffix',
-                  style: const TextStyle(
-                      fontFamily: 'Fixed',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24.0)),
-              Slider(
-                divisions: divisions,
-                min: min,
-                max: max,
-                value: snapshot.data ?? 1.0,
-                onChanged: onChanged,
-              ),
-            ],
-          ),
-        ),
-      ),
-    ),
-  );
-}
+Stopwatch _watch = Stopwatch();
 
 class PlaylistPlayerWidget extends StatefulWidget {
   const PlaylistPlayerWidget({
@@ -211,7 +39,7 @@ class PlaylistPlayerWidget extends StatefulWidget {
   final List<AudioModelStruct> listAudios;
 
   @override
-  _PlaylistPlayerWidgetState createState() => _PlaylistPlayerWidgetState();
+  State<PlaylistPlayerWidget> createState() => _PlaylistPlayerWidgetState();
 }
 
 class _PlaylistPlayerWidgetState extends State<PlaylistPlayerWidget> {
@@ -226,13 +54,11 @@ class _PlaylistPlayerWidgetState extends State<PlaylistPlayerWidget> {
   // final currentIndexTitleNotifier = ValueNotifier<int>(0);
   // final playlistNotifier = ValueNotifier<List<String>>([]);
 
-  Stream<PositionData> get _positionDataStream =>
-      Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
-          _player.positionStream,
-          _player.bufferedPositionStream,
-          _player.durationStream,
-          (position, bufferedPosition, duration) => PositionData(
-              position, bufferedPosition, duration ?? Duration.zero));
+  Stream<PositionData> get _positionDataStream => Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
+      _player.positionStream,
+      _player.bufferedPositionStream,
+      _player.durationStream,
+      (position, bufferedPosition, duration) => PositionData(position, bufferedPosition, duration ?? Duration.zero));
 
   @override
   void initState() {
@@ -248,12 +74,10 @@ class _PlaylistPlayerWidgetState extends State<PlaylistPlayerWidget> {
   @override
   void dispose() {
     _player.dispose();
-    globalWatch.stop();
-    FFAppState().addToMeditationLogList(MeditationLogStruct(
-        duration: globalWatch.elapsed.inSeconds,
-        date: DateTime.now(),
-        type: 'guided'));
-    globalWatch.reset();
+    _watch.stop();
+    FFAppState().addToMeditationLogList(
+        MeditationLogStruct(duration: _watch.elapsed.inSeconds, date: DateTime.now(), type: 'guided'));
+    _watch.reset();
     super.dispose();
   }
 
@@ -264,8 +88,7 @@ class _PlaylistPlayerWidgetState extends State<PlaylistPlayerWidget> {
     //currentSongTitleNotifier.value = widget.listAudios[0].title;
 
     // Listen to errors during playback.
-    _player.playbackEventStream.listen((event) {},
-        onError: (Object e, StackTrace stackTrace) {
+    _player.playbackEventStream.listen((event) {}, onError: (Object e, StackTrace stackTrace) {
       print('A stream error occurred: $e');
     });
     try {
@@ -367,15 +190,14 @@ class _PlaylistPlayerWidgetState extends State<PlaylistPlayerWidget> {
                 color: widget.colorButton,
                 duration: positionData?.duration ?? Duration.zero,
                 position: positionData?.position ?? Duration.zero,
-                bufferedPosition:
-                    positionData?.bufferedPosition ?? Duration.zero,
+                bufferedPosition: positionData?.bufferedPosition ?? Duration.zero,
                 onChangeEnd: (newPosition) {
                   _player.seek(newPosition);
                 },
               );
             },
           ),
-          ControlButtons(_player, colorButton: widget.colorButton),
+          PlaylistControlButtons(_player, colorButton: widget.colorButton),
           const SizedBox(height: 8.0),
         ],
       ),
@@ -383,20 +205,20 @@ class _PlaylistPlayerWidgetState extends State<PlaylistPlayerWidget> {
   }
 }
 
-class ControlButtons extends StatelessWidget {
+class PlaylistControlButtons extends StatelessWidget {
   final AudioPlayer player;
   final Color? colorButton;
 
-  const ControlButtons(this.player, {super.key, this.colorButton});
+  const PlaylistControlButtons(this.player, {super.key, this.colorButton});
 
   void _play() {
     player.play();
-    globalWatch.start();
+    _watch.start();
   }
 
   void _pause() {
     player.pause();
-    globalWatch.stop();
+    _watch.stop();
   }
 
   void _skipToNext() async {
@@ -437,19 +259,16 @@ class ControlButtons extends StatelessWidget {
             final playerState = snapshot.data;
             final processingState = playerState?.processingState;
             final playing = playerState?.playing;
-            if (processingState == ProcessingState.loading ||
-                processingState == ProcessingState.buffering) {
+            if (processingState == ProcessingState.loading || processingState == ProcessingState.buffering) {
               return Container(
                 margin: const EdgeInsets.all(8.0),
                 width: 64.0,
                 height: 64.0,
-                child: CircularProgressIndicator(
-                    color: colorButton ?? Colors.black38),
+                child: CircularProgressIndicator(color: colorButton ?? Colors.black38),
               );
             } else if (playing != true) {
               return IconButton(
-                icon: Icon(Icons.play_arrow,
-                    color: colorButton ?? Colors.black38),
+                icon: Icon(Icons.play_arrow, color: colorButton ?? Colors.black38),
                 iconSize: 64.0,
                 onPressed: () => _play(),
               );
@@ -463,8 +282,7 @@ class ControlButtons extends StatelessWidget {
               return IconButton(
                 icon: Icon(Icons.replay, color: colorButton ?? Colors.black38),
                 iconSize: 64.0,
-                onPressed: () => player.seek(Duration.zero,
-                    index: player.effectiveIndices!.first),
+                onPressed: () => player.seek(Duration.zero, index: player.effectiveIndices!.first),
               );
             }
           },

@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-import 'package:medita_b_k/custom_code/actions/init_audio_player_controller.dart';
+import '/core/controllers/index.dart';
+import 'audio_player_controls.dart';
 import 'package:flutter/services.dart';
 
 class FFPlaylistPlayerWidget extends StatefulWidget {
