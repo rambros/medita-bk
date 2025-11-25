@@ -1,5 +1,4 @@
 import '/backend/backend.dart';
-import '/backend/schema/structs/index.dart';
 
 /// Service for meditation-specific business logic
 class MeditationService {

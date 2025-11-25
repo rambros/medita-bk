@@ -1,8 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:from_css_color/from_css_color.dart';
 
-import '/backend/schema/enums/enums.dart';
 import '/backend/schema/util/schema_util.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 

@@ -100,10 +100,6 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget> wit
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {

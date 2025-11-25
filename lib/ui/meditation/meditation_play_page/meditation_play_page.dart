@@ -53,10 +53,6 @@ class _MeditationPlayPageWidgetState extends State<MeditationPlayPageWidget> wit
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {

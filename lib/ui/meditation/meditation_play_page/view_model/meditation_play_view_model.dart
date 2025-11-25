@@ -7,8 +7,4 @@ class MeditationPlayViewModel extends ChangeNotifier {
 
   // No additional state management needed for this simple page.
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 }

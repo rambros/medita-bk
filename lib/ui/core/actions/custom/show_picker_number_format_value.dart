@@ -546,7 +546,7 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
       ThemeData? theme, VoidCallback? onPressed) {
     if (widget == null) {
       String? txt = text ?? (isCancel ? "Cancelar" : "Confirmar");
-      if (txt == null || txt.isEmpty) {
+      if (txt.isEmpty) {
         return null;
       }
       return TextButton(

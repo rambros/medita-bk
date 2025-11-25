@@ -1,6 +1,5 @@
 import '/data/services/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
-import '/backend/schema/structs/index.dart';
 
 class DesafioRepository {
   /// Updates the user's Desafio 21 progress.

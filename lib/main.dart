@@ -49,6 +49,7 @@ import '/ui/video/youtube_player_page/view_model/youtube_player_view_model.dart'
 import '/backend/repositories/meditation/meditation_repository.dart';
 import '/ui/meditation/meditation_home_page/view_model/meditation_home_view_model.dart';
 import '/ui/meditation/meditation_list_page/view_model/meditation_list_view_model.dart';
+import '/data/repositories/playlist_repository.dart';
 
 import 'data/repositories/user_repository.dart';
 import 'data/repositories/auth_repository.dart';
@@ -92,6 +93,9 @@ void main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => appState),
+
+      // Playlist Module
+      Provider(create: (_) => PlaylistRepository()),
 
       // Home Module
       Provider(create: (_) => HomeRepository()),
@@ -229,7 +233,7 @@ void main() async {
         update: (context, repo, viewModel) => viewModel ?? SocialLoginViewModel(repo),
       ),
     ],
-    child: MyApp(),
+    child: const MyApp(),
   ));
 }
 

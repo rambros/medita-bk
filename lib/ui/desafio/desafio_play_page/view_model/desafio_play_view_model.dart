@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '/backend/backend.dart';
-import '/backend/schema/structs/index.dart';
 import '/app_state.dart';
 import '/data/services/auth/firebase_auth/auth_util.dart';
 

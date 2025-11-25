@@ -32,7 +32,7 @@ Future initFirebase() async {
         defaultValue: _defaultMeasurementId);
 
     await Firebase.initializeApp(
-        options: FirebaseOptions(
+        options: const FirebaseOptions(
             apiKey: firebaseApiKey,
             authDomain: authDomain,
             projectId: projectId,

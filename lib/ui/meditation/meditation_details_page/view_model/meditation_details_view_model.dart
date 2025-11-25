@@ -153,8 +153,4 @@ class MeditationDetailsViewModel extends ChangeNotifier {
     _errorMessage = null;
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 }

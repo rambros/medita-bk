@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '/data/repositories/desafio_repository.dart';
 import '/backend/schema/structs/index.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart'; // For valueOrDefault
-import '/app_state.dart';
 import '/data/services/auth/firebase_auth/auth_util.dart';
 import '/backend/schema/enums/enums.dart';
 

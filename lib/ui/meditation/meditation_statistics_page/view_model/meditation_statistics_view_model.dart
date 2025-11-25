@@ -5,8 +5,4 @@ class MeditationStatisticsViewModel extends ChangeNotifier {
   // This ViewModel can be extended in the future if we need to add
   // business logic for statistics data.
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 }

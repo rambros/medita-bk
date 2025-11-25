@@ -6,8 +6,6 @@ import '/ui/core/flutter_flow/flutter_flow_widgets.dart';
 import '/ui/core/flutter_flow/form_field_controller.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'filter_meditations_dialog_model.dart';
 export 'filter_meditations_dialog_model.dart';
 

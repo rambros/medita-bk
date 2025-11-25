@@ -34,20 +34,17 @@ export '/ui/mensagens/mensagem_details_page/mensagem_details_page.dart' show Men
 export '/ui/mensagens/mensagem_show_page/mensagem_show_page.dart' show MensagemShowPage;
 export '/ui/meditation/meditation_video_list_page/meditation_video_list_page.dart' show MeditationVideoListPage;
 export '/ui/meditation/meditation_statistics_page/meditation_statistics_page.dart' show MeditationStatisticsPageWidget;
-export '/modules/playlist/playlist_list_page/playlist_list_page_widget.dart' show PlaylistListPageWidget;
-export '/modules/playlist/playlist_details_page/playlist_details_page_widget.dart' show PlaylistDetailsPageWidget;
-export '/modules/playlist/playlist_add_audios_page/playlist_add_audios_page_widget.dart'
-    show PlaylistAddAudiosPageWidget;
-export '/modules/playlist/selectinstrument_page/selectinstrument_page_widget.dart' show SelectinstrumentPageWidget;
-export '/modules/playlist/select_music_page/select_music_page_widget.dart' show SelectMusicPageWidget;
-export '/modules/playlist/select_meditations_page/select_meditations_page_widget.dart' show SelectMeditationsPageWidget;
-export '/modules/playlist/select_device_music_page/select_device_music_page_widget.dart'
-    show SelectDeviceMusicPageWidget;
-export '/modules/playlist/playlist_save_page/playlist_save_page_widget.dart' show PlaylistSavePageWidget;
-export '/modules/playlist/playlist_edit_page/playlist_edit_page_widget.dart' show PlaylistEditPageWidget;
-export '/modules/playlist/playlist_edit_audios_page/playlist_edit_audios_page_widget.dart'
-    show PlaylistEditAudiosPageWidget;
-export '/modules/playlist/playlist_play_page_old/playlist_play_page_old_widget.dart' show PlaylistPlayPageOldWidget;
+export '/ui/playlist/playlist_list_page/playlist_list_page.dart' show PlaylistListPageWidget;
+export '/ui/playlist/playlist_details_page/playlist_details_page.dart' show PlaylistDetailsPageWidget;
+export '/ui/playlist/playlist_add_audios_page/playlist_add_audios_page.dart' show PlaylistAddAudiosPageWidget;
+export '/ui/playlist/selectinstrument_page/selectinstrument_page.dart' show SelectinstrumentPageWidget;
+export '/ui/playlist/select_music_page/select_music_page.dart' show SelectMusicPageWidget;
+export '/ui/playlist/select_meditations_page/select_meditations_page.dart' show SelectMeditationsPageWidget;
+export '/ui/playlist/select_device_music_page/select_device_music_page.dart' show SelectDeviceMusicPageWidget;
+export '/ui/playlist/playlist_save_page/playlist_save_page.dart' show PlaylistSavePageWidget;
+export '/ui/playlist/playlist_edit_page/playlist_edit_page.dart' show PlaylistEditPageWidget;
+export '/ui/playlist/playlist_edit_audios_page/playlist_edit_audios_page.dart' show PlaylistEditAudiosPageWidget;
+export '/ui/playlist/playlist_play_page_old/playlist_play_page_old.dart' show PlaylistPlayPageOldWidget;
 export '/ui/mensagens/mensagens_semantic_search_page/mensagens_semantic_search_page.dart'
     show MensagensSemanticSearchPage;
 export '/ui/video/canal_viver_list_page/canal_viver_list_page.dart' show CanalViverListPageWidget;
@@ -56,9 +53,9 @@ export '/ui/config/support_page/support_page.dart' show SupportPageWidget;
 export '/ui/config/feedback_page/feedback_page.dart' show FeedbackPageWidget;
 export '/ui/config/feature_page/feature_page.dart' show FeaturePageWidget;
 export '/ui/config/donation_page/donation_page.dart' show DonationPageWidget;
-export '/modules/playlist/playlist_play_page/playlist_play_page_widget.dart' show PlaylistPlayPageWidget;
+export '/ui/playlist/playlist_play_page/playlist_play_page.dart' show PlaylistPlayPageWidget;
 
-export '/modules/playlist/playlist_audio_play_page/playlist_audio_play_page_widget.dart'
+export '/ui/playlist/playlist_audio_play_page/playlist_audio_play_page.dart'
     show PlaylistAudioPlayPageWidget;
 export '/ui/desafio/home_desafio_page/home_desafio_page.dart' show HomeDesafioPage;
 export '/ui/desafio/lista_etapas_page/lista_etapas_page.dart' show ListaEtapasPage;
