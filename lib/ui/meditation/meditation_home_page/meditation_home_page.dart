@@ -1,14 +1,10 @@
-import '/flutter_flow/flutter_flow_animations.dart';
-import '/flutter_flow/flutter_flow_icon_button.dart';
-import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_util.dart';
+import '/ui/core/flutter_flow/flutter_flow_animations.dart';
+import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
+import '/ui/core/flutter_flow/flutter_flow_theme.dart';
+import '/ui/core/flutter_flow/flutter_flow_util.dart';
 
-import 'dart:ui';
 import '/ui/core/actions/actions.dart' as action_blocks;
 import '/index.dart';
-import '/ui/meditation/meditation_video_list_page/meditation_video_list_page.dart';
-import '/ui/meditation/meditation_statistics_page/meditation_statistics_page.dart';
-import '/modules/playlist/playlist_list_page/playlist_list_page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';

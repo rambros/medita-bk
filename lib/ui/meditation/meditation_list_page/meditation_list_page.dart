@@ -1,11 +1,11 @@
 import '/backend/backend.dart';
 import '/ui/meditation/widgets/filter_meditations_dialog.dart';
-import '/componentes/meditation_card/meditation_card_widget.dart';
+import '/ui/meditation/widgets/meditation_card_widget.dart';
 import '/ui/meditation/widgets/sort_meditations_dialog.dart';
-import '/flutter_flow/flutter_flow_icon_button.dart';
-import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
+import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
+import '/ui/core/flutter_flow/flutter_flow_theme.dart';
+import '/ui/core/flutter_flow/flutter_flow_util.dart';
+import '/ui/core/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';

@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '/backend/schema/structs/index.dart';
 import '/backend/schema/enums/enums.dart';
-import '/flutter_flow/flutter_flow_util.dart';
+import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/core/controllers/index.dart';
 
 /// Audio file management and playback utilities

@@ -347,8 +347,8 @@ class <Feature>ViewModel extends ChangeNotifier {
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/ui/core/flutter_flow/flutter_flow_theme.dart';
+import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import 'view_model/<feature>_view_model.dart';
 import 'widgets/<component>_widget.dart';
 
@@ -465,7 +465,7 @@ class _<Feature>PageState extends State<<Feature>Page> {
 // lib/ui/<feature_area>/<feature>/widgets/<component>_widget.dart
 
 import 'package:flutter/material.dart';
-import '/flutter_flow/flutter_flow_theme.dart';
+import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/backend/supabase/supabase.dart';
 
 class <Component>Widget extends StatelessWidget {

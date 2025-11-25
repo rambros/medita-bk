@@ -3,8 +3,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'dart:ui';
 import '/backend/backend.dart';
-import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_util.dart';
+import '/ui/core/flutter_flow/flutter_flow_theme.dart';
+import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import 'view_model/notification_view_view_model.dart';
 
 /// Notification view page (dialog/modal)

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '/backend/backend.dart';
 import '/data/repositories/mensagem_repository.dart';
 import '/app_state.dart';
-import '/flutter_flow/custom_functions.dart' as functions;
+import '/ui/core/flutter_flow/custom_functions.dart' as functions;
 import 'package:share_plus/share_plus.dart';
 
 class MensagemDetailsViewModel extends ChangeNotifier {

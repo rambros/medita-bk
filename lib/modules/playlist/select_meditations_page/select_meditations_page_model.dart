@@ -1,6 +1,6 @@
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
-import '/flutter_flow/flutter_flow_util.dart';
+import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import 'select_meditations_page_widget.dart' show SelectMeditationsPageWidget;
 import 'package:flutter/material.dart';

@@ -1,11 +1,8 @@
 // Automatic FlutterFlow imports
-import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
-import '/backend/schema/enums/enums.dart';
-import '/ui/core/actions/actions.dart' as action_blocks;
-import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/custom_functions.dart'; // Imports custom functions
+import '/ui/core/flutter_flow/flutter_flow_theme.dart';
+import '/ui/core/flutter_flow/flutter_flow_util.dart';
+import '/ui/core/flutter_flow/custom_functions.dart';
 import 'package:flutter/material.dart';
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!

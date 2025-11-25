@@ -1,4 +1,4 @@
-import '/flutter_flow/flutter_flow_util.dart';
+import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import 'playlist_list_page_widget.dart' show PlaylistListPageWidget;
 import 'package:flutter/material.dart';

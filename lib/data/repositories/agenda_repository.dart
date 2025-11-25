@@ -1,7 +1,7 @@
 import '/backend/api_requests/api_manager.dart';
 import '/backend/schema/structs/index.dart';
 import '/domain/agenda/services/agenda_service.dart';
-import '/flutter_flow/flutter_flow_util.dart';
+import '/ui/core/flutter_flow/flutter_flow_util.dart';
 
 class AgendaRepository {
   Future<List<EventModelStruct>> getEvents() async {

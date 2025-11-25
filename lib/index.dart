@@ -60,15 +60,14 @@ export '/modules/playlist/playlist_play_page/playlist_play_page_widget.dart' sho
 
 export '/modules/playlist/playlist_audio_play_page/playlist_audio_play_page_widget.dart'
     show PlaylistAudioPlayPageWidget;
-export '/modules/desafio/home_desafio_page/home_desafio_page_widget.dart' show HomeDesafioPageWidget;
-export '/modules/desafio/lista_etapas_page/lista_etapas_page_widget.dart' show ListaEtapasPageWidget;
-export '/modules/desafio/desafio_play_page/desafio_play_page_widget.dart' show DesafioPlayPageWidget;
-export '/modules/desafio/completou_meditacao_page/completou_meditacao_page_widget.dart'
-    show CompletouMeditacaoPageWidget;
-export '/modules/desafio/completou_mandala_page/completou_mandala_page_widget.dart' show CompletouMandalaPageWidget;
-export '/modules/desafio/completou_brasao_page/completou_brasao_page_widget.dart' show CompletouBrasaoPageWidget;
-export '/modules/desafio/visualizar_premio_page/visualizar_premio_page_widget.dart' show VisualizarPremioPageWidget;
-export '/modules/desafio/desafio_onboarding_page/desafio_onboarding_page_widget.dart' show DesafioOnboardingPageWidget;
-export '/modules/desafio/diario_meditacao_page/diario_meditacao_page_widget.dart' show DiarioMeditacaoPageWidget;
-export '/modules/desafio/diario_detalhes_page/diario_detalhes_page_widget.dart' show DiarioDetalhesPageWidget;
-export '/modules/desafio/conquistas_page/conquistas_page_widget.dart' show ConquistasPageWidget;
+export '/ui/desafio/home_desafio_page/home_desafio_page.dart' show HomeDesafioPage;
+export '/ui/desafio/lista_etapas_page/lista_etapas_page.dart' show ListaEtapasPage;
+export '/ui/desafio/desafio_play_page/desafio_play_page.dart' show DesafioPlayPage;
+export '/ui/desafio/completou_meditacao_page/completou_meditacao_page.dart' show CompletouMeditacaoPage;
+export '/ui/desafio/completou_mandala_page/completou_mandala_page.dart' show CompletouMandalaPage;
+export '/ui/desafio/completou_brasao_page/completou_brasao_page.dart' show CompletouBrasaoPage;
+export '/ui/desafio/visualizar_premio_page/visualizar_premio_page.dart' show VisualizarPremioPage;
+export '/ui/desafio/desafio_onboarding_page/desafio_onboarding_page.dart' show DesafioOnboardingPage;
+export '/ui/desafio/diario_meditacao_page/diario_meditacao_page.dart' show DiarioMeditacaoPage;
+export '/ui/desafio/diario_detalhes_page/diario_detalhes_page.dart' show DiarioDetalhesPage;
+export '/ui/desafio/conquistas_page/conquistas_page.dart' show ConquistasPage;

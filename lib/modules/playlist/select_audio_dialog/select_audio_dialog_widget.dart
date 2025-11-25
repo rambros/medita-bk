@@ -1,6 +1,6 @@
-import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
+import '/ui/core/flutter_flow/flutter_flow_theme.dart';
+import '/ui/core/flutter_flow/flutter_flow_util.dart';
+import '/ui/core/flutter_flow/flutter_flow_widgets.dart';
 import '/modules/playlist/select_silence_time_dialog/select_silence_time_dialog_widget.dart';
 import 'dart:ui';
 import '/index.dart';

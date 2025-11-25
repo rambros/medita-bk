@@ -6,14 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 
-import 'auth/firebase_auth/firebase_user_provider.dart';
-import 'auth/firebase_auth/auth_util.dart';
+import 'data/services/auth/firebase_auth/firebase_user_provider.dart';
+import 'data/services/auth/firebase_auth/auth_util.dart';
 
 import 'backend/push_notifications/push_notifications_util.dart';
 import 'backend/firebase/firebase_config.dart';
-import '/flutter_flow/flutter_flow_theme.dart';
-import 'flutter_flow/flutter_flow_util.dart';
-import 'flutter_flow/internationalization.dart';
+import '/ui/core/flutter_flow/flutter_flow_theme.dart';
+import '/ui/core/flutter_flow/flutter_flow_util.dart';
+import '/ui/core/flutter_flow/internationalization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'index.dart';
@@ -63,6 +63,10 @@ import '/ui/authentication/forgot_password/view_model/forgot_password_view_model
 import '/ui/authentication/change_email_page/view_model/change_email_view_model.dart';
 import '/ui/authentication/social_login/view_model/social_login_view_model.dart';
 
+import '/data/repositories/desafio_repository.dart';
+import '/ui/desafio/home_desafio_page/view_model/home_desafio_view_model.dart';
+import '/ui/desafio/lista_etapas_page/view_model/lista_etapas_view_model.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoRouter.optionURLReflectsImperativeAPIs = true;
@@ -95,6 +99,14 @@ void main() async {
         create: (context) => HomeViewModel(context.read<HomeRepository>()),
         update: (context, repo, viewModel) => viewModel ?? HomeViewModel(repo),
       ),
+
+      // Desafio Module
+      Provider(create: (_) => DesafioRepository()),
+      ChangeNotifierProxyProvider<DesafioRepository, HomeDesafioViewModel>(
+        create: (context) => HomeDesafioViewModel(repository: context.read<DesafioRepository>()),
+        update: (context, repo, viewModel) => viewModel ?? HomeDesafioViewModel(repository: repo),
+      ),
+      ChangeNotifierProvider(create: (_) => ListaEtapasViewModel()),
 
       // Notification Module
       Provider(create: (_) => NotificationRepository()),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '/backend/api_requests/api_calls.dart';
-import '/flutter_flow/flutter_flow_util.dart';
+import '/ui/core/flutter_flow/flutter_flow_util.dart';
 
 class MeditationVideoListViewModel extends ChangeNotifier {
   // ========== STATE ==========

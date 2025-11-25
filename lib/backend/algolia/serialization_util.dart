@@ -2,7 +2,7 @@
 import '/backend/backend.dart';
 import '/backend/schema/enums/enums.dart';
 
-import '../../flutter_flow/nav/serialization_util.dart';
+import '../../routing/serialization_util.dart';
 
 dynamic convertAlgoliaParam<T>(
   dynamic data,

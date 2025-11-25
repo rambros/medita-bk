@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import '/auth/firebase_auth/auth_util.dart';
+import '/data/services/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/backend/firebase_storage/storage.dart';
 import '/data/repositories/user_repository.dart';
-import '/flutter_flow/upload_data.dart';
+import '/ui/core/flutter_flow/upload_data.dart';
 
-import '/flutter_flow/flutter_flow_util.dart';
+import '/ui/core/flutter_flow/flutter_flow_util.dart';
 
 class EditProfileViewModel extends ChangeNotifier {
   final UserRepository _userRepository;

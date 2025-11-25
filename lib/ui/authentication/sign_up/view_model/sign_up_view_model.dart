@@ -3,7 +3,7 @@ import '/data/repositories/auth_repository.dart';
 import '/data/repositories/user_repository.dart';
 import '/ui/home/home_page/home_page.dart';
 import '/backend/backend.dart';
-import '/flutter_flow/flutter_flow_util.dart';
+import '/ui/core/flutter_flow/flutter_flow_util.dart';
 
 class SignUpViewModel extends ChangeNotifier {
   final AuthRepository _authRepository;

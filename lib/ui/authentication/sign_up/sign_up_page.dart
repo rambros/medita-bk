@@ -1,9 +1,9 @@
-import '/flutter_flow/flutter_flow_checkbox_group.dart';
-import '/flutter_flow/flutter_flow_icon_button.dart';
-import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
-import '/flutter_flow/form_field_controller.dart';
+import '/ui/core/flutter_flow/flutter_flow_checkbox_group.dart';
+import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
+import '/ui/core/flutter_flow/flutter_flow_theme.dart';
+import '/ui/core/flutter_flow/flutter_flow_util.dart';
+import '/ui/core/flutter_flow/flutter_flow_widgets.dart';
+import '/ui/core/flutter_flow/form_field_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'view_model/sign_up_view_model.dart';

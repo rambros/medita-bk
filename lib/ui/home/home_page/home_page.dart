@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
-import '/auth/firebase_auth/auth_util.dart';
-import '/componentes/select_brasao_or_mandala_test/select_brasao_or_mandala_test_widget.dart';
-import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_animations.dart';
+import '/data/services/auth/firebase_auth/auth_util.dart';
+import '/ui/core/flutter_flow/flutter_flow_theme.dart';
+import '/ui/core/flutter_flow/flutter_flow_util.dart';
+import '/ui/core/flutter_flow/flutter_flow_animations.dart';
 import '/index.dart';
 import '/ui/core/actions/actions.dart' as action_blocks;
+import '/ui/desafio/widgets/select_brasao_or_mandala_test_widget.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
 import 'view_model/home_view_model.dart';
@@ -218,7 +218,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                     await action_blocks.checkInternetAccess(context);
                                     if (context.mounted) {
                                       context.pushNamed(
-                                        HomeDesafioPageWidget.routeName,
+                                        HomeDesafioPage.routeName,
                                         extra: <String, dynamic>{
                                           kTransitionInfoKey: const TransitionInfo(
                                             hasTransition: true,

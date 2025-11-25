@@ -1,6 +1,6 @@
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
-import '/flutter_flow/flutter_flow_util.dart';
+import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import 'playlist_edit_page_widget.dart' show PlaylistEditPageWidget;
 import 'package:flutter/material.dart';

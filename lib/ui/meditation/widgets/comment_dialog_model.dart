@@ -1,4 +1,4 @@
-import '/flutter_flow/flutter_flow_util.dart';
+import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import 'comment_dialog.dart' show CommentDialogWidget;
 import 'package:flutter/material.dart';
 

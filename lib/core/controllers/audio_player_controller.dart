@@ -3,8 +3,8 @@ import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import '/backend/schema/structs/index.dart';
 import '/core/services/index.dart';
-import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/custom_functions.dart';
+import '/ui/core/flutter_flow/flutter_flow_util.dart';
+import '/ui/core/flutter_flow/custom_functions.dart';
 
 // Global instance
 late AudioPlayerController globalAudioPlayerController;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '/backend/backend.dart';
 import '/backend/repositories/meditation/meditation_repository.dart';
-import '/auth/firebase_auth/auth_util.dart';
+import '/data/services/auth/firebase_auth/auth_util.dart';
 
 class MeditationListViewModel extends ChangeNotifier {
   final MeditationRepository _meditationRepository;

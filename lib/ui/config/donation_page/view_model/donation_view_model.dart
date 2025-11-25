@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '/backend/backend.dart';
-import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/custom_functions.dart' as functions;
+import '/ui/core/flutter_flow/flutter_flow_util.dart';
+import '/ui/core/flutter_flow/custom_functions.dart' as functions;
 
 class DonationViewModel extends ChangeNotifier {
   MessagesRecord? messageDoc;

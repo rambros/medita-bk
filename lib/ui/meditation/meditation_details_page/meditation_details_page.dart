@@ -1,19 +1,15 @@
-import '/auth/firebase_auth/auth_util.dart';
+import '/data/services/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
-import '/backend/schema/structs/index.dart';
-import '/flutter_flow/flutter_flow_icon_button.dart';
-import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_toggle_icon.dart';
-import '/flutter_flow/flutter_flow_util.dart';
+import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
+import '/ui/core/flutter_flow/flutter_flow_theme.dart';
+import '/ui/core/flutter_flow/flutter_flow_toggle_icon.dart';
+import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/ui/meditation/widgets/comment_dialog.dart';
-import 'dart:ui';
 import '/core/utils/network_utils.dart';
-import '/flutter_flow/custom_functions.dart' as functions;
+import '/ui/core/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:webviewx_plus/webviewx_plus.dart';
 
 class MeditationDetailsPageWidget extends StatefulWidget {
   const MeditationDetailsPageWidget({
@@ -269,18 +265,16 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                                     await showDialog(
                                       context: context,
                                       builder: (alertDialogContext) {
-                                        return WebViewAware(
-                                          child: AlertDialog(
-                                            title: const Text('Sem acesso à internet'),
-                                            content: const Text(
-                                                'Parece que você está offline. Conecte-se à internet para continuar sua jornada com o MeditaBK.'),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () => Navigator.pop(alertDialogContext),
-                                                child: const Text('Ok'),
-                                              ),
-                                            ],
-                                          ),
+                                        return AlertDialog(
+                                          title: const Text('Sem acesso à internet'),
+                                          content: const Text(
+                                              'Parece que você está offline. Conecte-se à internet para continuar sua jornada com o MeditaBK.'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () => Navigator.pop(alertDialogContext),
+                                              child: const Text('Ok'),
+                                            ),
+                                          ],
                                         );
                                       },
                                     );
@@ -377,17 +371,15 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                                 backgroundColor: const Color(0x91000000),
                                 context: context,
                                 builder: (context) {
-                                  return WebViewAware(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        FocusScope.of(context).unfocus();
-                                        FocusManager.instance.primaryFocus?.unfocus();
-                                      },
-                                      child: Padding(
-                                        padding: MediaQuery.viewInsetsOf(context),
-                                        child: CommentDialogWidget(
-                                          meditationRef: widget.meditationDocRef!,
-                                        ),
+                                  return GestureDetector(
+                                    onTap: () {
+                                      FocusScope.of(context).unfocus();
+                                      FocusManager.instance.primaryFocus?.unfocus();
+                                    },
+                                    child: Padding(
+                                      padding: MediaQuery.viewInsetsOf(context),
+                                      child: CommentDialogWidget(
+                                        meditationRef: widget.meditationDocRef!,
                                       ),
                                     ),
                                   );
@@ -595,24 +587,22 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                                                   var confirmDialogResponse = await showDialog<bool>(
                                                         context: context,
                                                         builder: (alertDialogContext) {
-                                                          return WebViewAware(
-                                                            child: AlertDialog(
-                                                              title: const Text('Confirmação'),
-                                                              content: const Text(
-                                                                  'Tem certeza que quer deletar seu comentário?'),
-                                                              actions: [
-                                                                TextButton(
-                                                                  onPressed: () =>
-                                                                      Navigator.pop(alertDialogContext, false),
-                                                                  child: const Text('Cancelar'),
-                                                                ),
-                                                                TextButton(
-                                                                  onPressed: () =>
-                                                                      Navigator.pop(alertDialogContext, true),
-                                                                  child: const Text('Confirmar'),
-                                                                ),
-                                                              ],
-                                                            ),
+                                                          return AlertDialog(
+                                                            title: const Text('Confirmação'),
+                                                            content: const Text(
+                                                                'Tem certeza que quer deletar seu comentário?'),
+                                                            actions: [
+                                                              TextButton(
+                                                                onPressed: () =>
+                                                                    Navigator.pop(alertDialogContext, false),
+                                                                child: const Text('Cancelar'),
+                                                              ),
+                                                              TextButton(
+                                                                onPressed: () =>
+                                                                    Navigator.pop(alertDialogContext, true),
+                                                                child: const Text('Confirmar'),
+                                                              ),
+                                                            ],
                                                           );
                                                         },
                                                       ) ??

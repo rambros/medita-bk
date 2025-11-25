@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/auth/firebase_auth/auth_util.dart';
+import '/data/services/auth/firebase_auth/auth_util.dart';
 
 class AuthRepository {
   Future<BaseAuthUser?> signInWithEmail(

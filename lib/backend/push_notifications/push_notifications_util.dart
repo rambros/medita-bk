@@ -1,7 +1,7 @@
 import 'dart:io' show Platform;
 
 
-import '../../auth/firebase_auth/auth_util.dart';
+import '../../data/services/auth/firebase_auth/auth_util.dart';
 import '../cloud_functions/cloud_functions.dart';
 
 import 'package:flutter/foundation.dart';

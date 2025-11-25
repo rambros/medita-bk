@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/flutter_flow/nav/nav.dart';
+import '../../../../routing/nav.dart';
 import '/data/repositories/auth_repository.dart';
 import '/ui/authentication/social_login/social_login_page.dart';
 

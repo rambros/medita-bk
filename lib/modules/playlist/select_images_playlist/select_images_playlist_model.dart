@@ -1,4 +1,4 @@
-import '/flutter_flow/flutter_flow_util.dart';
+import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import 'select_images_playlist_widget.dart' show SelectImagesPlaylistWidget;
 import 'package:flutter/material.dart';
 

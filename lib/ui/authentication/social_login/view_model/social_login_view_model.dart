@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '/data/repositories/auth_repository.dart';
-import '/flutter_flow/nav/nav.dart';
+import '../../../../routing/nav.dart';
 import '/ui/home/home_page/home_page.dart';
 
 class SocialLoginViewModel extends ChangeNotifier {

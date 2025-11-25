@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '/flutter_flow/flutter_flow_animations.dart';
-import '/flutter_flow/flutter_flow_util.dart';
+import '/ui/core/flutter_flow/flutter_flow_animations.dart';
+import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import 'navigation_card.dart';
 
