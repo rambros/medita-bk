@@ -1,7 +1,8 @@
-import '/data/services/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/backend/schema/enums/enums.dart';
+import '/data/repositories/auth_repository.dart';
 import '/data/repositories/playlist_repository.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
@@ -39,15 +40,18 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
   @override
   void initState() {
     super.initState();
+    final authRepo = context.read<AuthRepository>();
+    final userRef = authRepo.currentUserRef;
     _model = PlaylistDetailsPageViewModel(
       repository: context.read<PlaylistRepository>(),
-      userRef: currentUserReference!,
+      userRef: userRef ?? FirebaseFirestore.instance.collection('users').doc('_invalid'),
     )..init(context);
 
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'playlistDetailsPage'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.playlist = (currentUserDocument?.playlists.toList() ?? []).elementAtOrNull(widget.playlistIndex);
+      final user = context.read<AuthRepository>().currentUser;
+      _model.playlist = (user?.playlists.toList() ?? []).elementAtOrNull(widget.playlistIndex);
       _model.newListAudios = await AudioUtils.checkDeviceAudios(
         _model.playlist!.audios.toList(),
       );

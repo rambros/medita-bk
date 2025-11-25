@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import '/backend/backend.dart';
+
 import '/app_state.dart';
-import '/data/services/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/data/repositories/auth_repository.dart';
 
 class DesafioPlayViewModel extends ChangeNotifier {
   final int meditationIndex;
+  final AuthRepository _authRepository;
 
   DesafioPlayViewModel({
     required this.meditationIndex,
-  });
+    required AuthRepository authRepository,
+  }) : _authRepository = authRepository;
 
   bool _isLoading = true;
   bool get isLoading => _isLoading;
@@ -50,13 +53,14 @@ class DesafioPlayViewModel extends ChangeNotifier {
       FFAppState().listaEtapasMandalas = _desafio21Record!.listaEtapasMandalas.toList().cast<D21EtapaModelStruct>();
 
       // Check if user has started the challenge
-      if (currentUserDocument?.desafio21 == null) {
+      final userDesafio = _authRepository.currentUser?.desafio21;
+      if (userDesafio == null) {
         // Not started - use template data
         FFAppState().desafio21 = _desafio21Record!.desafio21Data;
         _iniciadoDesafio = false;
       } else {
         // Started - use user data
-        FFAppState().desafio21 = currentUserDocument!.desafio21;
+        FFAppState().desafio21 = userDesafio;
         _iniciadoDesafio = true;
       }
 

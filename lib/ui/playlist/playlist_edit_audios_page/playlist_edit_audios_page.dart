@@ -1,6 +1,6 @@
-import '/data/services/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
+import '/data/repositories/auth_repository.dart';
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
@@ -9,6 +9,7 @@ import '/ui/playlist/select_audio_dialog/select_audio_dialog.dart';
 import '/core/utils/media/audio_utils.dart';
 import '/ui/core/utils/ui_utils.dart';
 import '/ui/core/flutter_flow/custom_functions.dart' as functions;
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
@@ -32,18 +33,33 @@ class PlaylistEditAudiosPageWidget extends StatefulWidget {
 
 class _PlaylistEditAudiosPageWidgetState extends State<PlaylistEditAudiosPageWidget> {
   late PlaylistEditAudiosPageViewModel _model;
+  bool _unauthorized = false;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
+    final userRef = context.read<AuthRepository>().currentUserRef;
+    if (userRef == null) {
+      _model = PlaylistEditAudiosPageViewModel()..init(context);
+      _unauthorized = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('É necessário estar autenticado para editar playlists.')),
+        );
+        context.goNamed(SocialLoginPage.routeName);
+      });
+      return;
+    }
     _model = PlaylistEditAudiosPageViewModel()..init(context);
 
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'playlistEditAudiosPage'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.playlist = (currentUserDocument?.playlists.toList() ?? []).elementAtOrNull(widget.playlistIndex!);
+      final user = context.read<AuthRepository>().currentUser;
+      _model.playlist = (user?.playlists.toList() ?? []).elementAtOrNull(widget.playlistIndex!);
       safeSetState(() {});
       // joga os audios para a varaiavel de app listSelectedAudios para ser editado no edit audios se o usuário selecionar.
       //
@@ -70,6 +86,18 @@ class _PlaylistEditAudiosPageWidgetState extends State<PlaylistEditAudiosPageWid
 
   @override
   Widget build(BuildContext context) {
+    if (_unauthorized) {
+      return Scaffold(
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        body: Center(
+          child: Text(
+            'Faça login para editar playlists.',
+            style: FlutterFlowTheme.of(context).bodyMedium,
+          ),
+        ),
+      );
+    }
+
     context.watch<FFAppState>();
 
     return GestureDetector(

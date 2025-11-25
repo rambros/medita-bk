@@ -8,7 +8,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mime_type/mime_type.dart';
 import 'package:video_player/video_player.dart';
 
-import '/data/services/auth/firebase_auth/auth_util.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow_util.dart';
 
@@ -49,6 +48,7 @@ enum MediaSource {
 Future<List<SelectedFile>?> selectMediaWithSourceBottomSheet({
   required BuildContext context,
   String? storageFolderPath,
+  String? userId,
   double? maxWidth,
   double? maxHeight,
   int? imageQuality,
@@ -139,6 +139,7 @@ Future<List<SelectedFile>?> selectMediaWithSourceBottomSheet({
   }
   return selectMedia(
     storageFolderPath: storageFolderPath,
+    userId: userId,
     maxWidth: maxWidth,
     maxHeight: maxHeight,
     imageQuality: imageQuality,
@@ -152,6 +153,7 @@ Future<List<SelectedFile>?> selectMediaWithSourceBottomSheet({
 
 Future<List<SelectedFile>?> selectMedia({
   String? storageFolderPath,
+  String? userId,
   double? maxWidth,
   double? maxHeight,
   int? imageQuality,
@@ -177,7 +179,13 @@ Future<List<SelectedFile>?> selectMedia({
       final index = e.key;
       final media = e.value;
       final mediaBytes = await media.readAsBytes();
-      final path = _getStoragePath(storageFolderPath, media.name, false, index);
+      final path = _getStoragePath(
+        storageFolderPath,
+        media.name,
+        false,
+        index: index,
+        userId: userId,
+      );
       final dimensions = includeDimensions
           ? isVideo
               ? _getVideoDimensions(media.path)
@@ -210,7 +218,12 @@ Future<List<SelectedFile>?> selectMedia({
   if (mediaBytes == null) {
     return null;
   }
-  final path = _getStoragePath(storageFolderPath, pickedMedia!.name, isVideo);
+  final path = _getStoragePath(
+    storageFolderPath,
+    pickedMedia!.name,
+    isVideo,
+    userId: userId,
+  );
   final dimensions = includeDimensions
       ? isVideo
           ? _getVideoDimensions(pickedMedia.path)
@@ -268,8 +281,12 @@ Future<List<SelectedFile>?> selectFiles({
     return Future.wait(pickedFiles.files.asMap().entries.map((e) async {
       final index = e.key;
       final file = e.value;
-      final storagePath =
-          _getStoragePath(storageFolderPath, file.name, false, index);
+      final storagePath = _getStoragePath(
+        storageFolderPath,
+        file.name,
+        false,
+        index: index,
+      );
       return SelectedFile(
         storagePath: storagePath,
         filePath: isWeb ? null : file.path,
@@ -296,6 +313,7 @@ Future<List<SelectedFile>?> selectFiles({
 List<SelectedFile> selectedFilesFromUploadedFiles(
   List<FFUploadedFile> uploadedFiles, {
   String? storageFolderPath,
+  String? userId,
   bool isMultiData = false,
 }) =>
     uploadedFiles.asMap().entries.map(
@@ -307,7 +325,8 @@ List<SelectedFile> selectedFilesFromUploadedFiles(
               storageFolderPath,
               file.name!,
               false,
-              isMultiData ? index : null,
+              index: isMultiData ? index : null,
+              userId: userId,
             ),
             bytes: file.bytes!,
             originalFilename: file.originalFilename);
@@ -333,10 +352,11 @@ Future<MediaDimensions> _getVideoDimensions(String path) async {
 String _getStoragePath(
   String? pathPrefix,
   String filePath,
-  bool isVideo, [
+  bool isVideo, {
   int? index,
-]) {
-  pathPrefix ??= _firebasePathPrefix();
+  String? userId,
+}) {
+  pathPrefix ??= _firebasePathPrefix(userId: userId);
   pathPrefix = _removeTrailingSlash(pathPrefix);
   final timestamp = DateTime.now().microsecondsSinceEpoch;
   // Workaround fixed by https://github.com/flutter/plugins/pull/3685
@@ -346,8 +366,8 @@ String _getStoragePath(
   return '$pathPrefix/$timestamp$indexStr.$ext';
 }
 
-String getSignatureStoragePath([String? pathPrefix]) {
-  pathPrefix ??= _firebasePathPrefix();
+String getSignatureStoragePath({String? pathPrefix, String? userId}) {
+  pathPrefix ??= _firebasePathPrefix(userId: userId);
   pathPrefix = _removeTrailingSlash(pathPrefix);
   final timestamp = DateTime.now().microsecondsSinceEpoch;
   return '$pathPrefix/signature_$timestamp.png';
@@ -386,7 +406,9 @@ String? _removeTrailingSlash(String? path) => path != null && path.endsWith('/')
     ? path.substring(0, path.length - 1)
     : path;
 
-String _firebasePathPrefix() => 'users/$currentUserUid/uploads';
+/// Default storage path prefix when none is provided.
+String _firebasePathPrefix({String? userId}) =>
+    userId != null && userId.isNotEmpty ? 'users/$userId/uploads' : 'uploads';
 
 /// MVVM-friendly aliases for upload helper types.
 typedef AppSelectedFile = SelectedFile;

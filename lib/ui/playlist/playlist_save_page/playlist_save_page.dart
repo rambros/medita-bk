@@ -1,6 +1,7 @@
-import '/data/services/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/data/repositories/auth_repository.dart';
 import '/data/repositories/playlist_repository.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
@@ -32,9 +33,11 @@ class _PlaylistSavePageWidgetState extends State<PlaylistSavePageWidget> {
   @override
   void initState() {
     super.initState();
+    final authRepo = context.read<AuthRepository>();
+    final userRef = authRepo.currentUserRef;
     _model = PlaylistSavePageViewModel(
       repository: context.read<PlaylistRepository>(),
-      userRef: currentUserReference!,
+      userRef: userRef ?? FirebaseFirestore.instance.collection('users').doc('_invalid'),
     )..init(context);
 
     logFirebaseEvent('screen_view',
@@ -57,7 +60,20 @@ class _PlaylistSavePageWidgetState extends State<PlaylistSavePageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final isInvalidUser = _model.userRef.path.contains('_invalid');
     context.watch<FFAppState>();
+
+    if (isInvalidUser) {
+      return Scaffold(
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        body: Center(
+          child: Text(
+            'Faça login para salvar playlists.',
+            style: FlutterFlowTheme.of(context).bodyMedium,
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       key: scaffoldKey,
@@ -397,18 +413,27 @@ class _PlaylistSavePageWidgetState extends State<PlaylistSavePageWidget> {
                                             child: ClipRRect(
                                               borderRadius:
                                                   BorderRadius.circular(8.0),
-                                              child: CachedNetworkImage(
-                                                fadeInDuration:
-                                                    const Duration(milliseconds: 500),
-                                                fadeOutDuration:
-                                                    const Duration(milliseconds: 500),
-                                                imageUrl: _model.imageUrl!,
-                                                width: 330.0,
-                                                height: 330.0,
-                                                fit: BoxFit.cover,
+                                            child: CachedNetworkImage(
+                                              fadeInDuration:
+                                                  const Duration(milliseconds: 500),
+                                              fadeOutDuration:
+                                                  const Duration(milliseconds: 500),
+                                              imageUrl: _model.imageUrl!,
+                                              width: 330.0,
+                                              height: 330.0,
+                                              fit: BoxFit.cover,
+                                              errorWidget: (_, __, ___) => Container(
+                                                color: FlutterFlowTheme.of(context).accent4,
+                                                alignment: Alignment.center,
+                                                child: Icon(
+                                                  Icons.broken_image_outlined,
+                                                  color: FlutterFlowTheme.of(context).primary,
+                                                  size: 48.0,
+                                                ),
                                               ),
                                             ),
-                                          );
+                                          ),
+                                        );
                                         }
                                       },
                                     ),

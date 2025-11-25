@@ -1,4 +1,3 @@
-import '/data/services/auth/firebase_auth/auth_util.dart';
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
@@ -25,13 +24,18 @@ class _EditProfilePageWidgetState extends State<EditProfilePageWidget> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<EditProfileViewModel>().init();
+      }
+    });
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'editProfilePage'});
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = Provider.of<EditProfileViewModel>(context);
+    final viewModel = context.watch<EditProfileViewModel>();
 
     return GestureDetector(
       onTap: () {
@@ -122,8 +126,15 @@ class _EditProfilePageWidgetState extends State<EditProfilePageWidget> {
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.all(2.0),
-                                        child: AuthUserStreamWidget(
-                                          builder: (context) => Container(
+                                        child: Builder(builder: (context) {
+                                          final photoUrl = viewModel.photoToDisplay;
+                                          final parsed = Uri.tryParse(photoUrl);
+                                          final hasImage =
+                                              parsed != null && parsed.hasScheme && parsed.host.isNotEmpty;
+                                          if (!hasImage) {
+                                            return const _EditAvatarPlaceholder(size: 150.0);
+                                          }
+                                          return Container(
                                             width: 150.0,
                                             height: 150.0,
                                             clipBehavior: Clip.antiAlias,
@@ -133,15 +144,13 @@ class _EditProfilePageWidgetState extends State<EditProfilePageWidget> {
                                             child: CachedNetworkImage(
                                               fadeInDuration: const Duration(milliseconds: 500),
                                               fadeOutDuration: const Duration(milliseconds: 500),
-                                              imageUrl: viewModel.uploadedFileUrl.isNotEmpty
-                                                  ? viewModel.uploadedFileUrl
-                                                  : (valueOrDefault(currentUserDocument?.userImageUrl, '') == ''
-                                                      ? 'https://firebasestorage.googleapis.com/v0/b/meditabk2020.appspot.com/o/app_images%2Fstar_small.png?alt=media&token=e2375a94-b069-4c88-979f-7a3d82f14a68'
-                                                      : valueOrDefault(currentUserDocument?.userImageUrl, '')),
+                                              imageUrl: photoUrl,
                                               fit: BoxFit.cover,
+                                              errorWidget: (_, __, ___) =>
+                                                  const _EditAvatarPlaceholder(size: 150.0),
                                             ),
-                                          ),
-                                        ),
+                                          );
+                                        }),
                                       ),
                                     ),
                                     Padding(
@@ -184,24 +193,22 @@ class _EditProfilePageWidgetState extends State<EditProfilePageWidget> {
                               ),
                               Padding(
                                 padding: const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 8.0),
-                                child: AuthUserStreamWidget(
-                                  builder: (context) => Text(
-                                    valueOrDefault(currentUserDocument?.fullName, ''),
-                                    style: FlutterFlowTheme.of(context).titleLarge.override(
-                                          fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
-                                          color: FlutterFlowTheme.of(context).primaryText,
-                                          letterSpacing: 0.0,
-                                          useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
-                                        ),
-                                  ),
+                                child: Text(
+                                  viewModel.displayName,
+                                  style: FlutterFlowTheme.of(context).titleLarge.override(
+                                        fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
+                                        color: FlutterFlowTheme.of(context).primaryText,
+                                        letterSpacing: 0.0,
+                                        useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
+                                      ),
                                 ),
                               ),
                               Text(
-                                currentUserEmail,
-                                style: FlutterFlowTheme.of(context).titleSmall.override(
-                                      fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
-                                      color: FlutterFlowTheme.of(context).primaryText,
-                                      letterSpacing: 0.0,
+                              viewModel.email,
+                              style: FlutterFlowTheme.of(context).titleSmall.override(
+                                    fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
+                                    color: FlutterFlowTheme.of(context).primaryText,
+                                    letterSpacing: 0.0,
                                       useGoogleFonts: !FlutterFlowTheme.of(context).titleSmallIsCustom,
                                     ),
                               ),
@@ -216,69 +223,67 @@ class _EditProfilePageWidgetState extends State<EditProfilePageWidget> {
                             children: [
                               Padding(
                                 padding: const EdgeInsetsDirectional.fromSTEB(20.0, 16.0, 20.0, 16.0),
-                                child: AuthUserStreamWidget(
-                                  builder: (context) => TextFormField(
-                                    controller: viewModel.fullNameTextController,
-                                    focusNode: viewModel.fullNameFocusNode,
-                                    autofocus: true,
-                                    obscureText: false,
-                                    decoration: InputDecoration(
-                                      labelText: 'Seu nome completo',
-                                      labelStyle: FlutterFlowTheme.of(context).bodySmall.override(
-                                            fontFamily: FlutterFlowTheme.of(context).bodySmallFamily,
-                                            letterSpacing: 0.0,
-                                            useGoogleFonts: !FlutterFlowTheme.of(context).bodySmallIsCustom,
-                                          ),
-                                      hintStyle: FlutterFlowTheme.of(context).bodySmall.override(
-                                            fontFamily: FlutterFlowTheme.of(context).bodySmallFamily,
-                                            letterSpacing: 0.0,
-                                            useGoogleFonts: !FlutterFlowTheme.of(context).bodySmallIsCustom,
-                                          ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context).primary,
-                                          width: 2.0,
-                                        ),
-                                        borderRadius: BorderRadius.circular(50.0),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context).primary,
-                                          width: 2.0,
-                                        ),
-                                        borderRadius: BorderRadius.circular(50.0),
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context).error,
-                                          width: 2.0,
-                                        ),
-                                        borderRadius: BorderRadius.circular(50.0),
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context).error,
-                                          width: 2.0,
-                                        ),
-                                        borderRadius: BorderRadius.circular(50.0),
-                                      ),
-                                      filled: true,
-                                      fillColor: FlutterFlowTheme.of(context).primaryBackground,
-                                      contentPadding: const EdgeInsetsDirectional.fromSTEB(20.0, 24.0, 0.0, 24.0),
-                                    ),
-                                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                          fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
+                                child: TextFormField(
+                                  controller: viewModel.fullNameTextController,
+                                  focusNode: viewModel.fullNameFocusNode,
+                                  autofocus: true,
+                                  obscureText: false,
+                                  decoration: InputDecoration(
+                                    labelText: 'Seu nome completo',
+                                    labelStyle: FlutterFlowTheme.of(context).bodySmall.override(
+                                          fontFamily: FlutterFlowTheme.of(context).bodySmallFamily,
                                           letterSpacing: 0.0,
-                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
+                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodySmallIsCustom,
                                         ),
-                                    keyboardType: TextInputType.name,
-                                    validator: (val) {
-                                      if (val == null || val.isEmpty) {
-                                        return 'Campo obrigatório';
-                                      }
-                                      return null;
-                                    },
+                                    hintStyle: FlutterFlowTheme.of(context).bodySmall.override(
+                                          fontFamily: FlutterFlowTheme.of(context).bodySmallFamily,
+                                          letterSpacing: 0.0,
+                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodySmallIsCustom,
+                                        ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: FlutterFlowTheme.of(context).primary,
+                                        width: 2.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(50.0),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: FlutterFlowTheme.of(context).primary,
+                                        width: 2.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(50.0),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: FlutterFlowTheme.of(context).error,
+                                        width: 2.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(50.0),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: FlutterFlowTheme.of(context).error,
+                                        width: 2.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(50.0),
+                                    ),
+                                    filled: true,
+                                    fillColor: FlutterFlowTheme.of(context).primaryBackground,
+                                    contentPadding: const EdgeInsetsDirectional.fromSTEB(20.0, 24.0, 0.0, 24.0),
                                   ),
+                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                        fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
+                                        letterSpacing: 0.0,
+                                        useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
+                                      ),
+                                  keyboardType: TextInputType.name,
+                                  validator: (val) {
+                                    if (val == null || val.isEmpty) {
+                                      return 'Campo obrigatório';
+                                    }
+                                    return null;
+                                  },
                                 ),
                               ),
                             ],
@@ -390,6 +395,30 @@ class _EditProfilePageWidgetState extends State<EditProfilePageWidget> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _EditAvatarPlaceholder extends StatelessWidget {
+  const _EditAvatarPlaceholder({required this.size});
+
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: FlutterFlowTheme.of(context).accent3,
+        shape: BoxShape.circle,
+      ),
+      alignment: Alignment.center,
+      child: Icon(
+        Icons.person_outline,
+        size: size * 0.5,
+        color: FlutterFlowTheme.of(context).primary,
       ),
     );
   }

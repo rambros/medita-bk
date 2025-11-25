@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '/data/services/auth/firebase_auth/auth_util.dart';
+
 import '/backend/backend.dart';
+import '/data/repositories/auth_repository.dart';
 import '/data/repositories/home_repository.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/ui/core/actions/actions.dart' as action_blocks;
@@ -9,8 +10,11 @@ import '/ui/core/actions/actions.dart' as action_blocks;
 /// Manages state and business logic for the home page
 class HomeViewModel extends ChangeNotifier {
   final HomeRepository _repository;
+  final AuthRepository _authRepository;
 
-  HomeViewModel(this._repository);
+  HomeViewModel({required HomeRepository repository, required AuthRepository authRepository})
+      : _repository = repository,
+        _authRepository = authRepository;
 
   // State properties
   bool _isLoading = false;
@@ -76,19 +80,21 @@ class HomeViewModel extends ChangeNotifier {
 
   /// Load user data and update last access
   Future<void> loadUserData() async {
-    if (currentUserReference == null) return;
+    final userRef = _authRepository.currentUserRef;
+    if (userRef == null) return;
 
-    _userRecord = await _repository.getUserRecord(currentUserReference!);
+    _userRecord = await _repository.getUserRecord(userRef);
 
     // Update last access timestamp
-    await _repository.updateLastAccess(currentUserReference!);
+    await _repository.updateLastAccess(userRef);
 
     notifyListeners();
   }
 
   /// Initialize Desafio 21 data
   Future<void> initializeDesafio21() async {
-    if (currentUserReference == null || currentUserDocument == null) return;
+    final userRef = _authRepository.currentUserRef;
+    if (userRef == null || _userRecord == null) return;
 
     // Get desafioStarted from user
     final desafioStarted = _userRecord?.desafio21Started ?? false;
@@ -96,7 +102,7 @@ class HomeViewModel extends ChangeNotifier {
 
     // Create field if it doesn't exist
     if (desafioStarted != true) {
-      await _repository.updateDesafio21Started(currentUserReference!, false);
+      await _repository.updateDesafio21Started(userRef, false);
     }
 
     // Load Desafio 21 template
@@ -107,14 +113,14 @@ class HomeViewModel extends ChangeNotifier {
       _listaEtapasMandalas = _desafioRecord!.listaEtapasMandalas.toList().cast<D21EtapaModelStruct>();
       FFAppState().listaEtapasMandalas = _listaEtapasMandalas;
 
-      if (valueOrDefault<bool>(currentUserDocument?.desafio21Started, false) == true) {
+      if (valueOrDefault<bool>(_userRecord?.desafio21Started, false) == true) {
         // Load user's existing desafio21 data
-        _desafio21Data = currentUserDocument!.desafio21;
+        _desafio21Data = _userRecord!.desafio21;
         FFAppState().desafio21 = _desafio21Data!;
       } else {
         // Create new desafio21 for user
         final newDesafio21 = _desafioRecord!.desafio21Data;
-        await _repository.updateUserDesafio21(currentUserReference!, newDesafio21);
+        await _repository.updateUserDesafio21(userRef, newDesafio21);
 
         _desafio21Data = newDesafio21;
         FFAppState().desafio21 = newDesafio21;

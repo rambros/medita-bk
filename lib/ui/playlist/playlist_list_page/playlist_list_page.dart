@@ -1,6 +1,7 @@
-import '/data/services/auth/firebase_auth/auth_util.dart';
 import '/backend/schema/structs/index.dart';
+import '/data/repositories/auth_repository.dart';
 import '/data/repositories/playlist_repository.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
@@ -29,9 +30,19 @@ class _PlaylistListPageWidgetState extends State<PlaylistListPageWidget> {
   @override
   void initState() {
     super.initState();
+    final authRepo = context.read<AuthRepository>();
+    final userRef = authRepo.currentUserRef;
+    if (userRef == null) {
+      // No authenticated user; avoid initializing stream.
+      _model = PlaylistListViewModel(
+        repository: context.read<PlaylistRepository>(),
+        userRef: FirebaseFirestore.instance.collection('users').doc('_invalid'),
+      )..init(context);
+      return;
+    }
     _model = PlaylistListViewModel(
       repository: context.read<PlaylistRepository>(),
-      userRef: currentUserReference!,
+      userRef: userRef,
     )..init(context);
 
     logFirebaseEvent('screen_view',
@@ -48,6 +59,18 @@ class _PlaylistListPageWidgetState extends State<PlaylistListPageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (_model.userRef.path.contains('_invalid')) {
+      return Scaffold(
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        body: Center(
+          child: Text(
+            'Faça login para ver suas playlists.',
+            style: FlutterFlowTheme.of(context).bodyMedium,
+          ),
+        ),
+      );
+    }
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import '/backend/backend.dart';
 import '/backend/repositories/meditation/meditation_repository.dart';
-import '/data/services/auth/firebase_auth/auth_util.dart';
+import '/data/repositories/auth_repository.dart';
 
 class MeditationListViewModel extends ChangeNotifier {
   final MeditationRepository _meditationRepository;
+  final AuthRepository _authRepository;
 
-  MeditationListViewModel({required MeditationRepository meditationRepository})
-      : _meditationRepository = meditationRepository;
+  MeditationListViewModel({
+    required MeditationRepository meditationRepository,
+    required AuthRepository authRepository,
+  })  : _meditationRepository = meditationRepository,
+        _authRepository = authRepository;
 
   Stream<List<MeditationsRecord>> get meditationsStream => _meditationRepository.getMeditations();
 
@@ -155,7 +159,12 @@ class MeditationListViewModel extends ChangeNotifier {
     notifyListeners();
 
     if (_isFavourites) {
-      _userFavorites = await _meditationRepository.getFavoriteMeditations(currentUserUid);
+      final userId = _authRepository.currentUserUid;
+      if (userId.isEmpty) {
+        _userFavorites = [];
+      } else {
+        _userFavorites = await _meditationRepository.getFavoriteMeditations(userId);
+      }
       if (_userFavorites.isEmpty) {
         _isFavourites = false; // Revert if no favorites
       }

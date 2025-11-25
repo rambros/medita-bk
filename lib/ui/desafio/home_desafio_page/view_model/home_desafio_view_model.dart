@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
-import '/data/repositories/desafio_repository.dart';
-import '/backend/schema/structs/index.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart'; // For valueOrDefault
-import '/data/services/auth/firebase_auth/auth_util.dart';
+
 import '/backend/schema/enums/enums.dart';
+import '/backend/schema/structs/index.dart';
+import '/data/repositories/auth_repository.dart';
+import '/data/repositories/desafio_repository.dart';
+import '/ui/core/flutter_flow/flutter_flow_util.dart'; // For valueOrDefault
 
 class HomeDesafioViewModel extends ChangeNotifier {
   final DesafioRepository _repository;
+  final AuthRepository _authRepository;
 
-  HomeDesafioViewModel({required DesafioRepository repository}) : _repository = repository;
+  HomeDesafioViewModel({required DesafioRepository repository, required AuthRepository authRepository})
+      : _repository = repository,
+        _authRepository = authRepository;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -24,7 +28,7 @@ class HomeDesafioViewModel extends ChangeNotifier {
   List<D21EtapaModelStruct> get listaEtapasMandalas => FFAppState().listaEtapasMandalas;
 
   // We need to check currentUserDocument for started status as per original code
-  bool get isDesafioStarted => valueOrDefault<bool>(currentUserDocument?.desafio21Started, false);
+  bool get isDesafioStarted => valueOrDefault<bool>(_authRepository.currentUser?.desafio21Started, false);
 
   Future<void> startDesafio() async {
     _setLoading(true);

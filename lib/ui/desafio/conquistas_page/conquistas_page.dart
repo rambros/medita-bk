@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:provider/provider.dart';
 
-import '/data/services/auth/firebase_auth/auth_util.dart';
+import '/data/repositories/auth_repository.dart';
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
@@ -24,19 +24,12 @@ class ConquistasPage extends StatefulWidget {
 
 class _ConquistasPageState extends State<ConquistasPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  late ConquistasViewModel _viewModel;
-
-  @override
-  void initState() {
-    super.initState();
-    _viewModel = ConquistasViewModel();
-    logFirebaseEvent('screen_view', parameters: {'screen_name': 'conquistasPage'});
-  }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<ConquistasViewModel>.value(
-      value: _viewModel,
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'conquistasPage'});
+    return ChangeNotifierProvider(
+      create: (context) => ConquistasViewModel(authRepository: context.read<AuthRepository>()),
       child: Consumer<ConquistasViewModel>(
         builder: (context, viewModel, _) {
           return GestureDetector(
@@ -56,10 +49,7 @@ class _ConquistasPageState extends State<ConquistasPage> {
                       child: Container(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
-                            colors: [
-                              FlutterFlowTheme.of(context).d21Top,
-                              FlutterFlowTheme.of(context).d21Botton
-                            ],
+                            colors: [FlutterFlowTheme.of(context).d21Top, FlutterFlowTheme.of(context).d21Botton],
                             stops: const [0.0, 1.0],
                             begin: const AlignmentDirectional(0.0, -1.0),
                             end: const AlignmentDirectional(0, 1.0),
@@ -198,24 +188,22 @@ class _ConquistasPageState extends State<ConquistasPage> {
                     children: [
                       Padding(
                         padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
-                        child: AuthUserStreamWidget(
-                          builder: (context) => CircularPercentIndicator(
-                            percent: viewModel.progressoMeditacoes,
-                            radius: 60.0,
-                            lineWidth: 12.0,
-                            animation: true,
-                            animateFromLastPercent: true,
-                            progressColor: FlutterFlowTheme.of(context).primary,
-                            backgroundColor: FlutterFlowTheme.of(context).accent4,
-                            center: Text(
-                              '${viewModel.diasCompletados}/21',
-                              style: FlutterFlowTheme.of(context).headlineSmall.override(
-                                    fontFamily: FlutterFlowTheme.of(context).headlineSmallFamily,
-                                    color: FlutterFlowTheme.of(context).info,
-                                    letterSpacing: 0.0,
-                                    useGoogleFonts: !FlutterFlowTheme.of(context).headlineSmallIsCustom,
-                                  ),
-                            ),
+                        child: CircularPercentIndicator(
+                          percent: viewModel.progressoMeditacoes,
+                          radius: 60.0,
+                          lineWidth: 12.0,
+                          animation: true,
+                          animateFromLastPercent: true,
+                          progressColor: FlutterFlowTheme.of(context).primary,
+                          backgroundColor: FlutterFlowTheme.of(context).accent4,
+                          center: Text(
+                            '${viewModel.diasCompletados}/21',
+                            style: FlutterFlowTheme.of(context).headlineSmall.override(
+                                  fontFamily: FlutterFlowTheme.of(context).headlineSmallFamily,
+                                  color: FlutterFlowTheme.of(context).info,
+                                  letterSpacing: 0.0,
+                                  useGoogleFonts: !FlutterFlowTheme.of(context).headlineSmallIsCustom,
+                                ),
                           ),
                         ),
                       ),
@@ -268,24 +256,22 @@ class _ConquistasPageState extends State<ConquistasPage> {
                     children: [
                       Padding(
                         padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
-                        child: AuthUserStreamWidget(
-                          builder: (context) => CircularPercentIndicator(
-                            percent: viewModel.progressoEtapas,
-                            radius: 60.0,
-                            lineWidth: 12.0,
-                            animation: true,
-                            animateFromLastPercent: true,
-                            progressColor: FlutterFlowTheme.of(context).d21Orange,
-                            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-                            center: Text(
-                              '${viewModel.etapasCompletadas}/7',
-                              style: FlutterFlowTheme.of(context).headlineSmall.override(
-                                    fontFamily: FlutterFlowTheme.of(context).headlineSmallFamily,
-                                    color: FlutterFlowTheme.of(context).info,
-                                    letterSpacing: 0.0,
-                                    useGoogleFonts: !FlutterFlowTheme.of(context).headlineSmallIsCustom,
-                                  ),
-                            ),
+                        child: CircularPercentIndicator(
+                          percent: viewModel.progressoEtapas,
+                          radius: 60.0,
+                          lineWidth: 12.0,
+                          animation: true,
+                          animateFromLastPercent: true,
+                          progressColor: FlutterFlowTheme.of(context).d21Orange,
+                          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+                          center: Text(
+                            '${viewModel.etapasCompletadas}/7',
+                            style: FlutterFlowTheme.of(context).headlineSmall.override(
+                                  fontFamily: FlutterFlowTheme.of(context).headlineSmallFamily,
+                                  color: FlutterFlowTheme.of(context).info,
+                                  letterSpacing: 0.0,
+                                  useGoogleFonts: !FlutterFlowTheme.of(context).headlineSmallIsCustom,
+                                ),
                           ),
                         ),
                       ),
@@ -315,21 +301,19 @@ class _ConquistasPageState extends State<ConquistasPage> {
   }
 
   Widget _buildCarousels(BuildContext context, ConquistasViewModel viewModel) {
-    return AuthUserStreamWidget(
-      builder: (context) => Column(
-        children: [
-          if (viewModel.mandalasCompletadas.isNotEmpty)
-            CarouselGetMandalasWidget(
-              listaMandalas: viewModel.mandalasCompletadas,
-            ),
-          CarouselGetBrasaoWidget(
-            listaBrasoes: viewModel.brasoesCompletados,
+    return Column(
+      children: [
+        if (viewModel.mandalasCompletadas.isNotEmpty)
+          CarouselGetMandalasWidget(
+            listaMandalas: viewModel.mandalasCompletadas,
           ),
-          CarouselGetEbooksWidget(
-            listaEbooks: viewModel.ebooksCompletados,
-          ),
-        ],
-      ),
+        CarouselGetBrasaoWidget(
+          listaBrasoes: viewModel.brasoesCompletados,
+        ),
+        CarouselGetEbooksWidget(
+          listaEbooks: viewModel.ebooksCompletados,
+        ),
+      ],
     );
   }
 }

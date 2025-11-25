@@ -1,12 +1,11 @@
-import '/data/services/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/data/repositories/auth_repository.dart';
 import '/data/repositories/playlist_repository.dart';
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/ui/core/flutter_flow/flutter_flow_widgets.dart';
 import '/ui/playlist/select_images_playlist/select_images_playlist.dart';
-import '/ui/core/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -33,58 +32,88 @@ class PlaylistEditPageWidget extends StatefulWidget {
 }
 
 class _PlaylistEditPageWidgetState extends State<PlaylistEditPageWidget> {
-  late PlaylistEditPageViewModel _model;
+  PlaylistEditPageViewModel? _model;
+  bool _unauthorized = false;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
+    final authRepo = context.read<AuthRepository>();
+    final userRef = authRepo.currentUserRef;
+    if (userRef == null) {
+      _unauthorized = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('É necessário estar autenticado para editar playlists.')),
+        );
+        context.goNamed(SocialLoginPage.routeName);
+      });
+      return;
+    }
     _model = PlaylistEditPageViewModel(
       repository: context.read<PlaylistRepository>(),
-      userRef: currentUserReference!,
+      userRef: userRef,
     )..init(context);
+    final model = _model!;
+    final user = authRepo.currentUser;
 
     logFirebaseEvent('screen_view',
         parameters: {'screen_name': 'playlistEditPage'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.playlist = (currentUserDocument?.playlists.toList() ?? [])
-          .elementAtOrNull(widget.playlistIndex!);
-      _model.imageUrl = _model.playlist?.imageUrl;
+      model.playlist =
+          (user?.playlists.toList() ?? []).elementAtOrNull(widget.playlistIndex!);
+      model.imageUrl = model.playlist?.imageUrl;
+      final playlist = model.playlist;
       safeSetState(() {});
       // joga os audios para a varaiavel de app listSelectedAudios para ser editado no edit audios se o usuário selecionar.
       //
       // É esta variavel que será salva
-      FFAppState().listAudiosSelected =
-          _model.playlist!.audios.toList().cast<AudioModelStruct>();
+      if (playlist != null) {
+        FFAppState().listAudiosSelected =
+            playlist.audios.toList().cast<AudioModelStruct>();
+      } else {
+        FFAppState().listAudiosSelected = [];
+      }
     });
 
-    _model.titleTextController ??= TextEditingController(
-        text: (currentUserDocument?.playlists.toList() ?? [])
-            .elementAtOrNull(widget.playlistIndex!)
-            ?.title);
-    _model.titleFocusNode ??= FocusNode();
+    model.titleTextController ??= TextEditingController(
+        text: (user?.playlists.toList() ?? []).elementAtOrNull(widget.playlistIndex!)?.title);
+    model.titleFocusNode ??= FocusNode();
 
-    _model.descriptionTextController ??= TextEditingController(
-        text: (currentUserDocument?.playlists.toList() ?? [])
-            .elementAtOrNull(widget.playlistIndex!)
-            ?.description);
-    _model.descriptionFocusNode ??= FocusNode();
+    model.descriptionTextController ??= TextEditingController(
+        text: (user?.playlists.toList() ?? []).elementAtOrNull(widget.playlistIndex!)?.description);
+    model.descriptionFocusNode ??= FocusNode();
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
   void dispose() {
-    _model.dispose();
+    _model?.dispose();
 
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_unauthorized || _model == null) {
+      return Scaffold(
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        body: Center(
+          child: Text(
+            'Faça login para editar playlists.',
+            style: FlutterFlowTheme.of(context).bodyMedium,
+          ),
+        ),
+      );
+    }
+
     context.watch<FFAppState>();
+    final model = _model!;
 
     return GestureDetector(
       onTap: () {
@@ -153,7 +182,7 @@ class _PlaylistEditPageWidgetState extends State<PlaylistEditPageWidget> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Form(
-                          key: _model.formKey,
+                          key: model.formKey,
                           autovalidateMode: AutovalidateMode.always,
                           child: Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(
@@ -163,204 +192,198 @@ class _PlaylistEditPageWidgetState extends State<PlaylistEditPageWidget> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: AuthUserStreamWidget(
-                                    builder: (context) => TextFormField(
-                                      controller: _model.titleTextController,
-                                      focusNode: _model.titleFocusNode,
-                                      autofocus: true,
-                                      textInputAction: TextInputAction.next,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Nome da Playlist',
-                                        labelStyle: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              fontFamily:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMediumFamily,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              fontSize: 18.0,
-                                              letterSpacing: 0.0,
-                                              fontWeight: FontWeight.w500,
-                                              useGoogleFonts:
-                                                  !FlutterFlowTheme.of(context)
-                                                      .bodyMediumIsCustom,
-                                            ),
-                                        hintText: 'Nome da Playlist',
-                                        hintStyle: FlutterFlowTheme.of(context)
-                                            .bodySmall
-                                            .override(
-                                              fontFamily:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodySmallFamily,
-                                              letterSpacing: 0.0,
-                                              useGoogleFonts:
-                                                  !FlutterFlowTheme.of(context)
-                                                      .bodySmallIsCustom,
-                                            ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primary,
-                                            width: 2.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primary,
-                                            width: 2.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                        errorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .error,
-                                            width: 2.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                        focusedErrorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .error,
-                                            width: 2.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                        filled: true,
-                                        fillColor: FlutterFlowTheme.of(context)
-                                            .primaryBackground,
-                                        contentPadding:
-                                            const EdgeInsetsDirectional.fromSTEB(
-                                                20.0, 24.0, 20.0, 24.0),
-                                      ),
-                                      style: FlutterFlowTheme.of(context)
+                                  child: TextFormField(
+                                    controller: model.titleTextController,
+                                    focusNode: model.titleFocusNode,
+                                    autofocus: true,
+                                    textInputAction: TextInputAction.next,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      labelText: 'Nome da Playlist',
+                                      labelStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
                                             fontFamily:
                                                 FlutterFlowTheme.of(context)
                                                     .bodyMediumFamily,
+                                            color:
+                                                FlutterFlowTheme.of(context)
+                                                    .secondaryText,
+                                            fontSize: 18.0,
                                             letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w500,
                                             useGoogleFonts:
                                                 !FlutterFlowTheme.of(context)
                                                     .bodyMediumIsCustom,
                                           ),
-                                      maxLines: null,
-                                      validator: _model
-                                          .titleTextControllerValidator
-                                          .asValidator(context),
+                                      hintText: 'Nome da Playlist',
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .bodySmall
+                                          .override(
+                                            fontFamily:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodySmallFamily,
+                                            letterSpacing: 0.0,
+                                            useGoogleFonts:
+                                                !FlutterFlowTheme.of(context)
+                                                    .bodySmallIsCustom,
+                                          ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .primary,
+                                          width: 2.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .primary,
+                                          width: 2.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .error,
+                                          width: 2.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .error,
+                                          width: 2.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      filled: true,
+                                      fillColor: FlutterFlowTheme.of(context)
+                                          .primaryBackground,
+                                      contentPadding:
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                              20.0, 24.0, 20.0, 24.0),
                                     ),
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          fontFamily:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMediumFamily,
+                                          letterSpacing: 0.0,
+                                          useGoogleFonts:
+                                              !FlutterFlowTheme.of(context)
+                                                  .bodyMediumIsCustom,
+                                        ),
+                                    maxLines: null,
+                                    validator:
+                                        model.titleTextControllerValidator.asValidator(context),
                                   ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: AuthUserStreamWidget(
-                                    builder: (context) => TextFormField(
-                                      controller:
-                                          _model.descriptionTextController,
-                                      focusNode: _model.descriptionFocusNode,
-                                      autofocus: true,
-                                      textInputAction: TextInputAction.next,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Descrição',
-                                        labelStyle: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              fontFamily:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMediumFamily,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              fontSize: 18.0,
-                                              letterSpacing: 0.0,
-                                              fontWeight: FontWeight.w500,
-                                              useGoogleFonts:
-                                                  !FlutterFlowTheme.of(context)
-                                                      .bodyMediumIsCustom,
-                                            ),
-                                        hintText: 'Descrição da Playlist',
-                                        hintStyle: FlutterFlowTheme.of(context)
-                                            .bodySmall
-                                            .override(
-                                              fontFamily:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodySmallFamily,
-                                              letterSpacing: 0.0,
-                                              useGoogleFonts:
-                                                  !FlutterFlowTheme.of(context)
-                                                      .bodySmallIsCustom,
-                                            ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primary,
-                                            width: 2.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primary,
-                                            width: 2.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                        errorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .error,
-                                            width: 2.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                        focusedErrorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .error,
-                                            width: 2.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                        filled: true,
-                                        fillColor: FlutterFlowTheme.of(context)
-                                            .primaryBackground,
-                                        contentPadding:
-                                            const EdgeInsetsDirectional.fromSTEB(
-                                                20.0, 24.0, 20.0, 24.0),
-                                      ),
-                                      style: FlutterFlowTheme.of(context)
+                                  child: TextFormField(
+                                    controller: model.descriptionTextController,
+                                    focusNode: model.descriptionFocusNode,
+                                    autofocus: true,
+                                    textInputAction: TextInputAction.next,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      labelText: 'Descrição',
+                                      labelStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
                                             fontFamily:
                                                 FlutterFlowTheme.of(context)
                                                     .bodyMediumFamily,
+                                            color:
+                                                FlutterFlowTheme.of(context)
+                                                    .secondaryText,
+                                            fontSize: 18.0,
                                             letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w500,
                                             useGoogleFonts:
                                                 !FlutterFlowTheme.of(context)
                                                     .bodyMediumIsCustom,
                                           ),
-                                      maxLines: null,
-                                      minLines: 3,
-                                      validator: _model
-                                          .descriptionTextControllerValidator
-                                          .asValidator(context),
+                                      hintText: 'Descrição da Playlist',
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .bodySmall
+                                          .override(
+                                            fontFamily:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodySmallFamily,
+                                            letterSpacing: 0.0,
+                                            useGoogleFonts:
+                                                !FlutterFlowTheme.of(context)
+                                                    .bodySmallIsCustom,
+                                          ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .primary,
+                                          width: 2.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .primary,
+                                          width: 2.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .error,
+                                          width: 2.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .error,
+                                          width: 2.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      filled: true,
+                                      fillColor: FlutterFlowTheme.of(context)
+                                          .primaryBackground,
+                                      contentPadding:
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                              20.0, 24.0, 20.0, 24.0),
                                     ),
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          fontFamily:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMediumFamily,
+                                          letterSpacing: 0.0,
+                                          useGoogleFonts:
+                                              !FlutterFlowTheme.of(context)
+                                                  .bodyMediumIsCustom,
+                                        ),
+                                    maxLines: null,
+                                    minLines: 3,
+                                    validator: model
+                                        .descriptionTextControllerValidator
+                                        .asValidator(context),
                                   ),
                                 ),
                               ].divide(const SizedBox(height: 8.0)),
@@ -414,12 +437,10 @@ class _PlaylistEditPageWidgetState extends State<PlaylistEditPageWidget> {
                                             ),
                                           );
                                         },
-                                      ).then((value) => safeSetState(
-                                          () => _model.imageSelected = value));
+                                      ).then((value) =>
+                                          safeSetState(() => model.imageSelected = value));
 
-                                      _model.imageUrl = _model.imageSelected;
-                                      safeSetState(() {});
-
+                                      model.imageUrl = model.imageSelected;
                                       safeSetState(() {});
                                     },
                                     child: Container(
@@ -434,8 +455,11 @@ class _PlaylistEditPageWidgetState extends State<PlaylistEditPageWidget> {
                                       ),
                                       child: Builder(
                                         builder: (context) {
-                                          if (_model.imageUrl == null ||
-                                              _model.imageUrl == '') {
+                                          final imageUrl = model.imageUrl ?? '';
+                                          final parsedUrl = Uri.tryParse(imageUrl);
+                                          final hasImage =
+                                              parsedUrl != null && parsedUrl.hasScheme && parsedUrl.host.isNotEmpty;
+                                          if (!hasImage) {
                                             return Align(
                                               alignment: const AlignmentDirectional(
                                                   0.0, 0.0),
@@ -468,10 +492,19 @@ class _PlaylistEditPageWidgetState extends State<PlaylistEditPageWidget> {
                                                       milliseconds: 500),
                                                   fadeOutDuration: const Duration(
                                                       milliseconds: 500),
-                                                  imageUrl: _model.imageUrl!,
+                                                  imageUrl: imageUrl,
                                                   width: 330.0,
                                                   height: 330.0,
                                                   fit: BoxFit.cover,
+                                                  errorWidget: (_, __, ___) => Container(
+                                                    color: FlutterFlowTheme.of(context).accent4,
+                                                    alignment: Alignment.center,
+                                                    child: Icon(
+                                                      Icons.broken_image_outlined,
+                                                      color: FlutterFlowTheme.of(context).primary,
+                                                      size: 48.0,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             );
@@ -596,22 +629,46 @@ class _PlaylistEditPageWidgetState extends State<PlaylistEditPageWidget> {
                                     0.0, 8.0, 0.0, 8.0),
                                 child: FFButtonWidget(
                                   onPressed: () async {
-                                    if (_model.formKey.currentState == null ||
-                                        !_model.formKey.currentState!
-                                            .validate()) {
+                                    if (model.formKey.currentState == null ||
+                                        !model.formKey.currentState!.validate()) {
+                                      return;
+                                    }
+                                    final playlist = model.playlist;
+                                    if (playlist == null) {
+                                      if (!context.mounted) return;
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            'Playlist não encontrada.',
+                                            style: FlutterFlowTheme.of(context)
+                                                .titleSmall
+                                                .override(
+                                                  fontFamily: FlutterFlowTheme.of(context)
+                                                      .titleSmallFamily,
+                                                  color: FlutterFlowTheme.of(context).info,
+                                                  letterSpacing: 0.0,
+                                                  useGoogleFonts: !FlutterFlowTheme.of(context)
+                                                      .titleSmallIsCustom,
+                                                ),
+                                          ),
+                                          duration: const Duration(milliseconds: 4000),
+                                          backgroundColor: FlutterFlowTheme.of(context).error,
+                                        ),
+                                      );
                                       return;
                                     }
                                     try {
-                                      await _model.updatePlaylist(
-                                        originalPlaylist: _model.playlist!,
+                                      await model.updatePlaylist(
+                                        originalPlaylist: playlist,
                                         audios: FFAppState().listAudiosSelected.toList(),
                                         playlistId: widget.idPlaylist,
                                       );
                                     } catch (_) {
+                                      if (!context.mounted) return;
                                       ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBar(
                                           content: Text(
-                                            _model.errorMessage ??
+                                            model.errorMessage ??
                                                 'Não foi possível atualizar a playlist.',
                                             style: FlutterFlowTheme.of(context)
                                                 .titleSmall
@@ -630,6 +687,7 @@ class _PlaylistEditPageWidgetState extends State<PlaylistEditPageWidget> {
                                       );
                                       return;
                                     }
+                                    if (!context.mounted) return;
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(

@@ -1,22 +1,30 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import '/data/services/auth/firebase_auth/auth_util.dart';
+
 import '/backend/backend.dart';
 import '/backend/firebase_storage/storage.dart';
+import '/data/repositories/auth_repository.dart';
 import '/data/repositories/user_repository.dart';
 import '/ui/core/flutter_flow/upload_data.dart';
 
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
-
 class EditProfileViewModel extends ChangeNotifier {
-  final UserRepository _userRepository;
+  EditProfileViewModel({
+    required UserRepository userRepository,
+    required AuthRepository authRepository,
+  })  : _userRepository = userRepository,
+        _authRepository = authRepository;
 
-  EditProfileViewModel({required UserRepository userRepository}) : _userRepository = userRepository {
-    _initialize();
-  }
+  final UserRepository _userRepository;
+  final AuthRepository _authRepository;
 
   final formKey = GlobalKey<FormState>();
-  late TextEditingController fullNameTextController;
-  late FocusNode fullNameFocusNode;
+  final TextEditingController fullNameTextController = TextEditingController();
+  final FocusNode fullNameFocusNode = FocusNode();
+
+  StreamSubscription<UsersRecord?>? _userSub;
+  UsersRecord? _user;
+  bool _initializedControllers = false;
 
   String _uploadedFileUrl = '';
   String get uploadedFileUrl => _uploadedFileUrl;
@@ -24,13 +32,39 @@ class EditProfileViewModel extends ChangeNotifier {
   bool _isUploading = false;
   bool get isUploading => _isUploading;
 
-  void _initialize() {
-    fullNameTextController = TextEditingController(text: valueOrDefault(currentUserDocument?.fullName, ''));
-    fullNameFocusNode = FocusNode();
+  String get displayName => _user?.fullName ?? '';
+  String get email => _authRepository.currentUserEmail;
+  String get photoUrl => _user?.userImageUrl ?? '';
+
+  /// Chooses which photo to show (uploaded > existing > fallback).
+  String get photoToDisplay {
+    if (_uploadedFileUrl.isNotEmpty) return _uploadedFileUrl;
+    if (photoUrl.isNotEmpty) return photoUrl;
+    return 'https://firebasestorage.googleapis.com/v0/b/meditabk2020.appspot.com/o/app_images%2Fstar_small.png?alt=media&token=e2375a94-b069-4c88-979f-7a3d82f14a68';
+  }
+
+  void init() {
+    // Seed with current user so the UI shows data immediately.
+    _user = _authRepository.currentUser;
+    if (!_initializedControllers) {
+      fullNameTextController.text = _user?.fullName ?? '';
+      _initializedControllers = true;
+    }
+    notifyListeners();
+
+    _userSub ??= _authRepository.authUserStream().listen((u) {
+      _user = u;
+      if (!_initializedControllers) {
+        fullNameTextController.text = u?.fullName ?? '';
+        _initializedControllers = true;
+      }
+      notifyListeners();
+    });
   }
 
   @override
   void dispose() {
+    _userSub?.cancel();
     fullNameTextController.dispose();
     fullNameFocusNode.dispose();
     super.dispose();
@@ -87,12 +121,15 @@ class EditProfileViewModel extends ChangeNotifier {
       return;
     }
 
+    final userRef = _user?.reference;
+    if (userRef == null) return;
+
     final updateData = createUsersRecordData(
       fullName: fullNameTextController.text,
       userImageUrl: _uploadedFileUrl.isNotEmpty ? _uploadedFileUrl : null,
     );
 
-    await _userRepository.updateUser(currentUserReference!, updateData);
+    await _userRepository.updateUser(userRef, updateData);
 
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(

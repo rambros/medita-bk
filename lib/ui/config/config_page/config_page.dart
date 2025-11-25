@@ -1,4 +1,3 @@
-import '/data/services/auth/firebase_auth/auth_util.dart';
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
@@ -25,6 +24,11 @@ class _ConfigPageWidgetState extends State<ConfigPageWidget> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<ConfigViewModel>().init();
+      }
+    });
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'configPage'});
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
@@ -36,7 +40,7 @@ class _ConfigPageWidgetState extends State<ConfigPageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = Provider.of<ConfigViewModel>(context, listen: false);
+    final viewModel = context.watch<ConfigViewModel>();
 
     return GestureDetector(
       onTap: () {
@@ -117,23 +121,30 @@ class _ConfigPageWidgetState extends State<ConfigPageWidget> {
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(2.0),
-                              child: AuthUserStreamWidget(
-                                builder: (context) => Hero(
-                                  tag: valueOrDefault(currentUserDocument?.userImageUrl, ''),
+                              child: Builder(builder: (context) {
+                                final photoUrl = viewModel.photoUrl;
+                                final parsed = Uri.tryParse(photoUrl);
+                                final hasImage = parsed != null && parsed.hasScheme && parsed.host.isNotEmpty;
+                                if (!hasImage) {
+                                  return _AvatarPlaceholder(size: 60.0);
+                                }
+                                return Hero(
+                                  tag: photoUrl,
                                   transitionOnUserGestures: true,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(50.0),
                                     child: CachedNetworkImage(
                                       fadeInDuration: const Duration(milliseconds: 500),
                                       fadeOutDuration: const Duration(milliseconds: 500),
-                                      imageUrl: valueOrDefault(currentUserDocument?.userImageUrl, ''),
+                                      imageUrl: photoUrl,
                                       width: 60.0,
                                       height: 60.0,
                                       fit: BoxFit.cover,
+                                      errorWidget: (_, __, ___) => _AvatarPlaceholder(size: 60.0),
                                     ),
                                   ),
-                                ),
-                              ),
+                                );
+                              }),
                             ),
                           ),
                           Padding(
@@ -143,20 +154,18 @@ class _ConfigPageWidgetState extends State<ConfigPageWidget> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                AuthUserStreamWidget(
-                                  builder: (context) => Text(
-                                    valueOrDefault(currentUserDocument?.fullName, ''),
-                                    style: FlutterFlowTheme.of(context).titleMedium.override(
-                                          fontFamily: FlutterFlowTheme.of(context).titleMediumFamily,
-                                          letterSpacing: 0.0,
-                                          useGoogleFonts: !FlutterFlowTheme.of(context).titleMediumIsCustom,
-                                        ),
-                                  ),
+                                Text(
+                                  viewModel.displayName,
+                                  style: FlutterFlowTheme.of(context).titleMedium.override(
+                                        fontFamily: FlutterFlowTheme.of(context).titleMediumFamily,
+                                        letterSpacing: 0.0,
+                                        useGoogleFonts: !FlutterFlowTheme.of(context).titleMediumIsCustom,
+                                      ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                                   child: Text(
-                                    currentUserEmail,
+                                    viewModel.email,
                                     style: FlutterFlowTheme.of(context).labelMedium.override(
                                           fontFamily: FlutterFlowTheme.of(context).labelMediumFamily,
                                           color: FlutterFlowTheme.of(context).info,
@@ -724,6 +733,30 @@ class _ConfigPageWidgetState extends State<ConfigPageWidget> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _AvatarPlaceholder extends StatelessWidget {
+  const _AvatarPlaceholder({this.size = 60});
+
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: FlutterFlowTheme.of(context).accent3,
+        shape: BoxShape.circle,
+      ),
+      alignment: Alignment.center,
+      child: Icon(
+        Icons.person_outline,
+        size: size * 0.6,
+        color: FlutterFlowTheme.of(context).primary,
       ),
     );
   }

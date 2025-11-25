@@ -1,4 +1,3 @@
-import '/data/services/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
@@ -7,7 +6,9 @@ import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/ui/meditation/widgets/comment_dialog.dart';
 import '/core/utils/network_utils.dart';
 import '/ui/core/flutter_flow/custom_functions.dart' as functions;
+import '/data/repositories/auth_repository.dart';
 import '/index.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -42,13 +43,15 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       _meditationDoc = await MeditationsRecord.getDocumentOnce(widget.meditationDocRef!);
+      if (!mounted) return;
       // TODO: Migrate isAudioDownloaded to AudioService
       // final isDownloaded = await actions.isAudioDownloaded(
       //   functions.getStringFromAudioPath(_meditationDoc!.audioUrl)!,
       // );
       // _isAudioDownloaded = isDownloaded;
       _isAudioDownloaded = false; // Temporary: assume not downloaded
-      _isFavorite = (currentUserDocument?.favorites.toList() ?? []).contains(_meditationDoc?.documentId) ? true : false;
+      final userFavorites = context.read<AuthRepository>().currentUser?.favorites.toList() ?? [];
+      _isFavorite = userFavorites.contains(_meditationDoc?.documentId);
       safeSetState(() {});
     });
 
@@ -233,15 +236,47 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                         child: Stack(
                           alignment: const AlignmentDirectional(0.0, 0.0),
                           children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(16.0),
-                              child: Image.network(
-                                meditationDetailsPageMeditationsRecord.imageUrl,
-                                width: MediaQuery.sizeOf(context).width * 1.0,
-                                height: MediaQuery.sizeOf(context).height * 1.0,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                            Builder(builder: (context) {
+                              final imageUrl = meditationDetailsPageMeditationsRecord.imageUrl;
+                              final parsedUrl = Uri.tryParse(imageUrl);
+                              final hasImage = parsedUrl != null && parsedUrl.hasScheme && parsedUrl.host.isNotEmpty;
+                              if (!hasImage) {
+                                return Container(
+                                  width: double.infinity,
+                                  height: MediaQuery.sizeOf(context).height * 1.0,
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context).accent4,
+                                    borderRadius: BorderRadius.circular(16.0),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Icon(
+                                    Icons.image_not_supported_outlined,
+                                    color: FlutterFlowTheme.of(context).primary,
+                                    size: 48.0,
+                                  ),
+                                );
+                              }
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(16.0),
+                                child: Image.network(
+                                  imageUrl,
+                                  width: MediaQuery.sizeOf(context).width * 1.0,
+                                  height: MediaQuery.sizeOf(context).height * 1.0,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (_, __, ___) => Container(
+                                    width: double.infinity,
+                                    height: MediaQuery.sizeOf(context).height * 1.0,
+                                    color: FlutterFlowTheme.of(context).accent4,
+                                    alignment: Alignment.center,
+                                    child: Icon(
+                                      Icons.broken_image_outlined,
+                                      color: FlutterFlowTheme.of(context).primary,
+                                      size: 48.0,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
                             InkWell(
                               splashColor: Colors.transparent,
                               focusColor: Colors.transparent,
@@ -262,6 +297,7 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                                   ));
                                 } else {
                                   if (_isAudioDownloaded != true) {
+                                    if (!context.mounted) return;
                                     await showDialog(
                                       context: context,
                                       builder: (alertDialogContext) {
@@ -283,6 +319,7 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                                   }
                                 }
 
+                                if (!context.mounted) return;
                                 context.pushNamed(
                                   MeditationPlayPageWidget.routeName,
                                   queryParameters: {
@@ -414,6 +451,25 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                           ),
                           ToggleIcon(
                             onPressed: () async {
+                              final userRef = context.read<AuthRepository>().currentUserRef;
+                              if (userRef == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Faça login para curtir meditações.',
+                                      style: FlutterFlowTheme.of(context).titleSmall.override(
+                                            fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
+                                            color: FlutterFlowTheme.of(context).info,
+                                            letterSpacing: 0.0,
+                                            useGoogleFonts:
+                                                !FlutterFlowTheme.of(context).titleSmallIsCustom,
+                                          ),
+                                    ),
+                                    backgroundColor: FlutterFlowTheme.of(context).primary,
+                                  ),
+                                );
+                                return;
+                              }
                               safeSetState(() => _isFavorite = !_isFavorite);
 
                               final numLiked = meditationDetailsPageMeditationsRecord.numLiked;
@@ -425,7 +481,7 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                                   ),
                                 );
 
-                                await currentUserReference!.update({
+                                await userRef.update({
                                   ...mapToFirestore(
                                     {
                                       'favorites':
@@ -440,7 +496,7 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                                   ),
                                 );
 
-                                await currentUserReference!.update({
+                                await userRef.update({
                                   ...mapToFirestore(
                                     {
                                       'favorites':

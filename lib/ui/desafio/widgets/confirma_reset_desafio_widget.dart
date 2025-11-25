@@ -1,9 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '/data/services/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/data/repositories/auth_repository.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/ui/core/flutter_flow/flutter_flow_widgets.dart';
@@ -108,14 +109,17 @@ class ConfirmaResetDesafioWidget extends StatelessWidget {
                         padding: const EdgeInsetsDirectional.fromSTEB(32.0, 0.0, 0.0, 0.0),
                         child: FFButtonWidget(
                           onPressed: () async {
-                            await currentUserReference!.update(
-                              createUsersRecordData(
-                                desafio21: createD21ModelStruct(delete: true),
-                                desafio21Started: false,
-                              ),
-                            );
-                            FFAppState().desafio21 = D21ModelStruct();
-                            FFAppState().desafioStarted = false;
+                            final userRef = context.read<AuthRepository>().currentUserRef;
+                            if (userRef != null) {
+                              await userRef.update(
+                                createUsersRecordData(
+                                  desafio21: createD21ModelStruct(delete: true),
+                                  desafio21Started: false,
+                                ),
+                              );
+                              FFAppState().desafio21 = D21ModelStruct();
+                              FFAppState().desafioStarted = false;
+                            }
 
                             if (!context.mounted) return;
                             context.goNamed(

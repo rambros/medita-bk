@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:expandable/expandable.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
 
-import '/data/services/auth/firebase_auth/auth_util.dart';
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
@@ -125,40 +124,38 @@ class _ListaEtapasPageState extends State<ListaEtapasPage> {
                                         ),
                                   ),
                                   if (viewModel.isTester)
-                                    AuthUserStreamWidget(
-                                      builder: (context) => FlutterFlowIconButton(
-                                        borderColor: Colors.transparent,
-                                        borderRadius: 20.0,
-                                        borderWidth: 1.0,
-                                        buttonSize: 40.0,
-                                        icon: Icon(
-                                          Icons.lock_reset_rounded,
-                                          color: FlutterFlowTheme.of(context).secondaryBackground,
-                                          size: 24.0,
-                                        ),
-                                        onPressed: () async {
-                                          await showModalBottomSheet(
-                                            isScrollControlled: true,
-                                            backgroundColor: Colors.transparent,
-                                            enableDrag: false,
-                                            context: context,
-                                            builder: (context) {
-                                              return WebViewAware(
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    FocusScope.of(context).unfocus();
-                                                    FocusManager.instance.primaryFocus?.unfocus();
-                                                  },
-                                                  child: Padding(
-                                                    padding: MediaQuery.viewInsetsOf(context),
-                                                    child: const ConfirmaResetDesafioWidget(),
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          ).then((value) => safeSetState(() {}));
-                                        },
+                                    FlutterFlowIconButton(
+                                      borderColor: Colors.transparent,
+                                      borderRadius: 20.0,
+                                      borderWidth: 1.0,
+                                      buttonSize: 40.0,
+                                      icon: Icon(
+                                        Icons.lock_reset_rounded,
+                                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                                        size: 24.0,
                                       ),
+                                      onPressed: () async {
+                                        await showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          backgroundColor: Colors.transparent,
+                                          enableDrag: false,
+                                          context: context,
+                                          builder: (context) {
+                                            return WebViewAware(
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  FocusScope.of(context).unfocus();
+                                                  FocusManager.instance.primaryFocus?.unfocus();
+                                                },
+                                                child: Padding(
+                                                  padding: MediaQuery.viewInsetsOf(context),
+                                                  child: const ConfirmaResetDesafioWidget(),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ).then((value) => safeSetState(() {}));
+                                      },
                                     ),
                                 ],
                               ),

@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+
 import '/app_state.dart';
-import '/data/services/auth/firebase_auth/auth_util.dart';
 import '/backend/schema/structs/index.dart';
+import '/data/repositories/auth_repository.dart';
 
 class ListaEtapasViewModel extends ChangeNotifier {
+  ListaEtapasViewModel({required AuthRepository authRepository}) : _authRepository = authRepository;
+
+  final AuthRepository _authRepository;
+
   // Access to global state
   final FFAppState _appState = FFAppState();
 
@@ -12,10 +17,7 @@ class ListaEtapasViewModel extends ChangeNotifier {
 
   List<D21EtapaModelStruct> get listaEtapasMandalas => _appState.listaEtapasMandalas;
 
-  bool get isTester {
-    final roles = currentUserDocument?.userRole.toList() ?? [];
-    return roles.contains('Tester');
-  }
+  bool get isTester => (_authRepository.currentUser?.userRole.toList() ?? []).contains('Tester');
 
   // Methods
   String? getURLMandala(int etapa) {

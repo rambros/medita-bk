@@ -1,12 +1,13 @@
-import '/data/services/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/core/utils/media/audio_utils.dart';
 import '/ui/core/flutter_flow/custom_functions.dart' as functions;
+import '/data/repositories/auth_repository.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
 import 'meditation_card_model.dart';
 export 'meditation_card_model.dart';
 
@@ -57,6 +58,12 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final imageUrl = widget.docMeditation?.imageUrl ?? '';
+    final parsedUrl = Uri.tryParse(imageUrl);
+    final hasImage = parsedUrl != null && parsedUrl.hasScheme && parsedUrl.host.isNotEmpty;
+    final favorites =
+        context.watch<AuthRepository>().currentUser?.favorites.toList() ?? [];
+
     return InkWell(
       splashColor: Colors.transparent,
       focusColor: Colors.transparent,
@@ -111,20 +118,23 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
                   ),
                   shape: BoxShape.rectangle,
                 ),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(16.0),
-                    bottomRight: Radius.circular(0.0),
-                    topLeft: Radius.circular(16.0),
-                    topRight: Radius.circular(0.0),
-                  ),
-                  child: Image.network(
-                    widget.docMeditation!.imageUrl,
-                    width: 100.0,
-                    height: 100.0,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                child: hasImage
+                    ? ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(16.0),
+                          bottomRight: Radius.circular(0.0),
+                          topLeft: Radius.circular(16.0),
+                          topRight: Radius.circular(0.0),
+                        ),
+                        child: Image.network(
+                          imageUrl,
+                          width: 100.0,
+                          height: 100.0,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => const _PlaceholderImage(),
+                        ),
+                      )
+                    : const _PlaceholderImage(),
               ),
             ),
             Container(
@@ -260,9 +270,8 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
                                   ),
                                   Builder(
                                     builder: (context) {
-                                      if ((currentUserDocument?.favorites.toList() ?? [])
-                                              .contains(widget.docMeditation?.reference.id) ==
-                                          true) {
+                                      if (favorites
+                                          .contains(widget.docMeditation?.reference.id)) {
                                         return Icon(
                                           Icons.favorite,
                                           color: FlutterFlowTheme.of(context).primary,
@@ -290,6 +299,25 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _PlaceholderImage extends StatelessWidget {
+  const _PlaceholderImage();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 100.0,
+      height: 100.0,
+      color: FlutterFlowTheme.of(context).accent4,
+      alignment: Alignment.center,
+      child: Icon(
+        Icons.image_not_supported_outlined,
+        color: FlutterFlowTheme.of(context).primary,
+        size: 32.0,
       ),
     );
   }

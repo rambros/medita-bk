@@ -1,12 +1,13 @@
-import '/data/services/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/ui/core/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/ui/core/flutter_flow/custom_functions.dart' as functions;
+import '/data/repositories/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'comment_dialog_model.dart';
 export 'comment_dialog_model.dart';
 
@@ -237,7 +238,32 @@ class _CommentDialogWidgetState extends State<CommentDialogWidget> {
                               0.0, 16.0, 0.0, 16.0),
                           child: FFButtonWidget(
                             onPressed: () async {
+                              final authRepo = context.read<AuthRepository>();
+                              if (authRepo.currentUserRef == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Faça login para comentar.',
+                                      style: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .override(
+                                            fontFamily: FlutterFlowTheme.of(context)
+                                                .titleSmallFamily,
+                                            color: FlutterFlowTheme.of(context).info,
+                                            letterSpacing: 0.0,
+                                            useGoogleFonts: !FlutterFlowTheme.of(context)
+                                                .titleSmallIsCustom,
+                                          ),
+                                    ),
+                                    backgroundColor:
+                                        FlutterFlowTheme.of(context).primary,
+                                  ),
+                                );
+                                return;
+                              }
                               if (_model.comentarioTextController.text != '') {
+                                final userId = authRepo.currentUserUid;
+                                final user = authRepo.currentUser;
                                 await widget.meditationRef!.update({
                                   ...mapToFirestore(
                                     {
@@ -245,19 +271,15 @@ class _CommentDialogWidgetState extends State<CommentDialogWidget> {
                                         getCommentFirestoreData(
                                           updateCommentStruct(
                                             CommentStruct(
-                                              userId: currentUserUid,
-                                              userName: valueOrDefault(
-                                                  currentUserDocument?.fullName,
-                                                  ''),
+                                              userId: userId,
+                                              userName: valueOrDefault(user?.fullName, ''),
                                               comment: _model
                                                   .comentarioTextController
                                                   .text,
                                               commentDate:
                                                   functions.commentDate(),
-                                              userImageUrl: valueOrDefault(
-                                                  currentUserDocument
-                                                      ?.userImageUrl,
-                                                  ''),
+                                              userImageUrl:
+                                                  valueOrDefault(user?.userImageUrl, ''),
                                             ),
                                             clearUnsetFields: false,
                                           ),
@@ -269,6 +291,7 @@ class _CommentDialogWidgetState extends State<CommentDialogWidget> {
                                 });
 
                                 _model.updatePage(() {});
+                                if (!context.mounted) return;
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(

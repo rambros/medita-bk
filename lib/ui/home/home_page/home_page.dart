@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
-import '/data/services/auth/firebase_auth/auth_util.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/ui/core/flutter_flow/flutter_flow_animations.dart';
@@ -161,7 +160,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   hoverColor: Colors.transparent,
                                   highlightColor: Colors.transparent,
                                   onTap: () async {
-                                    if ((currentUserDocument?.userRole.toList() ?? []).contains('Tester') == true) {
+                                    if ((viewModel.userRecord?.userRole.toList() ?? []).contains('Tester') ==
+                                        true) {
                                       await showDialog(
                                         context: context,
                                         builder: (dialogContext) {

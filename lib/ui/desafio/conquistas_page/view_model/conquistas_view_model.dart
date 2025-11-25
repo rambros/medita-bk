@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
-import '/data/services/auth/firebase_auth/auth_util.dart';
-import '/backend/schema/structs/index.dart';
+
 import '/app_state.dart';
+import '/backend/schema/structs/index.dart';
+import '/data/repositories/auth_repository.dart';
 import '/ui/core/flutter_flow/custom_functions.dart' as functions;
 
 class ConquistasViewModel extends ChangeNotifier {
-  D21ModelStruct? get desafio21 => currentUserDocument?.desafio21;
+  ConquistasViewModel({required AuthRepository authRepository}) : _authRepository = authRepository;
+
+  final AuthRepository _authRepository;
+
+  D21ModelStruct? get desafio21 => _authRepository.currentUser?.desafio21;
   
   int get diasCompletados => desafio21?.diasCompletados ?? 0;
   int get etapasCompletadas => desafio21?.etapasCompletadas ?? 0;

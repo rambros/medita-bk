@@ -50,6 +50,7 @@ import '/backend/repositories/meditation/meditation_repository.dart';
 import '/ui/meditation/meditation_home_page/view_model/meditation_home_view_model.dart';
 import '/ui/meditation/meditation_list_page/view_model/meditation_list_view_model.dart';
 import '/data/repositories/playlist_repository.dart';
+import '/data/services/auth/firebase_auth/firebase_auth_service.dart';
 
 import 'data/repositories/user_repository.dart';
 import 'data/repositories/auth_repository.dart';
@@ -94,23 +95,41 @@ void main() async {
     providers: [
       ChangeNotifierProvider(create: (context) => appState),
 
+      // Core services
+      Provider(create: (_) => FirebaseAuthService()),
+      ProxyProvider<FirebaseAuthService, AuthRepository>(
+        update: (context, authService, previous) => previous ?? AuthRepository(authService: authService),
+      ),
+      Provider(create: (_) => UserRepository()),
+
       // Playlist Module
       Provider(create: (_) => PlaylistRepository()),
 
       // Home Module
       Provider(create: (_) => HomeRepository()),
-      ChangeNotifierProxyProvider<HomeRepository, HomeViewModel>(
-        create: (context) => HomeViewModel(context.read<HomeRepository>()),
-        update: (context, repo, viewModel) => viewModel ?? HomeViewModel(repo),
+      ChangeNotifierProxyProvider2<HomeRepository, AuthRepository, HomeViewModel>(
+        create: (context) => HomeViewModel(
+          repository: context.read<HomeRepository>(),
+          authRepository: context.read<AuthRepository>(),
+        ),
+        update: (context, homeRepo, authRepo, viewModel) =>
+            viewModel ?? HomeViewModel(repository: homeRepo, authRepository: authRepo),
       ),
 
       // Desafio Module
       Provider(create: (_) => DesafioRepository()),
-      ChangeNotifierProxyProvider<DesafioRepository, HomeDesafioViewModel>(
-        create: (context) => HomeDesafioViewModel(repository: context.read<DesafioRepository>()),
-        update: (context, repo, viewModel) => viewModel ?? HomeDesafioViewModel(repository: repo),
+      ChangeNotifierProxyProvider2<DesafioRepository, AuthRepository, HomeDesafioViewModel>(
+        create: (context) => HomeDesafioViewModel(
+          repository: context.read<DesafioRepository>(),
+          authRepository: context.read<AuthRepository>(),
+        ),
+        update: (context, repo, authRepo, viewModel) =>
+            viewModel ?? HomeDesafioViewModel(repository: repo, authRepository: authRepo),
       ),
-      ChangeNotifierProvider(create: (_) => ListaEtapasViewModel()),
+      ChangeNotifierProxyProvider<AuthRepository, ListaEtapasViewModel>(
+        create: (context) => ListaEtapasViewModel(authRepository: context.read<AuthRepository>()),
+        update: (context, authRepo, previous) => previous ?? ListaEtapasViewModel(authRepository: authRepo),
+      ),
 
       // Notification Module
       Provider(create: (_) => NotificationRepository()),
@@ -173,24 +192,28 @@ void main() async {
       // Meditation Module
       Provider<MeditationRepository>(create: (_) => MeditationRepositoryImpl()),
       ChangeNotifierProvider(create: (_) => MeditationHomeViewModel()),
-      ChangeNotifierProxyProvider<MeditationRepository, MeditationListViewModel>(
-        create: (context) => MeditationListViewModel(meditationRepository: context.read<MeditationRepository>()),
-        update: (context, repo, viewModel) => viewModel ?? MeditationListViewModel(meditationRepository: repo),
+      ChangeNotifierProxyProvider2<MeditationRepository, AuthRepository, MeditationListViewModel>(
+        create: (context) => MeditationListViewModel(
+          meditationRepository: context.read<MeditationRepository>(),
+          authRepository: context.read<AuthRepository>(),
+        ),
+        update: (context, medRepo, authRepo, viewModel) =>
+            viewModel ?? MeditationListViewModel(meditationRepository: medRepo, authRepository: authRepo),
       ),
       // User Repository and ViewModels
-      Provider(create: (context) => UserRepository()),
-      Provider(create: (context) => AuthRepository()),
       ChangeNotifierProxyProvider<AuthRepository, ConfigViewModel>(
         create: (context) => ConfigViewModel(
           authRepository: Provider.of<AuthRepository>(context, listen: false),
         ),
         update: (context, authRepository, previous) => ConfigViewModel(authRepository: authRepository),
       ),
-      ChangeNotifierProxyProvider<UserRepository, EditProfileViewModel>(
+      ChangeNotifierProxyProvider2<AuthRepository, UserRepository, EditProfileViewModel>(
         create: (context) => EditProfileViewModel(
           userRepository: Provider.of<UserRepository>(context, listen: false),
+          authRepository: Provider.of<AuthRepository>(context, listen: false),
         ),
-        update: (context, userRepository, previous) => previous ?? EditProfileViewModel(userRepository: userRepository),
+        update: (context, authRepository, userRepository, previous) =>
+            previous ?? EditProfileViewModel(userRepository: userRepository, authRepository: authRepository),
       ),
       ChangeNotifierProvider(create: (context) => SettingsViewModel()),
       ChangeNotifierProxyProvider<AuthRepository, DeleteAccountViewModel>(

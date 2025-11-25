@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
+import '/data/repositories/auth_repository.dart';
 
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
@@ -26,7 +27,7 @@ class _DiarioMeditacaoPageState extends State<DiarioMeditacaoPage> {
   @override
   void initState() {
     super.initState();
-    _viewModel = DiarioMeditacaoViewModel();
+    _viewModel = DiarioMeditacaoViewModel(authRepository: context.read<AuthRepository>());
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'diarioMeditacaoPage'});
 
     SchedulerBinding.instance.addPostFrameCallback((_) async {
