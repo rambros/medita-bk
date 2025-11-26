@@ -6,16 +6,20 @@ import '/core/utils/logger.dart';
 
 class PalestrasListViewModel extends ChangeNotifier {
   final VideoRepository _repository;
-  final PagingController<String?, Video> pagingController = PagingController(firstPageKey: null);
+  late final PagingController<int, Video> pagingController;
+  String? _nextPageToken = '';
+  bool _hasNextPage = true;
+  int _nextPageKey = 0;
 
   Channel? channel;
   int totalVideos = 0;
   bool isLoadingChannel = true;
 
   PalestrasListViewModel(this._repository) {
-    pagingController.addPageRequestListener((pageKey) {
-      _fetchPage(pageKey);
-    });
+    pagingController = PagingController<int, Video>(
+      getNextPageKey: (_) => _hasNextPage ? _nextPageKey : null,
+      fetchPage: _fetchPage,
+    );
     _loadChannelInfo();
   }
 
@@ -33,22 +37,32 @@ class PalestrasListViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> _fetchPage(String? pageKey) async {
+  Future<List<Video>> _fetchPage(int pageKey) async {
     try {
       logDebug('PalestrasListViewModel: Fetching page with pageKey: $pageKey');
-      final newItems = await _repository.getVideosPalestras(pageToken: pageKey);
+      final pageToken = (_nextPageToken ?? '').isEmpty ? null : _nextPageToken;
+      final newItems = await _repository.getVideosPalestras(pageToken: pageToken);
       logDebug('PalestrasListViewModel: Received ${newItems.videos.length} videos');
       logDebug('PalestrasListViewModel: Next page token: ${newItems.nextPageToken}');
       final isLastPage = newItems.nextPageToken == null;
+      _nextPageToken = newItems.nextPageToken ?? '';
+      _nextPageKey++;
       if (isLastPage) {
-        pagingController.appendLastPage(newItems.videos);
-      } else {
-        pagingController.appendPage(newItems.videos, newItems.nextPageToken);
+        _hasNextPage = false;
+        pagingController.value = pagingController.value.copyWith(hasNextPage: false);
       }
+      return newItems.videos;
     } catch (error, stackTrace) {
       logDebug('PalestrasListViewModel: Error fetching page: $error', stackTrace: stackTrace);
-      pagingController.error = error;
+      rethrow;
     }
+  }
+
+  void refresh() {
+    _nextPageToken = '';
+    _hasNextPage = true;
+    _nextPageKey = 0;
+    pagingController.refresh();
   }
 
   @override

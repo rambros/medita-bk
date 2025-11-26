@@ -11,7 +11,7 @@ import 'data/services/auth/firebase_auth/auth_util.dart';
 
 import 'data/services/push_notifications/push_notifications_util.dart';
 import 'data/services/firebase_config.dart';
-import '/ui/core/flutter_flow/flutter_flow_theme.dart';
+import '/ui/core/theme/app_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/ui/core/flutter_flow/internationalization.dart';
 import 'package:flutter/foundation.dart';
@@ -37,7 +37,7 @@ void main() async {
   final notificationService = NotificationService();
   await notificationService.initialize();
 
-  await FlutterFlowTheme.initialize();
+  await AppTheme.initialize();
 
   final appState = AppStateStore(); // Initialize AppStateStore
   await appState.initializePersistedState(); // Initialize SharedPreferences
@@ -248,12 +248,12 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
 class _MyAppState extends State<MyApp> {
   Locale? _locale;
 
-  ThemeMode _themeMode = FlutterFlowTheme.themeMode;
+  ThemeMode _themeMode = AppTheme.themeMode;
 
   late AppStateNotifier _appStateNotifier;
   late GoRouter _router;
-  String getRoute([RouteMatch? routeMatch]) {
-    final RouteMatch lastMatch = routeMatch ?? _router.routerDelegate.currentConfiguration.last;
+  String getRoute([RouteMatchBase? routeMatch]) {
+    final RouteMatchBase lastMatch = routeMatch ?? _router.routerDelegate.currentConfiguration.last;
     final RouteMatchList matchList =
         lastMatch is ImperativeRouteMatch ? lastMatch.matches : _router.routerDelegate.currentConfiguration;
     return matchList.uri.toString();
@@ -271,14 +271,33 @@ class _MyAppState extends State<MyApp> {
 
     _appStateNotifier = AppStateNotifier.instance;
     _router = createRouter(_appStateNotifier);
-    userStream = meditaBKFirebaseUserStream()
-      ..listen((user) {
-        _appStateNotifier.update(user);
-      });
-    jwtTokenStream.listen((_) {});
+    
+    // Setup user stream with error handling
+    try {
+      userStream = meditaBKFirebaseUserStream()
+        ..listen(
+          (user) {
+            _appStateNotifier.update(user);
+          },
+          onError: (error) {
+            // Force hide splash on error to prevent getting stuck
+            _appStateNotifier.stopShowingSplashImage();
+          },
+        );
+      
+      jwtTokenStream.listen((_) {});
+    } catch (e) {
+      _appStateNotifier.stopShowingSplashImage();
+    }
+    
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _appStateNotifier.stopShowingSplashImage();
+    });
     Future.delayed(
       Duration(milliseconds: isWeb ? 0 : 1000),
-      () => _appStateNotifier.stopShowingSplashImage(),
+      () {
+        _appStateNotifier.stopShowingSplashImage();
+      },
     );
   }
 
@@ -295,7 +314,7 @@ class _MyAppState extends State<MyApp> {
 
   void setThemeMode(ThemeMode mode) => safeSetState(() {
         _themeMode = mode;
-        FlutterFlowTheme.saveThemeMode(mode);
+        AppTheme.saveThemeMode(mode);
       });
 
   @override
@@ -384,9 +403,9 @@ class _NavBarPageState extends State<NavBarPage> {
             _currentPage = null;
             _currentPageName = tabs.keys.toList()[i];
           }),
-          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-          selectedItemColor: FlutterFlowTheme.of(context).primary,
-          unselectedItemColor: FlutterFlowTheme.of(context).secondaryText,
+          backgroundColor: AppTheme.of(context).primaryBackground,
+          selectedItemColor: AppTheme.of(context).primary,
+          unselectedItemColor: AppTheme.of(context).secondaryText,
           showSelectedLabels: true,
           showUnselectedLabels: false,
           type: BottomNavigationBarType.fixed,

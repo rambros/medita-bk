@@ -5,16 +5,20 @@ import '/domain/models/video/video_model.dart';
 
 class CanalViverListViewModel extends ChangeNotifier {
   final VideoRepository _repository;
-  final PagingController<String?, Video> pagingController = PagingController(firstPageKey: null);
+  late final PagingController<int, Video> pagingController;
+  String? _nextPageToken = '';
+  bool _hasNextPage = true;
+  int _nextPageKey = 0;
 
   Channel? channel;
   int totalVideos = 0;
   bool isLoadingChannel = true;
 
   CanalViverListViewModel(this._repository) {
-    pagingController.addPageRequestListener((pageKey) {
-      _fetchPage(pageKey);
-    });
+    pagingController = PagingController<int, Video>(
+      getNextPageKey: (_) => _hasNextPage ? _nextPageKey : null,
+      fetchPage: _fetchPage,
+    );
     _loadChannelInfo();
   }
 
@@ -31,24 +35,30 @@ class CanalViverListViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> _fetchPage(String? pageKey) async {
-    try {
-      final newItems = await _repository.getVideosCanalViverMeditar(pageToken: pageKey);
+  Future<List<Video>> _fetchPage(int pageKey) async {
+    final pageToken = (_nextPageToken ?? '').isEmpty ? null : _nextPageToken;
+    final newItems = await _repository.getVideosCanalViverMeditar(pageToken: pageToken);
 
-      if (pageKey == null) {
-        totalVideos = newItems.totalResults;
-        notifyListeners();
-      }
-
-      final isLastPage = newItems.nextPageToken == null;
-      if (isLastPage) {
-        pagingController.appendLastPage(newItems.videos);
-      } else {
-        pagingController.appendPage(newItems.videos, newItems.nextPageToken);
-      }
-    } catch (error) {
-      pagingController.error = error;
+    if (pageKey == 0) {
+      totalVideos = newItems.totalResults;
+      notifyListeners();
     }
+
+    _nextPageToken = newItems.nextPageToken ?? '';
+    final isLastPage = newItems.nextPageToken == null;
+    _nextPageKey++;
+    if (isLastPage) {
+      _hasNextPage = false;
+      pagingController.value = pagingController.value.copyWith(hasNextPage: false);
+    }
+    return newItems.videos;
+  }
+
+  void refresh() {
+    _nextPageToken = '';
+    _hasNextPage = true;
+    _nextPageKey = 0;
+    pagingController.refresh();
   }
 
   @override

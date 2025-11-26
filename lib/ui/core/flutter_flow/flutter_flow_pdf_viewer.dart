@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:internet_file/internet_file.dart';
+import 'package:http/http.dart' as http;
 import 'package:pdfx/pdfx.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 
@@ -35,14 +35,17 @@ class _FlutterFlowPdfViewerState extends State<FlutterFlowPdfViewer> {
 
   Future<void> _initializeController() async {
     safeSetState(() => _isLoading = true);
-    final pdfDocument =
-        networkPath.isNotEmpty || assetPath.isNotEmpty || fileBytes.isNotEmpty
-            ? assetPath.isNotEmpty
-                ? await PdfDocument.openAsset(assetPath)
-                : networkPath.isNotEmpty
-                    ? await PdfDocument.openData(InternetFile.get(networkPath))
-                    : await PdfDocument.openData(Uint8List.fromList(fileBytes))
-            : null;
+    PdfDocument? pdfDocument;
+    if (assetPath.isNotEmpty) {
+      pdfDocument = await PdfDocument.openAsset(assetPath);
+    } else if (networkPath.isNotEmpty) {
+      final response = await http.get(Uri.parse(networkPath));
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        pdfDocument = await PdfDocument.openData(response.bodyBytes);
+      }
+    } else if (fileBytes.isNotEmpty) {
+      pdfDocument = await PdfDocument.openData(Uint8List.fromList(fileBytes));
+    }
     controller = pdfDocument != null
         ? PdfController(document: Future.value(pdfDocument))
         : null;

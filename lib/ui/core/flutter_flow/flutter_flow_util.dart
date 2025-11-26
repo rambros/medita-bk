@@ -118,7 +118,7 @@ Future downloadFile({
 
   // Extract base filename without extension for consistent handling
   final baseFilename = filename.contains('.') ? filename.substring(0, filename.lastIndexOf('.')) : filename;
-  final fileExtension = extension ?? mime.extensionFromMime(mimeType ?? '');
+  final fileExtension = extension ?? mime.extensionFromMime(mimeType ?? '') ?? '';
 
   if (kIsWeb) {
     await FileSaver.instance.saveFile(

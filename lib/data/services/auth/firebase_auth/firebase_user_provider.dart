@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
@@ -27,11 +26,8 @@ class MeditaBKFirebaseUser extends BaseAuthUser {
 
   @override
   Future? updateEmail(String email) async {
-    try {
-      await user?.updateEmail(email);
-    } catch (_) {
-      await user?.verifyBeforeUpdateEmail(email);
-    }
+    if (user == null) return;
+    await user!.verifyBeforeUpdateEmail(email);
   }
 
   @override
@@ -65,12 +61,7 @@ class MeditaBKFirebaseUser extends BaseAuthUser {
       MeditaBKFirebaseUser(user);
 }
 
-Stream<BaseAuthUser> meditaBKFirebaseUserStream() => FirebaseAuth.instance
-        .authStateChanges()
-        .debounce((user) => user == null && !loggedIn
-            ? TimerStream(true, const Duration(seconds: 1))
-            : Stream.value(user))
-        .map<BaseAuthUser>(
+Stream<BaseAuthUser> meditaBKFirebaseUserStream() => FirebaseAuth.instance.authStateChanges().map<BaseAuthUser>(
       (user) {
         currentUser = MeditaBKFirebaseUser(user);
         if (!kIsWeb) {

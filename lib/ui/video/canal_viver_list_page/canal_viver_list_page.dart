@@ -199,133 +199,137 @@ class _CanalViverListPageState extends State<CanalViverListPage> {
                           padding: const EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
                           child: RefreshIndicator(
                             onRefresh: () async {
-                              viewModel.pagingController.refresh();
+                              viewModel.refresh();
                             },
-                            child: PagedListView<String?, Video>.separated(
-                              pagingController: viewModel.pagingController,
-                              padding: EdgeInsets.zero,
-                              shrinkWrap: true,
-                              separatorBuilder: (_, __) => const SizedBox(height: 8.0),
-                              builderDelegate: PagedChildBuilderDelegate<Video>(
-                                firstPageProgressIndicatorBuilder: (_) => Center(
-                                  child: SizedBox(
-                                    width: 40.0,
-                                    height: 40.0,
-                                    child: CircularProgressIndicator(
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        FlutterFlowTheme.of(context).primary,
+                            child: ValueListenableBuilder<PagingState<int, Video>>(
+                              valueListenable: viewModel.pagingController,
+                              builder: (context, state, _) {
+                                return PagedListView<int, Video>.separated(
+                                  state: state,
+                                  fetchNextPage: viewModel.pagingController.fetchNextPage,
+                                  padding: EdgeInsets.zero,
+                                  shrinkWrap: true,
+                                  separatorBuilder: (_, __) => const SizedBox(height: 8.0),
+                                  builderDelegate: PagedChildBuilderDelegate<Video>(
+                                    firstPageProgressIndicatorBuilder: (_) => Center(
+                                      child: SizedBox(
+                                        width: 40.0,
+                                        height: 40.0,
+                                        child: CircularProgressIndicator(
+                                          valueColor: AlwaysStoppedAnimation<Color>(
+                                            FlutterFlowTheme.of(context).primary,
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                                firstPageErrorIndicatorBuilder: (_) => VideoErrorIndicator(
-                                  onRetry: () => viewModel.pagingController.refresh(),
-                                ),
-                                newPageProgressIndicatorBuilder: (_) => Center(
-                                  child: SizedBox(
-                                    width: 40.0,
-                                    height: 40.0,
-                                    child: CircularProgressIndicator(
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        FlutterFlowTheme.of(context).primary,
+                                    firstPageErrorIndicatorBuilder: (_) => VideoErrorIndicator(
+                                      onRetry: () => viewModel.refresh(),
+                                    ),
+                                    newPageProgressIndicatorBuilder: (_) => Center(
+                                      child: SizedBox(
+                                        width: 40.0,
+                                        height: 40.0,
+                                        child: CircularProgressIndicator(
+                                          valueColor: AlwaysStoppedAnimation<Color>(
+                                            FlutterFlowTheme.of(context).primary,
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                                newPageErrorIndicatorBuilder: (_) => VideoNewPageErrorIndicator(
-                                  onRetry: () => viewModel.pagingController.retryLastFailedRequest(),
-                                ),
-                                itemBuilder: (context, video, index) {
-                                  return Padding(
-                                    padding: const EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 4.0, 0.0),
-                                    child: InkWell(
-                                      splashColor: Colors.transparent,
-                                      focusColor: Colors.transparent,
-                                      hoverColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      onTap: () async {
-                                        context.pushNamed(
-                                          YoutubePlayerPage.routeName,
-                                          queryParameters: {
-                                            'videoId': serializeParam(
-                                              video.id,
-                                              ParamType.String,
-                                            ),
-                                            'videoTitle': serializeParam(
-                                              video.title,
-                                              ParamType.String,
-                                            ),
-                                          }.withoutNulls,
-                                          extra: <String, dynamic>{
-                                            kTransitionInfoKey: const TransitionInfo(
-                                              hasTransition: true,
-                                              transitionType: PageTransitionType.leftToRight,
-                                            ),
+                                    newPageErrorIndicatorBuilder: (_) => VideoNewPageErrorIndicator(
+                                      onRetry: () => viewModel.pagingController.fetchNextPage(),
+                                    ),
+                                    itemBuilder: (context, video, index) {
+                                      return Padding(
+                                        padding: const EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 4.0, 0.0),
+                                        child: InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            context.pushNamed(
+                                              YoutubePlayerPage.routeName,
+                                              queryParameters: {
+                                                'videoId': serializeParam(
+                                                  video.id,
+                                                  ParamType.String,
+                                                ),
+                                                'videoTitle': serializeParam(
+                                                  video.title,
+                                                  ParamType.String,
+                                                ),
+                                              }.withoutNulls,
+                                              extra: <String, dynamic>{
+                                                kTransitionInfoKey: const TransitionInfo(
+                                                  hasTransition: true,
+                                                  transitionType: PageTransitionType.leftToRight,
+                                                ),
+                                              },
+                                            );
                                           },
-                                        );
-                                      },
-                                      child: Material(
-                                        color: Colors.transparent,
-                                        elevation: 2.0,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(16.0),
-                                        ),
-                                        child: Container(
-                                          width: 100.0,
-                                          height: 120.0,
-                                          decoration: BoxDecoration(
-                                            color: FlutterFlowTheme.of(context).primaryBackground,
-                                            borderRadius: BorderRadius.circular(16.0),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                ClipRRect(
-                                                  borderRadius: BorderRadius.circular(8.0),
-                                                  child: Image.network(
-                                                    valueOrDefault<String>(
-                                                      video.thumbnailUrl,
-                                                      'https://yt3.ggpht.com/ytc/AIdro_ktHw0fvUCXpu4YLDc1tk8rFCniiSPjTDB1yCdFbxSJFVk=s88-c-k-c0x00ffffff-no-rj',
-                                                    ),
-                                                    width: 120.0,
-                                                    height: 200.0,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                                Flexible(
-                                                  child: Padding(
-                                                    padding: const EdgeInsetsDirectional.fromSTEB(8.0, 16.0, 8.0, 16.0),
-                                                    child: Column(
-                                                      mainAxisSize: MainAxisSize.max,
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                                                      children: [
-                                                        Text(
-                                                          video.title,
-                                                          style: FlutterFlowTheme.of(context).labelMedium.override(
-                                                                fontFamily:
-                                                                    FlutterFlowTheme.of(context).labelMediumFamily,
-                                                                color: FlutterFlowTheme.of(context).primaryText,
-                                                                letterSpacing: 0.0,
-                                                                useGoogleFonts:
-                                                                    !FlutterFlowTheme.of(context).labelMediumIsCustom,
-                                                              ),
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            elevation: 2.0,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(16.0),
+                                            ),
+                                            child: Container(
+                                              width: 100.0,
+                                              height: 120.0,
+                                              decoration: BoxDecoration(
+                                                color: FlutterFlowTheme.of(context).primaryBackground,
+                                                borderRadius: BorderRadius.circular(16.0),
+                                              ),
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  mainAxisSize: MainAxisSize.max,
+                                                  children: [
+                                                    ClipRRect(
+                                                      borderRadius: BorderRadius.circular(8.0),
+                                                      child: Image.network(
+                                                        valueOrDefault<String>(
+                                                          video.thumbnailUrl,
+                                                          'https://yt3.ggpht.com/ytc/AIdro_ktHw0fvUCXpu4YLDc1tk8rFCniiSPjTDB1yCdFbxSJFVk=s88-c-k-c0x00ffffff-no-rj',
                                                         ),
-                                                      ],
+                                                        width: 120.0,
+                                                        height: 200.0,
+                                                        fit: BoxFit.cover,
+                                                      ),
                                                     ),
-                                                  ),
+                                                    Flexible(
+                                                      child: Padding(
+                                                        padding: const EdgeInsetsDirectional.fromSTEB(8.0, 16.0, 8.0, 16.0),
+                                                        child: Column(
+                                                          mainAxisSize: MainAxisSize.max,
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                          children: [
+                                                            Text(
+                                                              video.title,
+                                                              style: FlutterFlowTheme.of(context).labelMedium.override(
+                                                                    fontFamily: FlutterFlowTheme.of(context).labelMediumFamily,
+                                                                    color: FlutterFlowTheme.of(context).primaryText,
+                                                                    letterSpacing: 0.0,
+                                                                    useGoogleFonts: !FlutterFlowTheme.of(context).labelMediumIsCustom,
+                                                                  ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                              ],
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
                             ),
                           ),
                         ),

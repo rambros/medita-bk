@@ -22,13 +22,21 @@ const kTransitionInfoKey = '__transition_info__';
 GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
 class AppStateNotifier extends ChangeNotifier {
-  AppStateNotifier._();
+  AppStateNotifier._() {
+    // Always clear splash after a short delay to avoid getting stuck.
+    Timer(const Duration(seconds: 3), () {
+      if (showSplashImage) {
+        stopShowingSplashImage();
+      }
+    });
+  }
 
   static AppStateNotifier? _instance;
   static AppStateNotifier get instance => _instance ??= AppStateNotifier._();
 
   BaseAuthUser? initialUser;
   BaseAuthUser? user;
+  // Start with splash visible; main() will clear this via timers/failsafe.
   bool showSplashImage = true;
   String? _redirectLocation;
 
@@ -39,7 +47,9 @@ class AppStateNotifier extends ChangeNotifier {
   /// Otherwise, this will trigger a refresh and interrupt the action(s).
   bool notifyOnAuthChange = true;
 
-  bool get loading => user == null || showSplashImage;
+  // Splash should only depend on the explicit flag, not auth availability, so we
+  // don't block the UI when the auth stream is slow or emits null.
+  bool get loading => showSplashImage;
   bool get loggedIn => user?.loggedIn ?? false;
   bool get initiallyLoggedIn => initialUser?.loggedIn ?? false;
   bool get shouldRedirect => loggedIn && _redirectLocation != null;
@@ -710,48 +720,57 @@ class FFRoute {
         pageBuilder: (context, state) {
           fixStatusBarOniOS16AndBelow(context);
           final ffParams = FFParameters(state, asyncParams);
-          final page = ffParams.hasFutures
-              ? FutureBuilder(
-                  future: ffParams.completeFutures(),
-                  builder: (context, _) => builder(context, ffParams),
-                )
-              : builder(context, ffParams);
-          final child = appStateNotifier.loading
-              ? isWeb
-                  ? Container()
-                  : Container(
-                      color: FlutterFlowTheme.of(context).primaryBackground,
-                      child: Center(
-                        child: Image.asset(
-                          'assets/images/logo_meditabk.png',
-                          width: MediaQuery.sizeOf(context).width * 0.7,
-                          height: MediaQuery.sizeOf(context).height * 1.0,
-                          fit: BoxFit.contain,
+          
+          // Use AnimatedBuilder to listen to appStateNotifier changes for BOTH splash AND auth state
+          return MaterialPage(
+            key: state.pageKey,
+            child: AnimatedBuilder(
+              animation: appStateNotifier,
+              builder: (context, _) {
+                // Determine which page to show based on current auth state
+                Widget currentPage;
+                if (state.uri.path == '/') {
+                  // Root path - decide between NavBarPage and SocialLoginPage
+                  currentPage = appStateNotifier.loggedIn 
+                      ? const NavBarPage() 
+                      : const SocialLoginPage();
+                } else {
+                  // Other paths - use the builder
+                  currentPage = ffParams.hasFutures
+                      ? FutureBuilder(
+                          future: ffParams.completeFutures(),
+                          builder: (context, _) => builder(context, ffParams),
+                        )
+                      : builder(context, ffParams);
+                }
+                
+                final basePage = PushNotificationsHandler(child: currentPage);
+                
+                Widget child;
+                if (appStateNotifier.loading && !isWeb) {
+                  child = Stack(
+                    children: [
+                      basePage,
+                      Container(
+                        color: FlutterFlowTheme.of(context).primaryBackground,
+                        child: Center(
+                          child: Image.asset(
+                            'assets/images/logo_meditabk.png',
+                            width: MediaQuery.sizeOf(context).width * 0.7,
+                            height: MediaQuery.sizeOf(context).height * 1.0,
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
-                    )
-              : PushNotificationsHandler(child: page);
-
-          final transitionInfo = state.transitionInfo;
-          return transitionInfo.hasTransition
-              ? CustomTransitionPage(
-                  key: state.pageKey,
-                  child: child,
-                  transitionDuration: transitionInfo.duration,
-                  transitionsBuilder: (context, animation, secondaryAnimation, child) => PageTransition(
-                    type: transitionInfo.transitionType,
-                    duration: transitionInfo.duration,
-                    reverseDuration: transitionInfo.duration,
-                    alignment: transitionInfo.alignment,
-                    child: child,
-                  ).buildTransitions(
-                    context,
-                    animation,
-                    secondaryAnimation,
-                    child,
-                  ),
-                )
-              : MaterialPage(key: state.pageKey, child: child);
+                    ],
+                  );
+                } else {
+                  child = basePage;
+                }
+                return child;
+              },
+            ),
+          );
         },
         routes: routes,
       );

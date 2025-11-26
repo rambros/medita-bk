@@ -6,16 +6,20 @@ import '/core/utils/logger.dart';
 
 class EntrevistasListViewModel extends ChangeNotifier {
   final VideoRepository _repository;
-  final PagingController<String?, Video> pagingController = PagingController(firstPageKey: null);
+  late final PagingController<int, Video> pagingController;
+  String? _nextPageToken = '';
+  bool _hasNextPage = true;
+  int _nextPageKey = 0;
 
   Channel? channel;
   int totalVideos = 0;
   bool isLoadingChannel = true;
 
   EntrevistasListViewModel(this._repository) {
-    pagingController.addPageRequestListener((pageKey) {
-      _fetchPage(pageKey);
-    });
+    pagingController = PagingController<int, Video>(
+      getNextPageKey: (_) => _hasNextPage ? _nextPageKey : null,
+      fetchPage: _fetchPage,
+    );
     _loadChannelInfo();
   }
 
@@ -34,27 +38,38 @@ class EntrevistasListViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> _fetchPage(String? pageKey) async {
+  Future<List<Video>> _fetchPage(int pageKey) async {
     try {
       logDebug('EntrevistasListViewModel: Fetching page with key: $pageKey');
-      final newItems = await _repository.getVideosEntrevistas(pageToken: pageKey);
-      logDebug('EntrevistasListViewModel: Received ${newItems.videos.length} videos, total: ${newItems.totalResults}');
+      final pageToken = (_nextPageToken ?? '').isEmpty ? null : _nextPageToken;
+      final newItems = await _repository.getVideosEntrevistas(pageToken: pageToken);
+      logDebug(
+          'EntrevistasListViewModel: Received ${newItems.videos.length} videos, total: ${newItems.totalResults}');
 
-      if (pageKey == null) {
+      if (pageKey == 0) {
         totalVideos = newItems.totalResults;
         notifyListeners();
       }
 
+      _nextPageToken = newItems.nextPageToken ?? '';
       final isLastPage = newItems.nextPageToken == null;
+      _nextPageKey++;
       if (isLastPage) {
-        pagingController.appendLastPage(newItems.videos);
-      } else {
-        pagingController.appendPage(newItems.videos, newItems.nextPageToken);
+        _hasNextPage = false;
+        pagingController.value = pagingController.value.copyWith(hasNextPage: false);
       }
+      return newItems.videos;
     } catch (error) {
       logDebug('EntrevistasListViewModel: Error fetching page - $error');
-      pagingController.error = error;
+      rethrow;
     }
+  }
+
+  void refresh() {
+    _nextPageToken = '';
+    _hasNextPage = true;
+    _nextPageKey = 0;
+    pagingController.refresh();
   }
 
   @override

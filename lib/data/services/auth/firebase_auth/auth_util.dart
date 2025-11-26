@@ -35,10 +35,10 @@ bool get currentUserEmailVerified => currentUser?.emailVerified ?? false;
 /// Create a Stream that listens to the current user's JWT Token, since Firebase
 /// generates a new token every hour.
 String? _currentJwtToken;
-final jwtTokenStream = FirebaseAuth.instance
-    .idTokenChanges()
-    .map((user) async => _currentJwtToken = await user?.getIdToken())
-    .asBroadcastStream();
+final jwtTokenStream = FirebaseAuth.instance.idTokenChanges().asyncMap((user) async {
+  _currentJwtToken = await user?.getIdToken();
+  return _currentJwtToken;
+}).asBroadcastStream();
 
 DocumentReference? get currentUserReference =>
     loggedIn ? FirebaseFirestore.instance.collection('users').doc(currentUser!.uid) : null;

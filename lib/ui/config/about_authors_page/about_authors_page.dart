@@ -2,7 +2,6 @@ import '/data/models/firebase/user_model.dart';
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
@@ -85,130 +84,127 @@ class _AboutAuthorsPageState extends State<AboutAuthorsPage> {
           ),
           child: Consumer<AboutAuthorsViewModel>(
             builder: (context, viewModel, child) {
-              return PagedListView<DocumentSnapshot?, UserModel>.separated(
-                pagingController: viewModel.pagingController,
-                padding: EdgeInsets.zero,
-                reverse: false,
-                scrollDirection: Axis.vertical,
-                separatorBuilder: (_, __) => const SizedBox(height: 4.0),
-                builderDelegate: PagedChildBuilderDelegate<UserModel>(
-                  // Customize what your widget looks like when it's loading the first page.
-                  firstPageProgressIndicatorBuilder: (_) => Center(
-                    child: SizedBox(
-                      width: 50.0,
-                      height: 50.0,
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          FlutterFlowTheme.of(context).primary,
-                        ),
-                      ),
-                    ),
-                  ),
-                  // Customize what your widget looks like when it's loading another page.
-                  newPageProgressIndicatorBuilder: (_) => Center(
-                    child: SizedBox(
-                      width: 50.0,
-                      height: 50.0,
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          FlutterFlowTheme.of(context).primary,
-                        ),
-                      ),
-                    ),
-                  ),
-                  itemBuilder: (context, _, listViewIndex) {
-                    final listViewUserModel = viewModel.pagingController.itemList![listViewIndex];
-                    return Card(
-                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                      color: FlutterFlowTheme.of(context).primaryBackground,
-                      elevation: 4.0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                      child: InkWell(
-                        onTap: () async {
-                          // TODO: Navigate to author detail page or show author info
-                          // For now, showing a placeholder message
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Detalhes de ${listViewUserModel.fullName}'),
-                              duration: const Duration(seconds: 2),
+              return ValueListenableBuilder(
+                valueListenable: viewModel.pagingController,
+                builder: (context, state, _) {
+                  return PagedListView<int, UserModel>.separated(
+                    state: state,
+                    fetchNextPage: viewModel.pagingController.fetchNextPage,
+                    padding: EdgeInsets.zero,
+                    reverse: false,
+                    scrollDirection: Axis.vertical,
+                    separatorBuilder: (_, __) => const SizedBox(height: 4.0),
+                    builderDelegate: PagedChildBuilderDelegate<UserModel>(
+                      firstPageProgressIndicatorBuilder: (_) => Center(
+                        child: SizedBox(
+                          width: 50.0,
+                          height: 50.0,
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              FlutterFlowTheme.of(context).primary,
                             ),
-                          );
-                        },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ClipOval(
-                                child: Container(
-                                  width: 90.0,
-                                  height: 90.0,
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context).primaryBackground,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    child: Image.network(
-                                      listViewUserModel.userImageUrl,
-                                      width: 150.0,
-                                      height: 150.0,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
+                          ),
+                        ),
+                      ),
+                      newPageProgressIndicatorBuilder: (_) => Center(
+                        child: SizedBox(
+                          width: 50.0,
+                          height: 50.0,
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              FlutterFlowTheme.of(context).primary,
+                            ),
+                          ),
+                        ),
+                      ),
+                      itemBuilder: (context, listViewUserModel, listViewIndex) {
+                        return Card(
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          color: FlutterFlowTheme.of(context).primaryBackground,
+                          elevation: 4.0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                          child: InkWell(
+                            onTap: () async {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Detalhes de ${listViewUserModel.fullName}'),
+                                  duration: const Duration(seconds: 2),
                                 ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(8.0, 12.0, 8.0, 8.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      listViewUserModel.fullName,
-                                      style: FlutterFlowTheme.of(context).titleSmall.override(
-                                            fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
-                                            color: FlutterFlowTheme.of(context).primaryText,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w500,
-                                            useGoogleFonts: !FlutterFlowTheme.of(context).titleSmallIsCustom,
-                                          ),
-                                    ),
-                                    Container(
-                                      width: double.infinity,
-                                      height: 68.0,
+                              );
+                            },
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ClipOval(
+                                    child: Container(
+                                      width: 90.0,
+                                      height: 90.0,
                                       decoration: BoxDecoration(
                                         color: FlutterFlowTheme.of(context).primaryBackground,
+                                        shape: BoxShape.circle,
                                       ),
-                                      child: Text(
-                                        listViewUserModel.curriculum,
-                                        textAlign: TextAlign.start,
-                                        maxLines: 4,
-                                        style: FlutterFlowTheme.of(context).bodySmall.override(
-                                              fontFamily: FlutterFlowTheme.of(context).bodySmallFamily,
-                                              letterSpacing: 0.0,
-                                              fontWeight: FontWeight.normal,
-                                              useGoogleFonts: !FlutterFlowTheme.of(context).bodySmallIsCustom,
-                                            ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(8.0),
+                                        child: Image.network(
+                                          listViewUserModel.userImageUrl,
+                                          width: 150.0,
+                                          height: 150.0,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
-                                  ].divide(const SizedBox(height: 4.0)),
+                                  ),
                                 ),
-                              ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsetsDirectional.fromSTEB(8.0, 12.0, 8.0, 8.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          listViewUserModel.fullName,
+                                          style: FlutterFlowTheme.of(context).headlineMedium.override(
+                                                fontFamily: FlutterFlowTheme.of(context).headlineMediumFamily,
+                                                color: FlutterFlowTheme.of(context).primaryText,
+                                                letterSpacing: 0.0,
+                                                useGoogleFonts: !FlutterFlowTheme.of(context).headlineMediumIsCustom,
+                                              ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 4.0),
+                                          child: Text(
+                                            listViewUserModel.curriculum.isNotEmpty
+                                                ? listViewUserModel.curriculum
+                                                : 'Sem descrição',
+                                            maxLines: 4,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                  fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
+                                                  color: FlutterFlowTheme.of(context).secondaryText,
+                                                  letterSpacing: 0.0,
+                                                  useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
+                                                ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
               );
             },
           ),

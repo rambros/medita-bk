@@ -2,7 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-final _googleSignIn = GoogleSignIn(scopes: ['profile', 'email']);
+final _googleSignIn = GoogleSignIn.instance;
+var _googleInitialized = false;
 
 Future<UserCredential?> googleSignInFunc() async {
   if (kIsWeb) {
@@ -11,13 +12,25 @@ Future<UserCredential?> googleSignInFunc() async {
   }
 
   await signOutWithGoogle().catchError((_) => null);
-  final auth = await (await _googleSignIn.signIn())?.authentication;
-  if (auth == null) {
+  await _ensureInitialized();
+  try {
+    final account = await _googleSignIn.authenticate(scopeHint: const ['profile', 'email']);
+    final authz = await account.authorizationClient.authorizeScopes(const ['profile', 'email']);
+    final authTokens = account.authentication;
+    final credential = GoogleAuthProvider.credential(
+      idToken: authTokens.idToken,
+      accessToken: authz.accessToken,
+    );
+    return FirebaseAuth.instance.signInWithCredential(credential);
+  } on GoogleSignInException {
     return null;
   }
-  final credential = GoogleAuthProvider.credential(
-      idToken: auth.idToken, accessToken: auth.accessToken);
-  return FirebaseAuth.instance.signInWithCredential(credential);
 }
 
-Future signOutWithGoogle() => _googleSignIn.signOut();
+Future<void> _ensureInitialized() async {
+  if (_googleInitialized) return;
+  await _googleSignIn.initialize();
+  _googleInitialized = true;
+}
+
+Future signOutWithGoogle() => _googleInitialized ? _googleSignIn.signOut() : Future.value();

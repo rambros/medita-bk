@@ -7,46 +7,56 @@ import '/core/utils/logger.dart';
 
 class AboutAuthorsViewModel extends ChangeNotifier {
   final UserRepository _repository;
-  final PagingController<DocumentSnapshot?, UserModel> pagingController;
+  late final PagingController<int, UserModel> pagingController;
 
   bool _isDisposed = false;
+  DocumentSnapshot? _lastDocument;
+  bool _hasNextPage = true;
+  int _nextPageKey = 0;
+  static const _pageSize = 25;
 
   AboutAuthorsViewModel({required UserRepository repository})
-      : _repository = repository,
-        pagingController = PagingController(firstPageKey: null) {
-    pagingController.addPageRequestListener(_fetchPage);
+      : _repository = repository {
+    pagingController = PagingController<int, UserModel>(
+      getNextPageKey: (_) => _hasNextPage ? _nextPageKey : null,
+      fetchPage: _fetchPage,
+    );
   }
 
-  Future<void> _fetchPage(DocumentSnapshot? pageKey) async {
-    if (_isDisposed) return;
+  Future<List<UserModel>> _fetchPage(int pageKey) async {
+    if (_isDisposed) return [];
 
     try {
       final authors = await _repository.getAuthors(
-        pageSize: 25,
-        startAfter: pageKey,
+        pageSize: _pageSize,
+        startAfter: _lastDocument,
       );
 
-      if (_isDisposed) return;
+      if (_isDisposed) return [];
 
-      final isLastPage = authors.length < 25;
-      if (isLastPage) {
-        pagingController.appendLastPage(authors);
-      } else {
-        // Get the last document as the next page key
-        // Since UserModel doesn't have reference, we need to fetch it from Firestore
+      final isLastPage = authors.length < _pageSize;
+      if (!isLastPage && authors.isNotEmpty) {
         final lastAuthor = authors.last;
-        final nextPageKey = await FirebaseFirestore.instance.collection('users').doc(lastAuthor.uid).get();
-        pagingController.appendPage(authors, nextPageKey);
+        _lastDocument = await FirebaseFirestore.instance.collection('users').doc(lastAuthor.uid).get();
+      } else {
+        _hasNextPage = false;
       }
+      _nextPageKey++;
+      if (!_hasNextPage) {
+        pagingController.value = pagingController.value.copyWith(hasNextPage: false);
+      }
+      return authors;
     } catch (error) {
-      if (_isDisposed) return;
       logDebug('Error loading authors page: $error');
-      pagingController.error = error;
+      rethrow;
     }
   }
 
   void refresh() {
     if (!_isDisposed) {
+      _hasNextPage = true;
+      _nextPageKey = 0;
+      _lastDocument = null;
       pagingController.refresh();
     }
   }
