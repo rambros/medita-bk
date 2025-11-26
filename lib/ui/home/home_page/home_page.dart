@@ -160,7 +160,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   hoverColor: Colors.transparent,
                                   highlightColor: Colors.transparent,
                                   onTap: () async {
-                                    if ((viewModel.userRecord?.userRole.toList() ?? []).contains('Tester') ==
+                                    if ((viewModel.userRecord?.userRole.toList() ?? [])
+                                            .any((role) => role.toLowerCase() == 'tester') ==
                                         true) {
                                       await showDialog(
                                         context: context,

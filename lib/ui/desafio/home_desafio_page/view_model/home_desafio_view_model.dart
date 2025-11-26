@@ -4,6 +4,7 @@ import '/core/enums/enums.dart';
 import '/core/structs/index.dart';
 import '/data/repositories/auth_repository.dart';
 import '/data/repositories/desafio_repository.dart';
+import '/app_state.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart'; // For valueOrDefault
 
 class HomeDesafioViewModel extends ChangeNotifier {
@@ -28,7 +29,8 @@ class HomeDesafioViewModel extends ChangeNotifier {
   List<D21EtapaModelStruct> get listaEtapasMandalas => AppStateStore().listaEtapasMandalas;
 
   // We need to check currentUserDocument for started status as per original code
-  bool get isDesafioStarted => valueOrDefault<bool>(_authRepository.currentUser?.desafio21Started, false);
+  bool get isDesafioStarted =>
+      valueOrDefault<bool>(_authRepository.currentUser?.desafio21Started, AppStateStore().desafioStarted);
 
   Future<void> startDesafio() async {
     _setLoading(true);
@@ -53,9 +55,10 @@ class HomeDesafioViewModel extends ChangeNotifier {
 
       await _repository.updateDesafio21(newDesafio, desafio21Started: true);
 
-      // Update local state if needed, though AppStateStore might need manual update if it doesn't sync automatically
-      // Assuming AppStateStore is updated via streams or we need to update it manually here.
-      // For now, relying on the fact that we updated Firestore.
+      // Keep local stores in sync so the UI doesn't require a reload.
+      AppStateStore().desafio21 = newDesafio;
+      AppStateStore().desafioStarted = true;
+      await _authRepository.refreshCurrentUser();
 
       notifyListeners();
     } catch (e) {

@@ -112,6 +112,7 @@ class AppStateStore extends ChangeNotifier {
   bool get desafioStarted => _desafioStarted;
   set desafioStarted(bool value) {
     _desafioStarted = value;
+    notifyListeners();
   }
 
   List<AlarmTimeStruct> _alarms = [];

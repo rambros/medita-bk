@@ -24,6 +24,16 @@ class StatusMeditacaoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // Listen to app state for challenge data changes.
     context.watch<AppStateStore>();
+    final isTester = (context.read<AuthRepository>().currentUser?.userRole.toList() ?? [])
+        .any((role) => role.toLowerCase() == 'tester');
+
+    // Testers can always access the meditation (unless it's already completed, then show the check).
+    if (isTester) {
+      if (statusMeditacao == D21Status.completed) {
+        return _buildCompletedStatus(context);
+      }
+      return _buildPlay(context, dia ?? 0, icon: Icons.play_arrow_rounded);
+    }
 
     if (statusMeditacao == D21Status.open) {
       return _buildOpenStatus(context);
@@ -42,12 +52,7 @@ class StatusMeditacaoWidget extends StatelessWidget {
 
   Widget _buildOpenStatus(BuildContext context) {
     final day = dia ?? 0;
-    final isTester = (context.read<AuthRepository>().currentUser?.userRole.toList() ?? []).contains('Tester');
     final startDate = AppStateStore().diaInicioDesafio21;
-
-    if (isTester) {
-      return _buildPlay(context, day, icon: Icons.play_arrow_rounded);
-    }
 
     if (startDate == null) {
       return FaIcon(

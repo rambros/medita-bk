@@ -91,7 +91,7 @@ class _ListaEtapasPageState extends State<ListaEtapasPage> {
                               padding: const EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 4.0, 8.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   InkWell(
                                     splashColor: Colors.transparent,
@@ -119,14 +119,18 @@ class _ListaEtapasPageState extends State<ListaEtapasPage> {
                                       size: 32.0,
                                     ),
                                   ),
-                                  Text(
-                                    'Desafio 21 dias',
-                                    style: FlutterFlowTheme.of(context).titleLarge.override(
-                                          fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
-                                          color: FlutterFlowTheme.of(context).info,
-                                          letterSpacing: 0.0,
-                                          useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
-                                        ),
+                                  Expanded(
+                                    child: Center(
+                                      child: Text(
+                                        'Desafio 21 dias',
+                                        style: FlutterFlowTheme.of(context).titleLarge.override(
+                                              fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
+                                              color: FlutterFlowTheme.of(context).info,
+                                              letterSpacing: 0.0,
+                                              useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
+                                            ),
+                                      ),
+                                    ),
                                   ),
                                   if (viewModel.isTester)
                                     FlutterFlowIconButton(
@@ -136,7 +140,7 @@ class _ListaEtapasPageState extends State<ListaEtapasPage> {
                                       buttonSize: 40.0,
                                       icon: Icon(
                                         Icons.lock_reset_rounded,
-                                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                                        color: FlutterFlowTheme.of(context).info,
                                         size: 24.0,
                                       ),
                                       onPressed: () async {
@@ -161,7 +165,9 @@ class _ListaEtapasPageState extends State<ListaEtapasPage> {
                                           },
                                         ).then((value) => safeSetState(() {}));
                                       },
-                                    ),
+                                    )
+                                  else
+                                    const SizedBox(width: 40.0),
                                 ],
                               ),
                             ),

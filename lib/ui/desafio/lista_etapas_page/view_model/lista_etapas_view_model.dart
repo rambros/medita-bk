@@ -24,10 +24,13 @@ class ListaEtapasViewModel extends ChangeNotifier {
 
   List<D21EtapaModelStruct> get listaEtapasMandalas => _appState.listaEtapasMandalas;
 
-  bool get isTester => (_authRepository.currentUser?.userRole.toList() ?? []).contains('Tester');
+  bool _isTester = false;
+  bool get isTester => _isTester;
 
   // Methods
   Future<void> checkAndFixData() async {
+    await _ensureUserRoles();
+
     bool needsUpdate = false;
     D21ModelStruct desafio21 = _appState.desafio21;
     List<D21EtapaModelStruct> mandalas = _appState.listaEtapasMandalas;
@@ -71,5 +74,18 @@ class ListaEtapasViewModel extends ChangeNotifier {
     // But the UI uses `functions.getURLMandala`.
     // It's better if the ViewModel provides the data.
     return null;
+  }
+
+  Future<void> _ensureUserRoles() async {
+    if (_authRepository.currentUser == null) {
+      await _authRepository.refreshCurrentUser();
+    }
+
+    final roles = _authRepository.currentUser?.userRole ?? const [];
+    final tester = roles.any((role) => role.toLowerCase() == 'tester');
+    if (tester != _isTester) {
+      _isTester = tester;
+      notifyListeners();
+    }
   }
 }
