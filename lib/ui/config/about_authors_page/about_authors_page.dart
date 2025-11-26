@@ -1,7 +1,8 @@
-import '/backend/backend.dart';
+import '/data/models/firebase/user_model.dart';
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
@@ -84,13 +85,13 @@ class _AboutAuthorsPageWidgetState extends State<AboutAuthorsPageWidget> {
           ),
           child: Consumer<AboutAuthorsViewModel>(
             builder: (context, viewModel, child) {
-              return PagedListView<DocumentSnapshot?, UsersRecord>.separated(
+              return PagedListView<DocumentSnapshot?, UserModel>.separated(
                 pagingController: viewModel.pagingController,
                 padding: EdgeInsets.zero,
                 reverse: false,
                 scrollDirection: Axis.vertical,
                 separatorBuilder: (_, __) => const SizedBox(height: 4.0),
-                builderDelegate: PagedChildBuilderDelegate<UsersRecord>(
+                builderDelegate: PagedChildBuilderDelegate<UserModel>(
                   // Customize what your widget looks like when it's loading the first page.
                   firstPageProgressIndicatorBuilder: (_) => Center(
                     child: SizedBox(
@@ -116,7 +117,7 @@ class _AboutAuthorsPageWidgetState extends State<AboutAuthorsPageWidget> {
                     ),
                   ),
                   itemBuilder: (context, _, listViewIndex) {
-                    final listViewUsersRecord = viewModel.pagingController.itemList![listViewIndex];
+                    final listViewUserModel = viewModel.pagingController.itemList![listViewIndex];
                     return Card(
                       clipBehavior: Clip.antiAliasWithSaveLayer,
                       color: FlutterFlowTheme.of(context).primaryBackground,
@@ -130,7 +131,7 @@ class _AboutAuthorsPageWidgetState extends State<AboutAuthorsPageWidget> {
                           // For now, showing a placeholder message
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('Detalhes de ${listViewUsersRecord.fullName}'),
+                              content: Text('Detalhes de ${listViewUserModel.fullName}'),
                               duration: const Duration(seconds: 2),
                             ),
                           );
@@ -153,7 +154,7 @@ class _AboutAuthorsPageWidgetState extends State<AboutAuthorsPageWidget> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(8.0),
                                     child: Image.network(
-                                      listViewUsersRecord.userImageUrl,
+                                      listViewUserModel.userImageUrl,
                                       width: 150.0,
                                       height: 150.0,
                                       fit: BoxFit.cover,
@@ -171,7 +172,7 @@ class _AboutAuthorsPageWidgetState extends State<AboutAuthorsPageWidget> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      listViewUsersRecord.fullName,
+                                      listViewUserModel.fullName,
                                       style: FlutterFlowTheme.of(context).titleSmall.override(
                                             fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
                                             color: FlutterFlowTheme.of(context).primaryText,
@@ -187,7 +188,7 @@ class _AboutAuthorsPageWidgetState extends State<AboutAuthorsPageWidget> {
                                         color: FlutterFlowTheme.of(context).primaryBackground,
                                       ),
                                       child: Text(
-                                        listViewUsersRecord.curriculum,
+                                        listViewUserModel.curriculum,
                                         textAlign: TextAlign.start,
                                         maxLines: 4,
                                         style: FlutterFlowTheme.of(context).bodySmall.override(

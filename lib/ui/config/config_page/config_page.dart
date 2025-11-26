@@ -126,7 +126,7 @@ class _ConfigPageWidgetState extends State<ConfigPageWidget> {
                                 final parsed = Uri.tryParse(photoUrl);
                                 final hasImage = parsed != null && parsed.hasScheme && parsed.host.isNotEmpty;
                                 if (!hasImage) {
-                                  return _AvatarPlaceholder(size: 60.0);
+                                  return const _AvatarPlaceholder(size: 60.0);
                                 }
                                 return Hero(
                                   tag: photoUrl,
@@ -140,7 +140,7 @@ class _ConfigPageWidgetState extends State<ConfigPageWidget> {
                                       width: 60.0,
                                       height: 60.0,
                                       fit: BoxFit.cover,
-                                      errorWidget: (_, __, ___) => _AvatarPlaceholder(size: 60.0),
+                                      errorWidget: (_, __, ___) => const _AvatarPlaceholder(size: 60.0),
                                     ),
                                   ),
                                 );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '/core/structs/index.dart';
 import '/ui/core/flutter_flow/request_manager.dart';
-import '/backend/backend.dart';
+import '/data/models/firebase/firebase_models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 
@@ -23,8 +24,7 @@ class FFAppState extends ChangeNotifier {
       _darkTheme = prefs.getBool('ff_darkTheme') ?? _darkTheme;
     });
     _safeInit(() {
-      _receiveNotifications =
-          prefs.getBool('ff_receiveNotifications') ?? _receiveNotifications;
+      _receiveNotifications = prefs.getBool('ff_receiveNotifications') ?? _receiveNotifications;
     });
     _safeInit(() {
       _receiveEmails = prefs.getBool('ff_receiveEmails') ?? _receiveEmails;
@@ -45,12 +45,10 @@ class FFAppState extends ChangeNotifier {
           _alarms;
     });
     _safeInit(() {
-      _dataMensagemHoje =
-          prefs.getString('ff_dataMensagemHoje') ?? _dataMensagemHoje;
+      _dataMensagemHoje = prefs.getString('ff_dataMensagemHoje') ?? _dataMensagemHoje;
     });
     _safeInit(() {
-      _indexMensagemHoje =
-          prefs.getInt('ff_indexMensagemHoje') ?? _indexMensagemHoje;
+      _indexMensagemHoje = prefs.getInt('ff_indexMensagemHoje') ?? _indexMensagemHoje;
     });
     _safeInit(() {
       _meditationLogList = prefs
@@ -124,20 +122,17 @@ class FFAppState extends ChangeNotifier {
 
   void addToAlarms(AlarmTimeStruct value) {
     alarms.add(value);
-    prefs.setStringList(
-        'ff_alarms', _alarms.map((x) => x.serialize()).toList());
+    prefs.setStringList('ff_alarms', _alarms.map((x) => x.serialize()).toList());
   }
 
   void removeFromAlarms(AlarmTimeStruct value) {
     alarms.remove(value);
-    prefs.setStringList(
-        'ff_alarms', _alarms.map((x) => x.serialize()).toList());
+    prefs.setStringList('ff_alarms', _alarms.map((x) => x.serialize()).toList());
   }
 
   void removeAtIndexFromAlarms(int index) {
     alarms.removeAt(index);
-    prefs.setStringList(
-        'ff_alarms', _alarms.map((x) => x.serialize()).toList());
+    prefs.setStringList('ff_alarms', _alarms.map((x) => x.serialize()).toList());
   }
 
   void updateAlarmsAtIndex(
@@ -145,14 +140,12 @@ class FFAppState extends ChangeNotifier {
     AlarmTimeStruct Function(AlarmTimeStruct) updateFn,
   ) {
     alarms[index] = updateFn(_alarms[index]);
-    prefs.setStringList(
-        'ff_alarms', _alarms.map((x) => x.serialize()).toList());
+    prefs.setStringList('ff_alarms', _alarms.map((x) => x.serialize()).toList());
   }
 
   void insertAtIndexInAlarms(int index, AlarmTimeStruct value) {
     alarms.insert(index, value);
-    prefs.setStringList(
-        'ff_alarms', _alarms.map((x) => x.serialize()).toList());
+    prefs.setStringList('ff_alarms', _alarms.map((x) => x.serialize()).toList());
   }
 
   String _dataMensagemHoje = '2000-10-10';
@@ -173,26 +166,22 @@ class FFAppState extends ChangeNotifier {
   List<MeditationLogStruct> get meditationLogList => _meditationLogList;
   set meditationLogList(List<MeditationLogStruct> value) {
     _meditationLogList = value;
-    prefs.setStringList(
-        'ff_meditationLogList', value.map((x) => x.serialize()).toList());
+    prefs.setStringList('ff_meditationLogList', value.map((x) => x.serialize()).toList());
   }
 
   void addToMeditationLogList(MeditationLogStruct value) {
     meditationLogList.add(value);
-    prefs.setStringList('ff_meditationLogList',
-        _meditationLogList.map((x) => x.serialize()).toList());
+    prefs.setStringList('ff_meditationLogList', _meditationLogList.map((x) => x.serialize()).toList());
   }
 
   void removeFromMeditationLogList(MeditationLogStruct value) {
     meditationLogList.remove(value);
-    prefs.setStringList('ff_meditationLogList',
-        _meditationLogList.map((x) => x.serialize()).toList());
+    prefs.setStringList('ff_meditationLogList', _meditationLogList.map((x) => x.serialize()).toList());
   }
 
   void removeAtIndexFromMeditationLogList(int index) {
     meditationLogList.removeAt(index);
-    prefs.setStringList('ff_meditationLogList',
-        _meditationLogList.map((x) => x.serialize()).toList());
+    prefs.setStringList('ff_meditationLogList', _meditationLogList.map((x) => x.serialize()).toList());
   }
 
   void updateMeditationLogListAtIndex(
@@ -200,14 +189,12 @@ class FFAppState extends ChangeNotifier {
     MeditationLogStruct Function(MeditationLogStruct) updateFn,
   ) {
     meditationLogList[index] = updateFn(_meditationLogList[index]);
-    prefs.setStringList('ff_meditationLogList',
-        _meditationLogList.map((x) => x.serialize()).toList());
+    prefs.setStringList('ff_meditationLogList', _meditationLogList.map((x) => x.serialize()).toList());
   }
 
   void insertAtIndexInMeditationLogList(int index, MeditationLogStruct value) {
     meditationLogList.insert(index, value);
-    prefs.setStringList('ff_meditationLogList',
-        _meditationLogList.map((x) => x.serialize()).toList());
+    prefs.setStringList('ff_meditationLogList', _meditationLogList.map((x) => x.serialize()).toList());
   }
 
   List<AudioModelStruct> _listAudiosSelected = [];
@@ -239,8 +226,8 @@ class FFAppState extends ChangeNotifier {
     listAudiosSelected.insert(index, value);
   }
 
-  AudioModelStruct _tempAudioModel = AudioModelStruct.fromSerializableMap(
-      jsonDecode('{\"fileType\":\"file\",\"audioType\":\"device_music\"}'));
+  AudioModelStruct _tempAudioModel =
+      AudioModelStruct.fromSerializableMap(jsonDecode('{\"fileType\":\"file\",\"audioType\":\"device_music\"}'));
   AudioModelStruct get tempAudioModel => _tempAudioModel;
   set tempAudioModel(AudioModelStruct value) {
     _tempAudioModel = value;
@@ -293,6 +280,7 @@ class FFAppState extends ChangeNotifier {
   D21ModelStruct get desafio21 => _desafio21;
   set desafio21(D21ModelStruct value) {
     _desafio21 = value;
+    notifyListeners();
   }
 
   void updateDesafio21Struct(Function(D21ModelStruct) updateFn) {
@@ -303,6 +291,7 @@ class FFAppState extends ChangeNotifier {
   List<D21EtapaModelStruct> get listaEtapasMandalas => _listaEtapasMandalas;
   set listaEtapasMandalas(List<D21EtapaModelStruct> value) {
     _listaEtapasMandalas = value;
+    notifyListeners();
   }
 
   void addToListaEtapasMandalas(D21EtapaModelStruct value) {
@@ -324,8 +313,7 @@ class FFAppState extends ChangeNotifier {
     listaEtapasMandalas[index] = updateFn(_listaEtapasMandalas[index]);
   }
 
-  void insertAtIndexInListaEtapasMandalas(
-      int index, D21EtapaModelStruct value) {
+  void insertAtIndexInListaEtapasMandalas(int index, D21EtapaModelStruct value) {
     listaEtapasMandalas.insert(index, value);
   }
 
@@ -374,11 +362,11 @@ class FFAppState extends ChangeNotifier {
     _hasInternetAccess = value;
   }
 
-  final _listaAutoresManager = StreamRequestManager<List<UsersRecord>>();
-  Stream<List<UsersRecord>> listaAutores({
+  final _listaAutoresManager = StreamRequestManager<List<UserModel>>();
+  Stream<List<UserModel>> listaAutores({
     String? uniqueQueryKey,
     bool? overrideCache,
-    required Stream<List<UsersRecord>> Function() requestFn,
+    required Stream<List<UserModel>> Function() requestFn,
   }) =>
       _listaAutoresManager.performRequest(
         uniqueQueryKey: uniqueQueryKey,
@@ -386,15 +374,13 @@ class FFAppState extends ChangeNotifier {
         requestFn: requestFn,
       );
   void clearListaAutoresCache() => _listaAutoresManager.clear();
-  void clearListaAutoresCacheKey(String? uniqueKey) =>
-      _listaAutoresManager.clearRequest(uniqueKey);
+  void clearListaAutoresCacheKey(String? uniqueKey) => _listaAutoresManager.clearRequest(uniqueKey);
 
-  final _listMeditationsManager =
-      StreamRequestManager<List<MeditationsRecord>>();
-  Stream<List<MeditationsRecord>> listMeditations({
+  final _listMeditationsManager = StreamRequestManager<List<MeditationModel>>();
+  Stream<List<MeditationModel>> listMeditations({
     String? uniqueQueryKey,
     bool? overrideCache,
-    required Stream<List<MeditationsRecord>> Function() requestFn,
+    required Stream<List<MeditationModel>> Function() requestFn,
   }) =>
       _listMeditationsManager.performRequest(
         uniqueQueryKey: uniqueQueryKey,
@@ -402,8 +388,7 @@ class FFAppState extends ChangeNotifier {
         requestFn: requestFn,
       );
   void clearListMeditationsCache() => _listMeditationsManager.clear();
-  void clearListMeditationsCacheKey(String? uniqueKey) =>
-      _listMeditationsManager.clearRequest(uniqueKey);
+  void clearListMeditationsCacheKey(String? uniqueKey) => _listMeditationsManager.clearRequest(uniqueKey);
 }
 
 void _safeInit(Function() initializeField) {

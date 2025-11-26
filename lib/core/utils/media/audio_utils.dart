@@ -3,8 +3,8 @@ import 'package:file_picker/file_picker.dart' as fp;
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '/backend/schema/structs/index.dart';
-import '/backend/schema/enums/enums.dart';
+import '/core/structs/index.dart';
+import '/core/enums/enums.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/core/controllers/index.dart';
 

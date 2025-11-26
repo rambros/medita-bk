@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '/backend/backend.dart';
+import '/data/models/firebase/user_model.dart';
+import '/data/services/firebase/firestore_service.dart';
 import 'firebase_auth_manager.dart';
 import 'package:stream_transform/stream_transform.dart';
 
@@ -39,16 +41,22 @@ final jwtTokenStream = FirebaseAuth.instance
     .asBroadcastStream();
 
 DocumentReference? get currentUserReference =>
-    loggedIn ? UsersRecord.collection.doc(currentUser!.uid) : null;
+    loggedIn ? FirebaseFirestore.instance.collection('users').doc(currentUser!.uid) : null;
 
-UsersRecord? currentUserDocument;
+UserModel? currentUserDocument;
+final _firestoreService = FirestoreService();
 final authenticatedUserStream = FirebaseAuth.instance
     .authStateChanges()
     .map<String>((user) => user?.uid ?? '')
     .switchMap(
       (uid) => uid.isEmpty
           ? Stream.value(null)
-          : UsersRecord.getDocument(UsersRecord.collection.doc(uid))
+          : _firestoreService
+              .streamDocument(
+                collectionPath: 'users',
+                documentId: uid,
+                fromSnapshot: UserModel.fromFirestore,
+              )
               .handleError((_) {}),
     )
     .map((user) {

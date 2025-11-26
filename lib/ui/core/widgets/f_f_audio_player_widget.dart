@@ -43,6 +43,23 @@ class FFAudioPlayerWidgetState extends State<FFAudioPlayerWidget> {
   @override
   void initState() {
     super.initState();
+    _initPlayer();
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.black,
+    ));
+  }
+
+  @override
+  void didUpdateWidget(FFAudioPlayerWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.audioUrl != oldWidget.audioUrl) {
+      _initPlayer();
+    }
+  }
+
+  void _initPlayer() {
+    if (widget.audioUrl.isEmpty) return;
+
     final playerModel = PlayerModel(
       id: widget.audioTitle,
       title: widget.audioTitle,
@@ -51,12 +68,11 @@ class FFAudioPlayerWidgetState extends State<FFAudioPlayerWidget> {
     );
     audioPlayerController.initAudioPlayer(playerModel);
     _prepareAudioDownload();
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.black,
-    ));
   }
 
   void _prepareAudioDownload() {
+    if (widget.audioUrl.isEmpty) return;
+
     Future.microtask(() async {
       final cached = await audioPlayerController.isCached(widget.audioUrl);
       if (!mounted) {
@@ -71,12 +87,14 @@ class FFAudioPlayerWidgetState extends State<FFAudioPlayerWidget> {
   }
 
   Future<void> _downloadAudio() async {
-    if (!mounted || _isDownloading) {
+    if (!mounted || _isDownloading || widget.audioUrl.isEmpty) {
       return;
     }
     setState(() => _isDownloading = true);
     try {
       await audioPlayerController.download(widget.audioUrl);
+    } catch (e) {
+      debugPrint('Error downloading audio: $e');
     } finally {
       if (mounted) {
         final cached = await audioPlayerController.isCached(widget.audioUrl);

@@ -1,4 +1,4 @@
-import '/backend/schema/structs/index.dart';
+import '/core/structs/index.dart';
 
 /// Service for agenda/event-specific utilities
 class AgendaService {

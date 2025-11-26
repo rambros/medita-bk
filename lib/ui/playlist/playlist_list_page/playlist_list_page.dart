@@ -1,7 +1,6 @@
-import '/backend/schema/structs/index.dart';
+import '/core/structs/index.dart';
 import '/data/repositories/auth_repository.dart';
 import '/data/repositories/playlist_repository.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
@@ -31,18 +30,18 @@ class _PlaylistListPageWidgetState extends State<PlaylistListPageWidget> {
   void initState() {
     super.initState();
     final authRepo = context.read<AuthRepository>();
-    final userRef = authRepo.currentUserRef;
-    if (userRef == null) {
-      // No authenticated user; avoid initializing stream.
+    final userId = authRepo.currentUserUid;
+
+    if (userId.isEmpty) {
       _model = PlaylistListViewModel(
         repository: context.read<PlaylistRepository>(),
-        userRef: FirebaseFirestore.instance.collection('users').doc('_invalid'),
+        userId: '',
       )..init(context);
       return;
     }
     _model = PlaylistListViewModel(
       repository: context.read<PlaylistRepository>(),
-      userRef: userRef,
+      userId: userId,
     )..init(context);
 
     logFirebaseEvent('screen_view',
@@ -51,15 +50,8 @@ class _PlaylistListPageWidgetState extends State<PlaylistListPageWidget> {
   }
 
   @override
-  void dispose() {
-    _model.dispose();
-
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    if (_model.userRef.path.contains('_invalid')) {
+    if (_model.userId.isEmpty) {
       return Scaffold(
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         body: Center(

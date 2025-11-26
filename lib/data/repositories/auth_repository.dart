@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '/backend/schema/users_record.dart';
 import '/data/services/auth/base_auth_user_provider.dart';
 import '/data/services/auth/firebase_auth/firebase_auth_service.dart';
 import '/data/services/auth/firebase_auth/auth_util.dart' as auth_util;
+import '/data/models/firebase/user_model.dart';
+import '/data/services/firebase/firestore_service.dart';
 
 class AuthRepository {
-  AuthRepository({required FirebaseAuthService authService})
-      : _authService = authService;
+  AuthRepository({required FirebaseAuthService authService, FirestoreService? firestoreService})
+      : _authService = authService,
+        _firestoreService = firestoreService ?? FirestoreService();
 
   final FirebaseAuthService _authService;
+  final FirestoreService _firestoreService;
 
   Future<BaseAuthUser?> signInWithEmail(
     BuildContext context,
@@ -57,11 +60,35 @@ class AuthRepository {
   }
 
   /// Current user helpers (sourced from auth_util).
-  UsersRecord? get currentUser => auth_util.currentUserDocument;
+  UserModel? get currentUser => _currentUserModel;
   String get currentUserEmail => auth_util.currentUserEmail;
   String get currentUserUid => auth_util.currentUserUid;
   DocumentReference? get currentUserRef => auth_util.currentUserReference;
 
+  UserModel? _currentUserModel;
+
   /// Stream of the authenticated user document.
-  Stream<UsersRecord?> authUserStream() => auth_util.authenticatedUserStream;
+  Stream<UserModel?> authUserStream() {
+    final uid = currentUserUid;
+    if (uid.isEmpty) return Stream.value(null);
+    return _firestoreService.streamDocument(
+      collectionPath: 'users',
+      documentId: uid,
+      fromSnapshot: UserModel.fromFirestore,
+    );
+  }
+
+  /// Refresh the cached current user model.
+  Future<void> refreshCurrentUser() async {
+    final uid = currentUserUid;
+    if (uid.isEmpty) {
+      _currentUserModel = null;
+      return;
+    }
+    _currentUserModel = await _firestoreService.getDocument(
+      collectionPath: 'users',
+      documentId: uid,
+      fromSnapshot: UserModel.fromFirestore,
+    );
+  }
 }

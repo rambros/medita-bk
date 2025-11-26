@@ -1,3 +1,4 @@
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:expandable/expandable.dart';
@@ -36,6 +37,10 @@ class _ListaEtapasPageState extends State<ListaEtapasPage> {
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'listaEtapasPage'});
 
     _expandableControllers = List.generate(7, (_) => ExpandableController(initialExpanded: false));
+
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      context.read<ListaEtapasViewModel>().checkAndFixData();
+    });
   }
 
   @override

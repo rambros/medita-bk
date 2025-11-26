@@ -1,4 +1,5 @@
-import '/backend/backend.dart';
+import '/data/models/firebase/image_model.dart';
+import '/data/services/firebase/firestore_service.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import 'dart:ui';
@@ -69,8 +70,11 @@ class _SelectImagesPlaylistWidgetState
                   ),
                 ),
                 Expanded(
-                  child: FutureBuilder<List<ImagesRecord>>(
-                    future: queryImagesRecordOnce(),
+                  child: FutureBuilder<List<ImageModel>>(
+                    future: FirestoreService().getCollection(
+                      collectionPath: 'images',
+                      fromSnapshot: ImageModel.fromFirestore,
+                    ),
                     builder: (context, snapshot) {
                       // Customize what your widget looks like when it's loading.
                       if (!snapshot.hasData) {
@@ -86,8 +90,7 @@ class _SelectImagesPlaylistWidgetState
                           ),
                         );
                       }
-                      List<ImagesRecord> gridViewImagesRecordList =
-                          snapshot.data!;
+                      final gridViewImagesRecordList = snapshot.data!;
 
                       return GridView.builder(
                         padding: const EdgeInsets.fromLTRB(

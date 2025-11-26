@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
-import '/backend/backend.dart';
+import '/data/models/firebase/notification_model.dart';
 import '/ui/core/flutter_flow/flutter_flow_animations.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
@@ -201,7 +201,7 @@ class _NotificationListPageState extends State<NotificationListPage> with Ticker
                               Expanded(
                                 child: Padding(
                                   padding: const EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
-                                  child: StreamBuilder<List<NotificationsRecord>>(
+                                  child: StreamBuilder<List<NotificationModel>>(
                                     stream: viewModel.getNotificationsForTab(),
                                     builder: (context, snapshot) {
                                       // Loading state
@@ -320,7 +320,7 @@ class _NotificationListPageState extends State<NotificationListPage> with Ticker
   }
 
   /// Build notification list widget
-  Widget _buildNotificationList(List<NotificationsRecord> notifications) {
+  Widget _buildNotificationList(List<NotificationModel> notifications) {
     return KeepAliveWidgetWrapper(
       builder: (context) => Padding(
         padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 8.0),

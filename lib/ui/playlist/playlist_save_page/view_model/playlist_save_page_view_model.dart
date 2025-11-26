@@ -1,6 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '/backend/schema/structs/index.dart';
+import '/core/structs/index.dart';
 import '/data/repositories/playlist_repository.dart';
 import '/ui/core/flutter_flow/custom_functions.dart' as functions;
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
@@ -9,11 +8,11 @@ import 'package:flutter/material.dart';
 class PlaylistSavePageViewModel extends ChangeNotifier {
   PlaylistSavePageViewModel({
     required PlaylistRepository repository,
-    required this.userRef,
+    required this.userId,
   }) : _repository = repository;
 
   final PlaylistRepository _repository;
-  final DocumentReference userRef;
+  final String userId;
 
   /// Local state fields for this page.
 
@@ -71,7 +70,7 @@ class PlaylistSavePageViewModel extends ChangeNotifier {
         id: getCurrentTimestamp.secondsSinceEpoch.toString(),
       );
 
-      await _repository.addPlaylist(userRef, playlist);
+      await _repository.addPlaylist(userId, playlist);
     } catch (e) {
       errorMessage = 'Erro ao salvar playlist: $e';
       rethrow;

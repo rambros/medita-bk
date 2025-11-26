@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'dart:ui';
-import '/backend/backend.dart';
+import '/data/models/firebase/notification_model.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import 'view_model/notification_view_view_model.dart';
@@ -16,7 +16,7 @@ class NotificationViewPage extends StatefulWidget {
     this.isEditing,
   });
 
-  final NotificationsRecord? notificationDoc;
+  final NotificationModel? notificationDoc;
   final bool? isEditing;
 
   @override
@@ -194,7 +194,7 @@ class _NotificationViewPageState extends State<NotificationViewPage> {
                                 viewModel.notification != null
                                     ? 'Data de envio: ${dateTimeFormat(
                                         "dd/MM/yy H:mm",
-                                        viewModel.notification!.dataEnvio,
+                                        viewModel.notification!.sendDate,
                                         locale: FFLocalizations.of(context).languageCode,
                                       )}'
                                     : 'Data de envio: --',

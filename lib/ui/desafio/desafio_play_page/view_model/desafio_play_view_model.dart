@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 
 import '/app_state.dart';
-import '/backend/backend.dart';
+import '/data/models/firebase/desafio21_model.dart';
+import '/data/repositories/home_repository.dart';
 import '/data/repositories/auth_repository.dart';
+import '/core/structs/index.dart';
 
 class DesafioPlayViewModel extends ChangeNotifier {
   final int meditationIndex;
   final AuthRepository _authRepository;
+  final HomeRepository _homeRepository;
 
   DesafioPlayViewModel({
     required this.meditationIndex,
     required AuthRepository authRepository,
-  }) : _authRepository = authRepository;
+    required HomeRepository homeRepository,
+  })  : _authRepository = authRepository,
+        _homeRepository = homeRepository;
 
   bool _isLoading = true;
   bool get isLoading => _isLoading;
@@ -19,7 +24,7 @@ class DesafioPlayViewModel extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  Desafio21Record? _desafio21Record;
+  Desafio21Model? _desafio21Record;
   bool _iniciadoDesafio = false;
   bool get iniciadoDesafio => _iniciadoDesafio;
 
@@ -41,8 +46,7 @@ class DesafioPlayViewModel extends ChangeNotifier {
     _setLoading(true);
     try {
       // Fetch desafio template
-      final records = await queryDesafio21RecordOnce(singleRecord: true);
-      _desafio21Record = records.firstOrNull;
+      _desafio21Record = await _homeRepository.getDesafio21Template();
 
       if (_desafio21Record == null) {
         _setError('Desafio template not found');

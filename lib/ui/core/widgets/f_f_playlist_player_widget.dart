@@ -1,6 +1,5 @@
 // Automatic FlutterFlow imports
-import '/backend/backend.dart';
-import '/backend/schema/structs/index.dart';
+import '/core/structs/index.dart';
 // Imports other custom widgets
 // Imports custom actions
 // Imports custom functions

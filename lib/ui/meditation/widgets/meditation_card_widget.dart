@@ -1,4 +1,4 @@
-import '/backend/backend.dart';
+import '/data/models/firebase/meditation_model.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/core/utils/media/audio_utils.dart';
@@ -17,7 +17,7 @@ class MeditationCardWidget extends StatefulWidget {
     this.docMeditation,
   });
 
-  final MeditationsRecord? docMeditation;
+  final MeditationModel? docMeditation;
 
   @override
   State<MeditationCardWidget> createState() => _MeditationCardWidgetState();
@@ -39,11 +39,7 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
 
     // On component load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.isAudioDownloaded = await AudioUtils.isAudioDownloaded(
-        functions.getStringFromAudioPath(widget.docMeditation!.audioUrl)!,
-      );
-      _model.isDownloaded = _model.isAudioDownloaded!;
-      safeSetState(() {});
+      await _refreshDownloadStatus();
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
@@ -61,8 +57,7 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
     final imageUrl = widget.docMeditation?.imageUrl ?? '';
     final parsedUrl = Uri.tryParse(imageUrl);
     final hasImage = parsedUrl != null && parsedUrl.hasScheme && parsedUrl.host.isNotEmpty;
-    final favorites =
-        context.watch<AuthRepository>().currentUser?.favorites.toList() ?? [];
+    final favorites = context.watch<AuthRepository>().currentUser?.favorites.toList() ?? [];
 
     return InkWell(
       splashColor: Colors.transparent,
@@ -70,12 +65,12 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
       hoverColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () async {
-        context.pushNamed(
+        await context.pushNamed(
           MeditationDetailsPageWidget.routeName,
           queryParameters: {
-            'meditationDocRef': serializeParam(
-              widget.docMeditation?.reference,
-              ParamType.DocumentReference,
+            'meditationId': serializeParam(
+              widget.docMeditation?.id,
+              ParamType.String,
             ),
           }.withoutNulls,
           extra: <String, dynamic>{
@@ -85,6 +80,7 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
             ),
           },
         );
+        await _refreshDownloadStatus();
       },
       child: Card(
         clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -270,8 +266,7 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
                                   ),
                                   Builder(
                                     builder: (context) {
-                                      if (favorites
-                                          .contains(widget.docMeditation?.reference.id)) {
+                                      if (favorites.contains(widget.docMeditation?.id)) {
                                         return Icon(
                                           Icons.favorite,
                                           color: FlutterFlowTheme.of(context).primary,
@@ -301,6 +296,19 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
         ),
       ),
     );
+  }
+
+  Future<void> _refreshDownloadStatus() async {
+    final audioUrl = widget.docMeditation?.audioUrl ?? '';
+    if (audioUrl.isEmpty) return;
+
+    final resolvedPath = functions.getStringFromAudioPath(audioUrl) ?? audioUrl;
+    final downloaded = await AudioUtils.isAudioDownloaded(resolvedPath);
+    if (!mounted) return;
+
+    _model.isAudioDownloaded = downloaded;
+    _model.isDownloaded = downloaded;
+    safeSetState(() {});
   }
 }
 

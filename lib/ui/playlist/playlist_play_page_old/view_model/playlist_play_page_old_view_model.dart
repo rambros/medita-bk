@@ -1,4 +1,4 @@
-import '/backend/schema/structs/index.dart';
+import '/core/structs/index.dart';
 import 'package:flutter/material.dart';
 
 class PlaylistPlayPageOldViewModel extends ChangeNotifier {
@@ -21,8 +21,4 @@ class PlaylistPlayPageOldViewModel extends ChangeNotifier {
 
   void init(BuildContext context) {}
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 }

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import '/data/repositories/desafio_repository.dart';
-import '/backend/backend.dart';
-import '/backend/schema/structs/index.dart';
-import '/backend/schema/enums/enums.dart';
+import '/core/structs/index.dart';
+import '/core/enums/enums.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/ui/core/flutter_flow/custom_functions.dart' as functions;
 

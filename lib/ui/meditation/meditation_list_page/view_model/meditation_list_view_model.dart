@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '/backend/backend.dart';
-import '/backend/repositories/meditation/meditation_repository.dart';
+import '/data/models/firebase/meditation_model.dart';
+import '/data/repositories/meditation_repository.dart';
 import '/data/repositories/auth_repository.dart';
 
 class MeditationListViewModel extends ChangeNotifier {
@@ -13,7 +13,7 @@ class MeditationListViewModel extends ChangeNotifier {
   })  : _meditationRepository = meditationRepository,
         _authRepository = authRepository;
 
-  Stream<List<MeditationsRecord>> get meditationsStream => _meditationRepository.getMeditations();
+  Stream<List<MeditationModel>> get meditationsStream => _meditationRepository.getMeditations();
 
   // State
   bool _isSearching = false;
@@ -48,29 +48,29 @@ class MeditationListViewModel extends ChangeNotifier {
   String? Function(BuildContext, String?)? get textSearchFieldTextControllerValidator => null;
 
   // Data Lists
-  List<MeditationsRecord>? _algoliaSearchResults;
-  List<MeditationsRecord>? get algoliaSearchResults => _algoliaSearchResults;
+  List<MeditationModel>? _algoliaSearchResults;
+  List<MeditationModel>? get algoliaSearchResults => _algoliaSearchResults;
 
-  List<MeditationsRecord>? _listFiltered;
-  List<MeditationsRecord>? get listFiltered => _listFiltered;
+  List<MeditationModel>? _listFiltered;
+  List<MeditationModel>? get listFiltered => _listFiltered;
 
-  List<MeditationsRecord>? _listNumPlayed;
-  List<MeditationsRecord>? get listNumPlayed => _listNumPlayed;
+  List<MeditationModel>? _listNumPlayed;
+  List<MeditationModel>? get listNumPlayed => _listNumPlayed;
 
-  List<MeditationsRecord>? _listNewest;
-  List<MeditationsRecord>? get listNewest => _listNewest;
+  List<MeditationModel>? _listNewest;
+  List<MeditationModel>? get listNewest => _listNewest;
 
-  List<MeditationsRecord>? _listFavourites;
-  List<MeditationsRecord>? get listFavourites => _listFavourites; // For ordered by favourites
+  List<MeditationModel>? _listFavourites;
+  List<MeditationModel>? get listFavourites => _listFavourites; // For ordered by favourites
 
-  List<MeditationsRecord>? _listLongest;
-  List<MeditationsRecord>? get listLongest => _listLongest;
+  List<MeditationModel>? _listLongest;
+  List<MeditationModel>? get listLongest => _listLongest;
 
-  List<MeditationsRecord>? _listShortest;
-  List<MeditationsRecord>? get listShortest => _listShortest;
+  List<MeditationModel>? _listShortest;
+  List<MeditationModel>? get listShortest => _listShortest;
 
-  List<MeditationsRecord> _userFavorites = [];
-  List<MeditationsRecord> get userFavorites => _userFavorites; // For favorites toggle
+  List<MeditationModel> _userFavorites = [];
+  List<MeditationModel> get userFavorites => _userFavorites; // For favorites toggle
 
   void initState() {
     textSearchFieldTextController = TextEditingController();

@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
-import '/backend/backend.dart';
+import '/data/models/firebase/meditation_model.dart';
+import '/data/repositories/meditation_repository.dart';
+import '/data/repositories/user_repository.dart';
 import '/core/utils/network_utils.dart';
 
 class MeditationDetailsViewModel extends ChangeNotifier {
+  final MeditationRepository _meditationRepository;
+  final UserRepository _userRepository;
+
+  MeditationDetailsViewModel({
+    required MeditationRepository meditationRepository,
+    required UserRepository userRepository,
+  })  : _meditationRepository = meditationRepository,
+        _userRepository = userRepository;
+
   // ========== STATE ==========
 
   bool _isLoading = true;
@@ -11,8 +22,8 @@ class MeditationDetailsViewModel extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  MeditationsRecord? _meditationDoc;
-  MeditationsRecord? get meditationDoc => _meditationDoc;
+  MeditationModel? _meditationDoc;
+  MeditationModel? get meditationDoc => _meditationDoc;
 
   bool _isFavorite = false;
   bool get isFavorite => _isFavorite;
@@ -29,7 +40,7 @@ class MeditationDetailsViewModel extends ChangeNotifier {
   // ========== INITIALIZATION ==========
 
   Future<void> loadMeditationDetails(
-    DocumentReference meditationDocRef,
+    String meditationId,
     List<String> userFavorites,
   ) async {
     _setLoading(true);
@@ -37,7 +48,7 @@ class MeditationDetailsViewModel extends ChangeNotifier {
 
     try {
       // Load meditation document
-      _meditationDoc = await MeditationsRecord.getDocumentOnce(meditationDocRef);
+      _meditationDoc = await _meditationRepository.getMeditationById(meditationId);
 
       if (_meditationDoc == null) {
         _setError('Meditação não encontrada');
@@ -53,7 +64,7 @@ class MeditationDetailsViewModel extends ChangeNotifier {
       }
 
       // Check if meditation is in favorites
-      _isFavorite = userFavorites.contains(_meditationDoc!.documentId);
+      _isFavorite = userFavorites.contains(_meditationDoc!.id);
 
       // Initialize counters
       _numPlayed = _meditationDoc!.numPlayed;
@@ -71,59 +82,54 @@ class MeditationDetailsViewModel extends ChangeNotifier {
 
   /// Toggles favorite status and updates Firestore
   Future<void> toggleFavoriteCommand(
-    DocumentReference meditationDocRef,
-    DocumentReference userDocRef,
     String meditationId,
+    String userId,
   ) async {
     if (_meditationDoc == null) return;
 
+    final newFavoriteState = !_isFavorite; // Move outside try block
+
     try {
-      final newFavoriteState = !_isFavorite;
       _isFavorite = newFavoriteState;
 
       if (newFavoriteState) {
         // Add to favorites
         _numLiked++;
-        await meditationDocRef.update(createMeditationsRecordData(
-          numLiked: _numLiked,
-        ));
-
-        await userDocRef.update({
-          'favorites': FieldValue.arrayUnion([meditationId]),
-        });
+        await _meditationRepository.incrementLikeCount(meditationId);
+        await _userRepository.addToFavorites(userId, meditationId);
       } else {
         // Remove from favorites
         _numLiked--;
-        await meditationDocRef.update(createMeditationsRecordData(
-          numLiked: _numLiked,
-        ));
-
-        await userDocRef.update({
-          'favorites': FieldValue.arrayRemove([meditationId]),
-        });
+        await _meditationRepository.decrementLikeCount(meditationId);
+        await _userRepository.removeFromFavorites(userId, meditationId);
       }
 
       notifyListeners();
     } catch (e) {
       // Revert on error
       _isFavorite = !_isFavorite;
+      if (newFavoriteState) {
+        _numLiked--;
+      } else {
+        _numLiked++;
+      }
       _setError('Erro ao atualizar favorito: $e');
       notifyListeners();
     }
   }
 
   /// Increments play count before playing
-  Future<void> incrementPlayCountCommand(DocumentReference meditationDocRef) async {
+  Future<void> incrementPlayCountCommand(String meditationId) async {
     if (_meditationDoc == null) return;
 
     try {
       _numPlayed++;
-      await meditationDocRef.update(createMeditationsRecordData(
-        numPlayed: _numPlayed,
-      ));
+      await _meditationRepository.incrementPlayCount(meditationId);
       notifyListeners();
     } catch (e) {
+      _numPlayed--; // Revert on error
       _setError('Erro ao atualizar contador: $e');
+      notifyListeners();
     }
   }
 
@@ -152,5 +158,4 @@ class MeditationDetailsViewModel extends ChangeNotifier {
   void _clearError() {
     _errorMessage = null;
   }
-
 }

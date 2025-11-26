@@ -1,4 +1,4 @@
-import '/backend/backend.dart';
+import '/data/models/firebase/meditation_model.dart';
 import '/ui/meditation/widgets/filter_meditations_dialog.dart';
 import '/ui/meditation/widgets/meditation_card_widget.dart';
 import '/ui/meditation/widgets/sort_meditations_dialog.dart';
@@ -357,7 +357,7 @@ class _MeditationListPageWidgetState extends State<MeditationListPageWidget> {
     } else if (viewModel.isFiltered) {
       return _buildList(context, viewModel.listFiltered, 'Meditações com filtro = ${viewModel.listaCategorias}');
     } else if (viewModel.isOrdered) {
-      List<MeditationsRecord>? list;
+      List<MeditationModel>? list;
       String title = 'Meditações';
       if (viewModel.orderString == 'orderByNumPlayed') {
         list = viewModel.listNumPlayed;
@@ -380,7 +380,7 @@ class _MeditationListPageWidgetState extends State<MeditationListPageWidget> {
       return _buildList(context, viewModel.userFavorites, 'Minhas Favoritas');
     } else {
       // Default Stream
-      return StreamBuilder<List<MeditationsRecord>>(
+      return StreamBuilder<List<MeditationModel>>(
         stream: viewModel.meditationsStream,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -403,7 +403,7 @@ class _MeditationListPageWidgetState extends State<MeditationListPageWidget> {
     }
   }
 
-  Widget _buildList(BuildContext context, List<MeditationsRecord>? list, String title) {
+  Widget _buildList(BuildContext context, List<MeditationModel>? list, String title) {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [
@@ -451,7 +451,7 @@ class _MeditationListPageWidgetState extends State<MeditationListPageWidget> {
     );
   }
 
-  Widget _buildListView(List<MeditationsRecord> listDocs) {
+  Widget _buildListView(List<MeditationModel> listDocs) {
     return ListView.separated(
       padding: EdgeInsets.zero,
       primary: false,
@@ -461,7 +461,7 @@ class _MeditationListPageWidgetState extends State<MeditationListPageWidget> {
       itemBuilder: (context, listDocsIndex) {
         final listDocsItem = listDocs[listDocsIndex];
         return MeditationCardWidget(
-          key: Key('meditation_${listDocsItem.reference.id}'),
+          key: Key('meditation_${listDocsItem.id}'),
           docMeditation: listDocsItem,
         );
       },

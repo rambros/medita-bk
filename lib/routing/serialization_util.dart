@@ -2,11 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import '/backend/backend.dart';
-import '/backend/schema/enums/enums.dart';
-
-import '/ui/core/flutter_flow/place.dart';
-import '/ui/core/flutter_flow/uploaded_file.dart';
+import '/core/structs/util/firestore_util.dart';
+import '/core/structs/util/schema_util.dart';
+import '/ui/core/flutter_flow/flutter_flow_util.dart';
+import '/core/enums/enums.dart';
 
 /// SERIALIZATION HELPERS
 

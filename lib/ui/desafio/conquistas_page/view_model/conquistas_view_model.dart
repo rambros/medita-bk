@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '/app_state.dart';
-import '/backend/schema/structs/index.dart';
+import '/core/structs/index.dart';
 import '/data/repositories/auth_repository.dart';
 import '/ui/core/flutter_flow/custom_functions.dart' as functions;
 

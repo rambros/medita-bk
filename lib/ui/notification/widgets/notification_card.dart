@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '/backend/backend.dart';
+import '/data/models/firebase/notification_model.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/ui/core/flutter_flow/flutter_flow_animations.dart';
@@ -9,7 +9,7 @@ import '/ui/core/flutter_flow/flutter_flow_animations.dart';
 /// Reusable notification card widget
 /// Displays a notification in a card format with image, title, content, and metadata
 class NotificationCard extends StatelessWidget {
-  final NotificationsRecord notification;
+  final NotificationModel notification;
   final VoidCallback? onTap;
   final AnimationInfo? animation;
 
@@ -158,7 +158,7 @@ class NotificationCard extends StatelessWidget {
                                 child: Text(
                                   'Data de envio: ${dateTimeFormat(
                                     "d/M/y",
-                                    notification.dataEnvio,
+                                    notification.sendDate,
                                     locale: FFLocalizations.of(context).languageCode,
                                   )}',
                                   style: FlutterFlowTheme.of(context).bodyMedium.override(

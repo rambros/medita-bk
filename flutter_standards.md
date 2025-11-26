@@ -1,7 +1,8 @@
-
 # Recomendações de desenvolvimento – Arquitetura padrão MVVM (Flutter)
 
-> Estas instruções são para voce seguir sempre que estiver gerando código ou sugerindo estrutura para este app Flutter, com base no **Architecture case study – Compass app** da documentação oficial do Flutter.
+> Estas instruções são para voce seguir sempre que estiver gerando código ou
+> sugerindo estrutura para este app Flutter, com base no **Architecture case
+> study – Compass app** da documentação oficial do Flutter.
 
 ---
 
@@ -15,7 +16,10 @@
   - Domain (models, entities)
   - Data (repositories, services, models)
 
+  Estarei usando flutter puro, retirar toda referencia a FlutterFlow
+
 Recommended libraries:
+
 - Routing: `go_router`
 - State management: `provider` (or equivalent)
 - Networking: `dio`
@@ -65,6 +69,7 @@ lib/
 ```
 
 **Example: Video Module**
+
 ```text
 lib/
   ui/
@@ -91,10 +96,12 @@ lib/
 3. UI (View + ViewModel + Commands)
 
 ### Views
+
 - Widgets simples, sem lógica de negócio.
 - Obtêm estado do ViewModel via Provider.
 
 ### ViewModels
+
 - Usar ChangeNotifier.
 - Responsáveis por estado e chamadas aos Repositories.
 - Ações encapsuladas em Commands.
@@ -104,16 +111,20 @@ lib/
 4. Camada de Dados
 
 ### Repositories
+
 - Fonte de verdade da aplicação.
 - Expor métodos de alto nível.
 
 ### Services
+
 - Encapsular infraestrutura (HTTP, banco local).
 
 ### API Models
+
 - DTOs com conversão JSON.
 
 ### Domain Models
+
 - Entidades puras, independentes de API.
 
 ---
@@ -161,22 +172,19 @@ testing/
 - Seguir Dart Style Guide.
 - Nomear arquivos consistentemente:
   - `home_view_model.dart`, `trips_repository.dart` etc.
-- Dividir widgets grandes em subwidgets.
-| Type | Rule | Example |
-|------|------|---------|
-| Files | snake_case | `login_page.dart` |
-| Classes | PascalCase | `LoginController` |
-| Variables/methods | camelCase | `isLoading` |
-| Page widgets | end in `Page` | `HomePage` |
-| DTO models | end in `Model` | `UserModel` |
-| Domain entities | end in `Entity` | `UserEntity` |
-| Repository interfaces | end in `Repository` | `AuthRepository` |
+- Dividir widgets grandes em subwidgets. | Type | Rule | Example |
+  |------|------|---------| | Files | snake_case | `login_page.dart` | | Classes
+  | PascalCase | `LoginController` | | Variables/methods | camelCase |
+  `isLoading` | | Page widgets | end in `Page` | `HomePage` | | DTO models | end
+  in `Model` | `UserModel` | | Domain entities | end in `Entity` | `UserEntity`
+  | | Repository interfaces | end in `Repository` | `AuthRepository` |
 
 ---
 
 10. Instruções para voce ao gerar código
 
 Sempre:
+
 1. Informar o caminho correto do arquivo.
 2. Manter camadas separadas.
 3. Usar ChangeNotifier + Provider.
@@ -185,7 +193,6 @@ Sempre:
 6. Se possível, gerar exemplos de testes.
 
 ---
-
 
 11. Theming & UI Standards
 
@@ -197,6 +204,5 @@ Sempre:
 
 ---
 
-This `flutter_standards.md` must be kept up-to-date and followed for all new Flutter applications and features.
-
-
+This `flutter_standards.md` must be kept up-to-date and followed for all new
+Flutter applications and features.

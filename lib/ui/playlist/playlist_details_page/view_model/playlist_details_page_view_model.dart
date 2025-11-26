@@ -1,17 +1,16 @@
-import '/backend/schema/structs/index.dart';
+import '/core/structs/index.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '/data/repositories/playlist_repository.dart';
 
 class PlaylistDetailsPageViewModel extends ChangeNotifier {
   PlaylistDetailsPageViewModel({
     required PlaylistRepository repository,
-    required this.userRef,
+    required this.userId,
   }) : _repository = repository;
 
   final PlaylistRepository _repository;
-  final DocumentReference userRef;
+  final String userId;
 
   /// Local state fields for this page.
 
@@ -33,15 +32,11 @@ class PlaylistDetailsPageViewModel extends ChangeNotifier {
 
   Future<void> removePlaylist(PlaylistModelStruct target) async {
     try {
-      await _repository.removePlaylist(userRef, target);
+      await _repository.removePlaylist(userId, target);
     } catch (e) {
       errorMessage = 'Erro ao remover playlist: $e';
       rethrow;
     }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 }

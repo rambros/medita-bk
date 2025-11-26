@@ -1,5 +1,4 @@
-import '/backend/backend.dart';
-import '/backend/schema/structs/index.dart';
+import '/core/structs/index.dart';
 import '/data/repositories/auth_repository.dart';
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
@@ -40,8 +39,8 @@ class _PlaylistEditAudiosPageWidgetState extends State<PlaylistEditAudiosPageWid
   @override
   void initState() {
     super.initState();
-    final userRef = context.read<AuthRepository>().currentUserRef;
-    if (userRef == null) {
+    final userId = context.read<AuthRepository>().currentUserUid;
+    if (userId.isEmpty) {
       _model = PlaylistEditAudiosPageViewModel()..init(context);
       _unauthorized = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -11,7 +11,6 @@ import 'firebase_user_provider.dart';
 import 'google_auth.dart';
 import 'jwt_token_auth.dart';
 import 'github_auth.dart';
-import '/backend/backend.dart';
 
 export '../base_auth_user_provider.dart';
 
@@ -324,3 +323,7 @@ class FirebaseAuthManager extends AuthManager
     }
   }
 }
+
+// Legacy no-op hooks kept for compatibility after removing backend.dart
+Future maybeCreateUser(User user) async {}
+Future updateUserDocument({String? email}) async {}

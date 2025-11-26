@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/backend/backend.dart';
+import '/data/models/firebase/message_model.dart';
 import '/data/repositories/mensagem_repository.dart';
 import '/app_state.dart';
 import '/ui/core/flutter_flow/custom_functions.dart' as functions;
@@ -8,7 +8,7 @@ import 'package:share_plus/share_plus.dart';
 class MensagemDetailsViewModel extends ChangeNotifier {
   final MensagemRepository _repository;
 
-  MessagesRecord? messageDoc;
+  MessageModel? messageDoc;
   String? dataHoje;
   bool isLoading = true;
 

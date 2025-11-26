@@ -1,5 +1,5 @@
 // Automatic FlutterFlow imports
-import '/backend/schema/structs/index.dart';
+import '/core/structs/index.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/ui/core/flutter_flow/custom_functions.dart';

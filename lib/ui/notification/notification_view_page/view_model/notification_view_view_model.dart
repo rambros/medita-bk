@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import '/backend/backend.dart';
+import '/data/models/firebase/notification_model.dart';
 import '/ui/core/flutter_flow/custom_functions.dart' as functions;
 
 /// ViewModel for NotificationViewPage
 /// Manages state for viewing a single notification
 class NotificationViewViewModel extends ChangeNotifier {
   // State properties
-  NotificationsRecord? _notification;
-  NotificationsRecord? get notification => _notification;
+  NotificationModel? _notification;
+  NotificationModel? get notification => _notification;
 
   bool _isEditing = false;
   bool get isEditing => _isEditing;
 
   /// Initialize the ViewModel with notification data
-  void initialize(NotificationsRecord? doc, bool? editing) {
+  void initialize(NotificationModel? doc, bool? editing) {
     _notification = doc;
     _isEditing = editing ?? false;
     notifyListeners();

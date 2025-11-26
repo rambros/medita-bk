@@ -1,16 +1,13 @@
-import '/backend/backend.dart';
-import '/backend/schema/enums/enums.dart';
-import '/backend/schema/structs/index.dart';
+import '/core/enums/enums.dart';
+import '/data/models/firebase/music_model.dart';
+import '/data/repositories/music_repository.dart';
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import '/ui/core/flutter_flow/flutter_flow_widgets.dart';
-import 'dart:ui';
 import '/ui/core/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'view_model/select_music_page_view_model.dart';
 
@@ -55,10 +52,10 @@ class _SelectMusicPageWidgetState extends State<SelectMusicPageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<MusicsRecord>>(
-      future: queryMusicsRecordOnce(
-        queryBuilder: (musicsRecord) => musicsRecord.orderBy('title'),
-      ),
+    final musicRepository = context.read<MusicRepository>();
+
+    return StreamBuilder<List<MusicModel>>(
+      stream: musicRepository.streamMusics(),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
@@ -77,7 +74,7 @@ class _SelectMusicPageWidgetState extends State<SelectMusicPageWidget> {
             ),
           );
         }
-        List<MusicsRecord> selectMusicPageMusicsRecordList = snapshot.data!;
+        final musicList = snapshot.data!;
 
         return GestureDetector(
           onTap: () {
@@ -300,9 +297,7 @@ class _SelectMusicPageWidgetState extends State<SelectMusicPageWidget> {
                                 Expanded(
                                   child: Builder(
                                     builder: (context) {
-                                      final listMusics =
-                                          selectMusicPageMusicsRecordList
-                                              .toList();
+                                      final listMusics = musicList.toList();
 
                                       return ListView.separated(
                                         padding: EdgeInsets.zero,
@@ -379,7 +374,6 @@ class _SelectMusicPageWidgetState extends State<SelectMusicPageWidget> {
                                                                   .updateAudioSelectedStruct(
                                                                 (e) => e
                                                                   ..id = listMusicsItem
-                                                                      .reference
                                                                       .id
                                                                   ..title =
                                                                       listMusicsItem
@@ -474,7 +468,6 @@ class _SelectMusicPageWidgetState extends State<SelectMusicPageWidget> {
                                                               (e) => e
                                                                 ..id =
                                                                     listMusicsItem
-                                                                        .reference
                                                                         .id
                                                                 ..title =
                                                                     listMusicsItem

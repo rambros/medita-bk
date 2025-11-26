@@ -1,9 +1,9 @@
-import '/backend/backend.dart';
+import '/data/models/firebase/meditation_model.dart';
+import '/data/services/firebase/firestore_service.dart';
 import '/ui/core/flutter_flow/flutter_flow_animations.dart';
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import 'dart:ui';
 import '/ui/core/widgets/f_f_audio_player_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -11,10 +11,10 @@ import 'package:flutter_animate/flutter_animate.dart';
 class MeditationPlayPageWidget extends StatefulWidget {
   const MeditationPlayPageWidget({
     super.key,
-    required this.meditationDoc,
+    required this.meditationId,
   });
 
-  final MeditationsRecord? meditationDoc;
+  final String meditationId;
 
   static String routeName = 'meditationPlayPage';
   static String routePath = 'meditationPlayPage';
@@ -27,6 +27,8 @@ class _MeditationPlayPageWidgetState extends State<MeditationPlayPageWidget> wit
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   final animationsMap = <String, AnimationInfo>{};
+  final FirestoreService _firestoreService = FirestoreService();
+  MeditationModel? _meditation;
 
   @override
   void initState() {
@@ -50,12 +52,22 @@ class _MeditationPlayPageWidgetState extends State<MeditationPlayPageWidget> wit
       ),
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _meditation = await _firestoreService.getDocument(
+        collectionPath: 'meditations',
+        documentId: widget.meditationId,
+        fromSnapshot: MeditationModel.fromFirestore,
+      );
+      if (mounted) {
+        setState(() {});
+      }
+    });
   }
 
 
   @override
   Widget build(BuildContext context) {
+    final meditation = _meditation;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -131,7 +143,7 @@ class _MeditationPlayPageWidgetState extends State<MeditationPlayPageWidget> wit
                         padding: const EdgeInsetsDirectional.fromSTEB(24.0, 38.0, 24.0, 32.0),
                         child: Text(
                           valueOrDefault<String>(
-                            widget.meditationDoc?.title,
+                            meditation?.title,
                             'meditação',
                           ),
                           textAlign: TextAlign.center,
@@ -158,9 +170,9 @@ class _MeditationPlayPageWidgetState extends State<MeditationPlayPageWidget> wit
                           child: FFAudioPlayerWidget(
                             width: 600.0,
                             height: 600.0,
-                            audioTitle: widget.meditationDoc!.title,
-                            audioUrl: widget.meditationDoc!.audioUrl,
-                            audioArt: widget.meditationDoc!.imageUrl,
+                            audioTitle: meditation?.title ?? '',
+                            audioUrl: meditation?.audioUrl ?? '',
+                            audioArt: meditation?.imageUrl ?? '',
                             colorButton: FlutterFlowTheme.of(context).primary,
                           ),
                         ),

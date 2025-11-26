@@ -1,6 +1,5 @@
 // Automatic FlutterFlow imports
-import '/backend/backend.dart';
-import '/backend/schema/structs/index.dart';
+import '/core/structs/index.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 // Imports custom functions
 import 'package:flutter/material.dart';

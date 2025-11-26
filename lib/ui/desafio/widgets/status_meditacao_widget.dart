@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '/backend/schema/enums/enums.dart';
+import '/core/enums/enums.dart';
 import '/data/repositories/auth_repository.dart';
 import '/index.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';

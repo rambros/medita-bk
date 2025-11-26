@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '/app_state.dart';
-import '/backend/schema/structs/index.dart';
+import '/core/structs/index.dart';
 
 class CompletouMandalaViewModel extends ChangeNotifier {
   final int diaCompletado;

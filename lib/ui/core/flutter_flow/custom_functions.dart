@@ -1,9 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:intl/intl.dart';
-import '/backend/backend.dart';
-import '/backend/schema/structs/index.dart';
-import '/backend/schema/enums/enums.dart';
+import '/core/structs/index.dart';
+import '/core/enums/enums.dart';
 
 String transformMilliseconds(int milliseconds) {
   var hundreds = (milliseconds / 10).truncate();

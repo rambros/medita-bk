@@ -1,15 +1,19 @@
-import '/backend/backend.dart';
-import '/backend/api_requests/api_calls.dart';
+import '/data/models/firebase/message_model.dart';
+import '/data/services/firebase/firestore_service.dart';
+import '/data/services/messages_service.dart';
 
 class MensagemRepository {
+  MensagemRepository({FirestoreService? firestoreService})
+      : _firestoreService = firestoreService ?? FirestoreService();
+
+  final FirestoreService _firestoreService;
+
   /// Get a specific message by ID
-  Future<MessagesRecord?> getMensagemById(int id) async {
-    final results = await queryMessagesRecordOnce(
-      queryBuilder: (messagesRecord) => messagesRecord.where(
-        'id',
-        isEqualTo: id,
-      ),
-      singleRecord: true,
+  Future<MessageModel?> getMensagemById(int id) async {
+    final results = await _firestoreService.getCollection(
+      collectionPath: 'messages',
+      fromSnapshot: MessageModel.fromFirestore,
+      queryBuilder: (query) => query.where('id', isEqualTo: id).limit(1),
     );
     return results.firstOrNull;
   }

@@ -1,16 +1,22 @@
-import '/backend/backend.dart';
+import '/core/structs/comment_struct.dart';
+import '/data/models/firebase/meditation_model.dart';
+import '/data/repositories/meditation_repository.dart';
+import '/data/repositories/user_repository.dart';
+import '/data/services/firebase/firestore_service.dart';
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_toggle_icon.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/ui/meditation/widgets/comment_dialog.dart';
 import '/core/utils/network_utils.dart';
+import '/core/utils/media/audio_utils.dart';
 import '/ui/core/flutter_flow/custom_functions.dart' as functions;
 import '/data/repositories/auth_repository.dart';
 import '/index.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MeditationDetailsPageWidget extends StatefulWidget {
   const MeditationDetailsPageWidget({
@@ -29,11 +35,15 @@ class MeditationDetailsPageWidget extends StatefulWidget {
 
 class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final FirestoreService _firestoreService = FirestoreService();
+  final MeditationRepository _meditationRepository = MeditationRepositoryImpl();
+  final UserRepository _userRepository = UserRepository();
 
   // Local state
-  MeditationsRecord? _meditationDoc;
+  MeditationModel? _meditationDoc;
   bool _isAudioDownloaded = false;
   bool _isFavorite = false;
+  String? _lastCheckedAudioUrl;
 
   @override
   void initState() {
@@ -42,14 +52,18 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'meditationDetailsPage'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _meditationDoc = await MeditationsRecord.getDocumentOnce(widget.meditationDocRef!);
+      final meditationRef = widget.meditationDocRef;
+      if (meditationRef == null) {
+        return;
+      }
+      _meditationDoc = await _meditationRepository.getMeditationById(meditationRef.id);
       if (!mounted) return;
+      await _checkDownloadStatus(_meditationDoc?.audioUrl);
       // TODO: Migrate isAudioDownloaded to AudioService
       // final isDownloaded = await actions.isAudioDownloaded(
       //   functions.getStringFromAudioPath(_meditationDoc!.audioUrl)!,
       // );
       // _isAudioDownloaded = isDownloaded;
-      _isAudioDownloaded = false; // Temporary: assume not downloaded
       final userFavorites = context.read<AuthRepository>().currentUser?.favorites.toList() ?? [];
       _isFavorite = userFavorites.contains(_meditationDoc?.documentId);
       safeSetState(() {});
@@ -63,13 +77,44 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
     super.dispose();
   }
 
+  Future<void> _checkDownloadStatus(String? audioUrl) async {
+    if (audioUrl == null || audioUrl.trim().isEmpty) return;
+    if (_lastCheckedAudioUrl == audioUrl && _isAudioDownloaded) return;
+
+    _lastCheckedAudioUrl = audioUrl;
+
+    final resolvedPath = functions.getStringFromAudioPath(audioUrl) ?? audioUrl;
+    final downloaded = await AudioUtils.isAudioDownloaded(resolvedPath);
+    if (!mounted) return;
+    if (downloaded != _isAudioDownloaded) {
+      setState(() {
+        _isAudioDownloaded = downloaded;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<MeditationsRecord>(
-      stream: MeditationsRecord.getDocument(widget.meditationDocRef!),
+    if (widget.meditationDocRef == null) {
+      return Scaffold(
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Text(
+              'Meditação não encontrada.',
+              style: FlutterFlowTheme.of(context).bodyMedium,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return StreamBuilder<MeditationModel?>(
+      stream: _meditationRepository.streamMeditationById(widget.meditationDocRef!.id),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
-        if (!snapshot.hasData) {
+        if (!snapshot.hasData || snapshot.data == null) {
           return Scaffold(
             backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
             body: Center(
@@ -86,7 +131,10 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
           );
         }
 
-        final meditationDetailsPageMeditationsRecord = snapshot.data!;
+        final meditationDetailsPageMeditation = snapshot.data!;
+        SchedulerBinding.instance.addPostFrameCallback(
+          (_) => _checkDownloadStatus(meditationDetailsPageMeditation.audioUrl),
+        );
 
         return GestureDetector(
           onTap: () {
@@ -148,7 +196,7 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                       Padding(
                         padding: const EdgeInsetsDirectional.fromSTEB(8.0, 16.0, 8.0, 8.0),
                         child: Text(
-                          meditationDetailsPageMeditationsRecord.title,
+                          meditationDetailsPageMeditation.title,
                           textAlign: TextAlign.center,
                           style: FlutterFlowTheme.of(context).headlineMedium.override(
                                 fontFamily: FlutterFlowTheme.of(context).headlineMediumFamily,
@@ -158,7 +206,7 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                         ),
                       ),
                       Text(
-                        meditationDetailsPageMeditationsRecord.authorName,
+                        meditationDetailsPageMeditation.authorName,
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
                               letterSpacing: 0.0,
@@ -173,7 +221,7 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                           children: [
                             Text(
                               valueOrDefault<String>(
-                                meditationDetailsPageMeditationsRecord.audioDuration,
+                                meditationDetailsPageMeditation.audioDuration,
                                 '00:00',
                               ),
                               style: FlutterFlowTheme.of(context).bodyMedium.override(
@@ -183,7 +231,7 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                                   ),
                             ),
                             Text(
-                              '${meditationDetailsPageMeditationsRecord.numPlayed.toString()} reproduções',
+                              '${meditationDetailsPageMeditation.numPlayed.toString()} reproduções',
                               style: FlutterFlowTheme.of(context).bodyMedium.override(
                                     fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
                                     letterSpacing: 0.0,
@@ -200,7 +248,7 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Text(
-                                    meditationDetailsPageMeditationsRecord.numLiked.toString(),
+                                    meditationDetailsPageMeditation.numLiked.toString(),
                                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                                           fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
                                           letterSpacing: 0.0,
@@ -237,7 +285,7 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                           alignment: const AlignmentDirectional(0.0, 0.0),
                           children: [
                             Builder(builder: (context) {
-                              final imageUrl = meditationDetailsPageMeditationsRecord.imageUrl;
+                              final imageUrl = meditationDetailsPageMeditation.imageUrl;
                               final parsedUrl = Uri.tryParse(imageUrl);
                               final hasImage = parsedUrl != null && parsedUrl.hasScheme && parsedUrl.host.isNotEmpty;
                               if (!hasImage) {
@@ -287,14 +335,12 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                                 final hasInternetAccess = await NetworkUtils.hasInternetAccess();
                                 shouldSetState = true;
                                 if (hasInternetAccess == true) {
-                                  final numPlayed = meditationDetailsPageMeditationsRecord.numPlayed;
-                                  // tem bug no update with increment que transforma em double.
-                                  // jogo valor do numPlayed para um pageState e increment este depois update no filed numPlayed
-
-                                  await meditationDetailsPageMeditationsRecord.reference
-                                      .update(createMeditationsRecordData(
-                                    numPlayed: numPlayed + 1,
-                                  ));
+                                final numPlayed = meditationDetailsPageMeditation.numPlayed;
+                                await _firestoreService.updateDocument(
+                                  collectionPath: 'meditations',
+                                  documentId: meditationDetailsPageMeditation.id,
+                                  data: {'numPlayed': numPlayed + 1},
+                                );
                                 } else {
                                   if (_isAudioDownloaded != true) {
                                     if (!context.mounted) return;
@@ -323,13 +369,13 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                                 context.pushNamed(
                                   MeditationPlayPageWidget.routeName,
                                   queryParameters: {
-                                    'meditationDoc': serializeParam(
-                                      meditationDetailsPageMeditationsRecord,
-                                      ParamType.Document,
+                                    'meditationId': serializeParam(
+                                      meditationDetailsPageMeditation.id,
+                                      ParamType.String,
                                     ),
                                   }.withoutNulls,
                                   extra: <String, dynamic>{
-                                    'meditationDoc': meditationDetailsPageMeditationsRecord,
+                                    'meditationId': meditationDetailsPageMeditation.id,
                                     kTransitionInfoKey: const TransitionInfo(
                                       hasTransition: true,
                                       transitionType: PageTransitionType.leftToRight,
@@ -356,7 +402,7 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                             Padding(
                               padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 2.0),
                               child: Text(
-                                meditationDetailsPageMeditationsRecord.detailsText,
+                                meditationDetailsPageMeditation.detailsText,
                                 textAlign: TextAlign.center,
                                 maxLines: 3,
                                 style: FlutterFlowTheme.of(context).bodySmall.override(
@@ -370,7 +416,7 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                         ),
                       ),
                       Text(
-                        'Texto:  ${meditationDetailsPageMeditationsRecord.authorText}',
+                        'Texto:  ${meditationDetailsPageMeditation.authorText}',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
                               letterSpacing: 0.0,
@@ -378,7 +424,7 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                             ),
                       ),
                       Text(
-                        'Voz: ${meditationDetailsPageMeditationsRecord.authorName}',
+                        'Voz: ${meditationDetailsPageMeditation.authorName}',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
                               letterSpacing: 0.0,
@@ -386,7 +432,7 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                             ),
                       ),
                       Text(
-                        'Música: ${meditationDetailsPageMeditationsRecord.authorMusic}',
+                        'Música: ${meditationDetailsPageMeditation.authorMusic}',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
                               letterSpacing: 0.0,
@@ -434,7 +480,7 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                           Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(2.0, 0.0, 0.0, 0.0),
                             child: Text(
-                              meditationDetailsPageMeditationsRecord.comments.length.toString(),
+                              meditationDetailsPageMeditation.comments.length.toString(),
                               style: FlutterFlowTheme.of(context).bodyMedium.override(
                                     fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
                                     letterSpacing: 0.0,
@@ -451,8 +497,8 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                           ),
                           ToggleIcon(
                             onPressed: () async {
-                              final userRef = context.read<AuthRepository>().currentUserRef;
-                              if (userRef == null) {
+                              final userId = context.read<AuthRepository>().currentUserUid;
+                              if (userId.isEmpty) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
@@ -472,38 +518,14 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                               }
                               safeSetState(() => _isFavorite = !_isFavorite);
 
-                              final numLiked = meditationDetailsPageMeditationsRecord.numLiked;
+                              final numLiked = meditationDetailsPageMeditation.numLiked;
 
                               if (_isFavorite == true) {
-                                await meditationDetailsPageMeditationsRecord.reference.update(
-                                  createMeditationsRecordData(
-                                    numLiked: numLiked + 1,
-                                  ),
-                                );
-
-                                await userRef.update({
-                                  ...mapToFirestore(
-                                    {
-                                      'favorites':
-                                          FieldValue.arrayUnion([meditationDetailsPageMeditationsRecord.documentId]),
-                                    },
-                                  ),
-                                });
+                                await _meditationRepository.incrementLikeCount(meditationDetailsPageMeditation.id);
+                                await _userRepository.addToFavorites(userId, meditationDetailsPageMeditation.id);
                               } else {
-                                await meditationDetailsPageMeditationsRecord.reference.update(
-                                  createMeditationsRecordData(
-                                    numLiked: numLiked - 1,
-                                  ),
-                                );
-
-                                await userRef.update({
-                                  ...mapToFirestore(
-                                    {
-                                      'favorites':
-                                          FieldValue.arrayRemove([meditationDetailsPageMeditationsRecord.documentId]),
-                                    },
-                                  ),
-                                });
+                                await _meditationRepository.decrementLikeCount(meditationDetailsPageMeditation.id);
+                                await _userRepository.removeFromFavorites(userId, meditationDetailsPageMeditation.id);
                               }
                             },
                             value: _isFavorite,
@@ -528,10 +550,10 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                       ),
                       Builder(
                         builder: (context) {
-                          if (meditationDetailsPageMeditationsRecord.comments.isNotEmpty) {
+                          if (meditationDetailsPageMeditation.comments.isNotEmpty) {
                             return Builder(
                               builder: (context) {
-                                final comments = meditationDetailsPageMeditationsRecord.comments.toList();
+                                final comments = meditationDetailsPageMeditation.comments.toList();
 
                                 return ListView.separated(
                                   padding: EdgeInsets.zero,
@@ -664,23 +686,23 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                                                       ) ??
                                                       false;
                                                   if (confirmDialogResponse) {
-                                                    await widget.meditationDocRef!.update({
-                                                      ...mapToFirestore(
-                                                        {
-                                                          'comments': FieldValue.arrayRemove([
-                                                            getCommentFirestoreData(
-                                                              updateCommentStruct(
-                                                                commentsItem,
-                                                                clearUnsetFields: false,
-                                                              ),
-                                                              true,
-                                                            )
-                                                          ]),
-                                                        },
-                                                      ),
-                                                    });
-                                                  }
-                                                },
+                                                    await _firestoreService.updateDocument(
+                                                      collectionPath: 'meditations',
+                                                      documentId: meditationDetailsPageMeditation.id,
+                                                      data: {
+                                                        'comments': FieldValue.arrayRemove([
+                                                          getCommentFirestoreData(
+                                                            updateCommentStruct(
+                                                              commentsItem,
+                                                              clearUnsetFields: false,
+                                                            ),
+                                                            true,
+                                                          )
+                                                        ]),
+                                                      },
+                                                    );
+                                                 }
+                                               },
                                                 child: Icon(
                                                   Icons.delete,
                                                   color: FlutterFlowTheme.of(context).primary,

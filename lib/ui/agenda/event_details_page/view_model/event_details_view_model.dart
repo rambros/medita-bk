@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/backend/schema/structs/index.dart';
+import '/core/structs/index.dart';
 
 class EventDetailsViewModel extends ChangeNotifier {
   EventModelStruct? _event;

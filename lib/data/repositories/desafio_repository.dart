@@ -1,28 +1,57 @@
+import '/core/structs/index.dart';
 import '/data/services/auth/firebase_auth/auth_util.dart';
-import '/backend/backend.dart';
+import '/data/services/firebase/firestore_service.dart';
+
+import '/data/models/firebase/desafio21_model.dart';
+import 'package:collection/collection.dart';
 
 class DesafioRepository {
+  DesafioRepository({FirestoreService? firestoreService}) : _firestoreService = firestoreService ?? FirestoreService();
+
+  final FirestoreService _firestoreService;
+  static const String _collection = 'users';
+
   /// Updates the user's Desafio 21 progress.
   Future<void> updateDesafio21(D21ModelStruct desafio21, {bool? desafio21Started}) async {
-    final userRef = currentUserReference;
-    if (userRef == null) return;
+    final uid = currentUserUid;
+    if (uid.isEmpty) return;
 
-    final Map<String, dynamic> updateData = createUsersRecordData(
-      desafio21: desafio21,
-      desafio21Started: desafio21Started,
+    final Map<String, dynamic> updateData = {
+      'desafio21': desafio21.toMap(),
+      if (desafio21Started != null) 'desafio21Started': desafio21Started,
+    };
+
+    await _firestoreService.updateDocument(
+      collectionPath: _collection,
+      documentId: uid,
+      data: updateData,
     );
+  }
 
-    await userRef.update(updateData);
+  /// Updates the user's Desafio 21 progress (alias for compatibility).
+  Future<void> updateUserDesafio21(String userId, D21ModelStruct desafio21) async {
+    await _firestoreService.updateDocument(
+      collectionPath: _collection,
+      documentId: userId,
+      data: {'desafio21': desafio21.toMap()},
+    );
+  }
+
+  /// Get Desafio 21 template (docId = 1)
+  Future<Desafio21Model?> getDesafio21Template() async {
+    final results = await _firestoreService.getCollection(
+      collectionPath: 'desafio21',
+      fromSnapshot: Desafio21Model.fromFirestore,
+      queryBuilder: (query) => query.where('docId', isEqualTo: 1).limit(1),
+    );
+    return results.firstOrNull;
   }
 
   /// Resets the user's Desafio 21 progress.
   Future<void> resetDesafio() async {
-    final userRef = currentUserReference;
-    if (userRef == null) return;
+    final uid = currentUserUid;
+    if (uid.isEmpty) return;
 
-    // Logic to reset the challenge.
-    // Based on the existing code, it seems we might just need to update the struct.
-    // However, the exact reset logic was in a bottom sheet 'ConfirmaResetDesafioWidget'.
-    // I will implement the basic update for now.
+    // TODO: define reset logic (template reload, clear progress, etc.)
   }
 }

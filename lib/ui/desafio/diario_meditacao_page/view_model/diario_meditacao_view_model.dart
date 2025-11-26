@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '/backend/schema/structs/index.dart';
+import '/core/structs/index.dart';
 import '/data/repositories/auth_repository.dart';
 
 class DiarioMeditacaoViewModel extends ChangeNotifier {

@@ -9,8 +9,8 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'data/services/auth/firebase_auth/firebase_user_provider.dart';
 import 'data/services/auth/firebase_auth/auth_util.dart';
 
-import 'backend/push_notifications/push_notifications_util.dart';
-import 'backend/firebase/firebase_config.dart';
+import 'data/services/push_notifications/push_notifications_util.dart';
+import 'data/services/firebase_config.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/ui/core/flutter_flow/internationalization.dart';
@@ -21,6 +21,7 @@ import '/core/controllers/index.dart';
 
 import 'dart:ui' as ui;
 
+import '/data/repositories/category_repository.dart';
 import '/data/repositories/home_repository.dart';
 import '/ui/home/home_page/view_model/home_view_model.dart';
 
@@ -38,6 +39,7 @@ import '/ui/mensagens/mensagem_details_page/view_model/mensagem_details_view_mod
 import '/ui/mensagens/mensagem_show_page/view_model/mensagem_show_view_model.dart';
 import '/ui/mensagens/mensagens_semantic_search_page/view_model/mensagens_semantic_search_view_model.dart';
 
+import '/data/repositories/music_repository.dart';
 import '/data/repositories/video_repository.dart';
 import '/ui/video/video_home_page/view_model/video_home_view_model.dart';
 import '/ui/video/palestras_list_page/view_model/palestras_list_view_model.dart';
@@ -46,7 +48,7 @@ import '/ui/video/entrevistas_list_page/view_model/entrevistas_list_view_model.d
 import '/ui/video/canal_viver_list_page/view_model/canal_viver_list_view_model.dart';
 import '/ui/video/youtube_player_page/view_model/youtube_player_view_model.dart';
 
-import '/backend/repositories/meditation/meditation_repository.dart';
+import '/data/repositories/meditation_repository.dart';
 import '/ui/meditation/meditation_home_page/view_model/meditation_home_view_model.dart';
 import '/ui/meditation/meditation_list_page/view_model/meditation_list_view_model.dart';
 import '/data/repositories/playlist_repository.dart';
@@ -101,6 +103,7 @@ void main() async {
         update: (context, authService, previous) => previous ?? AuthRepository(authService: authService),
       ),
       Provider(create: (_) => UserRepository()),
+      Provider(create: (_) => CategoryRepository()),
 
       // Playlist Module
       Provider(create: (_) => PlaylistRepository()),
@@ -126,9 +129,13 @@ void main() async {
         update: (context, repo, authRepo, viewModel) =>
             viewModel ?? HomeDesafioViewModel(repository: repo, authRepository: authRepo),
       ),
-      ChangeNotifierProxyProvider<AuthRepository, ListaEtapasViewModel>(
-        create: (context) => ListaEtapasViewModel(authRepository: context.read<AuthRepository>()),
-        update: (context, authRepo, previous) => previous ?? ListaEtapasViewModel(authRepository: authRepo),
+      ChangeNotifierProxyProvider2<DesafioRepository, AuthRepository, ListaEtapasViewModel>(
+        create: (context) => ListaEtapasViewModel(
+          authRepository: context.read<AuthRepository>(),
+          repository: context.read<DesafioRepository>(),
+        ),
+        update: (context, repo, authRepo, previous) =>
+            previous ?? ListaEtapasViewModel(authRepository: authRepo, repository: repo),
       ),
 
       // Notification Module
@@ -163,6 +170,10 @@ void main() async {
         create: (context) => MensagensSemanticSearchViewModel(context.read<MensagemRepository>()),
         update: (context, repo, viewModel) => viewModel ?? MensagensSemanticSearchViewModel(repo),
       ),
+
+      // Music Module
+      Provider(create: (_) => MusicRepository()),
+
       Provider(create: (_) => VideoRepository()),
       ChangeNotifierProxyProvider<VideoRepository, VideoHomeViewModel>(
         create: (context) => VideoHomeViewModel(context.read<VideoRepository>()),
@@ -201,11 +212,13 @@ void main() async {
             viewModel ?? MeditationListViewModel(meditationRepository: medRepo, authRepository: authRepo),
       ),
       // User Repository and ViewModels
-      ChangeNotifierProxyProvider<AuthRepository, ConfigViewModel>(
+      ChangeNotifierProxyProvider2<AuthRepository, UserRepository, ConfigViewModel>(
         create: (context) => ConfigViewModel(
-          authRepository: Provider.of<AuthRepository>(context, listen: false),
+          authRepository: context.read<AuthRepository>(),
+          userRepository: context.read<UserRepository>(),
         ),
-        update: (context, authRepository, previous) => ConfigViewModel(authRepository: authRepository),
+        update: (context, authRepository, userRepository, previous) =>
+            previous ?? ConfigViewModel(authRepository: authRepository, userRepository: userRepository),
       ),
       ChangeNotifierProxyProvider2<AuthRepository, UserRepository, EditProfileViewModel>(
         create: (context) => EditProfileViewModel(

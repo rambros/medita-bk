@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
-import '/backend/backend.dart';
+import '/data/models/firebase/message_model.dart';
+import '/data/services/firebase/firestore_service.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/ui/core/flutter_flow/custom_functions.dart' as functions;
 
 class DonationViewModel extends ChangeNotifier {
-  MessagesRecord? messageDoc;
+  DonationViewModel({FirestoreService? firestoreService})
+      : _firestoreService = firestoreService ?? FirestoreService();
+
+  final FirestoreService _firestoreService;
+
+  MessageModel? messageDoc;
   bool isLoading = true;
 
   Future<void> loadMessage() async {
@@ -19,15 +25,17 @@ class DonationViewModel extends ChangeNotifier {
         FFAppState().dataMensagemHoje = dataHoje;
       }
 
-      final result = await queryMessagesRecordOnce(
-        queryBuilder: (messagesRecord) => messagesRecord.where(
+      final result = await _firestoreService.getCollection(
+        collectionPath: 'messages',
+        fromSnapshot: MessageModel.fromFirestore,
+        queryBuilder: (query) => query.where(
           'id',
           isEqualTo: valueOrDefault<int>(
             FFAppState().indexMensagemHoje,
             100,
           ),
         ),
-        singleRecord: true,
+        limit: 1,
       );
 
       messageDoc = result.firstOrNull;

@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 import '/data/repositories/auth_repository.dart';
+import '/data/repositories/home_repository.dart';
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
@@ -49,6 +50,7 @@ class _DesafioPlayPageState extends State<DesafioPlayPage> {
       _viewModel = DesafioPlayViewModel(
         meditationIndex: widget.indiceListaMeditacao!,
         authRepository: context.read<AuthRepository>(),
+        homeRepository: context.read<HomeRepository>(),
       );
     }
   }

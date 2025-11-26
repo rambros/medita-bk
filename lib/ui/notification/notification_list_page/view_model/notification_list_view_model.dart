@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/backend/backend.dart';
+import '/data/models/firebase/notification_model.dart';
 import '/data/repositories/notification_repository.dart';
 
 /// ViewModel for NotificationListPage
@@ -20,7 +20,7 @@ class NotificationListViewModel extends ChangeNotifier {
   }
 
   /// Get notifications stream based on current tab
-  Stream<List<NotificationsRecord>> getNotificationsForTab() {
+  Stream<List<NotificationModel>> getNotificationsForTab() {
     switch (_currentTabIndex) {
       case 0:
         // All Notifications

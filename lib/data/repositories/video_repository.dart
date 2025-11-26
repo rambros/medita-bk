@@ -1,4 +1,4 @@
-import '/backend/api_requests/api_calls.dart';
+import '/data/services/youtube_service.dart';
 import '/domain/models/video/video_model.dart';
 
 class VideoRepository {

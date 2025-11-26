@@ -1,4 +1,4 @@
-import '/backend/backend.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// Service for user-related utilities and migration scripts
 class UserService {

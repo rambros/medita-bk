@@ -1,4 +1,5 @@
-import '/backend/backend.dart';
+import '/data/models/firebase/category_model.dart';
+import '/data/repositories/category_repository.dart';
 import '/ui/core/flutter_flow/flutter_flow_choice_chips.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
@@ -6,6 +7,7 @@ import '/ui/core/flutter_flow/flutter_flow_widgets.dart';
 import '/ui/core/flutter_flow/form_field_controller.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'filter_meditations_dialog_model.dart';
 export 'filter_meditations_dialog_model.dart';
 
@@ -58,10 +60,8 @@ class _FilterMeditationsDialogWidgetState
         ),
         child: Align(
           alignment: const AlignmentDirectional(0.0, 1.0),
-          child: StreamBuilder<List<CategoryRecord>>(
-            stream: queryCategoryRecord(
-              queryBuilder: (categoryRecord) => categoryRecord.orderBy('nome'),
-            ),
+          child: StreamBuilder<List<CategoryModel>>(
+            stream: context.read<CategoryRepository>().getCategoriesStream(),
             builder: (context, snapshot) {
               // Customize what your widget looks like when it's loading.
               if (!snapshot.hasData) {
@@ -77,8 +77,7 @@ class _FilterMeditationsDialogWidgetState
                   ),
                 );
               }
-              List<CategoryRecord> bottomSheetMaterialCategoryRecordList =
-                  snapshot.data!;
+              final bottomSheetMaterialCategoryRecordList = snapshot.data!;
 
               return Container(
                 width: double.infinity,
@@ -126,7 +125,6 @@ class _FilterMeditationsDialogWidgetState
                         child: FlutterFlowChoiceChips(
                           options: bottomSheetMaterialCategoryRecordList
                               .map((e) => e.nome)
-                              .toList()
                               .map((label) => ChipData(label))
                               .toList(),
                           onChanged: (val) => safeSetState(

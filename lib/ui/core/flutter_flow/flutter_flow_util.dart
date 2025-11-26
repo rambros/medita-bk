@@ -18,7 +18,6 @@ import 'uploaded_file.dart';
 
 import '/main.dart';
 
-
 export 'keep_alive_wrapper.dart';
 export 'lat_lng.dart';
 export 'place.dart';
@@ -33,7 +32,7 @@ export 'package:cloud_firestore/cloud_firestore.dart' show DocumentReference, Fi
 export 'package:page_transition/page_transition.dart';
 export 'custom_icons.dart' show FFIcons;
 export 'internationalization.dart' show FFLocalizations;
-export '/backend/firebase_analytics/analytics.dart';
+export '/data/services/firebase/analytics_service.dart';
 export '../../../routing/nav.dart';
 
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();

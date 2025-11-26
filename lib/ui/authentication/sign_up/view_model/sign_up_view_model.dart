@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import '/data/models/firebase/user_model.dart';
 import '/data/repositories/auth_repository.dart';
 import '/data/repositories/user_repository.dart';
 import '/ui/home/home_page/home_page.dart';
-import '/backend/backend.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 
 class SignUpViewModel extends ChangeNotifier {
@@ -27,24 +27,23 @@ class SignUpViewModel extends ChangeNotifier {
     try {
       GoRouter.of(context).prepareAuthEvent();
       final user = await _authRepository.createAccountWithEmail(context, email, password);
+
       if (user != null) {
-        // Update user record
-        await _userRepository.updateUser(
-          UsersRecord.collection.doc(user.uid),
-          {
-            ...createUsersRecordData(
-              fullName: name,
-              createdTime: getCurrentTimestamp,
-              userImageUrl:
-                  'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/medita-bk-web-admin-2vj9u4/assets/i10jga9fdqpj/autorImage.jpg',
-            ),
-            ...mapToFirestore(
-              {
-                'userRole': ['User'],
-              },
-            ),
-          },
+        // Create new user model
+        final newUser = UserModel(
+          uid: user.uid ?? '', // Should never be null, but adding safety
+          email: user.email ?? email, // Use Firebase email or fallback to provided email
+          fullName: name,
+          displayName: name,
+          createdTime: DateTime.now(),
+          userImageUrl:
+              'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/medita-bk-web-admin-2vj9u4/assets/i10jga9fdqpj/autorImage.jpg',
+          userRole: const ['User'],
+          loginType: 'email',
         );
+
+        // Create user document in Firestore
+        await _userRepository.createUser(newUser);
 
         if (context.mounted) {
           context.goNamedAuth(HomePage.routeName, context.mounted);

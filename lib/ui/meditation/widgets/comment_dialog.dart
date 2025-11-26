@@ -1,10 +1,12 @@
-import '/backend/backend.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/ui/core/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/ui/core/flutter_flow/custom_functions.dart' as functions;
 import '/data/repositories/auth_repository.dart';
+import '/data/services/firebase/firestore_service.dart';
+import '/core/structs/comment_struct.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -239,7 +241,8 @@ class _CommentDialogWidgetState extends State<CommentDialogWidget> {
                           child: FFButtonWidget(
                             onPressed: () async {
                               final authRepo = context.read<AuthRepository>();
-                              if (authRepo.currentUserRef == null) {
+                              final userId = authRepo.currentUserUid;
+                              if (userId.isEmpty) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
@@ -262,33 +265,28 @@ class _CommentDialogWidgetState extends State<CommentDialogWidget> {
                                 return;
                               }
                               if (_model.comentarioTextController.text != '') {
-                                final userId = authRepo.currentUserUid;
                                 final user = authRepo.currentUser;
-                                await widget.meditationRef!.update({
-                                  ...mapToFirestore(
-                                    {
-                                      'comments': FieldValue.arrayUnion([
-                                        getCommentFirestoreData(
-                                          updateCommentStruct(
-                                            CommentStruct(
-                                              userId: userId,
-                                              userName: valueOrDefault(user?.fullName, ''),
-                                              comment: _model
-                                                  .comentarioTextController
-                                                  .text,
-                                              commentDate:
-                                                  functions.commentDate(),
-                                              userImageUrl:
-                                                  valueOrDefault(user?.userImageUrl, ''),
-                                            ),
-                                            clearUnsetFields: false,
+                                await FirestoreService().updateDocument(
+                                  collectionPath: 'meditations',
+                                  documentId: widget.meditationRef!.id,
+                                  data: {
+                                    'comments': FieldValue.arrayUnion([
+                                      getCommentFirestoreData(
+                                        updateCommentStruct(
+                                          CommentStruct(
+                                            userId: userId,
+                                            userName: valueOrDefault(user?.fullName, ''),
+                                            comment: _model.comentarioTextController.text,
+                                            commentDate: functions.commentDate(),
+                                            userImageUrl: valueOrDefault(user?.userImageUrl, ''),
                                           ),
-                                          true,
-                                        )
-                                      ]),
-                                    },
-                                  ),
-                                });
+                                          clearUnsetFields: false,
+                                        ),
+                                        true,
+                                      )
+                                    ]),
+                                  },
+                                );
 
                                 _model.updatePage(() {});
                                 if (!context.mounted) return;

@@ -1,8 +1,7 @@
-import '/backend/backend.dart';
-import '/backend/schema/enums/enums.dart';
+import '/core/enums/enums.dart';
+import '/core/structs/index.dart';
 import '/data/repositories/auth_repository.dart';
 import '/data/repositories/playlist_repository.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
@@ -41,10 +40,10 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
   void initState() {
     super.initState();
     final authRepo = context.read<AuthRepository>();
-    final userRef = authRepo.currentUserRef;
+    final userId = authRepo.currentUserUid;
     _model = PlaylistDetailsPageViewModel(
       repository: context.read<PlaylistRepository>(),
-      userRef: userRef ?? FirebaseFirestore.instance.collection('users').doc('_invalid'),
+      userId: userId,
     )..init(context);
 
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'playlistDetailsPage'});

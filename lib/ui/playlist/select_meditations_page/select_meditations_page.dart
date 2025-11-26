@@ -1,5 +1,6 @@
-import '/backend/backend.dart';
-import '/backend/schema/enums/enums.dart';
+import '/core/enums/enums.dart';
+import '/data/models/firebase/meditation_model.dart';
+import '/data/repositories/meditation_repository.dart';
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
@@ -7,6 +8,7 @@ import '/ui/core/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
 import 'view_model/select_meditations_page_view_model.dart';
 
 class SelectMeditationsPageWidget extends StatefulWidget {
@@ -151,11 +153,8 @@ class _SelectMeditationsPageWidgetState
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Expanded(
-                              child: StreamBuilder<List<MeditationsRecord>>(
-                                stream: queryMeditationsRecord(
-                                  queryBuilder: (meditationsRecord) =>
-                                      meditationsRecord.orderBy('title'),
-                                ),
+                              child: StreamBuilder<List<MeditationModel>>(
+                                stream: context.read<MeditationRepository>().getMeditations(),
                                 builder: (context, snapshot) {
                                   // Customize what your widget looks like when it's loading.
                                   if (!snapshot.hasData) {
@@ -173,22 +172,18 @@ class _SelectMeditationsPageWidgetState
                                       ),
                                     );
                                   }
-                                  List<MeditationsRecord>
-                                      listViewMeditationsRecordList =
-                                      snapshot.data!;
+                                  List<MeditationModel> listViewMeditationsRecordList = snapshot.data!;
 
                                   return ListView.separated(
                                     padding: EdgeInsets.zero,
                                     shrinkWrap: true,
                                     scrollDirection: Axis.vertical,
-                                    itemCount:
-                                        listViewMeditationsRecordList.length,
+                                    itemCount: listViewMeditationsRecordList.length,
                                     separatorBuilder: (_, __) =>
                                         const SizedBox(height: 4.0),
                                     itemBuilder: (context, listViewIndex) {
                                       final listViewMeditationsRecord =
-                                          listViewMeditationsRecordList[
-                                              listViewIndex];
+                                          listViewMeditationsRecordList[listViewIndex];
                                       return Align(
                                         alignment:
                                             const AlignmentDirectional(0.0, 0.0),

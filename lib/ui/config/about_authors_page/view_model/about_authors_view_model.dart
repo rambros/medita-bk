@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import '/backend/backend.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '/data/models/firebase/user_model.dart';
 import '/data/repositories/user_repository.dart';
 
 class AboutAuthorsViewModel extends ChangeNotifier {
   final UserRepository _repository;
-  final PagingController<DocumentSnapshot?, UsersRecord> pagingController;
+  final PagingController<DocumentSnapshot?, UserModel> pagingController;
 
   bool _isDisposed = false;
 
@@ -31,8 +32,9 @@ class AboutAuthorsViewModel extends ChangeNotifier {
         pagingController.appendLastPage(authors);
       } else {
         // Get the last document as the next page key
-        final lastDoc = authors.last;
-        final nextPageKey = await FirebaseFirestore.instance.collection('users').doc(lastDoc.reference.id).get();
+        // Since UserModel doesn't have reference, we need to fetch it from Firestore
+        final lastAuthor = authors.last;
+        final nextPageKey = await FirebaseFirestore.instance.collection('users').doc(lastAuthor.uid).get();
         pagingController.appendPage(authors, nextPageKey);
       }
     } catch (error) {

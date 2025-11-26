@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '/backend/backend.dart';
-import '/backend/firebase_storage/storage.dart';
+import '/data/models/firebase/user_model.dart';
+import '/data/services/firebase/firebase_storage_service.dart';
 import '/data/repositories/auth_repository.dart';
 import '/data/repositories/user_repository.dart';
 import '/ui/core/flutter_flow/upload_data.dart';
@@ -22,8 +22,8 @@ class EditProfileViewModel extends ChangeNotifier {
   final TextEditingController fullNameTextController = TextEditingController();
   final FocusNode fullNameFocusNode = FocusNode();
 
-  StreamSubscription<UsersRecord?>? _userSub;
-  UsersRecord? _user;
+  StreamSubscription<UserModel?>? _userSub;
+  UserModel? _user;
   bool _initializedControllers = false;
 
   String _uploadedFileUrl = '';
@@ -44,22 +44,20 @@ class EditProfileViewModel extends ChangeNotifier {
   }
 
   void init() {
-    // Seed with current user so the UI shows data immediately.
-    _user = _authRepository.currentUser;
-    if (!_initializedControllers) {
-      fullNameTextController.text = _user?.fullName ?? '';
-      _initializedControllers = true;
-    }
-    notifyListeners();
+    // Get current user ID
+    final currentUserId = _authRepository.currentUserUid;
 
-    _userSub ??= _authRepository.authUserStream().listen((u) {
-      _user = u;
-      if (!_initializedControllers) {
-        fullNameTextController.text = u?.fullName ?? '';
-        _initializedControllers = true;
-      }
-      notifyListeners();
-    });
+    if (currentUserId.isNotEmpty) {
+      // Stream user data
+      _userSub ??= _userRepository.streamUser(currentUserId).listen((user) {
+        _user = user;
+        if (!_initializedControllers && user != null) {
+          fullNameTextController.text = user.fullName;
+          _initializedControllers = true;
+        }
+        notifyListeners();
+      });
+    }
   }
 
   @override
@@ -121,15 +119,17 @@ class EditProfileViewModel extends ChangeNotifier {
       return;
     }
 
-    final userRef = _user?.reference;
-    if (userRef == null) return;
+    final currentUserId = _authRepository.currentUserUid;
+    if (currentUserId.isEmpty || _user == null) return;
 
-    final updateData = createUsersRecordData(
+    // Create updated user with new values
+    final updatedUser = _user!.copyWith(
       fullName: fullNameTextController.text,
-      userImageUrl: _uploadedFileUrl.isNotEmpty ? _uploadedFileUrl : null,
+      displayName: fullNameTextController.text,
+      userImageUrl: _uploadedFileUrl.isNotEmpty ? _uploadedFileUrl : _user!.userImageUrl,
     );
 
-    await _userRepository.updateUser(userRef, updateData);
+    await _userRepository.updateUser(currentUserId, updatedUser);
 
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(

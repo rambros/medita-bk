@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '/backend/backend.dart';
+import '/data/models/firebase/user_model.dart';
+import '/data/models/firebase/desafio21_model.dart';
+import '/data/models/firebase/settings_model.dart';
 import '/data/repositories/auth_repository.dart';
 import '/data/repositories/home_repository.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/ui/core/actions/actions.dart' as action_blocks;
+import '/core/structs/index.dart';
 
 /// ViewModel for HomePage
 /// Manages state and business logic for the home page
@@ -23,14 +26,14 @@ class HomeViewModel extends ChangeNotifier {
   bool _hasInternet = false;
   bool get hasInternet => _hasInternet;
 
-  UsersRecord? _userRecord;
-  UsersRecord? get userRecord => _userRecord;
+  UserModel? _userRecord;
+  UserModel? get userRecord => _userRecord;
 
-  Desafio21Record? _desafioRecord;
-  Desafio21Record? get desafioRecord => _desafioRecord;
+  Desafio21Model? _desafioRecord;
+  Desafio21Model? get desafioRecord => _desafioRecord;
 
-  SettingsRecord? _settings;
-  SettingsRecord? get settings => _settings;
+  SettingsModel? _settings;
+  SettingsModel? get settings => _settings;
 
   bool _habilitaDesafio21 = false;
   bool get habilitaDesafio21 => _habilitaDesafio21;
@@ -80,21 +83,23 @@ class HomeViewModel extends ChangeNotifier {
 
   /// Load user data and update last access
   Future<void> loadUserData() async {
-    final userRef = _authRepository.currentUserRef;
-    if (userRef == null) return;
+    final userId = _authRepository.currentUserUid;
+    if (userId.isEmpty) return;
 
-    _userRecord = await _repository.getUserRecord(userRef);
+    _userRecord = await _repository.getUserById(userId);
 
-    // Update last access timestamp
-    await _repository.updateLastAccess(userRef);
+    if (_userRecord != null) {
+      // Update last access timestamp
+      await _repository.updateLastAccess(userId);
+    }
 
     notifyListeners();
   }
 
   /// Initialize Desafio 21 data
   Future<void> initializeDesafio21() async {
-    final userRef = _authRepository.currentUserRef;
-    if (userRef == null || _userRecord == null) return;
+    final userId = _authRepository.currentUserUid;
+    if (userId.isEmpty || _userRecord == null) return;
 
     // Get desafioStarted from user
     final desafioStarted = _userRecord?.desafio21Started ?? false;
@@ -102,7 +107,7 @@ class HomeViewModel extends ChangeNotifier {
 
     // Create field if it doesn't exist
     if (desafioStarted != true) {
-      await _repository.updateDesafio21Started(userRef, false);
+      await _repository.updateDesafio21Started(userId, false);
     }
 
     // Load Desafio 21 template
@@ -116,11 +121,28 @@ class HomeViewModel extends ChangeNotifier {
       if (valueOrDefault<bool>(_userRecord?.desafio21Started, false) == true) {
         // Load user's existing desafio21 data
         _desafio21Data = _userRecord!.desafio21;
+
+        // Fix for missing meditations or null data (corrupted state)
+        if (_desafio21Data == null || _desafio21Data!.d21Meditations.isEmpty) {
+          // Use template data to restore/fix
+          final templateData = _desafioRecord!.desafio21Data;
+
+          if (_desafio21Data == null) {
+            _desafio21Data = templateData;
+          } else {
+            // Only update meditations, keeping other progress if possible
+            _desafio21Data!.d21Meditations = templateData.d21Meditations;
+          }
+
+          // Persist the fix to Firestore
+          await _repository.updateUserDesafio21(userId, _desafio21Data!);
+        }
+
         FFAppState().desafio21 = _desafio21Data!;
       } else {
         // Create new desafio21 for user
         final newDesafio21 = _desafioRecord!.desafio21Data;
-        await _repository.updateUserDesafio21(userRef, newDesafio21);
+        await _repository.updateUserDesafio21(userId, newDesafio21);
 
         _desafio21Data = newDesafio21;
         FFAppState().desafio21 = newDesafio21;

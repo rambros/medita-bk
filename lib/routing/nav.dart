@@ -2,11 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '/backend/backend.dart';
+import '/core/structs/util/schema_util.dart';
+import '/core/structs/d21_meditation_model_struct.dart';
 
 import '/data/services/auth/base_auth_user_provider.dart';
 
-import '/backend/push_notifications/push_notifications_handler.dart' show PushNotificationsHandler;
+import '/data/services/push_notifications/push_notifications_handler.dart' show PushNotificationsHandler;
 import '/index.dart';
 import '/main.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
@@ -180,25 +181,34 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: MeditationDetailsPageWidget.routeName,
               path: MeditationDetailsPageWidget.routePath,
               builder: (context, params) => MeditationDetailsPageWidget(
-                meditationDocRef: params.getParam(
-                  'meditationDocRef',
-                  ParamType.DocumentReference,
-                  isList: false,
-                  collectionNamePath: ['meditations'],
-                ),
+                meditationDocRef: () {
+                  final meditationId = params.getParam(
+                    'meditationId',
+                    ParamType.String,
+                  );
+                  if (meditationId != null && meditationId.isNotEmpty) {
+                    return FirebaseFirestore.instance.collection('meditations').doc(meditationId);
+                  }
+
+                  final docRef = params.getParam(
+                    'meditationDocRef',
+                    ParamType.DocumentReference,
+                    isList: false,
+                    collectionNamePath: const ['meditations'],
+                  );
+                  return docRef;
+                }(),
               ),
             ),
             FFRoute(
               name: MeditationPlayPageWidget.routeName,
               path: MeditationPlayPageWidget.routePath,
-              asyncParams: {
-                'meditationDoc': getDoc(['meditations'], MeditationsRecord.fromSnapshot),
-              },
               builder: (context, params) => MeditationPlayPageWidget(
-                meditationDoc: params.getParam(
-                  'meditationDoc',
-                  ParamType.Document,
-                ),
+                meditationId: params.getParam(
+                  'meditationId',
+                  ParamType.String,
+                  isList: false,
+                )!,
               ),
             ),
             FFRoute(

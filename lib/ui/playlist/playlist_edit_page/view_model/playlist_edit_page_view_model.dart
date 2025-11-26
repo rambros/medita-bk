@@ -1,18 +1,16 @@
-import '/backend/schema/structs/index.dart';
+import '/core/structs/index.dart';
 import '/data/repositories/playlist_repository.dart';
 import '/ui/core/flutter_flow/custom_functions.dart' as functions;
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class PlaylistEditPageViewModel extends ChangeNotifier {
   PlaylistEditPageViewModel({
     required PlaylistRepository repository,
-    required this.userRef,
+    required this.userId,
   }) : _repository = repository;
 
   final PlaylistRepository _repository;
-  final DocumentReference userRef;
+  final String userId;
 
   /// Local state fields for this page.
 
@@ -80,7 +78,7 @@ class PlaylistEditPageViewModel extends ChangeNotifier {
       );
 
       await _repository.replacePlaylist(
-        userRef: userRef,
+        userId: userId,
         oldPlaylist: originalPlaylist,
         newPlaylist: updatedPlaylist,
       );

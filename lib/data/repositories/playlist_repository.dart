@@ -1,59 +1,78 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '/backend/schema/structs/index.dart';
-import '/backend/schema/users_record.dart';
-import '/backend/schema/util/firestore_util.dart';
+import '/core/structs/index.dart';
+import '/core/structs/util/firestore_util.dart';
+import '/data/models/firebase/user_model.dart';
+import '/data/services/firebase/firestore_service.dart';
 
 /// Repository responsible for persisting playlist data for the current user.
 class PlaylistRepository {
+  PlaylistRepository({FirestoreService? firestoreService})
+      : _firestoreService = firestoreService ?? FirestoreService();
+
+  final FirestoreService _firestoreService;
+  static const String _collection = 'users';
+
   /// Stream playlists from the provided user reference.
-  Stream<List<PlaylistModelStruct>> watchUserPlaylists(
-    DocumentReference userRef,
-  ) {
-    return UsersRecord.getDocument(userRef).map((record) => record.playlists);
+  Stream<List<PlaylistModelStruct>> watchUserPlaylists(String userId) {
+    return _firestoreService
+        .streamDocument(
+          collectionPath: _collection,
+          documentId: userId,
+          fromSnapshot: UserModel.fromFirestore,
+        )
+        .map((user) => user?.playlists ?? const []);
   }
 
   /// Append a playlist to the user document.
   Future<void> addPlaylist(
-    DocumentReference userRef,
+    String userId,
     PlaylistModelStruct playlist,
   ) {
-    return userRef.update({
-      ...mapToFirestore({
-        'playlists': FieldValue.arrayUnion([
-          getPlaylistModelFirestoreData(
-            updatePlaylistModelStruct(playlist, clearUnsetFields: false),
-            true,
-          ),
-        ]),
-      }),
-    });
+    return _firestoreService.updateDocument(
+      collectionPath: _collection,
+      documentId: userId,
+      data: {
+        ...mapToFirestore({
+          'playlists': FieldValue.arrayUnion([
+            getPlaylistModelFirestoreData(
+              updatePlaylistModelStruct(playlist, clearUnsetFields: false),
+              true,
+            ),
+          ]),
+        }),
+      },
+    );
   }
 
   /// Remove a playlist from the user document.
   Future<void> removePlaylist(
-    DocumentReference userRef,
+    String userId,
     PlaylistModelStruct playlist,
   ) {
-    return userRef.update({
-      ...mapToFirestore({
-        'playlists': FieldValue.arrayRemove([
-          getPlaylistModelFirestoreData(
-            updatePlaylistModelStruct(playlist, clearUnsetFields: false),
-            true,
-          )
-        ]),
-      }),
-    });
+    return _firestoreService.updateDocument(
+      collectionPath: _collection,
+      documentId: userId,
+      data: {
+        ...mapToFirestore({
+          'playlists': FieldValue.arrayRemove([
+            getPlaylistModelFirestoreData(
+              updatePlaylistModelStruct(playlist, clearUnsetFields: false),
+              true,
+            )
+          ]),
+        }),
+      },
+    );
   }
 
   /// Replace one playlist with another (remove old, add new).
   Future<void> replacePlaylist({
-    required DocumentReference userRef,
+    required String userId,
     required PlaylistModelStruct oldPlaylist,
     required PlaylistModelStruct newPlaylist,
   }) async {
-    await removePlaylist(userRef, oldPlaylist);
-    await addPlaylist(userRef, newPlaylist);
+    await removePlaylist(userId, oldPlaylist);
+    await addPlaylist(userId, newPlaylist);
   }
 }

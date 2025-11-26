@@ -1,4 +1,4 @@
-import '/backend/schema/structs/index.dart';
+import '/core/structs/index.dart';
 import 'package:flutter/material.dart';
 
 class PlaylistAddAudiosPageViewModel extends ChangeNotifier {
@@ -9,8 +9,4 @@ class PlaylistAddAudiosPageViewModel extends ChangeNotifier {
 
   void init(BuildContext context) {}
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 }
