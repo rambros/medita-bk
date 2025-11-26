@@ -102,7 +102,7 @@ class _AgendaHomePageState extends State<AgendaHomePage> with TickerProviderStat
                             highlightColor: Colors.transparent,
                             onTap: () async {
                               context.pushNamed(
-                                ConfigPageWidget.routeName,
+                                ConfigPage.routeName,
                                 extra: <String, dynamic>{
                                   kTransitionInfoKey: const TransitionInfo(
                                     hasTransition: true,

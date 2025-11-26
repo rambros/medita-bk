@@ -7,17 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'view_model/selectinstrument_page_view_model.dart';
 
-class SelectinstrumentPageWidget extends StatefulWidget {
-  const SelectinstrumentPageWidget({super.key});
+class SelectinstrumentPage extends StatefulWidget {
+  const SelectinstrumentPage({super.key});
 
   static String routeName = 'selectinstrumentPage';
   static String routePath = 'selectInstrumentPage';
 
   @override
-  State<SelectinstrumentPageWidget> createState() => _SelectinstrumentPageWidgetState();
+  State<SelectinstrumentPage> createState() => _SelectinstrumentPageState();
 }
 
-class _SelectinstrumentPageWidgetState extends State<SelectinstrumentPageWidget> {
+class _SelectinstrumentPageState extends State<SelectinstrumentPage> {
   late SelectinstrumentPageViewModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -77,7 +77,7 @@ class _SelectinstrumentPageWidgetState extends State<SelectinstrumentPageWidget>
                     ),
                     onPressed: () async {
                       if (_model.isSelected && (_model.selectedIndex > 0)) {
-                        FFAppState()
+                        AppStateStore()
                             .addToListAudiosSelected(_model.instrumentsSounds.elementAtOrNull(_model.selectedIndex)!);
                         safeSetState(() {});
                       }

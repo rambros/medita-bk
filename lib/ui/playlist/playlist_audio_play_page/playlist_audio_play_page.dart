@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'view_model/playlist_audio_play_page_view_model.dart';
 
-class PlaylistAudioPlayPageWidget extends StatefulWidget {
-  const PlaylistAudioPlayPageWidget({
+class PlaylistAudioPlayPage extends StatefulWidget {
+  const PlaylistAudioPlayPage({
     super.key,
     required this.audio,
     required this.title,
@@ -23,10 +23,10 @@ class PlaylistAudioPlayPageWidget extends StatefulWidget {
   static String routePath = 'playlistAudioPlayPage';
 
   @override
-  State<PlaylistAudioPlayPageWidget> createState() => _PlaylistAudioPlayPageWidgetState();
+  State<PlaylistAudioPlayPage> createState() => _PlaylistAudioPlayPageState();
 }
 
-class _PlaylistAudioPlayPageWidgetState extends State<PlaylistAudioPlayPageWidget> with TickerProviderStateMixin {
+class _PlaylistAudioPlayPageState extends State<PlaylistAudioPlayPage> with TickerProviderStateMixin {
   late PlaylistAudioPlayPageViewModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();

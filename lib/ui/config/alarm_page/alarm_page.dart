@@ -8,17 +8,17 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'view_model/alarm_view_model.dart';
 
-class AlarmPageWidget extends StatefulWidget {
-  const AlarmPageWidget({super.key});
+class AlarmPage extends StatefulWidget {
+  const AlarmPage({super.key});
 
   static String routeName = 'alarmPage';
   static String routePath = 'alarmPage';
 
   @override
-  State<AlarmPageWidget> createState() => _AlarmPageWidgetState();
+  State<AlarmPage> createState() => _AlarmPageState();
 }
 
-class _AlarmPageWidgetState extends State<AlarmPageWidget> {
+class _AlarmPageState extends State<AlarmPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -30,7 +30,7 @@ class _AlarmPageWidgetState extends State<AlarmPageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
+    context.watch<AppStateStore>();
 
     return ChangeNotifierProvider(
       create: (_) => AlarmViewModel(),
@@ -191,7 +191,7 @@ class _AlarmPageWidgetState extends State<AlarmPageWidget> {
                         ),
                         child: Builder(
                           builder: (context) {
-                            final alarmList = FFAppState().alarms.map((e) => e).toList().take(20).toList();
+                            final alarmList = AppStateStore().alarms.map((e) => e).toList().take(20).toList();
 
                             return ListView.builder(
                               padding: EdgeInsets.zero,

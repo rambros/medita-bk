@@ -316,7 +316,7 @@ class AudioPlayerController {
 
   void stop() {
     globalWatch.stop();
-    FFAppState().addToMeditationLogList(
+    AppStateStore().addToMeditationLogList(
         MeditationLogStruct(duration: globalWatch.elapsed.inSeconds, date: DateTime.now(), type: 'guided'));
     clearMusicTitle();
     globalWatch.reset();

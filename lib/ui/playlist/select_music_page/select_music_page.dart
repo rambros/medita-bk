@@ -11,17 +11,17 @@ import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'view_model/select_music_page_view_model.dart';
 
-class SelectMusicPageWidget extends StatefulWidget {
-  const SelectMusicPageWidget({super.key});
+class SelectMusicPage extends StatefulWidget {
+  const SelectMusicPage({super.key});
 
   static String routeName = 'selectMusicPage';
   static String routePath = 'selectMusicPage';
 
   @override
-  State<SelectMusicPageWidget> createState() => _SelectMusicPageWidgetState();
+  State<SelectMusicPage> createState() => _SelectMusicPageState();
 }
 
-class _SelectMusicPageWidgetState extends State<SelectMusicPageWidget> {
+class _SelectMusicPageState extends State<SelectMusicPage> {
   late SelectMusicPageViewModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -107,7 +107,7 @@ class _SelectMusicPageWidgetState extends State<SelectMusicPageWidget> {
                         onPressed: () async {
                           if (_model.isSelected &&
                               (_model.selectedIndex >= 0)) {
-                            FFAppState()
+                            AppStateStore()
                                 .addToListAudiosSelected(_model.audioSelected!);
                             safeSetState(() {});
                           }
@@ -369,7 +369,7 @@ class _SelectMusicPageWidgetState extends State<SelectMusicPageWidget> {
                                                             safeSetState(() {});
 
                                                             context.pushNamed(
-                                                              PlaylistAudioPlayPageWidget
+                                                              PlaylistAudioPlayPage
                                                                   .routeName,
                                                               queryParameters: {
                                                                 'audio':

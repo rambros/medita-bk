@@ -11,17 +11,17 @@ import 'package:provider/provider.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
 import 'view_model/meditation_list_view_model.dart';
 
-class MeditationListPageWidget extends StatefulWidget {
-  const MeditationListPageWidget({super.key});
+class MeditationListPage extends StatefulWidget {
+  const MeditationListPage({super.key});
 
   static String routeName = 'meditationListPage';
   static String routePath = 'meditationListPage';
 
   @override
-  State<MeditationListPageWidget> createState() => _MeditationListPageWidgetState();
+  State<MeditationListPage> createState() => _MeditationListPageState();
 }
 
-class _MeditationListPageWidgetState extends State<MeditationListPageWidget> {
+class _MeditationListPageState extends State<MeditationListPage> {
   late MeditationListViewModel _viewModel;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 

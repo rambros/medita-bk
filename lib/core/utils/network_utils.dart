@@ -27,7 +27,7 @@ class NetworkUtils {
   /// [url] - URL of the file to download
   /// [suggestedFileName] - Suggested name for the downloaded file
   ///
-  /// Updates FFAppState().downloadStatus with the result.
+  /// Updates AppStateStore().downloadStatus with the result.
   static Future<void> downloadFile(
     String url,
     String suggestedFileName,
@@ -37,8 +37,8 @@ class NetworkUtils {
       String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
 
       if (selectedDirectory == null) {
-        FFAppState().update(() {
-          FFAppState().downloadStatus = "Nenhum diretório selecionado";
+        AppStateStore().update(() {
+          AppStateStore().downloadStatus = "Nenhum diretório selecionado";
         });
         return;
       }
@@ -55,17 +55,17 @@ class NetworkUtils {
         final file = File(filePath);
         await file.writeAsBytes(response.bodyBytes);
 
-        FFAppState().update(() {
-          FFAppState().downloadStatus = "PDF salvo em: $filePath";
+        AppStateStore().update(() {
+          AppStateStore().downloadStatus = "PDF salvo em: $filePath";
         });
       } else {
-        FFAppState().update(() {
-          FFAppState().downloadStatus = "Failed to download PDF: ${response.statusCode}";
+        AppStateStore().update(() {
+          AppStateStore().downloadStatus = "Failed to download PDF: ${response.statusCode}";
         });
       }
     } catch (e) {
-      FFAppState().update(() {
-        FFAppState().downloadStatus = "Error downloading PDF: $e";
+      AppStateStore().update(() {
+        AppStateStore().downloadStatus = "Error downloading PDF: $e";
       });
     }
   }

@@ -14,8 +14,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'view_model/playlist_details_page_view_model.dart';
 
-class PlaylistDetailsPageWidget extends StatefulWidget {
-  const PlaylistDetailsPageWidget({
+class PlaylistDetailsPage extends StatefulWidget {
+  const PlaylistDetailsPage({
     super.key,
     int? playlistIndex,
     required this.idPlaylist,
@@ -28,10 +28,10 @@ class PlaylistDetailsPageWidget extends StatefulWidget {
   static String routePath = 'playlistDetailsPage';
 
   @override
-  State<PlaylistDetailsPageWidget> createState() => _PlaylistDetailsPageWidgetState();
+  State<PlaylistDetailsPage> createState() => _PlaylistDetailsPageState();
 }
 
-class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
+class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
   late PlaylistDetailsPageViewModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -72,7 +72,7 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
+    context.watch<AppStateStore>();
 
     return GestureDetector(
       onTap: () {
@@ -150,12 +150,12 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
                     alignment: const AlignmentDirectional(0.0, 0.0),
                     children: [
                       Hero(
-                        tag: FFAppState().tempPlaylist.imageUrl,
+                        tag: AppStateStore().tempPlaylist.imageUrl,
                         transitionOnUserGestures: true,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(16.0),
                           child: Image.network(
-                            FFAppState().tempPlaylist.imageUrl,
+                            AppStateStore().tempPlaylist.imageUrl,
                             width: MediaQuery.sizeOf(context).width * 1.0,
                             height: MediaQuery.sizeOf(context).height * 0.35,
                             fit: BoxFit.cover,
@@ -171,11 +171,11 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
                           _model.checkedListAudios = await AudioUtils.deleteInvalidDeviceAudios(
                             _model.playlist!.audios.toList(),
                           );
-                          FFAppState().listAudiosReadyToPlay =
+                          AppStateStore().listAudiosReadyToPlay =
                               _model.checkedListAudios!.toList().cast<AudioModelStruct>();
 
                           context.pushNamed(
-                            PlaylistPlayPageWidget.routeName,
+                            PlaylistPlayPage.routeName,
                             extra: <String, dynamic>{
                               kTransitionInfoKey: const TransitionInfo(
                                 hasTransition: true,
@@ -204,7 +204,7 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
                       Padding(
                         padding: const EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 8.0),
                         child: Text(
-                          FFAppState().tempPlaylist.description,
+                          AppStateStore().tempPlaylist.description,
                           textAlign: TextAlign.center,
                           maxLines: 3,
                           style: FlutterFlowTheme.of(context).bodySmall.override(
@@ -215,7 +215,7 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
                         ),
                       ),
                       Text(
-                        'Duração total desta playlist  ${functions.transformSeconds(FFAppState().tempPlaylist.duration)}',
+                        'Duração total desta playlist  ${functions.transformSeconds(AppStateStore().tempPlaylist.duration)}',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
                               letterSpacing: 0.0,
@@ -229,7 +229,7 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
                   padding: const EdgeInsetsDirectional.fromSTEB(16.0, 8.0, 16.0, 8.0),
                   child: Builder(
                     builder: (context) {
-                      final listAudios = FFAppState().tempPlaylist.audios.toList();
+                      final listAudios = AppStateStore().tempPlaylist.audios.toList();
 
                       return ListView.separated(
                         padding: const EdgeInsets.fromLTRB(
@@ -306,7 +306,7 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
                           child: FFButtonWidget(
                             onPressed: () async {
                               try {
-                                await _model.removePlaylist(FFAppState().tempPlaylist);
+                                await _model.removePlaylist(AppStateStore().tempPlaylist);
                               } catch (_) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
@@ -368,7 +368,7 @@ class _PlaylistDetailsPageWidgetState extends State<PlaylistDetailsPageWidget> {
                                 context.pop();
                               }
                               context.pushNamed(
-                                PlaylistEditPageWidget.routeName,
+                                PlaylistEditPage.routeName,
                                 queryParameters: {
                                   'playlistIndex': serializeParam(
                                     widget.playlistIndex,

@@ -5,17 +5,17 @@ import '/ui/core/flutter_flow/flutter_flow_widgets.dart';
 import '/core/services/review_service.dart';
 import 'package:flutter/material.dart';
 
-class AppReviewPageWidget extends StatefulWidget {
-  const AppReviewPageWidget({super.key});
+class AppReviewPage extends StatefulWidget {
+  const AppReviewPage({super.key});
 
   static String routeName = 'appReviewPage';
   static String routePath = 'appReviewPage';
 
   @override
-  State<AppReviewPageWidget> createState() => _AppReviewPageWidgetState();
+  State<AppReviewPage> createState() => _AppReviewPageState();
 }
 
-class _AppReviewPageWidgetState extends State<AppReviewPageWidget> {
+class _AppReviewPageState extends State<AppReviewPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override

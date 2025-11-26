@@ -8,17 +8,17 @@ import 'widgets/profile_header.dart';
 import 'widgets/theme_toggle_widget.dart';
 import 'widgets/profile_menu_item.dart';
 
-class ProfilePageWidget extends StatefulWidget {
-  const ProfilePageWidget({super.key});
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
 
   static String routeName = 'profilePage';
   static String routePath = 'profilePage';
 
   @override
-  State<ProfilePageWidget> createState() => _ProfilePageWidgetState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageWidgetState extends State<ProfilePageWidget> with TickerProviderStateMixin {
+class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   var hasContainerTriggered1 = false;
   var hasContainerTriggered2 = false;

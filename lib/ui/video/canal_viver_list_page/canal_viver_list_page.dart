@@ -9,17 +9,17 @@ import 'view_model/canal_viver_list_view_model.dart';
 import '/domain/models/video/video_model.dart';
 import '../widgets/video_error_indicator.dart';
 
-class CanalViverListPageWidget extends StatefulWidget {
-  const CanalViverListPageWidget({super.key});
+class CanalViverListPage extends StatefulWidget {
+  const CanalViverListPage({super.key});
 
   static String routeName = 'canalViverListPage';
   static String routePath = 'canalViverListPage';
 
   @override
-  State<CanalViverListPageWidget> createState() => _CanalViverListPageWidgetState();
+  State<CanalViverListPage> createState() => _CanalViverListPageState();
 }
 
-class _CanalViverListPageWidgetState extends State<CanalViverListPageWidget> {
+class _CanalViverListPageState extends State<CanalViverListPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -245,7 +245,7 @@ class _CanalViverListPageWidgetState extends State<CanalViverListPageWidget> {
                                       highlightColor: Colors.transparent,
                                       onTap: () async {
                                         context.pushNamed(
-                                          YoutubePlayerPageWidget.routeName,
+                                          YoutubePlayerPage.routeName,
                                           queryParameters: {
                                             'videoId': serializeParam(
                                               video.id,

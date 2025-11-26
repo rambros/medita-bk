@@ -34,7 +34,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                   highlightColor: Colors.transparent,
                   onTap: () async {
                     context.pushNamed(
-                      ConfigPageWidget.routeName,
+                      ConfigPage.routeName,
                       extra: <String, dynamic>{
                         kTransitionInfoKey: const TransitionInfo(
                           hasTransition: true,

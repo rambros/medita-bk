@@ -12,17 +12,17 @@ import 'package:provider/provider.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
 import 'view_model/playlist_add_audios_page_view_model.dart';
 
-class PlaylistAddAudiosPageWidget extends StatefulWidget {
-  const PlaylistAddAudiosPageWidget({super.key});
+class PlaylistAddAudiosPage extends StatefulWidget {
+  const PlaylistAddAudiosPage({super.key});
 
   static String routeName = 'playlistAddAudiosPage';
   static String routePath = 'playlistAddAudiosPage';
 
   @override
-  State<PlaylistAddAudiosPageWidget> createState() => _PlaylistAddAudiosPageWidgetState();
+  State<PlaylistAddAudiosPage> createState() => _PlaylistAddAudiosPageState();
 }
 
-class _PlaylistAddAudiosPageWidgetState extends State<PlaylistAddAudiosPageWidget> {
+class _PlaylistAddAudiosPageState extends State<PlaylistAddAudiosPage> {
   late PlaylistAddAudiosPageViewModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -45,7 +45,7 @@ class _PlaylistAddAudiosPageWidgetState extends State<PlaylistAddAudiosPageWidge
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
+    context.watch<AppStateStore>();
 
     return GestureDetector(
       onTap: () {
@@ -169,7 +169,7 @@ class _PlaylistAddAudiosPageWidgetState extends State<PlaylistAddAudiosPageWidge
                             children: [
                               Builder(
                                 builder: (context) {
-                                  final listAudios = FFAppState().listAudiosSelected.toList();
+                                  final listAudios = AppStateStore().listAudiosSelected.toList();
 
                                   return InkWell(
                                     splashColor: Colors.transparent,
@@ -291,7 +291,7 @@ class _PlaylistAddAudiosPageWidgetState extends State<PlaylistAddAudiosPageWidge
                                           reorderableNewIndex,
                                           reorderableOldIndex,
                                         );
-                                        FFAppState().listAudiosSelected =
+                                        AppStateStore().listAudiosSelected =
                                             _model.newList!.toList().cast<AudioModelStruct>();
                                         safeSetState(() {});
 
@@ -303,7 +303,7 @@ class _PlaylistAddAudiosPageWidgetState extends State<PlaylistAddAudiosPageWidge
                               ),
                               Builder(
                                 builder: (context) {
-                                  if (FFAppState().listAudiosSelected.isNotEmpty) {
+                                  if (AppStateStore().listAudiosSelected.isNotEmpty) {
                                     return Column(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
@@ -322,7 +322,7 @@ class _PlaylistAddAudiosPageWidgetState extends State<PlaylistAddAudiosPageWidge
                                         Padding(
                                           padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 4.0),
                                           child: Text(
-                                            'Esta playlist está com uma duração de ${functions.transformSeconds(functions.getDurationPlaylist(FFAppState().listAudiosSelected.toList())!)}',
+                                            'Esta playlist está com uma duração de ${functions.transformSeconds(functions.getDurationPlaylist(AppStateStore().listAudiosSelected.toList())!)}',
                                             style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                   fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
                                                   letterSpacing: 0.0,
@@ -339,7 +339,7 @@ class _PlaylistAddAudiosPageWidgetState extends State<PlaylistAddAudiosPageWidge
                                                 child: FFButtonWidget(
                                                   onPressed: () async {
                                                     context.pushNamed(
-                                                      PlaylistSavePageWidget.routeName,
+                                                      PlaylistSavePage.routeName,
                                                       extra: <String, dynamic>{
                                                         kTransitionInfoKey: const TransitionInfo(
                                                           hasTransition: true,

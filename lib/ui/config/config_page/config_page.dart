@@ -8,17 +8,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'view_model/config_view_model.dart';
 
-class ConfigPageWidget extends StatefulWidget {
-  const ConfigPageWidget({super.key});
+class ConfigPage extends StatefulWidget {
+  const ConfigPage({super.key});
 
   static String routeName = 'configPage';
   static String routePath = 'configPage';
 
   @override
-  State<ConfigPageWidget> createState() => _ConfigPageWidgetState();
+  State<ConfigPage> createState() => _ConfigPageState();
 }
 
-class _ConfigPageWidgetState extends State<ConfigPageWidget> {
+class _ConfigPageState extends State<ConfigPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -191,7 +191,7 @@ class _ConfigPageWidgetState extends State<ConfigPageWidget> {
                     highlightColor: Colors.transparent,
                     onTap: () async {
                       context.pushNamed(
-                        EditProfilePageWidget.routeName,
+                        EditProfilePage.routeName,
                         extra: <String, dynamic>{
                           kTransitionInfoKey: const TransitionInfo(
                             hasTransition: true,
@@ -255,7 +255,7 @@ class _ConfigPageWidgetState extends State<ConfigPageWidget> {
                     highlightColor: Colors.transparent,
                     onTap: () async {
                       context.pushNamed(
-                        InvitePageWidget.routeName,
+                        InvitePage.routeName,
                         extra: <String, dynamic>{
                           kTransitionInfoKey: const TransitionInfo(
                             hasTransition: true,
@@ -318,7 +318,7 @@ class _ConfigPageWidgetState extends State<ConfigPageWidget> {
                     highlightColor: Colors.transparent,
                     onTap: () async {
                       context.pushNamed(
-                        AppReviewPageWidget.routeName,
+                        AppReviewPage.routeName,
                         extra: <String, dynamic>{
                           kTransitionInfoKey: const TransitionInfo(
                             hasTransition: true,
@@ -381,7 +381,7 @@ class _ConfigPageWidgetState extends State<ConfigPageWidget> {
                     highlightColor: Colors.transparent,
                     onTap: () async {
                       context.pushNamed(
-                        AlarmPageWidget.routeName,
+                        AlarmPage.routeName,
                         extra: <String, dynamic>{
                           kTransitionInfoKey: const TransitionInfo(
                             hasTransition: true,
@@ -507,7 +507,7 @@ class _ConfigPageWidgetState extends State<ConfigPageWidget> {
                     highlightColor: Colors.transparent,
                     onTap: () async {
                       context.pushNamed(
-                        AboutAuthorsPageWidget.routeName,
+                        AboutAuthorsPage.routeName,
                         extra: <String, dynamic>{
                           kTransitionInfoKey: const TransitionInfo(
                             hasTransition: true,

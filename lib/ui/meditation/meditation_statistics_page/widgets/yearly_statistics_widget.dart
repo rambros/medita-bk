@@ -64,7 +64,7 @@ class YearlyStatisticsWidget extends StatefulWidget {
 }
 
 class _YearlyStatisticsWidgetState extends State<YearlyStatisticsWidget> {
-  List<MeditationLogStruct> listLogsFromRepository = FFAppState().meditationLogList;
+  List<MeditationLogStruct> listLogsFromRepository = AppStateStore().meditationLogList;
   var numYears = 4;
   late List<YearlyLog?> listYearlyLog; // 12 months
 

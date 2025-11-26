@@ -9,17 +9,17 @@ import 'view_model/congresso_list_view_model.dart';
 import '/domain/models/video/video_model.dart';
 import '../widgets/video_error_indicator.dart';
 
-class CongressoListPageWidget extends StatefulWidget {
-  const CongressoListPageWidget({super.key});
+class CongressoListPage extends StatefulWidget {
+  const CongressoListPage({super.key});
 
   static String routeName = 'congressoListPage';
   static String routePath = 'congressoListPage';
 
   @override
-  State<CongressoListPageWidget> createState() => _CongressoListPageWidgetState();
+  State<CongressoListPage> createState() => _CongressoListPageState();
 }
 
-class _CongressoListPageWidgetState extends State<CongressoListPageWidget> {
+class _CongressoListPageState extends State<CongressoListPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -245,7 +245,7 @@ class _CongressoListPageWidgetState extends State<CongressoListPageWidget> {
                                       highlightColor: Colors.transparent,
                                       onTap: () async {
                                         context.pushNamed(
-                                          YoutubePlayerPageWidget.routeName,
+                                          YoutubePlayerPage.routeName,
                                           queryParameters: {
                                             'videoId': serializeParam(
                                               video.id,

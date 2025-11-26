@@ -28,8 +28,8 @@ class DesafioPlayViewModel extends ChangeNotifier {
   bool _iniciadoDesafio = false;
   bool get iniciadoDesafio => _iniciadoDesafio;
 
-  // Computed properties from FFAppState
-  D21ModelStruct get desafio21 => FFAppState().desafio21;
+  // Computed properties from AppStateStore
+  D21ModelStruct get desafio21 => AppStateStore().desafio21;
 
   D21MeditationModelStruct? get currentMeditation {
     if (meditationIndex < 0 || meditationIndex >= desafio21.d21Meditations.length) {
@@ -53,18 +53,18 @@ class DesafioPlayViewModel extends ChangeNotifier {
         return;
       }
 
-      // Update lista mandalas in FFAppState
-      FFAppState().listaEtapasMandalas = _desafio21Record!.listaEtapasMandalas.toList().cast<D21EtapaModelStruct>();
+      // Update lista mandalas in AppStateStore
+      AppStateStore().listaEtapasMandalas = _desafio21Record!.listaEtapasMandalas.toList().cast<D21EtapaModelStruct>();
 
       // Check if user has started the challenge
       final userDesafio = _authRepository.currentUser?.desafio21;
       if (userDesafio == null) {
         // Not started - use template data
-        FFAppState().desafio21 = _desafio21Record!.desafio21Data;
+        AppStateStore().desafio21 = _desafio21Record!.desafio21Data;
         _iniciadoDesafio = false;
       } else {
         // Started - use user data
-        FFAppState().desafio21 = userDesafio;
+        AppStateStore().desafio21 = userDesafio;
         _iniciadoDesafio = true;
       }
 

@@ -264,7 +264,7 @@ class _MeditationVideoListPageState extends State<MeditationVideoListPage> {
         highlightColor: Colors.transparent,
         onTap: () async {
           context.pushNamed(
-            YoutubePlayerPageWidget.routeName,
+            YoutubePlayerPage.routeName,
             queryParameters: {
               'videoId': serializeParam(
                 viewModel.getVideoId(video),

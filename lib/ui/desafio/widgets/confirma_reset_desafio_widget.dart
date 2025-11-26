@@ -116,8 +116,8 @@ class ConfirmaResetDesafioWidget extends StatelessWidget {
                                     createD21ModelStruct(delete: true),
                                     desafio21Started: false,
                                   );
-                              FFAppState().desafio21 = D21ModelStruct();
-                              FFAppState().desafioStarted = false;
+                              AppStateStore().desafio21 = D21ModelStruct();
+                              AppStateStore().desafioStarted = false;
                             }
 
                             if (!context.mounted) return;

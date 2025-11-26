@@ -7,17 +7,17 @@ import 'widgets/monthly_statistics_widget.dart';
 import 'widgets/yearly_statistics_widget.dart';
 import 'package:flutter/material.dart';
 
-class MeditationStatisticsPageWidget extends StatefulWidget {
-  const MeditationStatisticsPageWidget({super.key});
+class MeditationStatisticsPage extends StatefulWidget {
+  const MeditationStatisticsPage({super.key});
 
   static String routeName = 'meditationStatisticsPage';
   static String routePath = 'meditationStatisticsPage';
 
   @override
-  State<MeditationStatisticsPageWidget> createState() => _MeditationStatisticsPageWidgetState();
+  State<MeditationStatisticsPage> createState() => _MeditationStatisticsPageState();
 }
 
-class _MeditationStatisticsPageWidgetState extends State<MeditationStatisticsPageWidget> with TickerProviderStateMixin {
+class _MeditationStatisticsPageState extends State<MeditationStatisticsPage> with TickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   late TabController _tabBarController;
 

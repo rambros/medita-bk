@@ -15,7 +15,7 @@ Use este checklist para cada página que você refatorar:
 - [ ] Identificar estados gerenciados (loading, error, data)
 - [ ] Mapear ações do usuário (botões, formulários, etc.)
 - [ ] Identificar widgets complexos que podem ser extraídos
-- [ ] Verificar dependências externas (FFAppState, currentUserUid, etc.)
+- [ ] Verificar dependências externas (AppStateStore, currentUserUid, etc.)
 
 ### 2️⃣ Planejamento
 
@@ -536,7 +536,7 @@ void main() {
         ChangeNotifierProvider(
           create: (context) => <Feature>ViewModel(
             repository: context.read<<Feature>Repository>(),
-            currentUserUid: currentUserUid, // ou FFAppState().loginUser.uid
+            currentUserUid: currentUserUid, // ou AppStateStore().loginUser.uid
           ),
         ),
         

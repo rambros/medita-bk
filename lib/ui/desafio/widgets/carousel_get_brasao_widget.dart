@@ -25,7 +25,7 @@ class _CarouselGetBrasaoWidgetState extends State<CarouselGetBrasaoWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
+    context.watch<AppStateStore>();
 
     return Align(
       alignment: const AlignmentDirectional(0.0, -1.0),

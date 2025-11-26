@@ -18,8 +18,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class MeditationDetailsPageWidget extends StatefulWidget {
-  const MeditationDetailsPageWidget({
+class MeditationDetailsPage extends StatefulWidget {
+  const MeditationDetailsPage({
     super.key,
     required this.meditationDocRef,
   });
@@ -30,10 +30,10 @@ class MeditationDetailsPageWidget extends StatefulWidget {
   static String routePath = 'meditationDetailsPage';
 
   @override
-  State<MeditationDetailsPageWidget> createState() => _MeditationDetailsPageWidgetState();
+  State<MeditationDetailsPage> createState() => _MeditationDetailsPageState();
 }
 
-class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidget> {
+class _MeditationDetailsPageState extends State<MeditationDetailsPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final FirestoreService _firestoreService = FirestoreService();
   final MeditationRepository _meditationRepository = MeditationRepositoryImpl();
@@ -367,7 +367,7 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
 
                                 if (!context.mounted) return;
                                 context.pushNamed(
-                                  MeditationPlayPageWidget.routeName,
+                                  MeditationPlayPage.routeName,
                                   queryParameters: {
                                     'meditationId': serializeParam(
                                       meditationDetailsPageMeditation.id,

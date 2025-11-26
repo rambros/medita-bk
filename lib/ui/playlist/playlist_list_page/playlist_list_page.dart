@@ -11,17 +11,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'view_model/playlist_list_page_view_model.dart';
 
-class PlaylistListPageWidget extends StatefulWidget {
-  const PlaylistListPageWidget({super.key});
+class PlaylistListPage extends StatefulWidget {
+  const PlaylistListPage({super.key});
 
   static String routeName = 'playlistListPage';
   static String routePath = 'playlistListPage';
 
   @override
-  State<PlaylistListPageWidget> createState() => _PlaylistListPageWidgetState();
+  State<PlaylistListPage> createState() => _PlaylistListPageState();
 }
 
-class _PlaylistListPageWidgetState extends State<PlaylistListPageWidget> {
+class _PlaylistListPageState extends State<PlaylistListPage> {
   late PlaylistListViewModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -134,11 +134,11 @@ class _PlaylistListPageWidgetState extends State<PlaylistListPageWidget> {
                           Expanded(
                             child: FFButtonWidget(
                               onPressed: () async {
-                                FFAppState().listAudiosSelected = [];
+                                AppStateStore().listAudiosSelected = [];
                                 safeSetState(() {});
 
                                 context.pushNamed(
-                                  PlaylistAddAudiosPageWidget.routeName,
+                                  PlaylistAddAudiosPage.routeName,
                                   extra: <String, dynamic>{
                                     kTransitionInfoKey: const TransitionInfo(
                                       hasTransition: true,
@@ -250,11 +250,11 @@ class _PlaylistListPageWidgetState extends State<PlaylistListPageWidget> {
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
                                     onTap: () async {
-                                      FFAppState().tempPlaylist = playlistsItem;
+                                      AppStateStore().tempPlaylist = playlistsItem;
                                       safeSetState(() {});
 
                                       context.pushNamed(
-                                        PlaylistDetailsPageWidget.routeName,
+                                        PlaylistDetailsPage.routeName,
                                         queryParameters: {
                                           'playlistIndex': serializeParam(
                                             playlistsIndex,

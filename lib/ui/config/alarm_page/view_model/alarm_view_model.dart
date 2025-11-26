@@ -33,7 +33,7 @@ class AlarmViewModel extends ChangeNotifier {
 
     if (datePicked == null) return;
 
-    if (FFAppState().alarms.where((e) => e.showTime == functions.showTime(datePicked!)).toList().isNotEmpty) {
+    if (AppStateStore().alarms.where((e) => e.showTime == functions.showTime(datePicked!)).toList().isNotEmpty) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -49,7 +49,7 @@ class AlarmViewModel extends ChangeNotifier {
         );
       }
     } else {
-      FFAppState().addToAlarms(AlarmTimeStruct(
+      AppStateStore().addToAlarms(AlarmTimeStruct(
         key: timeSelected!.millisecondsSinceEpoch.hashCode,
         showTime: functions.showTime(datePicked!),
       ));
@@ -82,7 +82,7 @@ class AlarmViewModel extends ChangeNotifier {
   Future<void> removeAlarm(BuildContext context, int index, AlarmTimeStruct alarmListItem) async {
     final notificationService = NotificationService();
     await notificationService.deleteAlarm(alarmListItem.key);
-    FFAppState().removeAtIndexFromAlarms(index);
+    AppStateStore().removeAtIndexFromAlarms(index);
     notifyListeners();
 
     if (context.mounted) {

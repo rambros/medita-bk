@@ -6,17 +6,17 @@ import '/core/services/review_service.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
 
-class SupportPageWidget extends StatefulWidget {
-  const SupportPageWidget({super.key});
+class SupportPage extends StatefulWidget {
+  const SupportPage({super.key});
 
   static String routeName = 'supportPage';
   static String routePath = 'SupportPage';
 
   @override
-  State<SupportPageWidget> createState() => _SupportPageWidgetState();
+  State<SupportPage> createState() => _SupportPageState();
 }
 
-class _SupportPageWidgetState extends State<SupportPageWidget> {
+class _SupportPageState extends State<SupportPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -169,7 +169,7 @@ class _SupportPageWidgetState extends State<SupportPageWidget> {
                               child: FFButtonWidget(
                                 onPressed: () async {
                                   context.pushNamed(
-                                    FeedbackPageWidget.routeName,
+                                    FeedbackPage.routeName,
                                     extra: <String, dynamic>{
                                       kTransitionInfoKey: const TransitionInfo(
                                         hasTransition: true,
@@ -255,7 +255,7 @@ class _SupportPageWidgetState extends State<SupportPageWidget> {
                               child: FFButtonWidget(
                                 onPressed: () async {
                                   context.pushNamed(
-                                    FeaturePageWidget.routeName,
+                                    FeaturePage.routeName,
                                     extra: <String, dynamic>{
                                       kTransitionInfoKey: const TransitionInfo(
                                         hasTransition: true,
@@ -302,7 +302,7 @@ class _SupportPageWidgetState extends State<SupportPageWidget> {
                               child: FFButtonWidget(
                                 onPressed: () async {
                                   context.pushNamed(
-                                    DonationPageWidget.routeName,
+                                    DonationPage.routeName,
                                     extra: <String, dynamic>{
                                       kTransitionInfoKey: const TransitionInfo(
                                         hasTransition: true,
@@ -349,7 +349,7 @@ class _SupportPageWidgetState extends State<SupportPageWidget> {
                               child: FFButtonWidget(
                                 onPressed: () async {
                                   context.pushNamed(
-                                    InvitePageWidget.routeName,
+                                    InvitePage.routeName,
                                     extra: <String, dynamic>{
                                       kTransitionInfoKey: const TransitionInfo(
                                         hasTransition: true,

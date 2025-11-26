@@ -64,7 +64,7 @@ class MonthlyStatisticsWidget extends StatefulWidget {
 }
 
 class _MonthlyStatisticsWidgetState extends State<MonthlyStatisticsWidget> {
-  List<MeditationLogStruct> listLogsFromRepository = FFAppState().meditationLogList;
+  List<MeditationLogStruct> listLogsFromRepository = AppStateStore().meditationLogList;
   List<MonthlyLog?> listMonthlyLog = List.filled(12, MonthlyLog()); // 12 months
 
   List<CartesianSeries<dynamic, dynamic>>? _seriesTimeListM;

@@ -17,12 +17,12 @@ class SettingsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get isDarkMode => FFAppState().darkTheme;
-  bool get receiveNotifications => FFAppState().receiveNotifications;
-  bool get receiveEmails => FFAppState().receiveEmails;
+  bool get isDarkMode => AppStateStore().darkTheme;
+  bool get receiveNotifications => AppStateStore().receiveNotifications;
+  bool get receiveEmails => AppStateStore().receiveEmails;
 
   void toggleDarkMode(BuildContext context, bool value) {
-    FFAppState().darkTheme = value;
+    AppStateStore().darkTheme = value;
     if (value) {
       setDarkModeSetting(context, ThemeMode.dark);
     } else {
@@ -32,12 +32,12 @@ class SettingsViewModel extends ChangeNotifier {
   }
 
   void toggleNotifications(bool value) {
-    FFAppState().receiveNotifications = value;
+    AppStateStore().receiveNotifications = value;
     notifyListeners();
   }
 
   void toggleEmails(bool value) {
-    FFAppState().receiveEmails = value;
+    AppStateStore().receiveEmails = value;
     notifyListeners();
   }
 

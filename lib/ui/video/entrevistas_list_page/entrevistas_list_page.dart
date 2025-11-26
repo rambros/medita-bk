@@ -8,17 +8,17 @@ import 'package:provider/provider.dart';
 import 'view_model/entrevistas_list_view_model.dart';
 import '/domain/models/video/video_model.dart';
 
-class EntrevistasListPageWidget extends StatefulWidget {
-  const EntrevistasListPageWidget({super.key});
+class EntrevistasListPage extends StatefulWidget {
+  const EntrevistasListPage({super.key});
 
   static String routeName = 'entrevistasListPage';
   static String routePath = 'entrevistasListPage';
 
   @override
-  State<EntrevistasListPageWidget> createState() => _EntrevistasListPageWidgetState();
+  State<EntrevistasListPage> createState() => _EntrevistasListPageState();
 }
 
-class _EntrevistasListPageWidgetState extends State<EntrevistasListPageWidget> {
+class _EntrevistasListPageState extends State<EntrevistasListPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -284,7 +284,7 @@ class _EntrevistasListPageWidgetState extends State<EntrevistasListPageWidget> {
                                       highlightColor: Colors.transparent,
                                       onTap: () async {
                                         context.pushNamed(
-                                          YoutubePlayerPageWidget.routeName,
+                                          YoutubePlayerPage.routeName,
                                           queryParameters: {
                                             'videoId': serializeParam(
                                               video.id,

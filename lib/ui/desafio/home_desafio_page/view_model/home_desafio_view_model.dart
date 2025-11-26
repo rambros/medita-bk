@@ -20,12 +20,12 @@ class HomeDesafioViewModel extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  // Accessing FFAppState directly for now as it acts as a global store
-  D21ModelStruct get desafio21 => FFAppState().desafio21;
+  // Accessing AppStateStore directly for now as it acts as a global store
+  D21ModelStruct get desafio21 => AppStateStore().desafio21;
   bool get isD21Completed => desafio21.isD21Completed;
   int get etapaAtual => desafio21.etapaAtual;
   int get diasCompletados => desafio21.diasCompletados;
-  List<D21EtapaModelStruct> get listaEtapasMandalas => FFAppState().listaEtapasMandalas;
+  List<D21EtapaModelStruct> get listaEtapasMandalas => AppStateStore().listaEtapasMandalas;
 
   // We need to check currentUserDocument for started status as per original code
   bool get isDesafioStarted => valueOrDefault<bool>(_authRepository.currentUser?.desafio21Started, false);
@@ -53,8 +53,8 @@ class HomeDesafioViewModel extends ChangeNotifier {
 
       await _repository.updateDesafio21(newDesafio, desafio21Started: true);
 
-      // Update local state if needed, though FFAppState might need manual update if it doesn't sync automatically
-      // Assuming FFAppState is updated via streams or we need to update it manually here.
+      // Update local state if needed, though AppStateStore might need manual update if it doesn't sync automatically
+      // Assuming AppStateStore is updated via streams or we need to update it manually here.
       // For now, relying on the fact that we updated Firestore.
 
       notifyListeners();

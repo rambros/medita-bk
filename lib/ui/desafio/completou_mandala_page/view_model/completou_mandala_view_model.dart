@@ -14,8 +14,8 @@ class CompletouMandalaViewModel extends ChangeNotifier {
   });
 
   // Computed properties
-  D21ModelStruct get desafio21 => FFAppState().desafio21;
-  List<D21EtapaModelStruct> get listaEtapasMandalas => FFAppState().listaEtapasMandalas;
+  D21ModelStruct get desafio21 => AppStateStore().desafio21;
+  List<D21EtapaModelStruct> get listaEtapasMandalas => AppStateStore().listaEtapasMandalas;
 
   String get meditationTitle {
     return desafio21.d21Meditations.elementAtOrNull(diaCompletado)?.titulo ?? '';

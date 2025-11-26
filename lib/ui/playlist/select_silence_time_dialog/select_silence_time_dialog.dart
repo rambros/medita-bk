@@ -31,7 +31,7 @@ class _SelectSilenceTimeDialogWidgetState
 
     // On component load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      FFAppState().tempAudioModel = AudioModelStruct.fromSerializableMap(
+      AppStateStore().tempAudioModel = AudioModelStruct.fromSerializableMap(
           jsonDecode('{\"fileType\":\"file\",\"audioType\":\"device_music\"}'));
       safeSetState(() {});
     });
@@ -48,7 +48,7 @@ class _SelectSilenceTimeDialogWidgetState
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
+    context.watch<AppStateStore>();
 
     return ClipRRect(
       child: BackdropFilter(
@@ -257,7 +257,7 @@ class _SelectSilenceTimeDialogWidgetState
                                   0.0, 8.0, 0.0, 8.0),
                               child: FFButtonWidget(
                                 onPressed: () async {
-                                  FFAppState().updateTempAudioModelStruct(
+                                  AppStateStore().updateTempAudioModelStruct(
                                     (e) => e
                                       ..title = 'Silêncio'
                                       ..author = ' '
@@ -270,8 +270,8 @@ class _SelectSilenceTimeDialogWidgetState
                                       ..duration = _model.newDuration,
                                   );
                                   safeSetState(() {});
-                                  FFAppState().addToListAudiosSelected(
-                                      FFAppState().tempAudioModel);
+                                  AppStateStore().addToListAudiosSelected(
+                                      AppStateStore().tempAudioModel);
                                   safeSetState(() {});
                                   Navigator.pop(context);
                                 },

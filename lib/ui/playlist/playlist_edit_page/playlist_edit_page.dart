@@ -14,8 +14,8 @@ import 'package:provider/provider.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
 import 'view_model/playlist_edit_page_view_model.dart';
 
-class PlaylistEditPageWidget extends StatefulWidget {
-  const PlaylistEditPageWidget({
+class PlaylistEditPage extends StatefulWidget {
+  const PlaylistEditPage({
     super.key,
     required this.playlistIndex,
     required this.idPlaylist,
@@ -28,10 +28,10 @@ class PlaylistEditPageWidget extends StatefulWidget {
   static String routePath = 'playlistEditPage';
 
   @override
-  State<PlaylistEditPageWidget> createState() => _PlaylistEditPageWidgetState();
+  State<PlaylistEditPage> createState() => _PlaylistEditPageState();
 }
 
-class _PlaylistEditPageWidgetState extends State<PlaylistEditPageWidget> {
+class _PlaylistEditPageState extends State<PlaylistEditPage> {
   PlaylistEditPageViewModel? _model;
   bool _unauthorized = false;
 
@@ -73,10 +73,10 @@ class _PlaylistEditPageWidgetState extends State<PlaylistEditPageWidget> {
       //
       // É esta variavel que será salva
       if (playlist != null) {
-        FFAppState().listAudiosSelected =
+        AppStateStore().listAudiosSelected =
             playlist.audios.toList().cast<AudioModelStruct>();
       } else {
-        FFAppState().listAudiosSelected = [];
+        AppStateStore().listAudiosSelected = [];
       }
     });
 
@@ -112,7 +112,7 @@ class _PlaylistEditPageWidgetState extends State<PlaylistEditPageWidget> {
       );
     }
 
-    context.watch<FFAppState>();
+    context.watch<AppStateStore>();
     final model = _model!;
 
     return GestureDetector(
@@ -528,7 +528,7 @@ class _PlaylistEditPageWidgetState extends State<PlaylistEditPageWidget> {
                                 child: FFButtonWidget(
                                   onPressed: () async {
                                     context.pushNamed(
-                                      PlaylistEditAudiosPageWidget.routeName,
+                                      PlaylistEditAudiosPage.routeName,
                                       queryParameters: {
                                         'playlistIndex': serializeParam(
                                           widget.playlistIndex,
@@ -660,7 +660,7 @@ class _PlaylistEditPageWidgetState extends State<PlaylistEditPageWidget> {
                                     try {
                                       await model.updatePlaylist(
                                         originalPlaylist: playlist,
-                                        audios: FFAppState().listAudiosSelected.toList(),
+                                        audios: AppStateStore().listAudiosSelected.toList(),
                                         playlistId: widget.idPlaylist,
                                       );
                                     } catch (_) {
@@ -716,7 +716,7 @@ class _PlaylistEditPageWidgetState extends State<PlaylistEditPageWidget> {
                                     );
 
                                     context.goNamed(
-                                      PlaylistListPageWidget.routeName,
+                                      PlaylistListPage.routeName,
                                       extra: <String, dynamic>{
                                         kTransitionInfoKey: const TransitionInfo(
                                           hasTransition: true,

@@ -4,17 +4,17 @@ import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/ui/core/flutter_flow/flutter_flow_web_view.dart';
 import 'package:flutter/material.dart';
 
-class FeedbackPageWidget extends StatefulWidget {
-  const FeedbackPageWidget({super.key});
+class FeedbackPage extends StatefulWidget {
+  const FeedbackPage({super.key});
 
   static String routeName = 'feedbackPage';
   static String routePath = 'feedbackPage';
 
   @override
-  State<FeedbackPageWidget> createState() => _FeedbackPageWidgetState();
+  State<FeedbackPage> createState() => _FeedbackPageState();
 }
 
-class _FeedbackPageWidgetState extends State<FeedbackPageWidget> {
+class _FeedbackPageState extends State<FeedbackPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override

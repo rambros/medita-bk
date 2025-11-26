@@ -12,17 +12,17 @@ import 'package:provider/provider.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
 import 'view_model/playlist_save_page_view_model.dart';
 
-class PlaylistSavePageWidget extends StatefulWidget {
-  const PlaylistSavePageWidget({super.key});
+class PlaylistSavePage extends StatefulWidget {
+  const PlaylistSavePage({super.key});
 
   static String routeName = 'playlistSavePage';
   static String routePath = 'playlistSavePage';
 
   @override
-  State<PlaylistSavePageWidget> createState() => _PlaylistSavePageWidgetState();
+  State<PlaylistSavePage> createState() => _PlaylistSavePageState();
 }
 
-class _PlaylistSavePageWidgetState extends State<PlaylistSavePageWidget> {
+class _PlaylistSavePageState extends State<PlaylistSavePage> {
   late PlaylistSavePageViewModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -58,7 +58,7 @@ class _PlaylistSavePageWidgetState extends State<PlaylistSavePageWidget> {
   @override
   Widget build(BuildContext context) {
     final isInvalidUser = _model.userId.isEmpty;
-    context.watch<FFAppState>();
+    context.watch<AppStateStore>();
 
     if (isInvalidUser) {
       return Scaffold(
@@ -458,7 +458,7 @@ class _PlaylistSavePageWidgetState extends State<PlaylistSavePageWidget> {
 
                                   try {
                                     await _model.savePlaylist(
-                                      FFAppState().listAudiosSelected.toList(),
+                                      AppStateStore().listAudiosSelected.toList(),
                                     );
                                   } catch (_) {
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -515,7 +515,7 @@ class _PlaylistSavePageWidgetState extends State<PlaylistSavePageWidget> {
                                   );
 
                                   context.goNamed(
-                                    PlaylistListPageWidget.routeName,
+                                    PlaylistListPage.routeName,
                                     extra: <String, dynamic>{
                                       kTransitionInfoKey: const TransitionInfo(
                                         hasTransition: true,

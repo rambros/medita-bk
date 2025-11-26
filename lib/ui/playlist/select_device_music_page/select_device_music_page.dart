@@ -12,17 +12,17 @@ import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'view_model/select_device_music_page_view_model.dart';
 
-class SelectDeviceMusicPageWidget extends StatefulWidget {
-  const SelectDeviceMusicPageWidget({super.key});
+class SelectDeviceMusicPage extends StatefulWidget {
+  const SelectDeviceMusicPage({super.key});
 
   static String routeName = 'selectDeviceMusicPage';
   static String routePath = 'selectDeviceMusicPage';
 
   @override
-  State<SelectDeviceMusicPageWidget> createState() => _SelectDeviceMusicPageWidgetState();
+  State<SelectDeviceMusicPage> createState() => _SelectDeviceMusicPageState();
 }
 
-class _SelectDeviceMusicPageWidgetState extends State<SelectDeviceMusicPageWidget> {
+class _SelectDeviceMusicPageState extends State<SelectDeviceMusicPage> {
   late SelectDeviceMusicPageViewModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -35,7 +35,7 @@ class _SelectDeviceMusicPageWidgetState extends State<SelectDeviceMusicPageWidge
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'selectDeviceMusicPage'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      FFAppState().tempAudioModel =
+      AppStateStore().tempAudioModel =
           AudioModelStruct.fromSerializableMap(jsonDecode('{\"fileType\":\"file\",\"audioType\":\"device_music\"}'));
       _model.isSelected = false;
       _model.deviceAudioName = null;
@@ -60,7 +60,7 @@ class _SelectDeviceMusicPageWidgetState extends State<SelectDeviceMusicPageWidge
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
+    context.watch<AppStateStore>();
 
     return GestureDetector(
       onTap: () {
@@ -92,13 +92,13 @@ class _SelectDeviceMusicPageWidgetState extends State<SelectDeviceMusicPageWidge
                     ),
                     onPressed: () async {
                       if (_model.isSelected == true) {
-                        FFAppState().updateTempAudioModelStruct(
+                        AppStateStore().updateTempAudioModelStruct(
                           (e) => e
                             ..title = _model.titleTextController.text
                             ..author = _model.authorTextController.text,
                         );
                         safeSetState(() {});
-                        FFAppState().addToListAudiosSelected(FFAppState().tempAudioModel);
+                        AppStateStore().addToListAudiosSelected(AppStateStore().tempAudioModel);
                         safeSetState(() {});
                       }
                       context.pop();
@@ -191,7 +191,7 @@ class _SelectDeviceMusicPageWidgetState extends State<SelectDeviceMusicPageWidge
                                                   _model.isSelected =
                                                       _model.audioName == null || _model.audioName == '' ? false : true;
                                                   _model.deviceAudioName = _model.audioName;
-                                                  _model.audioDuration = FFAppState().tempAudioModel.duration;
+                                                  _model.audioDuration = AppStateStore().tempAudioModel.duration;
                                                   safeSetState(() {});
 
                                                   safeSetState(() {});
@@ -289,7 +289,7 @@ class _SelectDeviceMusicPageWidgetState extends State<SelectDeviceMusicPageWidge
                                         onPressed: () async {
                                           await actions.showPickerNumberFormatValue(
                                             context,
-                                            FFAppState().tempAudioModel.duration,
+                                            AppStateStore().tempAudioModel.duration,
                                             FileType.file,
                                             (newDuration) async {
                                               _model.audioDuration = newDuration;
@@ -488,14 +488,14 @@ class _SelectDeviceMusicPageWidgetState extends State<SelectDeviceMusicPageWidge
                                       child: FFButtonWidget(
                                         onPressed: () async {
                                           if (_model.isSelected == true) {
-                                            FFAppState().updateTempAudioModelStruct(
+                                            AppStateStore().updateTempAudioModelStruct(
                                               (e) => e
                                                 ..title = _model.titleTextController.text
                                                 ..author = _model.authorTextController.text
                                                 ..duration = _model.audioDuration,
                                             );
                                             safeSetState(() {});
-                                            FFAppState().addToListAudiosSelected(FFAppState().tempAudioModel);
+                                            AppStateStore().addToListAudiosSelected(AppStateStore().tempAudioModel);
                                             safeSetState(() {});
                                           }
                                           context.pop();

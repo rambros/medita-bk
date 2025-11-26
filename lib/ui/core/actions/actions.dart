@@ -10,8 +10,8 @@ Future checkInternetAccess(BuildContext context) async {
   bool? hasIntenetAccess2;
 
   hasIntenetAccess = await NetworkUtils.hasInternetAccess();
-  FFAppState().hasInternetAccess = hasIntenetAccess;
-  while (FFAppState().hasInternetAccess == false) {
+  AppStateStore().hasInternetAccess = hasIntenetAccess;
+  while (AppStateStore().hasInternetAccess == false) {
     await showDialog(
       context: context,
       builder: (alertDialogContext) {
@@ -31,6 +31,6 @@ Future checkInternetAccess(BuildContext context) async {
       },
     );
     hasIntenetAccess2 = await NetworkUtils.hasInternetAccess();
-    FFAppState().hasInternetAccess = hasIntenetAccess2;
+    AppStateStore().hasInternetAccess = hasIntenetAccess2;
   }
 }

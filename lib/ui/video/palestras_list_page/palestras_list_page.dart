@@ -9,17 +9,17 @@ import 'view_model/palestras_list_view_model.dart';
 import '/domain/models/video/video_model.dart';
 import '../widgets/video_error_indicator.dart';
 
-class PalestrasListPageWidget extends StatefulWidget {
-  const PalestrasListPageWidget({super.key});
+class PalestrasListPage extends StatefulWidget {
+  const PalestrasListPage({super.key});
 
   static String routeName = 'palestrasListPage';
   static String routePath = 'palestrasListPage';
 
   @override
-  State<PalestrasListPageWidget> createState() => _PalestrasListPageWidgetState();
+  State<PalestrasListPage> createState() => _PalestrasListPageState();
 }
 
-class _PalestrasListPageWidgetState extends State<PalestrasListPageWidget> {
+class _PalestrasListPageState extends State<PalestrasListPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -245,7 +245,7 @@ class _PalestrasListPageWidgetState extends State<PalestrasListPageWidget> {
                                       highlightColor: Colors.transparent,
                                       onTap: () async {
                                         context.pushNamed(
-                                          YoutubePlayerPageWidget.routeName,
+                                          YoutubePlayerPage.routeName,
                                           queryParameters: {
                                             'videoId': serializeParam(
                                               video.id,

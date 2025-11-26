@@ -7,17 +7,17 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'view_model/invite_view_model.dart';
 
-class InvitePageWidget extends StatefulWidget {
-  const InvitePageWidget({super.key});
+class InvitePage extends StatefulWidget {
+  const InvitePage({super.key});
 
   static String routeName = 'invitePage';
   static String routePath = 'invitePage';
 
   @override
-  State<InvitePageWidget> createState() => _InvitePageWidgetState();
+  State<InvitePage> createState() => _InvitePageState();
 }
 
-class _InvitePageWidgetState extends State<InvitePageWidget> {
+class _InvitePageState extends State<InvitePage> {
   late TextEditingController inviteTextTextController;
   late FocusNode inviteTextFocusNode;
 

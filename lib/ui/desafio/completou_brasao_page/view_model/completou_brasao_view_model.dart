@@ -10,7 +10,7 @@ class CompletouBrasaoViewModel extends ChangeNotifier {
   });
 
   // Computed properties
-  D21ModelStruct get desafio21 => FFAppState().desafio21;
+  D21ModelStruct get desafio21 => AppStateStore().desafio21;
 
   D21BrasaoModelStruct? get brasao {
     return desafio21.listaBrasoes.elementAtOrNull(indiceBrasao);

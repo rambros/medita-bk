@@ -11,19 +11,19 @@ import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'view_model/select_meditations_page_view_model.dart';
 
-class SelectMeditationsPageWidget extends StatefulWidget {
-  const SelectMeditationsPageWidget({super.key});
+class SelectMeditationsPage extends StatefulWidget {
+  const SelectMeditationsPage({super.key});
 
   static String routeName = 'selectMeditationsPage';
   static String routePath = 'selectMeditationsPage';
 
   @override
-  State<SelectMeditationsPageWidget> createState() =>
-      _SelectMeditationsPageWidgetState();
+  State<SelectMeditationsPage> createState() =>
+      _SelectMeditationsPageState();
 }
 
-class _SelectMeditationsPageWidgetState
-    extends State<SelectMeditationsPageWidget> {
+class _SelectMeditationsPageState
+    extends State<SelectMeditationsPage> {
   late SelectMeditationsPageViewModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -84,7 +84,7 @@ class _SelectMeditationsPageWidgetState
                     ),
                     onPressed: () async {
                       if (_model.isSelected && (_model.selectedIndex >= 0)) {
-                        FFAppState()
+                        AppStateStore()
                             .addToListAudiosSelected(_model.audioSelected!);
                         safeSetState(() {});
                       }
@@ -361,7 +361,7 @@ class _SelectMeditationsPageWidgetState
                                                         );
 
                                                         context.pushNamed(
-                                                          MeditationPlayPageWidget
+                                                          MeditationPlayPage
                                                               .routeName,
                                                           queryParameters: {
                                                             'meditationDoc':

@@ -8,17 +8,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'view_model/edit_profile_view_model.dart';
 
-class EditProfilePageWidget extends StatefulWidget {
-  const EditProfilePageWidget({super.key});
+class EditProfilePage extends StatefulWidget {
+  const EditProfilePage({super.key});
 
   static String routeName = 'editProfilePage';
   static String routePath = 'editProfile';
 
   @override
-  State<EditProfilePageWidget> createState() => _EditProfilePageWidgetState();
+  State<EditProfilePage> createState() => _EditProfilePageState();
 }
 
-class _EditProfilePageWidgetState extends State<EditProfilePageWidget> {
+class _EditProfilePageState extends State<EditProfilePage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override

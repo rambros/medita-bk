@@ -103,7 +103,7 @@ class HomeViewModel extends ChangeNotifier {
 
     // Get desafioStarted from user
     final desafioStarted = _userRecord?.desafio21Started ?? false;
-    FFAppState().desafioStarted = desafioStarted;
+    AppStateStore().desafioStarted = desafioStarted;
 
     // Create field if it doesn't exist
     if (desafioStarted != true) {
@@ -116,7 +116,7 @@ class HomeViewModel extends ChangeNotifier {
     if (_desafioRecord != null) {
       // Save mandalas to app state
       _listaEtapasMandalas = _desafioRecord!.listaEtapasMandalas.toList().cast<D21EtapaModelStruct>();
-      FFAppState().listaEtapasMandalas = _listaEtapasMandalas;
+      AppStateStore().listaEtapasMandalas = _listaEtapasMandalas;
 
       if (valueOrDefault<bool>(_userRecord?.desafio21Started, false) == true) {
         // Load user's existing desafio21 data
@@ -138,14 +138,14 @@ class HomeViewModel extends ChangeNotifier {
           await _repository.updateUserDesafio21(userId, _desafio21Data!);
         }
 
-        FFAppState().desafio21 = _desafio21Data!;
+        AppStateStore().desafio21 = _desafio21Data!;
       } else {
         // Create new desafio21 for user
         final newDesafio21 = _desafioRecord!.desafio21Data;
         await _repository.updateUserDesafio21(userId, newDesafio21);
 
         _desafio21Data = newDesafio21;
-        FFAppState().desafio21 = newDesafio21;
+        AppStateStore().desafio21 = newDesafio21;
       }
     }
 
@@ -161,8 +161,8 @@ class HomeViewModel extends ChangeNotifier {
       _diaInicioDesafio21 = _settings!.diaInicioDesafio21;
 
       // Update app state
-      FFAppState().habilitaDesafio21 = _habilitaDesafio21;
-      FFAppState().diaInicioDesafio21 = _diaInicioDesafio21;
+      AppStateStore().habilitaDesafio21 = _habilitaDesafio21;
+      AppStateStore().diaInicioDesafio21 = _diaInicioDesafio21;
     }
 
     notifyListeners();

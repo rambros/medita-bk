@@ -42,7 +42,7 @@ class _PlaylistPlayPageOldWidgetState extends State<PlaylistPlayPageOldWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
+    context.watch<AppStateStore>();
 
     return PopScope(
       canPop: false,
@@ -120,7 +120,7 @@ class _PlaylistPlayPageOldWidgetState extends State<PlaylistPlayPageOldWidget> {
                           padding: const EdgeInsetsDirectional.fromSTEB(
                               24.0, 16.0, 24.0, 8.0),
                           child: Text(
-                            FFAppState().tempPlaylist.title,
+                            AppStateStore().tempPlaylist.title,
                             textAlign: TextAlign.center,
                             maxLines: 2,
                             style: FlutterFlowTheme.of(context)
@@ -140,7 +140,7 @@ class _PlaylistPlayPageOldWidgetState extends State<PlaylistPlayPageOldWidget> {
                           padding: const EdgeInsetsDirectional.fromSTEB(
                               24.0, 0.0, 24.0, 8.0),
                           child: Text(
-                            'Duração total desta playlist  ${functions.transformSeconds(FFAppState().tempPlaylist.duration)}',
+                            'Duração total desta playlist  ${functions.transformSeconds(AppStateStore().tempPlaylist.duration)}',
                             textAlign: TextAlign.center,
                             maxLines: 2,
                             style: FlutterFlowTheme.of(context)
@@ -189,7 +189,7 @@ class _PlaylistPlayPageOldWidgetState extends State<PlaylistPlayPageOldWidget> {
                                         0.0, 0.0, 0.0, 16.0),
                                     child: Builder(
                                       builder: (context) {
-                                        final listAudiosChecked = FFAppState()
+                                        final listAudiosChecked = AppStateStore()
                                             .listAudiosReadyToPlay
                                             .toList();
 
@@ -253,9 +253,9 @@ class _PlaylistPlayPageOldWidgetState extends State<PlaylistPlayPageOldWidget> {
                             child: PlaylistPlayerWidget(
                               width: 600.0,
                               height: 600.0,
-                              audioTitle: FFAppState().tempPlaylist.title,
-                              audioArt: FFAppState().tempPlaylist.imageUrl,
-                              listAudios: FFAppState().listAudiosReadyToPlay,
+                              audioTitle: AppStateStore().tempPlaylist.title,
+                              audioArt: AppStateStore().tempPlaylist.imageUrl,
+                              listAudios: AppStateStore().listAudiosReadyToPlay,
                             ),
                           ),
                         ),

@@ -66,7 +66,7 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
       highlightColor: Colors.transparent,
       onTap: () async {
         await context.pushNamed(
-          MeditationDetailsPageWidget.routeName,
+          MeditationDetailsPage.routeName,
           queryParameters: {
             'meditationId': serializeParam(
               widget.docMeditation?.id,

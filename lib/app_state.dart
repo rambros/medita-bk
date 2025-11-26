@@ -6,17 +6,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/core/utils/logger.dart';
 
-class FFAppState extends ChangeNotifier {
-  static FFAppState _instance = FFAppState._internal();
+class AppStateStore extends ChangeNotifier {
+  static AppStateStore _instance = AppStateStore._internal();
 
-  factory FFAppState() {
+  factory AppStateStore() {
     return _instance;
   }
 
-  FFAppState._internal();
+  AppStateStore._internal();
 
   static void reset() {
-    _instance = FFAppState._internal();
+    _instance = AppStateStore._internal();
   }
 
   Future initializePersistedState() async {

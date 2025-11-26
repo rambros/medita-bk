@@ -25,7 +25,7 @@ class _CarouselGetEbooksWidgetState extends State<CarouselGetEbooksWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
+    context.watch<AppStateStore>();
 
     return Align(
       alignment: const AlignmentDirectional(0.0, -1.0),
@@ -76,7 +76,7 @@ class _CarouselGetEbooksWidgetState extends State<CarouselGetEbooksWidget> {
                     hoverColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                     onTap: () async {
-                      final premio = FFAppState().desafio21.listaBrasoes.elementAtOrNull(_currentIndex);
+                      final premio = AppStateStore().desafio21.listaBrasoes.elementAtOrNull(_currentIndex);
                       await downloadFile(
                         filename: premio?.pdfFilename ?? 'Caminhos para uma vida plena',
                         url: premio?.pdfUrl ??

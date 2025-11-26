@@ -10,17 +10,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-class MeditationHomePageWidget extends StatefulWidget {
-  const MeditationHomePageWidget({super.key});
+class MeditationHomePage extends StatefulWidget {
+  const MeditationHomePage({super.key});
 
   static String routeName = 'meditationHomePage';
   static String routePath = 'meditationHomePage';
 
   @override
-  State<MeditationHomePageWidget> createState() => _MeditationHomePageWidgetState();
+  State<MeditationHomePage> createState() => _MeditationHomePageState();
 }
 
-class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget> with TickerProviderStateMixin {
+class _MeditationHomePageState extends State<MeditationHomePage> with TickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   final animationsMap = <String, AnimationInfo>{};
@@ -137,7 +137,7 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget> wit
                             highlightColor: Colors.transparent,
                             onTap: () async {
                               context.pushNamed(
-                                ConfigPageWidget.routeName,
+                                ConfigPage.routeName,
                                 extra: <String, dynamic>{
                                   kTransitionInfoKey: const TransitionInfo(
                                     hasTransition: true,
@@ -240,7 +240,7 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget> wit
                             await action_blocks.checkInternetAccess(context);
 
                             context.pushNamed(
-                              MeditationListPageWidget.routeName,
+                              MeditationListPage.routeName,
                               extra: <String, dynamic>{
                                 kTransitionInfoKey: const TransitionInfo(
                                   hasTransition: true,
@@ -323,7 +323,7 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget> wit
                               highlightColor: Colors.transparent,
                               onTap: () async {
                                 context.pushNamed(
-                                  PlaylistListPageWidget.routeName,
+                                  PlaylistListPage.routeName,
                                   extra: <String, dynamic>{
                                     kTransitionInfoKey: const TransitionInfo(
                                       hasTransition: true,
@@ -453,7 +453,7 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget> wit
                           highlightColor: Colors.transparent,
                           onTap: () async {
                             context.pushNamed(
-                              MeditationStatisticsPageWidget.routeName,
+                              MeditationStatisticsPage.routeName,
                               extra: <String, dynamic>{
                                 kTransitionInfoKey: const TransitionInfo(
                                   hasTransition: true,

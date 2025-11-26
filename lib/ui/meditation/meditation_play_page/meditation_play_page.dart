@@ -8,8 +8,8 @@ import '/ui/core/widgets/f_f_audio_player_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-class MeditationPlayPageWidget extends StatefulWidget {
-  const MeditationPlayPageWidget({
+class MeditationPlayPage extends StatefulWidget {
+  const MeditationPlayPage({
     super.key,
     required this.meditationId,
   });
@@ -20,10 +20,10 @@ class MeditationPlayPageWidget extends StatefulWidget {
   static String routePath = 'meditationPlayPage';
 
   @override
-  State<MeditationPlayPageWidget> createState() => _MeditationPlayPageWidgetState();
+  State<MeditationPlayPage> createState() => _MeditationPlayPageState();
 }
 
-class _MeditationPlayPageWidgetState extends State<MeditationPlayPageWidget> with TickerProviderStateMixin {
+class _MeditationPlayPageState extends State<MeditationPlayPage> with TickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   final animationsMap = <String, AnimationInfo>{};

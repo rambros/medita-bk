@@ -39,7 +39,7 @@ void main() async {
 
   await FlutterFlowTheme.initialize();
 
-  final appState = FFAppState(); // Initialize FFAppState
+  final appState = AppStateStore(); // Initialize AppStateStore
   await appState.initializePersistedState(); // Initialize SharedPreferences
   await initAudioPlayerController();
 
@@ -363,8 +363,8 @@ class _NavBarPageState extends State<NavBarPage> {
     final tabs = {
       'homePage': const HomePage(),
       'mensagensHomePage': const MensagensHomePage(),
-      'meditationHomePage': const MeditationHomePageWidget(),
-      'videoHomePage': const VideoHomePageWidget(),
+      'meditationHomePage': const MeditationHomePage(),
+      'videoHomePage': const VideoHomePage(),
       'agendaHomePage': const AgendaHomePage(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);

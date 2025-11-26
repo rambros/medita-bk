@@ -9,17 +9,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-class VideoHomePageWidget extends StatefulWidget {
-  const VideoHomePageWidget({super.key});
+class VideoHomePage extends StatefulWidget {
+  const VideoHomePage({super.key});
 
   static String routeName = 'videoHomePage';
   static String routePath = 'videoHomePage';
 
   @override
-  State<VideoHomePageWidget> createState() => _VideoHomePageWidgetState();
+  State<VideoHomePage> createState() => _VideoHomePageState();
 }
 
-class _VideoHomePageWidgetState extends State<VideoHomePageWidget> with TickerProviderStateMixin {
+class _VideoHomePageState extends State<VideoHomePage> with TickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   final animationsMap = <String, AnimationInfo>{};
@@ -121,7 +121,7 @@ class _VideoHomePageWidgetState extends State<VideoHomePageWidget> with TickerPr
                             highlightColor: Colors.transparent,
                             onTap: () async {
                               context.pushNamed(
-                                ConfigPageWidget.routeName,
+                                ConfigPage.routeName,
                                 extra: <String, dynamic>{
                                   kTransitionInfoKey: const TransitionInfo(
                                     hasTransition: true,
@@ -224,7 +224,7 @@ class _VideoHomePageWidgetState extends State<VideoHomePageWidget> with TickerPr
                             await action_blocks.checkInternetAccess(context);
 
                             context.pushNamed(
-                              CanalViverListPageWidget.routeName,
+                              CanalViverListPage.routeName,
                               extra: <String, dynamic>{
                                 kTransitionInfoKey: const TransitionInfo(
                                   hasTransition: true,
@@ -295,7 +295,7 @@ class _VideoHomePageWidgetState extends State<VideoHomePageWidget> with TickerPr
                           onTap: () async {
                             await action_blocks.checkInternetAccess(context);
 
-                            context.pushNamed(PalestrasListPageWidget.routeName);
+                            context.pushNamed(PalestrasListPage.routeName);
                           },
                           child: Container(
                             width: 100.0,
@@ -360,7 +360,7 @@ class _VideoHomePageWidgetState extends State<VideoHomePageWidget> with TickerPr
                             await action_blocks.checkInternetAccess(context);
 
                             context.pushNamed(
-                              CongressoListPageWidget.routeName,
+                              CongressoListPage.routeName,
                               extra: <String, dynamic>{
                                 kTransitionInfoKey: const TransitionInfo(
                                   hasTransition: true,
@@ -432,7 +432,7 @@ class _VideoHomePageWidgetState extends State<VideoHomePageWidget> with TickerPr
                             await action_blocks.checkInternetAccess(context);
 
                             context.pushNamed(
-                              EntrevistasListPageWidget.routeName,
+                              EntrevistasListPage.routeName,
                               extra: <String, dynamic>{
                                 kTransitionInfoKey: const TransitionInfo(
                                   hasTransition: true,

@@ -4,17 +4,17 @@ import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/ui/core/flutter_flow/flutter_flow_web_view.dart';
 import 'package:flutter/material.dart';
 
-class FeaturePageWidget extends StatefulWidget {
-  const FeaturePageWidget({super.key});
+class FeaturePage extends StatefulWidget {
+  const FeaturePage({super.key});
 
   static String routeName = 'featurePage';
   static String routePath = 'featurePage';
 
   @override
-  State<FeaturePageWidget> createState() => _FeaturePageWidgetState();
+  State<FeaturePage> createState() => _FeaturePageState();
 }
 
-class _FeaturePageWidgetState extends State<FeaturePageWidget> {
+class _FeaturePageState extends State<FeaturePage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override

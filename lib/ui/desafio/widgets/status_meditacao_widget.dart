@@ -23,7 +23,7 @@ class StatusMeditacaoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Listen to app state for challenge data changes.
-    context.watch<FFAppState>();
+    context.watch<AppStateStore>();
 
     if (statusMeditacao == D21Status.open) {
       return _buildOpenStatus(context);
@@ -43,7 +43,7 @@ class StatusMeditacaoWidget extends StatelessWidget {
   Widget _buildOpenStatus(BuildContext context) {
     final day = dia ?? 0;
     final isTester = (context.read<AuthRepository>().currentUser?.userRole.toList() ?? []).contains('Tester');
-    final startDate = FFAppState().diaInicioDesafio21;
+    final startDate = AppStateStore().diaInicioDesafio21;
 
     if (isTester) {
       return _buildPlay(context, day, icon: Icons.play_arrow_rounded);
@@ -69,7 +69,7 @@ class StatusMeditacaoWidget extends StatelessWidget {
       return _buildPlay(context, day, icon: Icons.arrow_forward_ios);
     }
 
-    final previousMeditation = FFAppState()
+    final previousMeditation = AppStateStore()
         .desafio21
         .d21Meditations
         .elementAtOrNull(day - 2)

@@ -32,8 +32,8 @@ class _VisualizarPremioPageState extends State<VisualizarPremioPage> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-    final premio = FFAppState().desafio21.listaBrasoes.elementAtOrNull(widget.indiceBrasao ?? 0);
+    context.watch<AppStateStore>();
+    final premio = AppStateStore().desafio21.listaBrasoes.elementAtOrNull(widget.indiceBrasao ?? 0);
 
     return GestureDetector(
       onTap: () {

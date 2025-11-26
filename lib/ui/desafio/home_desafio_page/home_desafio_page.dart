@@ -35,8 +35,8 @@ class _HomeDesafioPageState extends State<HomeDesafioPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Watch FFAppState to ensure UI updates when global state changes (legacy support)
-    context.watch<FFAppState>();
+    // Watch AppStateStore to ensure UI updates when global state changes (legacy support)
+    context.watch<AppStateStore>();
     final viewModel = context.watch<HomeDesafioViewModel>();
 
     return GestureDetector(

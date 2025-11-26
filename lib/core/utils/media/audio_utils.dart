@@ -64,7 +64,7 @@ class AudioUtils {
           fileLocation: newPermenentAudioFile.path,
           fileType: FileType.file,
         );
-        FFAppState().tempAudioModel = deviceMusic;
+        AppStateStore().tempAudioModel = deviceMusic;
         return nameAudioFile;
       }
       return null;

@@ -17,7 +17,7 @@ class ListaEtapasViewModel extends ChangeNotifier {
   final DesafioRepository _repository;
 
   // Access to global state
-  final FFAppState _appState = FFAppState();
+  final AppStateStore _appState = AppStateStore();
 
   // Getters for UI
   int get diasCompletados => _appState.desafio21.diasCompletados;

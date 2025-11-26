@@ -10,17 +10,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'view_model/donation_view_model.dart';
 
-class DonationPageWidget extends StatefulWidget {
-  const DonationPageWidget({super.key});
+class DonationPage extends StatefulWidget {
+  const DonationPage({super.key});
 
   static String routeName = 'donationPage';
   static String routePath = 'donationPage';
 
   @override
-  State<DonationPageWidget> createState() => _DonationPageWidgetState();
+  State<DonationPage> createState() => _DonationPageState();
 }
 
-class _DonationPageWidgetState extends State<DonationPageWidget> with TickerProviderStateMixin {
+class _DonationPageState extends State<DonationPage> with TickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   final animationsMap = <String, AnimationInfo>{};

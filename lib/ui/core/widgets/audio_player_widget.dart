@@ -85,7 +85,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   void dispose() {
     _player.dispose();
     _watch.stop();
-    FFAppState().addToMeditationLogList(
+    AppStateStore().addToMeditationLogList(
         MeditationLogStruct(duration: _watch.elapsed.inSeconds, date: DateTime.now(), type: 'guided'));
     _watch.reset();
     super.dispose();

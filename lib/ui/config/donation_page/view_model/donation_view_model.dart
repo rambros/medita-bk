@@ -20,9 +20,9 @@ class DonationViewModel extends ChangeNotifier {
     try {
       String dataHoje = functions.getTodayDateFormated();
 
-      if (dataHoje != FFAppState().dataMensagemHoje) {
-        FFAppState().indexMensagemHoje = functions.getRandom(1222);
-        FFAppState().dataMensagemHoje = dataHoje;
+      if (dataHoje != AppStateStore().dataMensagemHoje) {
+        AppStateStore().indexMensagemHoje = functions.getRandom(1222);
+        AppStateStore().dataMensagemHoje = dataHoje;
       }
 
       final result = await _firestoreService.getCollection(
@@ -31,7 +31,7 @@ class DonationViewModel extends ChangeNotifier {
         queryBuilder: (query) => query.where(
           'id',
           isEqualTo: valueOrDefault<int>(
-            FFAppState().indexMensagemHoje,
+            AppStateStore().indexMensagemHoje,
             100,
           ),
         ),

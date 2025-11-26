@@ -26,7 +26,7 @@ class _CardDiaMeditacaoWidgetState extends State<CardDiaMeditacaoWidget> {
   bool isDownloaded = false;
 
   D21MeditationModelStruct? get _meditation =>
-      FFAppState().desafio21.d21Meditations.elementAtOrNull(widget.dia - 1);
+      AppStateStore().desafio21.d21Meditations.elementAtOrNull(widget.dia - 1);
 
   @override
   void initState() {
@@ -56,7 +56,7 @@ class _CardDiaMeditacaoWidgetState extends State<CardDiaMeditacaoWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
+    context.watch<AppStateStore>();
     final meditation = _meditation;
 
     if (meditation == null) {

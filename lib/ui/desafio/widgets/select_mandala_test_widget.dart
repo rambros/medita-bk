@@ -43,7 +43,7 @@ class _SelectMandalaTestWidgetState extends State<SelectMandalaTestWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
+    context.watch<AppStateStore>();
 
     return Material(
       color: Colors.transparent,
@@ -162,7 +162,7 @@ class _SelectMandalaTestWidgetState extends State<SelectMandalaTestWidget> {
                                 ),
                                 'parmMandalaUrl': serializeParam(
                                   functions.getURLMandala((_model.dropDownValue!) + 1, (_model.dropDownValue!) * 3 + 3,
-                                      FFAppState().listaEtapasMandalas.toList()),
+                                      AppStateStore().listaEtapasMandalas.toList()),
                                   ParamType.String,
                                 ),
                               }.withoutNulls,

@@ -7,17 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'view_model/playlist_play_page_view_model.dart';
 
-class PlaylistPlayPageWidget extends StatefulWidget {
-  const PlaylistPlayPageWidget({super.key});
+class PlaylistPlayPage extends StatefulWidget {
+  const PlaylistPlayPage({super.key});
 
   static String routeName = 'playlistPlayPage';
   static String routePath = 'playlistPlayPage';
 
   @override
-  State<PlaylistPlayPageWidget> createState() => _PlaylistPlayPageWidgetState();
+  State<PlaylistPlayPage> createState() => _PlaylistPlayPageState();
 }
 
-class _PlaylistPlayPageWidgetState extends State<PlaylistPlayPageWidget> {
+class _PlaylistPlayPageState extends State<PlaylistPlayPage> {
   late PlaylistPlayPageViewModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -40,7 +40,7 @@ class _PlaylistPlayPageWidgetState extends State<PlaylistPlayPageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
+    context.watch<AppStateStore>();
 
     return PopScope(
       canPop: false,
@@ -115,7 +115,7 @@ class _PlaylistPlayPageWidgetState extends State<PlaylistPlayPageWidget> {
                         Padding(
                           padding: const EdgeInsetsDirectional.fromSTEB(24.0, 16.0, 24.0, 8.0),
                           child: Text(
-                            FFAppState().tempPlaylist.title,
+                            AppStateStore().tempPlaylist.title,
                             textAlign: TextAlign.center,
                             maxLines: 2,
                             style: FlutterFlowTheme.of(context).titleLarge.override(
@@ -130,7 +130,7 @@ class _PlaylistPlayPageWidgetState extends State<PlaylistPlayPageWidget> {
                         Padding(
                           padding: const EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 8.0),
                           child: Text(
-                            'Duração total desta playlist  ${functions.transformSeconds(FFAppState().tempPlaylist.duration)}',
+                            'Duração total desta playlist  ${functions.transformSeconds(AppStateStore().tempPlaylist.duration)}',
                             textAlign: TextAlign.center,
                             maxLines: 2,
                             style: FlutterFlowTheme.of(context).titleLarge.override(
@@ -167,7 +167,7 @@ class _PlaylistPlayPageWidgetState extends State<PlaylistPlayPageWidget> {
                                     padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
                                     child: Builder(
                                       builder: (context) {
-                                        final listAudiosChecked = FFAppState().listAudiosReadyToPlay.toList();
+                                        final listAudiosChecked = AppStateStore().listAudiosReadyToPlay.toList();
 
                                         return ListView.separated(
                                           padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -212,10 +212,10 @@ class _PlaylistPlayPageWidgetState extends State<PlaylistPlayPageWidget> {
                             child: FFPlaylistPlayerWidget(
                               width: 400.0,
                               height: 400.0,
-                              playlistTitle: FFAppState().tempPlaylist.title,
-                              playlistArt: FFAppState().tempPlaylist.imageUrl,
+                              playlistTitle: AppStateStore().tempPlaylist.title,
+                              playlistArt: AppStateStore().tempPlaylist.imageUrl,
                               colorButton: FlutterFlowTheme.of(context).primary,
-                              listAudios: FFAppState().listAudiosReadyToPlay,
+                              listAudios: AppStateStore().listAudiosReadyToPlay,
                             ),
                           ),
                         ),

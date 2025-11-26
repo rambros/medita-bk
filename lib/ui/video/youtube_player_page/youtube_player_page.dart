@@ -4,8 +4,8 @@ import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/ui/core/widgets/you_tube_player_widget.dart';
 import 'package:flutter/material.dart';
 
-class YoutubePlayerPageWidget extends StatefulWidget {
-  const YoutubePlayerPageWidget({
+class YoutubePlayerPage extends StatefulWidget {
+  const YoutubePlayerPage({
     super.key,
     required this.videoTitle,
     required this.videoId,
@@ -18,10 +18,10 @@ class YoutubePlayerPageWidget extends StatefulWidget {
   static String routePath = 'youtubePlayerPage';
 
   @override
-  State<YoutubePlayerPageWidget> createState() => _YoutubePlayerPageWidgetState();
+  State<YoutubePlayerPage> createState() => _YoutubePlayerPageState();
 }
 
-class _YoutubePlayerPageWidgetState extends State<YoutubePlayerPageWidget> {
+class _YoutubePlayerPageState extends State<YoutubePlayerPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override

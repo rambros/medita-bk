@@ -30,7 +30,7 @@ class CompletouMeditacaoViewModel extends ChangeNotifier {
   int? get proximaEtapa => _proximaEtapa;
 
   // Computed properties
-  D21ModelStruct get desafio21 => FFAppState().desafio21;
+  D21ModelStruct get desafio21 => AppStateStore().desafio21;
 
   String get meditationTitle {
     return desafio21.d21Meditations.elementAtOrNull(diaCompletado)?.titulo ?? '';
@@ -52,7 +52,7 @@ class CompletouMeditacaoViewModel extends ChangeNotifier {
         _mandalaURL = functions.getURLMandala(
           ((diaCompletado) ~/ 3) + 1,
           diaCompletado + 1,
-          FFAppState().listaEtapasMandalas.toList(),
+          AppStateStore().listaEtapasMandalas.toList(),
         );
         notifyListeners();
         _setLoading(false);
@@ -60,7 +60,7 @@ class CompletouMeditacaoViewModel extends ChangeNotifier {
       }
 
       // Mark meditation as completed
-      FFAppState().updateDesafio21Struct(
+      AppStateStore().updateDesafio21Struct(
         (e) => e
           ..updateD21Meditations(
             (e) => e[diaCompletado]
@@ -79,7 +79,7 @@ class CompletouMeditacaoViewModel extends ChangeNotifier {
 
       // Persist to Firestore
       await _repository.updateDesafio21(
-        FFAppState().desafio21,
+        AppStateStore().desafio21,
         desafio21Started: true,
       );
 
@@ -93,7 +93,7 @@ class CompletouMeditacaoViewModel extends ChangeNotifier {
 
   Future<void> _completarDesafio() async {
     // Update challenge completion data
-    FFAppState().updateDesafio21Struct(
+    AppStateStore().updateDesafio21Struct(
       (e) => e
         ..diasCompletados = 21
         ..diaAtual = 21
@@ -103,7 +103,7 @@ class CompletouMeditacaoViewModel extends ChangeNotifier {
     );
 
     // Mark challenge as completed
-    FFAppState().updateDesafio21Struct(
+    AppStateStore().updateDesafio21Struct(
       (e) => e
         ..dateCompleted = getCurrentTimestamp
         ..d21Status = D21Status.completed
@@ -114,13 +114,13 @@ class CompletouMeditacaoViewModel extends ChangeNotifier {
     _mandalaURL = functions.getURLMandala(
       7,
       21,
-      FFAppState().listaEtapasMandalas.toList(),
+      AppStateStore().listaEtapasMandalas.toList(),
     );
   }
 
   Future<void> _avancarParaProximoDia() async {
     // Open next meditation
-    FFAppState().updateDesafio21Struct(
+    AppStateStore().updateDesafio21Struct(
       (e) => e
         ..updateD21Meditations(
           (e) => e[diaCompletado + 1]..meditationStatus = D21Status.open,
@@ -128,7 +128,7 @@ class CompletouMeditacaoViewModel extends ChangeNotifier {
     );
 
     // Update days completed
-    FFAppState().updateDesafio21Struct(
+    AppStateStore().updateDesafio21Struct(
       (e) => e
         ..incrementDiasCompletados(1)
         ..incrementDiaAtual(1),
@@ -136,9 +136,9 @@ class CompletouMeditacaoViewModel extends ChangeNotifier {
 
     // Get mandala URL
     _mandalaURL = functions.getURLMandala(
-      FFAppState().desafio21.etapaAtual,
-      FFAppState().desafio21.diasCompletados,
-      FFAppState().listaEtapasMandalas.toList(),
+      AppStateStore().desafio21.etapaAtual,
+      AppStateStore().desafio21.diasCompletados,
+      AppStateStore().listaEtapasMandalas.toList(),
     );
 
     // Get next stage
@@ -146,7 +146,7 @@ class CompletouMeditacaoViewModel extends ChangeNotifier {
 
     // Update stage data
     if (_proximaEtapa != null) {
-      FFAppState().updateDesafio21Struct(
+      AppStateStore().updateDesafio21Struct(
         (e) => e
           ..etapasCompletadas = _proximaEtapa! - 1
           ..etapaAtual = _proximaEtapa,

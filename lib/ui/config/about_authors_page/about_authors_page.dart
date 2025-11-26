@@ -8,17 +8,17 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 import 'view_model/about_authors_view_model.dart';
 
-class AboutAuthorsPageWidget extends StatefulWidget {
-  const AboutAuthorsPageWidget({super.key});
+class AboutAuthorsPage extends StatefulWidget {
+  const AboutAuthorsPage({super.key});
 
   static String routeName = 'aboutAuthorsPage';
   static String routePath = 'aboutAuthorsPage';
 
   @override
-  State<AboutAuthorsPageWidget> createState() => _AboutAuthorsPageWidgetState();
+  State<AboutAuthorsPage> createState() => _AboutAuthorsPageState();
 }
 
-class _AboutAuthorsPageWidgetState extends State<AboutAuthorsPageWidget> {
+class _AboutAuthorsPageState extends State<AboutAuthorsPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override

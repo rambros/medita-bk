@@ -63,7 +63,7 @@ class DailyStatisticsWidget extends StatefulWidget {
 }
 
 class _DailyStatisticsWidgetState extends State<DailyStatisticsWidget> {
-  List<MeditationLogStruct> listLogsFromRepository = FFAppState().meditationLogList;
+  List<MeditationLogStruct> listLogsFromRepository = AppStateStore().meditationLogList;
   List<DailyLog?> listDailyLog = List.filled(14, DailyLog()); // 14 days
 
   List<CartesianSeries<dynamic, dynamic>>? _seriesTimeListD;

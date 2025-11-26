@@ -15,8 +15,8 @@ import 'package:provider/provider.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
 import 'view_model/playlist_edit_audios_page_view_model.dart';
 
-class PlaylistEditAudiosPageWidget extends StatefulWidget {
-  const PlaylistEditAudiosPageWidget({
+class PlaylistEditAudiosPage extends StatefulWidget {
+  const PlaylistEditAudiosPage({
     super.key,
     required this.playlistIndex,
   });
@@ -27,10 +27,10 @@ class PlaylistEditAudiosPageWidget extends StatefulWidget {
   static String routePath = 'playlistEditAudiosPage';
 
   @override
-  State<PlaylistEditAudiosPageWidget> createState() => _PlaylistEditAudiosPageWidgetState();
+  State<PlaylistEditAudiosPage> createState() => _PlaylistEditAudiosPageState();
 }
 
-class _PlaylistEditAudiosPageWidgetState extends State<PlaylistEditAudiosPageWidget> {
+class _PlaylistEditAudiosPageState extends State<PlaylistEditAudiosPage> {
   late PlaylistEditAudiosPageViewModel _model;
   bool _unauthorized = false;
 
@@ -63,7 +63,7 @@ class _PlaylistEditAudiosPageWidgetState extends State<PlaylistEditAudiosPageWid
       // joga os audios para a varaiavel de app listSelectedAudios para ser editado no edit audios se o usuário selecionar.
       //
       // É esta variavel que será salva
-      FFAppState().listAudiosSelected = _model.playlist!.audios.toList().cast<AudioModelStruct>();
+      AppStateStore().listAudiosSelected = _model.playlist!.audios.toList().cast<AudioModelStruct>();
       safeSetState(() {});
       _model.editListAudios = await AudioUtils.checkDeviceAudios(
         _model.playlist!.audios.toList(),
@@ -97,7 +97,7 @@ class _PlaylistEditAudiosPageWidgetState extends State<PlaylistEditAudiosPageWid
       );
     }
 
-    context.watch<FFAppState>();
+    context.watch<AppStateStore>();
 
     return GestureDetector(
       onTap: () {
@@ -217,7 +217,7 @@ class _PlaylistEditAudiosPageWidgetState extends State<PlaylistEditAudiosPageWid
                       children: [
                         Builder(
                           builder: (context) {
-                            final listAudios = FFAppState().listAudiosSelected.toList();
+                            final listAudios = AppStateStore().listAudiosSelected.toList();
 
                             return InkWell(
                               splashColor: Colors.transparent,
@@ -318,7 +318,7 @@ class _PlaylistEditAudiosPageWidgetState extends State<PlaylistEditAudiosPageWid
                                                     hoverColor: Colors.transparent,
                                                     highlightColor: Colors.transparent,
                                                     onTap: () async {
-                                                      FFAppState().removeAtIndexFromListAudiosSelected(listAudiosIndex);
+                                                      AppStateStore().removeAtIndexFromListAudiosSelected(listAudiosIndex);
                                                       safeSetState(() {});
                                                     },
                                                     child: Icon(
@@ -342,7 +342,7 @@ class _PlaylistEditAudiosPageWidgetState extends State<PlaylistEditAudiosPageWid
                                     reorderableNewIndex,
                                     reorderableOldIndex,
                                   );
-                                  FFAppState().listAudiosSelected = _model.newList!.toList().cast<AudioModelStruct>();
+                                  AppStateStore().listAudiosSelected = _model.newList!.toList().cast<AudioModelStruct>();
                                   safeSetState(() {});
 
                                   safeSetState(() {});
@@ -353,7 +353,7 @@ class _PlaylistEditAudiosPageWidgetState extends State<PlaylistEditAudiosPageWid
                         ),
                         Builder(
                           builder: (context) {
-                            if (FFAppState().listAudiosSelected.isNotEmpty) {
+                            if (AppStateStore().listAudiosSelected.isNotEmpty) {
                               return Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
@@ -372,7 +372,7 @@ class _PlaylistEditAudiosPageWidgetState extends State<PlaylistEditAudiosPageWid
                                   Padding(
                                     padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 4.0),
                                     child: Text(
-                                      'Esta playlist está com uma duração de ${functions.transformSeconds(functions.getDurationPlaylist(FFAppState().listAudiosSelected.toList())!)}',
+                                      'Esta playlist está com uma duração de ${functions.transformSeconds(functions.getDurationPlaylist(AppStateStore().listAudiosSelected.toList())!)}',
                                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                                             fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
                                             letterSpacing: 0.0,

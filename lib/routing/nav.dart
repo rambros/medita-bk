@@ -97,9 +97,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => const SignUpPage(),
             ),
             FFRoute(
-              name: EditProfilePageWidget.routeName,
-              path: EditProfilePageWidget.routePath,
-              builder: (context, params) => const EditProfilePageWidget(),
+              name: EditProfilePage.routeName,
+              path: EditProfilePage.routePath,
+              builder: (context, params) => const EditProfilePage(),
             ),
             FFRoute(
               name: ForgotPasswordPage.routeName,
@@ -113,16 +113,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   params.isEmpty ? const NavBarPage(initialPage: 'homePage') : const HomePage(),
             ),
             FFRoute(
-              name: ProfilePageWidget.routeName,
-              path: ProfilePageWidget.routePath,
-              builder: (context, params) => const ProfilePageWidget(),
+              name: ProfilePage.routeName,
+              path: ProfilePage.routePath,
+              builder: (context, params) => const ProfilePage(),
             ),
             FFRoute(
-              name: MeditationHomePageWidget.routeName,
-              path: MeditationHomePageWidget.routePath,
+              name: MeditationHomePage.routeName,
+              path: MeditationHomePage.routePath,
               builder: (context, params) => params.isEmpty
                   ? const NavBarPage(initialPage: 'meditationHomePage')
-                  : const MeditationHomePageWidget(),
+                  : const MeditationHomePage(),
             ),
             FFRoute(
               name: NotificationListPage.routeName,
@@ -135,9 +135,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => const SocialLoginPage(),
             ),
             FFRoute(
-              name: ConfigPageWidget.routeName,
-              path: ConfigPageWidget.routePath,
-              builder: (context, params) => const ConfigPageWidget(),
+              name: ConfigPage.routeName,
+              path: ConfigPage.routePath,
+              builder: (context, params) => const ConfigPage(),
             ),
             FFRoute(
               name: AboutPage.routeName,
@@ -150,9 +150,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => const ChangeEmailPage(),
             ),
             FFRoute(
-              name: AppReviewPageWidget.routeName,
-              path: AppReviewPageWidget.routePath,
-              builder: (context, params) => const AppReviewPageWidget(),
+              name: AppReviewPage.routeName,
+              path: AppReviewPage.routePath,
+              builder: (context, params) => const AppReviewPage(),
             ),
             FFRoute(
               name: SettingsPage.routeName,
@@ -160,9 +160,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => const SettingsPage(),
             ),
             FFRoute(
-              name: InvitePageWidget.routeName,
-              path: InvitePageWidget.routePath,
-              builder: (context, params) => const InvitePageWidget(),
+              name: InvitePage.routeName,
+              path: InvitePage.routePath,
+              builder: (context, params) => const InvitePage(),
             ),
             FFRoute(
               name: DeleteAccountPage.routeName,
@@ -170,19 +170,19 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => const DeleteAccountPage(),
             ),
             FFRoute(
-              name: AboutAuthorsPageWidget.routeName,
-              path: AboutAuthorsPageWidget.routePath,
-              builder: (context, params) => const AboutAuthorsPageWidget(),
+              name: AboutAuthorsPage.routeName,
+              path: AboutAuthorsPage.routePath,
+              builder: (context, params) => const AboutAuthorsPage(),
             ),
             FFRoute(
-              name: AlarmPageWidget.routeName,
-              path: AlarmPageWidget.routePath,
-              builder: (context, params) => const AlarmPageWidget(),
+              name: AlarmPage.routeName,
+              path: AlarmPage.routePath,
+              builder: (context, params) => const AlarmPage(),
             ),
             FFRoute(
-              name: MeditationDetailsPageWidget.routeName,
-              path: MeditationDetailsPageWidget.routePath,
-              builder: (context, params) => MeditationDetailsPageWidget(
+              name: MeditationDetailsPage.routeName,
+              path: MeditationDetailsPage.routePath,
+              builder: (context, params) => MeditationDetailsPage(
                 meditationDocRef: () {
                   final meditationId = params.getParam(
                     'meditationId',
@@ -203,9 +203,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: MeditationPlayPageWidget.routeName,
-              path: MeditationPlayPageWidget.routePath,
-              builder: (context, params) => MeditationPlayPageWidget(
+              name: MeditationPlayPage.routeName,
+              path: MeditationPlayPage.routePath,
+              builder: (context, params) => MeditationPlayPage(
                 meditationId: params.getParam(
                   'meditationId',
                   ParamType.String,
@@ -214,20 +214,20 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: MeditationListPageWidget.routeName,
-              path: MeditationListPageWidget.routePath,
-              builder: (context, params) => const MeditationListPageWidget(),
+              name: MeditationListPage.routeName,
+              path: MeditationListPage.routePath,
+              builder: (context, params) => const MeditationListPage(),
             ),
             FFRoute(
-              name: VideoHomePageWidget.routeName,
-              path: VideoHomePageWidget.routePath,
+              name: VideoHomePage.routeName,
+              path: VideoHomePage.routePath,
               builder: (context, params) =>
-                  params.isEmpty ? const NavBarPage(initialPage: 'videoHomePage') : const VideoHomePageWidget(),
+                  params.isEmpty ? const NavBarPage(initialPage: 'videoHomePage') : const VideoHomePage(),
             ),
             FFRoute(
-              name: YoutubePlayerPageWidget.routeName,
-              path: YoutubePlayerPageWidget.routePath,
-              builder: (context, params) => YoutubePlayerPageWidget(
+              name: YoutubePlayerPage.routeName,
+              path: YoutubePlayerPage.routePath,
+              builder: (context, params) => YoutubePlayerPage(
                 videoTitle: params.getParam(
                   'videoTitle',
                   ParamType.String,
@@ -239,14 +239,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: CongressoListPageWidget.routeName,
-              path: CongressoListPageWidget.routePath,
-              builder: (context, params) => const CongressoListPageWidget(),
+              name: CongressoListPage.routeName,
+              path: CongressoListPage.routePath,
+              builder: (context, params) => const CongressoListPage(),
             ),
             FFRoute(
-              name: EntrevistasListPageWidget.routeName,
-              path: EntrevistasListPageWidget.routePath,
-              builder: (context, params) => const EntrevistasListPageWidget(),
+              name: EntrevistasListPage.routeName,
+              path: EntrevistasListPage.routePath,
+              builder: (context, params) => const EntrevistasListPage(),
             ),
             FFRoute(
               name: AgendaHomePage.routeName,
@@ -305,19 +305,19 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => const MeditationVideoListPage(),
             ),
             FFRoute(
-              name: MeditationStatisticsPageWidget.routeName,
-              path: MeditationStatisticsPageWidget.routePath,
-              builder: (context, params) => const MeditationStatisticsPageWidget(),
+              name: MeditationStatisticsPage.routeName,
+              path: MeditationStatisticsPage.routePath,
+              builder: (context, params) => const MeditationStatisticsPage(),
             ),
             FFRoute(
-              name: PlaylistListPageWidget.routeName,
-              path: PlaylistListPageWidget.routePath,
-              builder: (context, params) => const PlaylistListPageWidget(),
+              name: PlaylistListPage.routeName,
+              path: PlaylistListPage.routePath,
+              builder: (context, params) => const PlaylistListPage(),
             ),
             FFRoute(
-              name: PlaylistDetailsPageWidget.routeName,
-              path: PlaylistDetailsPageWidget.routePath,
-              builder: (context, params) => PlaylistDetailsPageWidget(
+              name: PlaylistDetailsPage.routeName,
+              path: PlaylistDetailsPage.routePath,
+              builder: (context, params) => PlaylistDetailsPage(
                 playlistIndex: params.getParam(
                   'playlistIndex',
                   ParamType.int,
@@ -329,39 +329,39 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: PlaylistAddAudiosPageWidget.routeName,
-              path: PlaylistAddAudiosPageWidget.routePath,
-              builder: (context, params) => const PlaylistAddAudiosPageWidget(),
+              name: PlaylistAddAudiosPage.routeName,
+              path: PlaylistAddAudiosPage.routePath,
+              builder: (context, params) => const PlaylistAddAudiosPage(),
             ),
             FFRoute(
-              name: SelectinstrumentPageWidget.routeName,
-              path: SelectinstrumentPageWidget.routePath,
-              builder: (context, params) => const SelectinstrumentPageWidget(),
+              name: SelectinstrumentPage.routeName,
+              path: SelectinstrumentPage.routePath,
+              builder: (context, params) => const SelectinstrumentPage(),
             ),
             FFRoute(
-              name: SelectMusicPageWidget.routeName,
-              path: SelectMusicPageWidget.routePath,
-              builder: (context, params) => const SelectMusicPageWidget(),
+              name: SelectMusicPage.routeName,
+              path: SelectMusicPage.routePath,
+              builder: (context, params) => const SelectMusicPage(),
             ),
             FFRoute(
-              name: SelectMeditationsPageWidget.routeName,
-              path: SelectMeditationsPageWidget.routePath,
-              builder: (context, params) => const SelectMeditationsPageWidget(),
+              name: SelectMeditationsPage.routeName,
+              path: SelectMeditationsPage.routePath,
+              builder: (context, params) => const SelectMeditationsPage(),
             ),
             FFRoute(
-              name: SelectDeviceMusicPageWidget.routeName,
-              path: SelectDeviceMusicPageWidget.routePath,
-              builder: (context, params) => const SelectDeviceMusicPageWidget(),
+              name: SelectDeviceMusicPage.routeName,
+              path: SelectDeviceMusicPage.routePath,
+              builder: (context, params) => const SelectDeviceMusicPage(),
             ),
             FFRoute(
-              name: PlaylistSavePageWidget.routeName,
-              path: PlaylistSavePageWidget.routePath,
-              builder: (context, params) => const PlaylistSavePageWidget(),
+              name: PlaylistSavePage.routeName,
+              path: PlaylistSavePage.routePath,
+              builder: (context, params) => const PlaylistSavePage(),
             ),
             FFRoute(
-              name: PlaylistEditPageWidget.routeName,
-              path: PlaylistEditPageWidget.routePath,
-              builder: (context, params) => PlaylistEditPageWidget(
+              name: PlaylistEditPage.routeName,
+              path: PlaylistEditPage.routePath,
+              builder: (context, params) => PlaylistEditPage(
                 playlistIndex: params.getParam(
                   'playlistIndex',
                   ParamType.int,
@@ -373,9 +373,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: PlaylistEditAudiosPageWidget.routeName,
-              path: PlaylistEditAudiosPageWidget.routePath,
-              builder: (context, params) => PlaylistEditAudiosPageWidget(
+              name: PlaylistEditAudiosPage.routeName,
+              path: PlaylistEditAudiosPage.routePath,
+              builder: (context, params) => PlaylistEditAudiosPage(
                 playlistIndex: params.getParam(
                   'playlistIndex',
                   ParamType.int,
@@ -393,44 +393,44 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => const MensagensSemanticSearchPage(),
             ),
             FFRoute(
-              name: CanalViverListPageWidget.routeName,
-              path: CanalViverListPageWidget.routePath,
-              builder: (context, params) => const CanalViverListPageWidget(),
+              name: CanalViverListPage.routeName,
+              path: CanalViverListPage.routePath,
+              builder: (context, params) => const CanalViverListPage(),
             ),
             FFRoute(
-              name: PalestrasListPageWidget.routeName,
-              path: PalestrasListPageWidget.routePath,
-              builder: (context, params) => const PalestrasListPageWidget(),
+              name: PalestrasListPage.routeName,
+              path: PalestrasListPage.routePath,
+              builder: (context, params) => const PalestrasListPage(),
             ),
             FFRoute(
-              name: SupportPageWidget.routeName,
-              path: SupportPageWidget.routePath,
-              builder: (context, params) => const SupportPageWidget(),
+              name: SupportPage.routeName,
+              path: SupportPage.routePath,
+              builder: (context, params) => const SupportPage(),
             ),
             FFRoute(
-              name: FeedbackPageWidget.routeName,
-              path: FeedbackPageWidget.routePath,
-              builder: (context, params) => const FeedbackPageWidget(),
+              name: FeedbackPage.routeName,
+              path: FeedbackPage.routePath,
+              builder: (context, params) => const FeedbackPage(),
             ),
             FFRoute(
-              name: FeaturePageWidget.routeName,
-              path: FeaturePageWidget.routePath,
-              builder: (context, params) => const FeaturePageWidget(),
+              name: FeaturePage.routeName,
+              path: FeaturePage.routePath,
+              builder: (context, params) => const FeaturePage(),
             ),
             FFRoute(
-              name: DonationPageWidget.routeName,
-              path: DonationPageWidget.routePath,
-              builder: (context, params) => const DonationPageWidget(),
+              name: DonationPage.routeName,
+              path: DonationPage.routePath,
+              builder: (context, params) => const DonationPage(),
             ),
             FFRoute(
-              name: PlaylistPlayPageWidget.routeName,
-              path: PlaylistPlayPageWidget.routePath,
-              builder: (context, params) => const PlaylistPlayPageWidget(),
+              name: PlaylistPlayPage.routeName,
+              path: PlaylistPlayPage.routePath,
+              builder: (context, params) => const PlaylistPlayPage(),
             ),
             FFRoute(
-              name: PlaylistAudioPlayPageWidget.routeName,
-              path: PlaylistAudioPlayPageWidget.routePath,
-              builder: (context, params) => PlaylistAudioPlayPageWidget(
+              name: PlaylistAudioPlayPage.routeName,
+              path: PlaylistAudioPlayPage.routePath,
+              builder: (context, params) => PlaylistAudioPlayPage(
                 audio: params.getParam(
                   'audio',
                   ParamType.String,

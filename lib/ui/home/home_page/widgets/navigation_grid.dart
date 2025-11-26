@@ -38,7 +38,7 @@ class NavigationGrid extends StatelessWidget {
             gradientEnd: const AlignmentDirectional(1.0, 1.0),
             onTap: () {
               context.pushNamed(
-                MeditationListPageWidget.routeName,
+                MeditationListPage.routeName,
                 extra: <String, dynamic>{
                   kTransitionInfoKey: const TransitionInfo(
                     hasTransition: true,
@@ -104,7 +104,7 @@ class NavigationGrid extends StatelessWidget {
             gradientEnd: const AlignmentDirectional(-1.0, -1.0),
             onTap: () {
               context.pushNamed(
-                SupportPageWidget.routeName,
+                SupportPage.routeName,
                 extra: <String, dynamic>{
                   kTransitionInfoKey: const TransitionInfo(
                     hasTransition: true,

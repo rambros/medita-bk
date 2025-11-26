@@ -23,15 +23,15 @@ class MensagemDetailsViewModel extends ChangeNotifier {
       dataHoje = functions.getTodayDateFormated();
 
       // If it is equal, already passed through here and set index and date
-      if (dataHoje != FFAppState().dataMensagemHoje) {
-        FFAppState().indexMensagemHoje = functions.getRandom(1222);
+      if (dataHoje != AppStateStore().dataMensagemHoje) {
+        AppStateStore().indexMensagemHoje = functions.getRandom(1222);
       }
 
       messageDoc = await _repository.getMensagemById(
-        FFAppState().indexMensagemHoje,
+        AppStateStore().indexMensagemHoje,
       );
 
-      FFAppState().dataMensagemHoje = functions.getTodayDateFormated();
+      AppStateStore().dataMensagemHoje = functions.getTodayDateFormated();
     } catch (e) {
       logDebug('Error loading mensagem do dia: $e');
     } finally {

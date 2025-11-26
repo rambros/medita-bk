@@ -129,7 +129,7 @@ class _SelectAudioDialogWidgetState extends State<SelectAudioDialogWidget> {
                                 Navigator.pop(context);
 
                                 context.pushNamed(
-                                  SelectinstrumentPageWidget.routeName,
+                                  SelectinstrumentPage.routeName,
                                   extra: <String, dynamic>{
                                     kTransitionInfoKey: const TransitionInfo(
                                       hasTransition: true,
@@ -220,7 +220,7 @@ class _SelectAudioDialogWidgetState extends State<SelectAudioDialogWidget> {
                                 Navigator.pop(context);
 
                                 context.pushNamed(
-                                  SelectMusicPageWidget.routeName,
+                                  SelectMusicPage.routeName,
                                   extra: <String, dynamic>{
                                     kTransitionInfoKey: const TransitionInfo(
                                       hasTransition: true,
@@ -311,7 +311,7 @@ class _SelectAudioDialogWidgetState extends State<SelectAudioDialogWidget> {
                                 Navigator.pop(context);
 
                                 context.pushNamed(
-                                  SelectDeviceMusicPageWidget.routeName,
+                                  SelectDeviceMusicPage.routeName,
                                   extra: <String, dynamic>{
                                     kTransitionInfoKey: const TransitionInfo(
                                       hasTransition: true,
@@ -402,7 +402,7 @@ class _SelectAudioDialogWidgetState extends State<SelectAudioDialogWidget> {
                                 Navigator.pop(context);
 
                                 context.pushNamed(
-                                  SelectMeditationsPageWidget.routeName,
+                                  SelectMeditationsPage.routeName,
                                   extra: <String, dynamic>{
                                     kTransitionInfoKey: const TransitionInfo(
                                       hasTransition: true,

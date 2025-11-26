@@ -19,7 +19,7 @@ class ConquistasViewModel extends ChangeNotifier {
   double get progressoEtapas => _safeProgress(etapasCompletadas, 7);
   
   List<String> get mandalasCompletadas {
-    final etapasMandalas = FFAppState().listaEtapasMandalas;
+    final etapasMandalas = AppStateStore().listaEtapasMandalas;
     if (etapasMandalas.isEmpty) {
       return [];
     }
@@ -44,7 +44,7 @@ class ConquistasViewModel extends ChangeNotifier {
   }
   
   List<String> get ebooksCompletados {
-    final ebooks = FFAppState().listaEbooksDesafio21;
+    final ebooks = AppStateStore().listaEbooksDesafio21;
     if (ebooks.isEmpty) {
       return [];
     }
