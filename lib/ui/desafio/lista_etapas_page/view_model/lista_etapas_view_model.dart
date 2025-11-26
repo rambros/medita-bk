@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '/app_state.dart';
 import '/core/structs/index.dart';
-import '/data/models/firebase/desafio21_model.dart';
 import '/data/repositories/desafio_repository.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/data/repositories/auth_repository.dart';

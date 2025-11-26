@@ -23,11 +23,11 @@ dynamic deserializeStructParam<T>(
   ParamType paramType,
   bool isList, {
   required StructBuilder<T> structBuilder,
-}) {
+  }) {
   if (param == null) {
     return null;
   } else if (isList) {
-    final paramValues;
+    final dynamic paramValues;
     try {
       paramValues = param is Iterable ? param : json.decode(param);
     } catch (e) {

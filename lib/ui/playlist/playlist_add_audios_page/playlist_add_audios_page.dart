@@ -188,7 +188,7 @@ class _PlaylistAddAudiosPageWidgetState extends State<PlaylistAddAudiosPageWidge
                                       itemBuilder: (context, listAudiosIndex) {
                                         final listAudiosItem = listAudios[listAudiosIndex];
                                         return Container(
-                                          key: ValueKey("ListView_h62s1qyo" '_' + listAudiosIndex.toString()),
+                                          key: ValueKey('ListView_h62s1qyo_${listAudiosIndex.toString()}'),
                                           child: Align(
                                             alignment: const AlignmentDirectional(0.0, 0.0),
                                             child: Padding(

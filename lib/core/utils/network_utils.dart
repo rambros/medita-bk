@@ -11,8 +11,8 @@ class NetworkUtils {
   ///
   /// Returns true if connected to network and can reach the internet.
   static Future<bool> hasInternetAccess() async {
-    final connectivity = await Connectivity().checkConnectivity();
-    if (connectivity == ConnectivityResult.none) return false;
+    final results = await Connectivity().checkConnectivity();
+    if (results.contains(ConnectivityResult.none)) return false;
 
     try {
       final result = await InternetAddress.lookup('google.com').timeout(const Duration(seconds: 3));

@@ -111,15 +111,14 @@ class _EventListWidgetState extends State<EventListWidget> {
                     monthTextStyle: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w400)),
               ),
               onTap: (details) async {
-                if ((details.targetElement == CalendarElement.appointment ||
-                    details.targetElement == CalendarElement.viewHeader)) {
-                  var event = details.appointments![0] as EventModelStruct;
-                  var eventJson = jsonEncode(event.toMap());
+    if ((details.targetElement == CalendarElement.appointment ||
+        details.targetElement == CalendarElement.viewHeader)) {
+      var event = details.appointments![0] as EventModelStruct;
 
-                  bigContext.pushNamed(
-                    'eventDetailsPage',
-                    queryParameters: {
-                      'eventDoc': serializeParam(
+      bigContext.pushNamed(
+        'eventDetailsPage',
+        queryParameters: {
+          'eventDoc': serializeParam(
                         event.toMap(),
                         ParamType.JSON,
                       ),

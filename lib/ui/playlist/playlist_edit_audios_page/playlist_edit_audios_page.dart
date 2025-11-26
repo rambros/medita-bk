@@ -235,7 +235,7 @@ class _PlaylistEditAudiosPageWidgetState extends State<PlaylistEditAudiosPageWid
                                 itemBuilder: (context, listAudiosIndex) {
                                   final listAudiosItem = listAudios[listAudiosIndex];
                                   return Container(
-                                    key: ValueKey("ListView_3afznwpi" '_' + listAudiosIndex.toString()),
+                                    key: ValueKey('ListView_3afznwpi_${listAudiosIndex.toString()}'),
                                     child: Align(
                                       alignment: const AlignmentDirectional(0.0, 0.0),
                                       child: Padding(

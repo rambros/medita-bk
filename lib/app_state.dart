@@ -397,9 +397,3 @@ void _safeInit(Function() initializeField) {
     initializeField();
   } catch (_) {}
 }
-
-Future _safeInitAsync(Function() initializeField) async {
-  try {
-    await initializeField();
-  } catch (_) {}
-}

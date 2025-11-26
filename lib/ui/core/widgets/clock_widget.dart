@@ -1,4 +1,5 @@
 // Automatic FlutterFlow imports
+// ignore_for_file: unnecessary_import, unused_import
 import '/core/structs/index.dart';
 import '/core/enums/enums.dart';
 import '/ui/core/actions/actions.dart' as action_blocks;
@@ -69,7 +70,7 @@ class ClockHands extends StatelessWidget {
 }
 
 class ClockDialPainter extends CustomPainter {
-  final clockText;
+  final ClockText clockText;
 
   final hourTickMarkLength = 10.0;
   final minuteTickMarkLength = 5.0;
@@ -256,7 +257,7 @@ class ClockWidget extends StatefulWidget {
       {super.key,
       this.width,
       this.height,
-      this.circleColor = const Color(0xfffe1ecf7),
+      this.circleColor = const Color(0xffe1ecf7),
       this.shadowColor = const Color(0xffd9e2ed),
       this.clockText = ClockText.arabic,
       this.getCurrentTime = getSystemTime,

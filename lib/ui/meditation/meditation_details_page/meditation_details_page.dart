@@ -518,8 +518,6 @@ class _MeditationDetailsPageWidgetState extends State<MeditationDetailsPageWidge
                               }
                               safeSetState(() => _isFavorite = !_isFavorite);
 
-                              final numLiked = meditationDetailsPageMeditation.numLiked;
-
                               if (_isFavorite == true) {
                                 await _meditationRepository.incrementLikeCount(meditationDetailsPageMeditation.id);
                                 await _userRepository.addToFavorites(userId, meditationDetailsPageMeditation.id);

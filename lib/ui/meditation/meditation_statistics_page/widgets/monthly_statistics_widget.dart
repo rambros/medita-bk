@@ -116,8 +116,8 @@ class _MonthlyStatisticsWidgetState extends State<MonthlyStatisticsWidget> {
 
   List<MeditationLogStruct> _getLastMonths(List<MeditationLogStruct> logs) {
     var now = DateTime.now();
-    var Months = now.subtract(const Duration(days: 365 - 1)); //[0..364] = 12 meses
-    var tempLogs = logs.where((log) => log.date!.isAfter(Months)).toList();
+    var monthsWindowStart = now.subtract(const Duration(days: 365 - 1)); //[0..364] = 12 meses
+    var tempLogs = logs.where((log) => log.date!.isAfter(monthsWindowStart)).toList();
     return tempLogs;
   }
 

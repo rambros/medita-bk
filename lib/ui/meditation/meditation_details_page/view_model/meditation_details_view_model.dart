@@ -58,7 +58,6 @@ class MeditationDetailsViewModel extends ChangeNotifier {
       // Check if audio is downloaded
       final audioPath = _meditationDoc!.audioUrl;
       if (audioPath.isNotEmpty) {
-        // TODO: Migrate isAudioDownloaded to AudioService
         // _isAudioDownloaded = await actions.isAudioDownloaded(audioPath);
         _isAudioDownloaded = false; // Temporary: assume not downloaded
       }

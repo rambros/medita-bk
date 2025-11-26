@@ -7,7 +7,7 @@ import '/core/enums/enums.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart' as Dialog;
+import 'package:flutter/material.dart' as dialog;
 import 'package:flutter/material.dart';
 import 'dart:async';
 import '/core/utils/logger.dart';
@@ -110,7 +110,7 @@ class Picker {
   final PickerConfirmBeforeCallback? onConfirmBefore;
 
   /// When the previous level selection changes, scroll the child to the first item.
-  final changeToFirst;
+  final bool changeToFirst;
 
   /// Specify flex for each column
   final List<int>? columnFlex;
@@ -280,7 +280,7 @@ class Picker {
   /// show dialog picker
   Future<List<int>?> showDialog(BuildContext context,
       {bool barrierDismissible = true, Color? backgroundColor, PickerWidgetBuilder? builder, Key? key}) {
-    return Dialog.showDialog<List<int>>(
+    return dialog.showDialog<List<int>>(
         context: context,
         barrierDismissible: barrierDismissible,
         builder: (BuildContext context) {
@@ -403,14 +403,12 @@ class _PickerWidget<T> extends StatefulWidget {
   const _PickerWidget({super.key, required this.picker, this.themeData, required this.isModal});
 
   @override
-  PickerWidgetState createState() => PickerWidgetState<T>(picker: this.picker, themeData: this.themeData);
+  PickerWidgetState createState() => PickerWidgetState<T>();
 }
 
 class PickerWidgetState<T> extends State<_PickerWidget> {
-  final Picker picker;
-  final ThemeData? themeData;
-  PickerWidgetState({required this.picker, this.themeData});
-
+  Picker get picker => widget.picker;
+  ThemeData? get themeData => widget.themeData;
   ThemeData? theme;
   final List<FixedExtentScrollController> scrollController = [];
   final List<StateSetter?> _keys = [];
@@ -632,10 +630,11 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
         var item = SizedBox(height: picker.height, child: o.child);
         if (o.column < 0) {
           items.insert(0, item);
-        } else if (o.column >= items.length)
+        } else if (o.column >= items.length) {
           items.add(item);
-        else
+        } else {
           items.insert(o.column, item);
+        }
       }
     }
 

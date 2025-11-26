@@ -154,7 +154,6 @@ String getAudioType(AudioType type) {
     case AudioType.silence:
       tipo = 'Silêncio';
       break;
-    default:
   }
   return tipo;
 }

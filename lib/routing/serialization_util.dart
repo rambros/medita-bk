@@ -62,40 +62,53 @@ String? serializeParam(
     switch (paramType) {
       case ParamType.int:
         data = param.toString();
+        break;
       case ParamType.double:
         data = param.toString();
+        break;
       case ParamType.String:
         data = param;
+        break;
       case ParamType.bool:
         data = param ? 'true' : 'false';
+        break;
       case ParamType.DateTime:
         data = (param as DateTime).millisecondsSinceEpoch.toString();
+        break;
       case ParamType.DateTimeRange:
         data = dateTimeRangeToString(param as DateTimeRange);
+        break;
       case ParamType.LatLng:
         data = (param as LatLng).serialize();
+        break;
       case ParamType.Color:
         data = (param as Color).toCssString();
+        break;
       case ParamType.FFPlace:
         data = placeToString(param as FFPlace);
+        break;
       case ParamType.FFUploadedFile:
         data = uploadedFileToString(param as FFUploadedFile);
+        break;
       case ParamType.JSON:
         data = json.encode(param);
+        break;
       case ParamType.DocumentReference:
         data = _serializeDocumentReference(param as DocumentReference);
+        break;
       case ParamType.Document:
         final reference = (param as FirestoreRecord).reference;
         data = _serializeDocumentReference(reference);
+        break;
 
       case ParamType.DataStruct:
         data = param is BaseStruct ? param.serialize() : null;
+        break;
 
       case ParamType.Enum:
         data = (param is Enum) ? param.serialize() : null;
+        break;
 
-      default:
-        data = null;
     }
     return data;
   } catch (e) {
