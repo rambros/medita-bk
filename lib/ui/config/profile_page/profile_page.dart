@@ -1,6 +1,7 @@
 import '/ui/core/flutter_flow/flutter_flow_animations.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
+import '/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'widgets/profile_header.dart';
@@ -128,7 +129,7 @@ class _ProfilePageWidgetState extends State<ProfilePageWidget> with TickerProvid
                               // Header Section
                               ProfileHeader(
                                 onAddCourse: () {
-                                  print('Button pressed ...');
+                                  logDebug('Button pressed ...');
                                 },
                               ),
 

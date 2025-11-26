@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'package:share_plus/share_plus.dart';
 import 'package:http/http.dart' as http;
+import '/core/utils/logger.dart';
 
 /// Utility class for UI-related operations like sharing content
 class UIUtils {
@@ -43,8 +44,7 @@ class UIUtils {
     } catch (e) {
       // If image sharing fails, fallback to sharing just the text
       await Share.share(textToShare);
-      // ignore: avoid_print
-      print('Error sharing image: $e');
+      logDebug('Error sharing image: $e');
     }
   }
 }

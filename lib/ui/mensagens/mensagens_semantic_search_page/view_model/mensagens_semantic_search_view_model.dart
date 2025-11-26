@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '/data/repositories/mensagem_repository.dart';
 import '/core/structs/index.dart';
+import '/core/utils/logger.dart';
 
 class MensagensSemanticSearchViewModel extends ChangeNotifier {
   final MensagemRepository _repository;
@@ -29,7 +30,7 @@ class MensagensSemanticSearchViewModel extends ChangeNotifier {
     } catch (e) {
       error = 'Erro ao buscar mensagens: $e';
       searchResults = [];
-      print(error);
+      logDebug(error);
     } finally {
       isLoading = false;
       notifyListeners();

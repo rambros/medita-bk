@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '/core/structs/index.dart';
+import '/core/utils/logger.dart';
 
 /// UI interaction utilities
 class UIUtils {
@@ -62,8 +63,7 @@ class UIUtils {
     } catch (e) {
       // If image sharing fails, fallback to sharing just the text
       await Share.share(textToShare);
-      // ignore: avoid_print
-      print('Error sharing image: $e');
+      logDebug('Error sharing image: $e');
     }
   }
 }

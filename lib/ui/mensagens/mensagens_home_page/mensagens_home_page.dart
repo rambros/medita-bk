@@ -2,6 +2,7 @@ import '/ui/core/flutter_flow/flutter_flow_animations.dart';
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
+import '/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -133,7 +134,7 @@ class _MensagensHomePageState extends State<MensagensHomePage> with TickerProvid
                               size: 24.0,
                             ),
                             onPressed: () {
-                              print('IconButton pressed ...');
+                              logDebug('IconButton pressed ...');
                             },
                           ),
                         ],

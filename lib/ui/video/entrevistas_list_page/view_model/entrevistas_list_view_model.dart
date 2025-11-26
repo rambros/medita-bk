@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '/data/repositories/video_repository.dart';
 import '/domain/models/video/video_model.dart';
+import '/core/utils/logger.dart';
 
 class EntrevistasListViewModel extends ChangeNotifier {
   final VideoRepository _repository;
@@ -22,11 +23,11 @@ class EntrevistasListViewModel extends ChangeNotifier {
     isLoadingChannel = true;
     notifyListeners();
     try {
-      print('EntrevistasListViewModel: Loading channel info...');
+      logDebug('EntrevistasListViewModel: Loading channel info...');
       channel = await _repository.getCanalBrahmaKumaris();
-      print('EntrevistasListViewModel: Channel loaded - ${channel?.title ?? "null"}');
+      logDebug('EntrevistasListViewModel: Channel loaded - ${channel?.title ?? "null"}');
     } catch (error) {
-      print('EntrevistasListViewModel: Error loading channel - $error');
+      logDebug('EntrevistasListViewModel: Error loading channel - $error');
     } finally {
       isLoadingChannel = false;
       notifyListeners();
@@ -35,9 +36,9 @@ class EntrevistasListViewModel extends ChangeNotifier {
 
   Future<void> _fetchPage(String? pageKey) async {
     try {
-      print('EntrevistasListViewModel: Fetching page with key: $pageKey');
+      logDebug('EntrevistasListViewModel: Fetching page with key: $pageKey');
       final newItems = await _repository.getVideosEntrevistas(pageToken: pageKey);
-      print('EntrevistasListViewModel: Received ${newItems.videos.length} videos, total: ${newItems.totalResults}');
+      logDebug('EntrevistasListViewModel: Received ${newItems.videos.length} videos, total: ${newItems.totalResults}');
 
       if (pageKey == null) {
         totalVideos = newItems.totalResults;
@@ -51,7 +52,7 @@ class EntrevistasListViewModel extends ChangeNotifier {
         pagingController.appendPage(newItems.videos, newItems.nextPageToken);
       }
     } catch (error) {
-      print('EntrevistasListViewModel: Error fetching page - $error');
+      logDebug('EntrevistasListViewModel: Error fetching page - $error');
       pagingController.error = error;
     }
   }

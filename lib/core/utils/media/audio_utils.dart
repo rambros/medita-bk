@@ -7,6 +7,7 @@ import '/core/structs/index.dart';
 import '/core/enums/enums.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/core/controllers/index.dart';
+import '/core/utils/logger.dart';
 
 /// Audio file management and playback utilities
 class AudioUtils {
@@ -68,8 +69,7 @@ class AudioUtils {
       }
       return null;
     } catch (e) {
-      // ignore: avoid_print
-      print('Unsupported operation$e');
+      logDebug('Unsupported operation $e');
       return null;
     }
   }

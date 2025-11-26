@@ -21,5 +21,6 @@
     "http",
     "net"
   ],
-  "debug.toolBarLocation": "floating"
+  "debug.toolBarLocation": "floating",
+  "git.ignoreLimitWarning": true
 }

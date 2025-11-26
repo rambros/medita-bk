@@ -4,6 +4,7 @@ import '/utils/serialization_util.dart';
 import '/data/models/firebase/meditation_model.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
+import '/core/utils/logger.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -62,7 +63,7 @@ class _PushNotificationsHandlerState extends State<PushNotificationsHandler> {
         }
       }
     } catch (e) {
-      print('Error: $e');
+      logDebug('Error: $e');
     } finally {
       safeSetState(() => _loading = false);
     }
@@ -268,7 +269,7 @@ Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {
     }
     return jsonDecode(parameterDataStr) as Map<String, dynamic>;
   } catch (e) {
-    print('Error parsing parameter data: $e');
+    logDebug('Error parsing parameter data: $e');
     return {};
   }
 }

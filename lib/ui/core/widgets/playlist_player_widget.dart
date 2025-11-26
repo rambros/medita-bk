@@ -3,6 +3,7 @@ import '/core/structs/index.dart';
 import '/core/enums/enums.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
+import '/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'seek_bar.dart';
 // Begin custom widget code
@@ -88,14 +89,13 @@ class _PlaylistPlayerWidgetState extends State<PlaylistPlayerWidget> {
 
     // Listen to errors during playback.
     _player.playbackEventStream.listen((event) {}, onError: (Object e, StackTrace stackTrace) {
-      print('A stream error occurred: $e');
+      logDebug('A stream error occurred: $e', stackTrace: stackTrace);
     });
     try {
       await _player.setAudioSource(_playlist);
     } catch (e, stackTrace) {
       // Catch load errors: 404, invalid url ...
-      print("Error loading playlist: $e");
-      print(stackTrace);
+      logDebug('Error loading playlist: $e', stackTrace: stackTrace);
     }
   }
 

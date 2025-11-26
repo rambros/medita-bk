@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '/data/repositories/video_repository.dart';
 import '/domain/models/video/video_model.dart';
+import '/core/utils/logger.dart';
 
 class PalestrasListViewModel extends ChangeNotifier {
   final VideoRepository _repository;
@@ -34,10 +35,10 @@ class PalestrasListViewModel extends ChangeNotifier {
 
   Future<void> _fetchPage(String? pageKey) async {
     try {
-      print('PalestrasListViewModel: Fetching page with pageKey: $pageKey');
+      logDebug('PalestrasListViewModel: Fetching page with pageKey: $pageKey');
       final newItems = await _repository.getVideosPalestras(pageToken: pageKey);
-      print('PalestrasListViewModel: Received ${newItems.videos.length} videos');
-      print('PalestrasListViewModel: Next page token: ${newItems.nextPageToken}');
+      logDebug('PalestrasListViewModel: Received ${newItems.videos.length} videos');
+      logDebug('PalestrasListViewModel: Next page token: ${newItems.nextPageToken}');
       final isLastPage = newItems.nextPageToken == null;
       if (isLastPage) {
         pagingController.appendLastPage(newItems.videos);
@@ -45,8 +46,7 @@ class PalestrasListViewModel extends ChangeNotifier {
         pagingController.appendPage(newItems.videos, newItems.nextPageToken);
       }
     } catch (error, stackTrace) {
-      print('PalestrasListViewModel: Error fetching page: $error');
-      print('PalestrasListViewModel: Stack trace: $stackTrace');
+      logDebug('PalestrasListViewModel: Error fetching page: $error', stackTrace: stackTrace);
       pagingController.error = error;
     }
   }

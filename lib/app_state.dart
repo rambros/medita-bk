@@ -4,6 +4,7 @@ import '/ui/core/flutter_flow/request_manager.dart';
 import '/data/models/firebase/firebase_models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
+import '/core/utils/logger.dart';
 
 class FFAppState extends ChangeNotifier {
   static FFAppState _instance = FFAppState._internal();
@@ -36,7 +37,7 @@ class FFAppState extends ChangeNotifier {
                 try {
                   return AlarmTimeStruct.fromSerializableMap(jsonDecode(x));
                 } catch (e) {
-                  print("Can't decode persisted data type. Error: $e.");
+                  logDebug("Can't decode persisted data type. Error: $e.");
                   return null;
                 }
               })
@@ -57,7 +58,7 @@ class FFAppState extends ChangeNotifier {
                 try {
                   return MeditationLogStruct.fromSerializableMap(jsonDecode(x));
                 } catch (e) {
-                  print("Can't decode persisted data type. Error: $e.");
+                  logDebug("Can't decode persisted data type. Error: $e.");
                   return null;
                 }
               })

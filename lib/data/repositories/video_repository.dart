@@ -1,3 +1,4 @@
+import '/core/utils/logger.dart';
 import '/data/services/youtube_service.dart';
 import '/domain/models/video/video_model.dart';
 
@@ -14,13 +15,13 @@ class VideoRepository {
   }
 
   Future<Channel?> getCanalBrahmaKumaris() async {
-    print('VideoRepository: Calling getCanalBrahmaKumaris');
+    logDebug('VideoRepository: Calling getCanalBrahmaKumaris');
     final response = await YouTubeGroup.canalBrahmaKumarisCall.call();
-    print('VideoRepository: BrahmaKumaris API response succeeded: ${response.succeeded}');
-    print('VideoRepository: BrahmaKumaris API status code: ${response.statusCode}');
+    logDebug('VideoRepository: BrahmaKumaris API response succeeded: ${response.succeeded}');
+    logDebug('VideoRepository: BrahmaKumaris API status code: ${response.statusCode}');
     if (response.succeeded) {
       final items = response.jsonBody['items'] as List?;
-      print('VideoRepository: BrahmaKumaris items count: ${items?.length ?? 0}');
+      logDebug('VideoRepository: BrahmaKumaris items count: ${items?.length ?? 0}');
       if (items != null && items.isNotEmpty) {
         return Channel.fromJson(items.first);
       }
@@ -34,25 +35,25 @@ class VideoRepository {
   }
 
   Future<VideoListResponse> getVideosEntrevistas({String? pageToken}) async {
-    print('VideoRepository: Calling getVideosEntrevistas with pageToken: $pageToken');
+    logDebug('VideoRepository: Calling getVideosEntrevistas with pageToken: $pageToken');
     final response = await YouTubeGroup.videosEntrevistasCall.call(pageToken: pageToken);
-    print('VideoRepository: Entrevistas API response succeeded: ${response.succeeded}');
-    print('VideoRepository: Entrevistas API status code: ${response.statusCode}');
+    logDebug('VideoRepository: Entrevistas API response succeeded: ${response.succeeded}');
+    logDebug('VideoRepository: Entrevistas API status code: ${response.statusCode}');
     if (response.succeeded) {
       final items = response.jsonBody['items'] as List?;
-      print('VideoRepository: Entrevistas items count: ${items?.length ?? 0}');
+      logDebug('VideoRepository: Entrevistas items count: ${items?.length ?? 0}');
     }
     return _parseVideoListResponse(response);
   }
 
   Future<VideoListResponse> getVideosPalestras({String? pageToken}) async {
-    print('VideoRepository: Calling getVideosPalestras with pageToken: $pageToken');
+    logDebug('VideoRepository: Calling getVideosPalestras with pageToken: $pageToken');
     final response = await YouTubeGroup.videosPalestrasCall.call(pageToken: pageToken);
-    print('VideoRepository: Palestras API response succeeded: ${response.succeeded}');
-    print('VideoRepository: Palestras API status code: ${response.statusCode}');
+    logDebug('VideoRepository: Palestras API response succeeded: ${response.succeeded}');
+    logDebug('VideoRepository: Palestras API status code: ${response.statusCode}');
     if (response.succeeded) {
       final items = response.jsonBody['items'] as List?;
-      print('VideoRepository: Palestras items count: ${items?.length ?? 0}');
+      logDebug('VideoRepository: Palestras items count: ${items?.length ?? 0}');
     }
     return _parseVideoListResponse(response);
   }

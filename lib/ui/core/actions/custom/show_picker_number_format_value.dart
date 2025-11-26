@@ -10,6 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as Dialog;
 import 'package:flutter/material.dart';
 import 'dart:async';
+import '/core/utils/logger.dart';
 
 Future showPickerNumberFormatValue(
   BuildContext context,
@@ -62,8 +63,7 @@ Future showPickerNumberFormatValue(
         color: Theme.of(context).colorScheme.primary,
       ),
       onConfirm: (Picker picker, List value) {
-        //print(value.toString());
-        print(picker.getSelectedValues());
+        logDebug(picker.getSelectedValues());
         int newDuration = value[0] * 60 + value[1];
         if (newDuration > maxMinutes * 60 + maxSeconds) {
           newDuration = maxMinutes * 60 + maxSeconds;
@@ -436,7 +436,6 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
   // var ref = 0;
   @override
   Widget build(BuildContext context) {
-    // print("picker build ${ref++}");
     theme = themeData ?? Theme.of(context);
 
     if (_wait && picker.smooth > 0) {
@@ -562,7 +561,7 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
   final Map<int, int> lastData = {};
 
   List<Widget> _buildViews() {
-    if (picker.printDebug) print("_buildViews");
+    if (picker.printDebug) logDebug('_buildViews');
     theme ??= Theme.of(context);
     for (int j = 0; j < _keys.length; j++) {
       _keys[j] = null;
@@ -590,7 +589,7 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
                     builder: (context, state) {
                       _keys[i] = state;
                       adapter.setColumn(i - 1);
-                      if (picker.printDebug) print("builder. col: $i");
+                      if (picker.printDebug) logDebug('builder. col: $i');
 
                       // 上一次是空列表
                       final lastIsEmpty =
@@ -603,7 +602,7 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
                       if (lastIsEmpty || (!picker.changeToFirst && picker.selecteds[i] >= length)) {
                         Timer(const Duration(milliseconds: 100), () {
                           if (!mounted) return;
-                          if (picker.printDebug) print("timer last");
+                          if (picker.printDebug) logDebug('timer last');
                           var len = adapter.length;
                           var index = (len < length ? len : length) - 1;
                           if (scrollController[i].position.hasContentDimensions) {
@@ -665,7 +664,7 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
         if (length <= 0) return;
         final selectedIndex = index % length;
         if (picker.printDebug) {
-          print("onSelectedItemChanged. col: $i, row: $selectedIndex");
+          logDebug('onSelectedItemChanged. col: $i, row: $selectedIndex');
         }
         picker.selecteds[i] = selectedIndex;
         updateScrollController(i);
@@ -890,7 +889,7 @@ class PickerDataAdapter<T> extends PickerAdapter<T> {
         }
       }
     }
-    if (picker?.printDebug == true) print("data.length: ${data.length}");
+    if (picker?.printDebug == true) logDebug('data.length: ${data.length}');
   }
 
   _parsePickerDataItem(List? pickerData, List<PickerItem> data) {
@@ -909,14 +908,12 @@ class PickerDataAdapter<T> extends PickerAdapter<T> {
           var o = map[mapList[j]];
           if (o is List && o.isNotEmpty) {
             List<PickerItem<T>> children = <PickerItem<T>>[];
-            //print('add: ${data.runtimeType.toString()}');
             data.add(PickerItem<T>(value: mapList[j], children: children));
             _parsePickerDataItem(o, children);
           }
         }
       } else if (T == String && item is! List) {
         String v = item.toString();
-        //print('add: $_v');
         data.add(PickerItem<T>(value: v as T));
       }
     }
@@ -927,7 +924,7 @@ class PickerDataAdapter<T> extends PickerAdapter<T> {
     if (_datas != null && _col == index + 1) return;
     _col = index + 1;
     if (isArray) {
-      if (picker!.printDebug) print("index: $index");
+      if (picker!.printDebug) logDebug('index: $index');
       if (_col < data.length) {
         _datas = data[_col].children;
       } else {

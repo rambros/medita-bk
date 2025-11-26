@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/firebase/user_model.dart';
 import '../services/firebase/firestore_service.dart';
+import '/core/utils/logger.dart';
 
 /// Repository for user data operations
 ///
@@ -23,7 +24,7 @@ class UserRepository {
         fromSnapshot: UserModel.fromFirestore,
       );
     } catch (e) {
-      print('Error fetching user by ID: $e');
+      logDebug('Error fetching user by ID: $e');
       rethrow;
     }
   }
@@ -46,7 +47,7 @@ class UserRepository {
         limit: limit,
       );
     } catch (e) {
-      print('Error fetching all users: $e');
+      logDebug('Error fetching all users: $e');
       rethrow;
     }
   }
@@ -72,7 +73,7 @@ class UserRepository {
         },
       );
     } catch (e) {
-      print('Error fetching authors: $e');
+      logDebug('Error fetching authors: $e');
       rethrow;
     }
   }
@@ -101,7 +102,7 @@ class UserRepository {
         },
       );
     } catch (e) {
-      print('Error fetching users by role: $e');
+      logDebug('Error fetching users by role: $e');
       rethrow;
     }
   }
@@ -117,7 +118,7 @@ class UserRepository {
         data: user.toFirestore(),
       );
     } catch (e) {
-      print('Error creating user: $e');
+      logDebug('Error creating user: $e');
       rethrow;
     }
   }
@@ -131,7 +132,7 @@ class UserRepository {
         data: user.toFirestore(),
       );
     } catch (e) {
-      print('Error updating user: $e');
+      logDebug('Error updating user: $e');
       rethrow;
     }
   }
@@ -145,7 +146,7 @@ class UserRepository {
         data: data,
       );
     } catch (e) {
-      print('Error updating user partial: $e');
+      logDebug('Error updating user partial: $e');
       rethrow;
     }
   }
@@ -158,7 +159,7 @@ class UserRepository {
         documentId: userId,
       );
     } catch (e) {
-      print('Error deleting user: $e');
+      logDebug('Error deleting user: $e');
       rethrow;
     }
   }
@@ -176,7 +177,7 @@ class UserRepository {
         },
       );
     } catch (e) {
-      print('Error adding to favorites: $e');
+      logDebug('Error adding to favorites: $e');
       rethrow;
     }
   }
@@ -192,7 +193,7 @@ class UserRepository {
         },
       );
     } catch (e) {
-      print('Error removing from favorites: $e');
+      logDebug('Error removing from favorites: $e');
       rethrow;
     }
   }
@@ -210,7 +211,7 @@ class UserRepository {
         },
       );
     } catch (e) {
-      print('Error updating last access: $e');
+      logDebug('Error updating last access: $e');
       rethrow;
     }
   }

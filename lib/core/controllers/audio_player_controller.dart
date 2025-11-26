@@ -188,7 +188,6 @@ class AudioPlayerController {
       currentIndexTitleNotifier.value = playbackState.queueIndex ?? 0;
       final isPlaying = playbackState.playing;
       final processingState = playbackState.processingState;
-      //print(processingState);
       if (processingState == AudioProcessingState.loading || processingState == AudioProcessingState.buffering) {
         playButtonNotifier.value = ButtonState.loading;
       } else if (!isPlaying) {

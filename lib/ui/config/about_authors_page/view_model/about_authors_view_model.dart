@@ -3,6 +3,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '/data/models/firebase/user_model.dart';
 import '/data/repositories/user_repository.dart';
+import '/core/utils/logger.dart';
 
 class AboutAuthorsViewModel extends ChangeNotifier {
   final UserRepository _repository;
@@ -39,7 +40,7 @@ class AboutAuthorsViewModel extends ChangeNotifier {
       }
     } catch (error) {
       if (_isDisposed) return;
-      print('Error loading authors page: $error');
+      logDebug('Error loading authors page: $error');
       pagingController.error = error;
     }
   }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:algolia/algolia.dart';
 import 'package:equatable/equatable.dart';
+import '/core/utils/logger.dart';
 import '/ui/core/flutter_flow/lat_lng.dart';
 
 export 'package:algolia/algolia.dart';
@@ -74,7 +75,7 @@ class AlgoliaService {
     try {
       snapshot = await query.getObjects();
     } catch (error, stackTrace) {
-      print('Algolia error: $error\nStack trace: $stackTrace');
+      logDebug('Algolia error: $error', stackTrace: stackTrace);
     }
     return _algoliaCache[params] = snapshot?.hits ?? [];
   }

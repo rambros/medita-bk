@@ -3,6 +3,7 @@ import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
+import '/core/utils/logger.dart';
 
 /// Custom app bar for home page
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -62,15 +63,15 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                   borderWidth: 1.0,
                   buttonSize: 40.0,
                   fillColor: FlutterFlowTheme.of(context).primaryBackground,
-                  icon: Icon(
-                    Icons.notifications_none,
-                    color: FlutterFlowTheme.of(context).primary,
-                    size: 24.0,
+                    icon: Icon(
+                      Icons.notifications_none,
+                      color: FlutterFlowTheme.of(context).primary,
+                      size: 24.0,
+                    ),
+                    onPressed: () {
+                      logDebug('IconButton pressed ...');
+                    },
                   ),
-                  onPressed: () {
-                    print('IconButton pressed ...');
-                  },
-                ),
               ],
             ),
           ),

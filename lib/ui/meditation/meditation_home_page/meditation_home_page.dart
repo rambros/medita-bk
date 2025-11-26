@@ -5,6 +5,7 @@ import '/ui/core/flutter_flow/flutter_flow_util.dart';
 
 import '/ui/core/actions/actions.dart' as action_blocks;
 import '/index.dart';
+import '/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -172,7 +173,7 @@ class _MeditationHomePageWidgetState extends State<MeditationHomePageWidget> wit
                               size: 24.0,
                             ),
                             onPressed: () {
-                              print('IconButton pressed ...');
+                              logDebug('IconButton pressed ...');
                             },
                           ),
                         ],

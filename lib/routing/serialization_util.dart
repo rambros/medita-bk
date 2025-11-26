@@ -6,6 +6,7 @@ import '/core/structs/util/firestore_util.dart';
 import '/core/structs/util/schema_util.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/core/enums/enums.dart';
+import '/core/utils/logger.dart';
 
 /// SERIALIZATION HELPERS
 
@@ -98,7 +99,7 @@ String? serializeParam(
     }
     return data;
   } catch (e) {
-    print('Error serializing parameter: $e');
+    logDebug('Error serializing parameter: $e');
     return null;
   }
 }
@@ -254,7 +255,7 @@ dynamic deserializeParam<T>(
         return null;
     }
   } catch (e) {
-    print('Error deserializing parameter: $e');
+    logDebug('Error deserializing parameter: $e');
     return null;
   }
 }

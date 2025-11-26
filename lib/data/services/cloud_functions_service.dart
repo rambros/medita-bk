@@ -1,4 +1,5 @@
 import 'package:cloud_functions/cloud_functions.dart';
+import '/core/utils/logger.dart';
 
 class CloudFunctionsService {
   static Future<Map<String, dynamic>> makeCloudCall(
@@ -10,14 +11,15 @@ class CloudFunctionsService {
           await FirebaseFunctions.instance.httpsCallable(callName, options: HttpsCallableOptions()).call(input);
       return response.data is Map ? Map<String, dynamic>.from(response.data as Map) : {};
     } on FirebaseFunctionsException catch (e) {
-      print(
-        'Cloud call error!\n $callName'
+      logDebug(
+        'Cloud call error!\n$callName'
         'Code: ${e.code}\n'
         'Details: ${e.details}\n'
         'Message: ${e.message}',
+        error: e,
       );
     } catch (e) {
-      print('Cloud call error:$callName $e');
+      logDebug('Cloud call error:$callName $e');
     }
     return {};
   }

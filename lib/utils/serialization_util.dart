@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '/core/structs/util/firestore_util.dart';
 import '/core/structs/util/schema_util.dart';
+import '/core/utils/logger.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 
 /// SERIALIZATION HELPERS
@@ -142,7 +143,7 @@ T? getParameter<T>(Map<String, dynamic> data, String paramName) {
     }
     return param;
   } catch (e) {
-    print('Error parsing parameter "$paramName": $e');
+    logDebug('Error parsing parameter "$paramName": $e');
     return null;
   }
 }

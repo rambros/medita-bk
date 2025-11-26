@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/firebase/meditation_model.dart';
 import '../services/firebase/firestore_service.dart';
+import '/core/utils/logger.dart';
 import '/data/services/algolia_service.dart';
 
 /// Repository interface for meditation data operations
@@ -45,7 +46,7 @@ class MeditationRepositoryImpl implements MeditationRepository {
         fromSnapshot: MeditationModel.fromFirestore,
       );
     } catch (e) {
-      print('Error fetching meditation by ID: $e');
+      logDebug('Error fetching meditation by ID: $e');
       rethrow;
     }
   }
@@ -84,7 +85,7 @@ class MeditationRepositoryImpl implements MeditationRepository {
         },
       );
     } catch (e) {
-      print('Error fetching ordered meditations: $e');
+      logDebug('Error fetching ordered meditations: $e');
       rethrow;
     }
   }
@@ -108,7 +109,7 @@ class MeditationRepositoryImpl implements MeditationRepository {
         ),
       );
     } catch (e) {
-      print('Error fetching filtered meditations: $e');
+      logDebug('Error fetching filtered meditations: $e');
       rethrow;
     }
   }
@@ -127,7 +128,7 @@ class MeditationRepositoryImpl implements MeditationRepository {
       // Convert Algolia results to MeditationModel
       return results.map((snapshot) => _fromAlgolia(snapshot)).toList();
     } catch (e) {
-      print('Error searching meditations: $e');
+      logDebug('Error searching meditations: $e');
       rethrow;
     }
   }
@@ -169,7 +170,7 @@ class MeditationRepositoryImpl implements MeditationRepository {
 
       return allFavorites;
     } catch (e) {
-      print('Error fetching favorite meditations: $e');
+      logDebug('Error fetching favorite meditations: $e');
       rethrow;
     }
   }
@@ -187,7 +188,7 @@ class MeditationRepositoryImpl implements MeditationRepository {
         },
       );
     } catch (e) {
-      print('Error incrementing play count: $e');
+      logDebug('Error incrementing play count: $e');
       rethrow;
     }
   }
@@ -203,7 +204,7 @@ class MeditationRepositoryImpl implements MeditationRepository {
         },
       );
     } catch (e) {
-      print('Error incrementing like count: $e');
+      logDebug('Error incrementing like count: $e');
       rethrow;
     }
   }
@@ -219,7 +220,7 @@ class MeditationRepositoryImpl implements MeditationRepository {
         },
       );
     } catch (e) {
-      print('Error decrementing like count: $e');
+      logDebug('Error decrementing like count: $e');
       rethrow;
     }
   }

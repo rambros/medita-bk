@@ -3,6 +3,7 @@ import '/data/models/firebase/message_model.dart';
 import '/data/repositories/mensagem_repository.dart';
 import '/app_state.dart';
 import '/ui/core/flutter_flow/custom_functions.dart' as functions;
+import '/core/utils/logger.dart';
 import 'package:share_plus/share_plus.dart';
 
 class MensagemDetailsViewModel extends ChangeNotifier {
@@ -32,7 +33,7 @@ class MensagemDetailsViewModel extends ChangeNotifier {
 
       FFAppState().dataMensagemHoje = functions.getTodayDateFormated();
     } catch (e) {
-      print('Error loading mensagem do dia: $e');
+      logDebug('Error loading mensagem do dia: $e');
     } finally {
       isLoading = false;
       notifyListeners();
