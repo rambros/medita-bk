@@ -21,55 +21,9 @@ import '/core/controllers/index.dart';
 
 import 'dart:ui' as ui;
 
-import '/data/repositories/category_repository.dart';
-import '/data/repositories/home_repository.dart';
-import '/ui/home/home_page/view_model/home_view_model.dart';
-
-import '/data/repositories/notification_repository.dart';
-import '/ui/notification/notification_list_page/view_model/notification_list_view_model.dart';
-import '/ui/notification/notification_view_page/view_model/notification_view_view_model.dart';
-
-import '/data/repositories/agenda_repository.dart';
-import '/ui/agenda/agenda_home_page/view_model/agenda_home_view_model.dart';
-import '/ui/agenda/agenda_list_page/view_model/agenda_list_view_model.dart';
-import '/ui/agenda/event_list_page/view_model/event_list_view_model.dart';
-import '/ui/agenda/event_details_page/view_model/event_details_view_model.dart';
-import '/data/repositories/mensagem_repository.dart';
-import '/ui/mensagens/mensagem_details_page/view_model/mensagem_details_view_model.dart';
-import '/ui/mensagens/mensagem_show_page/view_model/mensagem_show_view_model.dart';
-import '/ui/mensagens/mensagens_semantic_search_page/view_model/mensagens_semantic_search_view_model.dart';
-
-import '/data/repositories/music_repository.dart';
-import '/data/repositories/video_repository.dart';
-import '/ui/video/video_home_page/view_model/video_home_view_model.dart';
-import '/ui/video/palestras_list_page/view_model/palestras_list_view_model.dart';
-import '/ui/video/congresso_list_page/view_model/congresso_list_view_model.dart';
-import '/ui/video/entrevistas_list_page/view_model/entrevistas_list_view_model.dart';
-import '/ui/video/canal_viver_list_page/view_model/canal_viver_list_view_model.dart';
-import '/ui/video/youtube_player_page/view_model/youtube_player_view_model.dart';
-
-import '/data/repositories/meditation_repository.dart';
-import '/ui/meditation/meditation_home_page/view_model/meditation_home_view_model.dart';
-import '/ui/meditation/meditation_list_page/view_model/meditation_list_view_model.dart';
-import '/data/repositories/playlist_repository.dart';
+import '/data/repositories/index.dart';
+import '/view_models.dart';
 import '/data/services/auth/firebase_auth/firebase_auth_service.dart';
-
-import 'data/repositories/user_repository.dart';
-import 'data/repositories/auth_repository.dart';
-import 'ui/config/about_authors_page/view_model/about_authors_view_model.dart';
-import 'ui/config/config_page/view_model/config_view_model.dart';
-import 'package:medita_b_k/ui/config/edit_profile_page/view_model/edit_profile_view_model.dart';
-import 'package:medita_b_k/ui/config/settings_page/view_model/settings_view_model.dart';
-import 'package:medita_b_k/ui/config/delete_account_page/view_model/delete_account_view_model.dart';
-import '/ui/authentication/sign_in/view_model/sign_in_view_model.dart';
-import '/ui/authentication/sign_up/view_model/sign_up_view_model.dart';
-import '/ui/authentication/forgot_password/view_model/forgot_password_view_model.dart';
-import '/ui/authentication/change_email_page/view_model/change_email_view_model.dart';
-import '/ui/authentication/social_login/view_model/social_login_view_model.dart';
-
-import '/data/repositories/desafio_repository.dart';
-import '/ui/desafio/home_desafio_page/view_model/home_desafio_view_model.dart';
-import '/ui/desafio/lista_etapas_page/view_model/lista_etapas_view_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

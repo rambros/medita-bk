@@ -1,0 +1,12 @@
+export 'agenda_repository.dart';
+export 'auth_repository.dart';
+export 'category_repository.dart';
+export 'desafio_repository.dart';
+export 'home_repository.dart';
+export 'meditation_repository.dart';
+export 'mensagem_repository.dart';
+export 'music_repository.dart';
+export 'notification_repository.dart';
+export 'playlist_repository.dart';
+export 'user_repository.dart';
+export 'video_repository.dart';

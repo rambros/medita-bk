@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -78,6 +79,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
       errorBuilder: (context, state) => appStateNotifier.loggedIn ? const NavBarPage() : const SocialLoginPage(),
+      extraCodec: const FFExtraCodec(),
       routes: [
         FFRoute(
           name: '_initialize',
@@ -795,5 +797,45 @@ extension GoRouterLocationExtension on GoRouter {
     final RouteMatchList matchList =
         lastMatch is ImperativeRouteMatch ? lastMatch.matches : routerDelegate.currentConfiguration;
     return matchList.uri.toString();
+  }
+}
+
+class FFExtraCodec extends Codec<Object?, Object?> {
+  const FFExtraCodec();
+
+  @override
+  Converter<Object?, Object?> get decoder => const _FFExtraDecoder();
+
+  @override
+  Converter<Object?, Object?> get encoder => const _FFExtraEncoder();
+}
+
+class _FFExtraEncoder extends Converter<Object?, Object?> {
+  const _FFExtraEncoder();
+
+  @override
+  Object? convert(Object? input) {
+    if (input == null) {
+      return null;
+    }
+    if (input is List) {
+      return input.map(convert).toList();
+    }
+    if (input is Map) {
+      return input.map((k, v) => MapEntry(k, convert(v)));
+    }
+    if (input is String || input is num || input is bool) {
+      return input;
+    }
+    return null;
+  }
+}
+
+class _FFExtraDecoder extends Converter<Object?, Object?> {
+  const _FFExtraDecoder();
+
+  @override
+  Object? convert(Object? input) {
+    return input;
   }
 }
