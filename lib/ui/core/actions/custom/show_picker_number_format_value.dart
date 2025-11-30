@@ -866,7 +866,7 @@ class PickerDataAdapter<T> extends PickerAdapter<T> {
     }
   }
 
-  _parseArrayPickerDataItem(List? pickerData, List<PickerItem> data) {
+  void _parseArrayPickerDataItem(List? pickerData, List<PickerItem> data) {
     if (pickerData == null) return;
     var len = pickerData.length;
     for (int i = 0; i < len; i++) {
@@ -891,7 +891,7 @@ class PickerDataAdapter<T> extends PickerAdapter<T> {
     if (picker?.printDebug == true) logDebug('data.length: ${data.length}');
   }
 
-  _parsePickerDataItem(List? pickerData, List<PickerItem> data) {
+  void _parsePickerDataItem(List? pickerData, List<PickerItem> data) {
     if (pickerData == null) return;
     var len = pickerData.length;
     for (int i = 0; i < len; i++) {
@@ -1017,7 +1017,7 @@ class PickerDataAdapter<T> extends PickerAdapter<T> {
     return items;
   }
 
-  _checkPickerDataLevel(List<PickerItem>? data, int level) {
+  void _checkPickerDataLevel(List<PickerItem>? data, int level) {
     if (data == null) return;
     if (isArray) {
       _maxLevel = data.length;

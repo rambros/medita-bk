@@ -10,10 +10,7 @@ part of algolia;
 class AlgoliaIndexSettings extends AlgoliaSettings {
   const AlgoliaIndexSettings._(
     Algolia algolia,
-    String indexName, {
-    // ignore: unused_element
-    Map<String, dynamic>? parameters,
-  })  : assert(indexName != '*',
+    String indexName)  : assert(indexName != '*',
             'Index Name is required, but was found: $indexName'),
         super._(algolia, indexName);
 

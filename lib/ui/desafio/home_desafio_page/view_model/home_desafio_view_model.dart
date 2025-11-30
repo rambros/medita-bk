@@ -4,7 +4,6 @@ import '/core/enums/enums.dart';
 import '/core/structs/index.dart';
 import '/data/repositories/auth_repository.dart';
 import '/data/repositories/desafio_repository.dart';
-import '/app_state.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart'; // For valueOrDefault
 
 class HomeDesafioViewModel extends ChangeNotifier {
