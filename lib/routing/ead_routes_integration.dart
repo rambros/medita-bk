@@ -1,0 +1,114 @@
+/// =====================================================
+/// INSTRUÇÕES PARA INTEGRAR ROTAS DO EAD NO nav.dart
+/// =====================================================
+/// 
+/// 1. No arquivo lib/routing/nav.dart, adicione os imports:
+/// 
+/// ```dart
+/// import '/ui/ead/index.dart';
+/// import '/routing/ead_routes.dart';
+/// ```
+/// 
+/// 2. Adicione as rotas abaixo dentro da lista de FFRoutes
+///    (dentro de `routes: [` do GoRouter)
+/// 
+/// 3. Cole o código abaixo após as outras rotas existentes:
+
+/*
+            // === MÓDULO EAD ===
+            FFRoute(
+              name: EadHomePage.routeName,
+              path: EadHomePage.routePath,
+              builder: (context, params) => const EadHomePage(),
+            ),
+            FFRoute(
+              name: CatalogoCursosPage.routeName,
+              path: CatalogoCursosPage.routePath,
+              builder: (context, params) => const CatalogoCursosPage(),
+            ),
+            FFRoute(
+              name: CursoDetalhesPage.routeName,
+              path: CursoDetalhesPage.routePath,
+              builder: (context, params) => CursoDetalhesPage(
+                cursoId: params.getParam('cursoId', ParamType.String) ?? '',
+              ),
+            ),
+            FFRoute(
+              name: MeusCursosPage.routeName,
+              path: MeusCursosPage.routePath,
+              builder: (context, params) => const MeusCursosPage(),
+            ),
+            FFRoute(
+              name: PlayerTopicoPage.routeName,
+              path: PlayerTopicoPage.routePath,
+              builder: (context, params) => PlayerTopicoPage(
+                cursoId: params.getParam('cursoId', ParamType.String) ?? '',
+                aulaId: params.getParam('aulaId', ParamType.String) ?? '',
+                topicoId: params.getParam('topicoId', ParamType.String) ?? '',
+              ),
+            ),
+            FFRoute(
+              name: QuizPage.routeName,
+              path: QuizPage.routePath,
+              builder: (context, params) => QuizPage(
+                cursoId: params.getParam('cursoId', ParamType.String) ?? '',
+                aulaId: params.getParam('aulaId', ParamType.String) ?? '',
+                topicoId: params.getParam('topicoId', ParamType.String) ?? '',
+              ),
+            ),
+            FFRoute(
+              name: CertificadoPage.routeName,
+              path: CertificadoPage.routePath,
+              builder: (context, params) => CertificadoPage(
+                inscricaoId: params.getParam('inscricaoId', ParamType.String) ?? '',
+              ),
+            ),
+            // === FIM MÓDULO EAD ===
+*/
+
+/// =====================================================
+/// EXEMPLO DE NAVEGAÇÃO PARA AS ROTAS EAD
+/// =====================================================
+/// 
+/// ```dart
+/// // Ir para Home EAD
+/// context.pushNamed(EadRoutes.eadHome);
+/// 
+/// // Ir para Catálogo de Cursos
+/// context.pushNamed(EadRoutes.catalogoCursos);
+/// 
+/// // Ir para Detalhes do Curso
+/// context.pushNamed(
+///   EadRoutes.cursoDetalhes,
+///   pathParameters: {'cursoId': 'abc123'},
+/// );
+/// 
+/// // Ir para Meus Cursos
+/// context.pushNamed(EadRoutes.meusCursos);
+/// 
+/// // Ir para Player do Tópico
+/// context.pushNamed(
+///   EadRoutes.playerTopico,
+///   pathParameters: {
+///     'cursoId': 'curso123',
+///     'aulaId': 'aula456',
+///     'topicoId': 'topico789',
+///   },
+/// );
+/// 
+/// // Ir para Quiz
+/// context.pushNamed(
+///   EadRoutes.quiz,
+///   pathParameters: {
+///     'cursoId': 'curso123',
+///     'aulaId': 'aula456',
+///     'topicoId': 'topico789',
+///   },
+/// );
+/// 
+/// // Ir para Certificado
+/// context.pushNamed(
+///   EadRoutes.certificado,
+///   pathParameters: {'inscricaoId': 'inscricao_abc'},
+/// );
+/// ```

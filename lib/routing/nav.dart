@@ -10,6 +10,7 @@ import '/data/services/auth/base_auth_user_provider.dart';
 
 import '/data/services/push_notifications/push_notifications_handler.dart' show PushNotificationsHandler;
 import '/index.dart';
+import '/routing/ead_routes.dart';
 import '/main.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
@@ -549,7 +550,55 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: ConquistasPage.routeName,
               path: ConquistasPage.routePath,
               builder: (context, params) => const ConquistasPage(),
-            )
+            ),
+            // EAD Module Routes
+            FFRoute(
+              name: EadRoutes.eadHome,
+              path: EadRoutes.eadHomePath,
+              builder: (context, params) => const EadHomePage(),
+            ),
+            FFRoute(
+              name: EadRoutes.catalogoCursos,
+              path: EadRoutes.catalogoCursosPath,
+              builder: (context, params) => const CatalogoCursosPage(),
+            ),
+            FFRoute(
+              name: EadRoutes.cursoDetalhes,
+              path: EadRoutes.cursoDetalhesPath,
+              builder: (context, params) => CursoDetalhesPage(
+                cursoId: params.getParam('cursoId', ParamType.String)!,
+              ),
+            ),
+            FFRoute(
+              name: EadRoutes.meusCursos,
+              path: EadRoutes.meusCursosPath,
+              builder: (context, params) => const MeusCursosPage(),
+            ),
+            FFRoute(
+              name: EadRoutes.playerTopico,
+              path: EadRoutes.playerTopicoPath,
+              builder: (context, params) => PlayerTopicoPage(
+                cursoId: params.getParam('cursoId', ParamType.String)!,
+                aulaId: params.getParam('aulaId', ParamType.String)!,
+                topicoId: params.getParam('topicoId', ParamType.String)!,
+              ),
+            ),
+            FFRoute(
+              name: EadRoutes.quiz,
+              path: EadRoutes.quizPath,
+              builder: (context, params) => QuizPage(
+                cursoId: params.getParam('cursoId', ParamType.String)!,
+                aulaId: params.getParam('aulaId', ParamType.String)!,
+                topicoId: params.getParam('topicoId', ParamType.String)!,
+              ),
+            ),
+            FFRoute(
+              name: EadRoutes.certificado,
+              path: EadRoutes.certificadoPath,
+              builder: (context, params) => CertificadoPage(
+                cursoId: params.getParam('cursoId', ParamType.String)!,
+              ),
+            ),
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ),
       ].map((r) => r.toRoute(appStateNotifier)).toList(),

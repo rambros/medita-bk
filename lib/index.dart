@@ -68,3 +68,12 @@ export '/ui/desafio/desafio_onboarding_page/desafio_onboarding_page.dart' show D
 export '/ui/desafio/diario_meditacao_page/diario_meditacao_page.dart' show DiarioMeditacaoPage;
 export '/ui/desafio/diario_detalhes_page/diario_detalhes_page.dart' show DiarioDetalhesPage;
 export '/ui/desafio/conquistas_page/conquistas_page.dart' show ConquistasPage;
+
+// EAD Module
+export '/ui/ead/ead_home_page/ead_home_page.dart' show EadHomePage;
+export '/ui/ead/catalogo_cursos_page/catalogo_cursos_page.dart' show CatalogoCursosPage;
+export '/ui/ead/curso_detalhes_page/curso_detalhes_page.dart' show CursoDetalhesPage;
+export '/ui/ead/meus_cursos_page/meus_cursos_page.dart' show MeusCursosPage;
+export '/ui/ead/player_topico_page/player_topico_page.dart' show PlayerTopicoPage;
+export '/ui/ead/quiz_page/quiz_page.dart' show QuizPage;
+export '/ui/ead/certificado_page/certificado_page.dart' show CertificadoPage;

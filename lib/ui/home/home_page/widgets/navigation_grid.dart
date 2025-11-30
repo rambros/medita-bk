@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '/ui/core/flutter_flow/flutter_flow_animations.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
+import '/routing/ead_routes.dart';
 import 'navigation_card.dart';
 
 /// Grid of navigation cards for home page
@@ -50,6 +51,28 @@ class NavigationGrid extends StatelessWidget {
             animation: animationsMap['containerOnPageLoadAnimation2'],
           ),
 
+          // EAD/Cursos card
+          NavigationCard(
+            title: 'Aprender com cursos',
+            icon: Icons.school,
+            gradientColors: const [Color(0xFF7E57C2), Color(0xFFB39DDB)],
+            gradientStops: const [0.0, 1.0],
+            gradientBegin: const AlignmentDirectional(-1.0, 1.0),
+            gradientEnd: const AlignmentDirectional(1.0, -1.0),
+            onTap: () {
+              context.pushNamed(
+                EadRoutes.eadHome,
+                extra: <String, dynamic>{
+                  kTransitionInfoKey: const TransitionInfo(
+                    hasTransition: true,
+                    transitionType: PageTransitionType.leftToRight,
+                  ),
+                },
+              );
+            },
+            animation: animationsMap['containerOnPageLoadAnimation3'],
+          ),
+
           // Agenda card
           NavigationCard(
             title: 'Ver agenda de atividades',
@@ -69,7 +92,7 @@ class NavigationGrid extends StatelessWidget {
                 },
               );
             },
-            animation: animationsMap['containerOnPageLoadAnimation3'],
+            animation: animationsMap['containerOnPageLoadAnimation4'],
           ),
 
           // Daily message card
@@ -91,7 +114,7 @@ class NavigationGrid extends StatelessWidget {
                 },
               );
             },
-            animation: animationsMap['containerOnPageLoadAnimation4'],
+            animation: animationsMap['containerOnPageLoadAnimation5'],
           ),
 
           // Support card
@@ -114,7 +137,7 @@ class NavigationGrid extends StatelessWidget {
                 },
               );
             },
-            animation: animationsMap['containerOnPageLoadAnimation5'],
+            animation: animationsMap['containerOnPageLoadAnimation6'],
           ),
         ],
       ),
