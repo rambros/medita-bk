@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../../app_state.dart';
+import '../../../data/repositories/auth_repository.dart';
 import '../../../routing/ead_routes.dart';
 import 'view_model/certificado_view_model.dart';
 import 'widgets/certificado_widget.dart';
@@ -40,7 +40,10 @@ class _CertificadoPageState extends State<CertificadoPage> {
     super.dispose();
   }
 
-  String? get _usuarioId => FFAppState().currentUser?.uid;
+  String? get _usuarioId {
+    final authRepo = context.read<AuthRepository>();
+    return authRepo.currentUserUid.isEmpty ? null : authRepo.currentUserUid;
+  }
 
   Future<void> _carregarDados() async {
     final usuarioId = _usuarioId;

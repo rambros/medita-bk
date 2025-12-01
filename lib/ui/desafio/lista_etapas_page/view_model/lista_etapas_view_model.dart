@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '/app_state.dart';
+import '/core/state/app_state.dart';
 import '/core/structs/index.dart';
 import '/data/repositories/desafio_repository.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';

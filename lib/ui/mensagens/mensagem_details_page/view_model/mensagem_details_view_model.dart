@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '/data/models/firebase/message_model.dart';
 import '/data/repositories/mensagem_repository.dart';
-import '/app_state.dart';
+import '/core/state/app_state.dart';
 import '/ui/core/flutter_flow/custom_functions.dart' as functions;
 import '/core/utils/logger.dart';
 import 'package:share_plus/share_plus.dart';

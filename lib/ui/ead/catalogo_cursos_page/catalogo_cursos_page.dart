@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../../app_state.dart';
+import '../../../data/repositories/auth_repository.dart';
 import '../../../routing/ead_routes.dart';
 import 'view_model/catalogo_cursos_view_model.dart';
 import 'widgets/curso_card.dart';
@@ -38,7 +38,8 @@ class _CatalogoCursosPageState extends State<CatalogoCursosPage> {
   }
 
   Future<void> _carregarDados() async {
-    final usuarioId = FFAppState().currentUser?.uid;
+    final authRepo = context.read<AuthRepository>();
+    final usuarioId = authRepo.currentUserUid.isEmpty ? null : authRepo.currentUserUid;
     await _viewModel.carregarCursos(usuarioId: usuarioId);
   }
 
@@ -70,9 +71,11 @@ class _CatalogoCursosPageState extends State<CatalogoCursosPage> {
             }
 
             return RefreshIndicator(
-              onRefresh: () => viewModel.refresh(
-                usuarioId: FFAppState().currentUser?.uid,
-              ),
+              onRefresh: () {
+                final authRepo = context.read<AuthRepository>();
+                final usuarioId = authRepo.currentUserUid.isEmpty ? null : authRepo.currentUserUid;
+                return viewModel.refresh(usuarioId: usuarioId);
+              },
               child: _buildLista(viewModel),
             );
           },

@@ -9,7 +9,7 @@ import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/ui/core/flutter_flow/flutter_flow_widgets.dart';
 import '/ui/desafio/widgets/confirma_reset_desafio_widget.dart';
 import '/ui/core/flutter_flow/custom_functions.dart' as functions;
-import '/index.dart';
+import '/ui/pages.dart';
 import '/core/utils/logger.dart';
 
 import 'view_model/home_desafio_view_model.dart';

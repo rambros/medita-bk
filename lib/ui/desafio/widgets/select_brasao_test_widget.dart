@@ -1,6 +1,6 @@
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import '/index.dart';
+import '/ui/pages.dart';
 import 'package:flutter/material.dart';
 import 'select_brasao_test_model.dart';
 export 'select_brasao_test_model.dart';

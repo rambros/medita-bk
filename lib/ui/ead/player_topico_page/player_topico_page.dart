@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../../app_state.dart';
+import '../../../data/repositories/auth_repository.dart';
 import '../../../routing/ead_routes.dart';
 import 'view_model/player_topico_view_model.dart';
 import 'widgets/mark_complete_button.dart';
@@ -52,8 +52,7 @@ class _PlayerTopicoPageState extends State<PlayerTopicoPage> {
   void didUpdateWidget(PlayerTopicoPage oldWidget) {
     super.didUpdateWidget(oldWidget);
     // Se mudou o topico, reinicializa o viewmodel
-    if (oldWidget.topicoId != widget.topicoId ||
-        oldWidget.aulaId != widget.aulaId) {
+    if (oldWidget.topicoId != widget.topicoId || oldWidget.aulaId != widget.aulaId) {
       _viewModel.dispose();
       _initViewModel();
     }
@@ -65,7 +64,8 @@ class _PlayerTopicoPageState extends State<PlayerTopicoPage> {
     super.dispose();
   }
 
-  String? get _usuarioId => FFAppState().currentUser?.uid;
+  String? get _usuarioId =>
+      context.read<AuthRepository>().currentUserUid.isEmpty ? null : context.read<AuthRepository>().currentUserUid;
 
   Future<void> _carregarDados() async {
     await _viewModel.carregarDados(usuarioId: _usuarioId);

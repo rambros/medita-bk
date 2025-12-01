@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../../app_state.dart';
+import '../../../data/repositories/auth_repository.dart';
 import '../../../routing/ead_routes.dart';
 import '../../../ui/core/widgets/html_display_widget.dart';
 import 'view_model/curso_detalhes_view_model.dart';
@@ -43,21 +43,23 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
   }
 
   Future<void> _carregarDados() async {
-    final usuarioId = FFAppState().currentUser?.uid;
+    final authRepo = context.read<AuthRepository>();
+    final usuarioId = authRepo.currentUserUid.isEmpty ? null : authRepo.currentUserUid;
     await _viewModel.carregarDados(usuarioId: usuarioId);
   }
 
   Future<void> _inscrever() async {
-    final user = FFAppState().currentUser;
-    if (user == null) {
+    final authRepo = context.read<AuthRepository>();
+    final user = authRepo.currentUser;
+    if (user == null || authRepo.currentUserUid.isEmpty) {
       _mostrarSnackBar('Faça login para se inscrever');
       return;
     }
 
     final sucesso = await _viewModel.inscrever(
-      usuarioId: user.uid,
-      usuarioNome: user.displayName ?? 'Usuário',
-      usuarioEmail: user.email ?? '',
+      usuarioId: authRepo.currentUserUid,
+      usuarioNome: user.displayName.isEmpty ? 'Usuário' : user.displayName,
+      usuarioEmail: user.email,
       usuarioFoto: user.photoUrl,
     );
 
@@ -195,9 +197,11 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
     final curso = viewModel.curso!;
 
     return RefreshIndicator(
-      onRefresh: () => viewModel.refresh(
-        usuarioId: FFAppState().currentUser?.uid,
-      ),
+      onRefresh: () {
+        final authRepo = context.read<AuthRepository>();
+        final usuarioId = authRepo.currentUserUid.isEmpty ? null : authRepo.currentUserUid;
+        return viewModel.refresh(usuarioId: usuarioId);
+      },
       child: CustomScrollView(
         slivers: [
           // AppBar
@@ -247,7 +251,7 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
                               ),
                         ),
                         const SizedBox(height: 12),
-                        HtmlDisplayWidget(htmlContent: curso.descricao!),
+                        HtmlDisplayWidget(description: curso.descricao!),
                       ],
                     ),
                   ),
@@ -345,9 +349,7 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
               child: SizedBox(
                 width: viewModel.isInscrito ? null : double.infinity,
                 child: ElevatedButton.icon(
-                  onPressed: viewModel.isInscrevendo
-                      ? null
-                      : (viewModel.isInscrito ? _continuarCurso : _inscrever),
+                  onPressed: viewModel.isInscrevendo ? null : (viewModel.isInscrito ? _continuarCurso : _inscrever),
                   icon: viewModel.isInscrevendo
                       ? const SizedBox(
                           width: 20,

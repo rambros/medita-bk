@@ -1,5 +1,6 @@
 /// Enums para o módulo EAD Mobile
 /// Compatíveis com os enums do Web Admin
+library;
 
 import 'package:flutter/material.dart';
 

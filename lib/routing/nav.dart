@@ -9,7 +9,7 @@ import '/core/structs/d21_meditation_model_struct.dart';
 import '/data/services/auth/base_auth_user_provider.dart';
 
 import '/data/services/push_notifications/push_notifications_handler.dart' show PushNotificationsHandler;
-import '/index.dart';
+import '/ui/pages.dart';
 import '/routing/ead_routes.dart';
 import '/main.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';

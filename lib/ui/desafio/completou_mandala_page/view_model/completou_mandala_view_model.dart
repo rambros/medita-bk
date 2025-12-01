@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/app_state.dart';
+import '/core/state/app_state.dart';
 import '/core/structs/index.dart';
 
 class CompletouMandalaViewModel extends ChangeNotifier {

@@ -1,9 +1,10 @@
 /// Barrel file para o modulo EAD
-/// 
+///
 /// Uso:
 /// ```dart
 /// import 'package:medita_bk/ui/ead/index.dart';
 /// ```
+library;
 
 // Pages
 export 'ead_home_page/ead_home_page.dart';

@@ -6,7 +6,7 @@ import '/ui/core/flutter_flow/flutter_flow_widgets.dart';
 import '/ui/playlist/select_audio_dialog/select_audio_dialog.dart';
 import '/ui/core/utils/ui_utils.dart';
 import '/ui/core/flutter_flow/custom_functions.dart' as functions;
-import '/index.dart';
+import '/ui/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';

@@ -146,8 +146,6 @@ class CursoInfoHeader extends StatelessWidget {
   }
 
   Widget _buildMetricas(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Row(
       children: [
         _MetricaItem(
@@ -179,9 +177,7 @@ class CursoInfoHeader extends StatelessWidget {
         CircleAvatar(
           radius: 20,
           backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
-          backgroundImage: autor.imagemUrl != null
-              ? CachedNetworkImageProvider(autor.imagemUrl!)
-              : null,
+          backgroundImage: autor.imagemUrl != null ? CachedNetworkImageProvider(autor.imagemUrl!) : null,
           child: autor.imagemUrl == null
               ? Text(
                   autor.iniciais,

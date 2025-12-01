@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '/ui/core/flutter_flow/flutter_flow_animations.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import '/index.dart';
+import '/ui/pages.dart';
 import '/routing/ead_routes.dart';
 import 'navigation_card.dart';
 

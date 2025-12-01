@@ -12,7 +12,7 @@ import '/core/utils/network_utils.dart';
 import '/core/utils/media/audio_utils.dart';
 import '/ui/core/flutter_flow/custom_functions.dart' as functions;
 import '/data/repositories/auth_repository.dart';
-import '/index.dart';
+import '/ui/pages.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';

@@ -16,13 +16,13 @@ import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/ui/core/flutter_flow/internationalization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'index.dart';
+import '/ui/pages.dart';
 import '/core/controllers/index.dart';
 
 import 'dart:ui' as ui;
 
 import '/data/repositories/index.dart';
-import '/view_models.dart';
+import '/ui/view_models.dart';
 import '/data/services/auth/firebase_auth/firebase_auth_service.dart';
 
 void main() async {

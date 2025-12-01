@@ -8,7 +8,7 @@ import '/ui/playlist/select_audio_dialog/select_audio_dialog.dart';
 import '/core/utils/media/audio_utils.dart';
 import '/ui/core/utils/ui_utils.dart';
 import '/ui/core/flutter_flow/custom_functions.dart' as functions;
-import '/index.dart';
+import '/ui/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';

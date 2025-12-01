@@ -3,7 +3,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
+import '/core/state/app_state.dart';
 
 /// Network utilities for connectivity and file downloads
 class NetworkUtils {

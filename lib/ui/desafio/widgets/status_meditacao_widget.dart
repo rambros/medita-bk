@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import '/core/enums/enums.dart';
 import '/data/repositories/auth_repository.dart';
-import '/index.dart';
+import '/ui/pages.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/ui/core/flutter_flow/custom_functions.dart' as functions;

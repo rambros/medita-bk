@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '/app_state.dart';
+import '/core/state/app_state.dart';
 import '/data/models/firebase/desafio21_model.dart';
 import '/data/repositories/home_repository.dart';
 import '/data/repositories/auth_repository.dart';
