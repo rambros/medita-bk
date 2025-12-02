@@ -78,18 +78,20 @@ class _QuizPageState extends State<QuizPage> {
   Future<void> _finalizarQuiz() async {
     final usuarioId = _usuarioId;
     if (usuarioId == null) {
-      _mostrarSnackBar('Faca login para completar o quiz');
+      _mostrarSnackBar('Faça login para completar a avaliação');
       return;
     }
+
+    final appTheme = AppTheme.of(context);
 
     // Confirma se quer finalizar
     final confirmar = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Finalizar Quiz'),
+        title: const Text('Finalizar Avaliação'),
         content: const Text(
-          'Tem certeza que deseja finalizar o quiz?\n'
-          'Suas respostas serao avaliadas.',
+          'Tem certeza que deseja finalizar a avaliação?\n'
+          'Suas respostas serão avaliadas.',
         ),
         actions: [
           TextButton(
@@ -98,6 +100,10 @@ class _QuizPageState extends State<QuizPage> {
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: appTheme.primary,
+              foregroundColor: appTheme.info,
+            ),
             child: const Text('Finalizar'),
           ),
         ],
@@ -145,11 +151,15 @@ class _QuizPageState extends State<QuizPage> {
 
   @override
   Widget build(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     return ChangeNotifierProvider.value(
       value: _viewModel,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(_modoRevisao ? 'Revisao' : 'Quiz'),
+          backgroundColor: appTheme.primary,
+          foregroundColor: appTheme.info,
+          title: Text(_modoRevisao ? 'Revisão' : 'Avaliação'),
           leading: IconButton(
             icon: const Icon(Icons.close),
             onPressed: () {
@@ -226,6 +236,8 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   Widget _buildSemPerguntas() {
+    final appTheme = AppTheme.of(context);
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -233,13 +245,17 @@ class _QuizPageState extends State<QuizPage> {
           Icon(
             Icons.quiz_outlined,
             size: 64,
-            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
+            color: appTheme.primary.withOpacity(0.5),
           ),
           const SizedBox(height: 16),
-          const Text('Quiz sem perguntas'),
+          const Text('Avaliação sem perguntas'),
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () => context.pop(),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: appTheme.primary,
+              foregroundColor: appTheme.info,
+            ),
             child: const Text('Voltar'),
           ),
         ],
@@ -280,13 +296,15 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   Widget _buildNavigationBar(QuizViewModel viewModel, bool mostrarResultado) {
+    final appTheme = AppTheme.of(context);
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
+        color: appTheme.secondaryBackground,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: Colors.black.withOpacity(0.1),
             blurRadius: 8,
             offset: const Offset(0, -2),
           ),
@@ -295,13 +313,17 @@ class _QuizPageState extends State<QuizPage> {
       child: SafeArea(
         child: Row(
           children: [
-            // Botao anterior
+            // Botão anterior
             if (!viewModel.isPrimeiraPergunta)
               Expanded(
                 child: OutlinedButton.icon(
                   onPressed: _perguntaAnterior,
                   icon: const Icon(Icons.arrow_back, size: 18),
                   label: const Text('Anterior'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: appTheme.primary,
+                    side: BorderSide(color: appTheme.primary),
+                  ),
                 ),
               )
             else
@@ -309,7 +331,7 @@ class _QuizPageState extends State<QuizPage> {
 
             const SizedBox(width: 16),
 
-            // Botao proximo/finalizar
+            // Botão próximo/finalizar
             Expanded(
               child: _buildNextButton(viewModel, mostrarResultado),
             ),
@@ -320,23 +342,33 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   Widget _buildNextButton(QuizViewModel viewModel, bool mostrarResultado) {
-    // Se esta em modo revisao
+    final appTheme = AppTheme.of(context);
+
+    // Se está em modo revisão
     if (mostrarResultado) {
       if (viewModel.isUltimaPergunta) {
         return ElevatedButton.icon(
           onPressed: _sairModoRevisao,
           icon: const Icon(Icons.check, size: 18),
           label: const Text('Ver resultado'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: appTheme.primary,
+            foregroundColor: appTheme.info,
+          ),
         );
       }
       return ElevatedButton.icon(
         onPressed: _proximaPergunta,
-        icon: const Text('Proxima'),
+        icon: const Text('Próxima'),
         label: const Icon(Icons.arrow_forward, size: 18),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: appTheme.primary,
+          foregroundColor: appTheme.info,
+        ),
       );
     }
 
-    // Se e a ultima pergunta
+    // Se é a última pergunta
     if (viewModel.isUltimaPergunta) {
       return ElevatedButton.icon(
         onPressed: viewModel.todasRespondidas
@@ -346,24 +378,32 @@ class _QuizPageState extends State<QuizPage> {
               }
             : null,
         icon: viewModel.isSubmitting
-            ? const SizedBox(
+            ? SizedBox(
                 width: 18,
                 height: 18,
-                child: CircularProgressIndicator(strokeWidth: 2),
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: appTheme.info,
+                ),
               )
             : const Icon(Icons.check, size: 18),
         label: const Text('Finalizar'),
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppTheme.of(context).primary,
+          backgroundColor: appTheme.primary,
+          foregroundColor: appTheme.info,
         ),
       );
     }
 
-    // Proxima pergunta
+    // Próxima pergunta
     return ElevatedButton.icon(
       onPressed: viewModel.perguntaAtualRespondida ? _proximaPergunta : null,
-      icon: const Text('Proxima'),
+      icon: const Text('Próxima'),
       label: const Icon(Icons.arrow_forward, size: 18),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: appTheme.primary,
+        foregroundColor: appTheme.info,
+      ),
     );
   }
 
@@ -373,13 +413,15 @@ class _QuizPageState extends State<QuizPage> {
       return;
     }
 
+    final appTheme = AppTheme.of(context);
+
     final confirmar = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Sair do Quiz'),
+        title: const Text('Sair da Avaliação'),
         content: const Text(
           'Tem certeza que deseja sair?\n'
-          'Seu progresso sera perdido.',
+          'Seu progresso será perdido.',
         ),
         actions: [
           TextButton(
@@ -389,7 +431,8 @@ class _QuizPageState extends State<QuizPage> {
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
+              backgroundColor: appTheme.error,
+              foregroundColor: appTheme.info,
             ),
             child: const Text('Sair'),
           ),

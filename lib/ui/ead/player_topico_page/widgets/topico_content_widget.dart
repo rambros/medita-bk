@@ -13,11 +13,13 @@ class TopicoContentWidget extends StatelessWidget {
     required this.topico,
     this.cursoTitulo,
     this.cursoImagem,
+    this.onIniciarQuiz,
   });
 
   final TopicoModel topico;
   final String? cursoTitulo;
   final String? cursoImagem;
+  final VoidCallback? onIniciarQuiz;
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +150,7 @@ class TopicoContentWidget extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              'Este topico contem um quiz',
+              'Este tópico contem uma avaliação',
               style: appTheme.titleLarge.copyWith(
                 color: appTheme.primaryText,
               ),
@@ -163,11 +165,9 @@ class TopicoContentWidget extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
-              onPressed: () {
-                // Navegar para quiz
-              },
+              onPressed: onIniciarQuiz,
               icon: const Icon(Icons.play_arrow),
-              label: const Text('Iniciar Quiz'),
+              label: const Text('Iniciar Avaliação'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: appTheme.primary,
                 foregroundColor: appTheme.info,

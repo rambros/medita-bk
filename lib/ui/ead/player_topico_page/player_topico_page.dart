@@ -268,39 +268,16 @@ class _PlayerTopicoPageState extends State<PlayerTopicoPage> {
                   topico: topico,
                   cursoTitulo: viewModel.curso?.titulo,
                   cursoImagem: viewModel.curso?.imagemCapa,
+                  onIniciarQuiz: viewModel.isInscrito ? _navegarParaQuiz : null,
                 ),
 
-                // Card de conclusao (se inscrito)
+                // Card de conclusao (se inscrito e nao for quiz)
                 if (viewModel.isInscrito && !viewModel.isQuiz)
                   CompletionCard(
                     isCompleto: viewModel.isTopicoCompleto,
                     isLoading: viewModel.isMarcandoCompleto,
                     onToggle: _toggleCompleto,
                     progressoCurso: viewModel.progressoCurso,
-                  ),
-
-                // Botao para quiz (se for tipo quiz)
-                if (viewModel.isQuiz && viewModel.isInscrito)
-                  Builder(
-                    builder: (context) {
-                      final appTheme = AppTheme.of(context);
-                      return Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton.icon(
-                            onPressed: _navegarParaQuiz,
-                            icon: const Icon(Icons.quiz),
-                            label: const Text('Iniciar Quiz'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: appTheme.primary,
-                              foregroundColor: appTheme.info,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
                   ),
 
                 const SizedBox(height: 80), // Espaco para navegacao

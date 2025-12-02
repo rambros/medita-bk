@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
@@ -251,19 +253,58 @@ class EadService {
     final topicoDoc =
         await _topicosCollection(cursoId, aulaId).doc(topicoId).get();
 
-    if (!topicoDoc.exists) return [];
+    if (!topicoDoc.exists) {
+      debugPrint('EadService.getQuizByTopico: Topico nao encontrado');
+      return [];
+    }
 
     final data = topicoDoc.data();
-    final quizData = data?['quiz'] as List<dynamic>? ?? [];
 
-    return quizData
-        .asMap()
-        .entries
-        .map((entry) => QuizQuestionModel.fromMap(
-              entry.value as Map<String, dynamic>,
-              'question_${entry.key}',
-            ))
-        .toList();
+    // O quiz está armazenado em conteudo.htmlContent como JSON string
+    final conteudo = data?['conteudo'] as Map<String, dynamic>?;
+    final htmlContent = conteudo?['htmlContent'] as String?;
+
+    if (htmlContent == null || htmlContent.isEmpty) {
+      debugPrint('EadService.getQuizByTopico: htmlContent vazio');
+      return [];
+    }
+
+    try {
+      // Parse do JSON
+      final quizJson = jsonDecode(htmlContent) as Map<String, dynamic>;
+      final perguntasList = quizJson['perguntas'] as List<dynamic>? ?? [];
+
+      debugPrint('EadService.getQuizByTopico: ${perguntasList.length} perguntas encontradas');
+
+      // Converte para o modelo QuizQuestionModel
+      return perguntasList.asMap().entries.map((entry) {
+        final perguntaMap = entry.value as Map<String, dynamic>;
+        final opcoesList = perguntaMap['opcoes'] as List<dynamic>? ?? [];
+        final respostaCorretaIndex = perguntaMap['respostaCorretaIndex'] as int? ?? 0;
+
+        // Converte opcoes (array de strings) para QuizOpcaoModel
+        final opcoes = opcoesList.asMap().entries.map((opcaoEntry) {
+          final texto = opcaoEntry.value as String? ?? '';
+          final isCorreta = opcaoEntry.key == respostaCorretaIndex;
+          return QuizOpcaoModel(
+            id: 'opcao_${opcaoEntry.key}',
+            texto: texto,
+            isCorreta: isCorreta,
+            ordem: opcaoEntry.key,
+          );
+        }).toList();
+
+        return QuizQuestionModel(
+          id: 'question_${entry.key}',
+          pergunta: perguntaMap['titulo'] as String? ?? '',
+          opcoes: opcoes,
+          ordem: entry.key,
+        );
+      }).toList();
+    } catch (e) {
+      debugPrint('EadService.getQuizByTopico: Erro ao fazer parse do quiz: $e');
+      return [];
+    }
   }
 
   // === Helpers ===

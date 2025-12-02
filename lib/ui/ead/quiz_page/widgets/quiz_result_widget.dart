@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../domain/models/ead/index.dart';
+import '../../../core/theme/app_theme.dart';
 
 /// Widget que exibe o resultado do quiz
 class QuizResultWidget extends StatelessWidget {
@@ -230,9 +231,12 @@ class QuizProgressIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     return Container(
       height: 40,
       padding: const EdgeInsets.symmetric(horizontal: 16),
+      color: appTheme.primary,
       child: Row(
         children: List.generate(totalPerguntas, (index) {
           final isAtual = index == perguntaAtual;
@@ -246,10 +250,10 @@ class QuizProgressIndicator extends StatelessWidget {
                 height: 8,
                 decoration: BoxDecoration(
                   color: isAtual
-                      ? Theme.of(context).colorScheme.primary
+                      ? appTheme.info
                       : isRespondida
-                          ? Theme.of(context).colorScheme.primary.withOpacity(0.5)
-                          : Theme.of(context).colorScheme.surfaceContainerHighest,
+                          ? appTheme.info.withOpacity(0.7)
+                          : appTheme.info.withOpacity(0.3),
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
