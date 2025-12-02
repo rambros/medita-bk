@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../domain/models/ead/index.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/you_tube_player_widget.dart';
 import '../../../core/widgets/audio_player_widget.dart';
 import '../../../core/widgets/html_display_widget.dart';
@@ -64,6 +65,7 @@ class TopicoContentWidget extends StatelessWidget {
   }
 
   Widget _buildAudioPlayer(BuildContext context) {
+    final appTheme = AppTheme.of(context);
     final url = topico.url;
     if (url == null || url.isEmpty) {
       return _buildConteudoIndisponivel(context, 'Audio nao disponivel');
@@ -72,45 +74,37 @@ class TopicoContentWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Capa do audio
-        AspectRatio(
-          aspectRatio: 16 / 9,
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Theme.of(context).colorScheme.primary,
-                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.7),
-                ],
-              ),
-            ),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                // Icone de audio
-                Icon(
-                  Icons.headphones,
-                  size: 80,
-                  color: Colors.white.withValues(alpha: 0.3),
-                ),
-                // Titulo
-                Positioned(
-                  bottom: 16,
-                  left: 16,
-                  right: 16,
-                  child: Text(
-                    topico.titulo,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+        // Header compacto com icone e titulo
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                appTheme.primary,
+                appTheme.primary.withOpacity(0.8),
               ],
             ),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.headphones,
+                size: 32,
+                color: appTheme.info.withOpacity(0.8),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  topico.titulo,
+                  style: appTheme.titleMedium.copyWith(
+                    color: appTheme.info,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         // Player de audio
@@ -128,6 +122,7 @@ class TopicoContentWidget extends StatelessWidget {
   }
 
   Widget _buildTextoContent(BuildContext context) {
+    final appTheme = AppTheme.of(context);
     final html = topico.htmlContent;
     if (html == null || html.isEmpty) {
       return _buildConteudoIndisponivel(context, 'Conteudo nao disponivel');
@@ -144,21 +139,22 @@ class TopicoContentWidget extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                  color: appTheme.primary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
                   Icons.article,
-                  color: Theme.of(context).colorScheme.primary,
+                  color: appTheme.primary,
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   topico.titulo,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: appTheme.titleLarge.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: appTheme.primaryText,
+                  ),
                 ),
               ),
             ],
@@ -172,6 +168,8 @@ class TopicoContentWidget extends StatelessWidget {
   }
 
   Widget _buildQuizPlaceholder(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -181,20 +179,22 @@ class TopicoContentWidget extends StatelessWidget {
             Icon(
               Icons.quiz,
               size: 80,
-              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
+              color: appTheme.primary.withOpacity(0.5),
             ),
             const SizedBox(height: 24),
             Text(
               'Este topico contem um quiz',
-              style: Theme.of(context).textTheme.titleLarge,
+              style: appTheme.titleLarge.copyWith(
+                color: appTheme.primaryText,
+              ),
             ),
             const SizedBox(height: 8),
             Text(
               'Teste seus conhecimentos respondendo as perguntas',
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).textTheme.bodySmall?.color,
-                  ),
+              style: appTheme.bodyMedium.copyWith(
+                color: appTheme.secondaryText,
+              ),
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
@@ -204,6 +204,8 @@ class TopicoContentWidget extends StatelessWidget {
               icon: const Icon(Icons.play_arrow),
               label: const Text('Iniciar Quiz'),
               style: ElevatedButton.styleFrom(
+                backgroundColor: appTheme.primary,
+                foregroundColor: appTheme.info,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 32,
                   vertical: 16,
@@ -217,32 +219,26 @@ class TopicoContentWidget extends StatelessWidget {
   }
 
   Widget _buildDescricao(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     if (topico.descricao == null || topico.descricao!.isEmpty) {
       return const SizedBox.shrink();
     }
 
     return Padding(
       padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Sobre este topico',
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            topico.descricao!,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-        ],
+      child: Text(
+        topico.descricao!,
+        style: appTheme.bodyMedium.copyWith(
+          color: appTheme.secondaryText,
+        ),
       ),
     );
   }
 
   Widget _buildConteudoIndisponivel(BuildContext context, String mensagem) {
+    final appTheme = AppTheme.of(context);
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -252,13 +248,15 @@ class TopicoContentWidget extends StatelessWidget {
             Icon(
               Icons.error_outline,
               size: 64,
-              color: Theme.of(context).colorScheme.error.withValues(alpha: 0.5),
+              color: appTheme.error.withOpacity(0.5),
             ),
             const SizedBox(height: 16),
             Text(
               mensagem,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleMedium,
+              style: appTheme.titleMedium.copyWith(
+                color: appTheme.primaryText,
+              ),
             ),
           ],
         ),

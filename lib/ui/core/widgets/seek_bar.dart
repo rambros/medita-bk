@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import '/ui/core/flutter_flow/flutter_flow_theme.dart';
+import '/ui/core/theme/app_theme.dart';
 
 class SeekBar extends StatefulWidget {
   final Duration duration;
@@ -31,16 +31,19 @@ class SeekBarState extends State<SeekBar> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    final appTheme = AppTheme.of(context);
 
     _sliderThemeData = SliderTheme.of(context).copyWith(
       trackHeight: 2.0,
-      activeTrackColor: widget.color ?? Colors.blue.shade100,
-      thumbColor: widget.color ?? Colors.blue.shade100,
+      activeTrackColor: widget.color ?? appTheme.primary,
+      thumbColor: widget.color ?? appTheme.primary,
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     return Stack(
       children: [
         SliderTheme(
@@ -48,8 +51,8 @@ class SeekBarState extends State<SeekBar> {
             thumbShape: const RoundSliderThumbShape(
               enabledThumbRadius: 0.0,
             ),
-            activeTrackColor: widget.color ?? Colors.blue.shade100,
-            inactiveTrackColor: Colors.grey.shade300,
+            activeTrackColor: widget.color ?? appTheme.primary,
+            inactiveTrackColor: appTheme.accent4,
           ),
           child: ExcludeSemantics(
             child: Slider(
@@ -98,16 +101,17 @@ class SeekBarState extends State<SeekBar> {
             },
           ),
         ),
-        Positioned(
-          right: 16.0,
-          bottom: -5.0,
-          child: Text(
-            RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$').firstMatch("$_remaining")?.group(1) ?? '$_remaining',
-            style: Theme.of(context).textTheme.bodyLarge!.override(
-                  fontFamily: 'Poppins',
-                  fontSize: 16.0,
-                  color: widget.color ?? Colors.blue.shade100,
-                ),
+        Padding(
+          padding: const EdgeInsets.only(top: 32, right: 16),
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$').firstMatch("$_remaining")?.group(1) ?? '$_remaining',
+              style: appTheme.bodyMedium.copyWith(
+                color: widget.color ?? appTheme.primary,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ),
         ),
       ],

@@ -131,11 +131,11 @@ enum StatusInscricao {
   Color get color {
     switch (this) {
       case StatusInscricao.ativo:
-        return Colors.green;
+        return Colors.blue;
       case StatusInscricao.pausado:
         return Colors.orange;
       case StatusInscricao.concluido:
-        return Colors.blue;
+        return Colors.green;
       case StatusInscricao.cancelado:
         return Colors.red;
     }

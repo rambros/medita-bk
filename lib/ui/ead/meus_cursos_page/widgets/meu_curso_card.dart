@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../domain/models/ead/index.dart';
+import '../../../core/theme/app_theme.dart';
 
 /// Card para exibição de um curso inscrito na lista "Meus Cursos"
 /// Foco em mostrar progresso e permitir continuação rápida
@@ -22,7 +23,7 @@ class MeuCursoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final appTheme = AppTheme.of(context);
 
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -47,8 +48,9 @@ class MeuCursoCard extends StatelessWidget {
                   // Título
                   Text(
                     inscricao.cursoTitulo,
-                    style: theme.textTheme.titleMedium?.copyWith(
+                    style: appTheme.titleMedium.copyWith(
                       fontWeight: FontWeight.bold,
+                      color: appTheme.primaryText,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -127,19 +129,21 @@ class MeuCursoCard extends StatelessWidget {
   }
 
   Widget _buildPlaceholder(BuildContext context) {
+    final appTheme = AppTheme.of(context);
     return Container(
-      color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+      color: appTheme.primary.withOpacity(0.1),
       child: Center(
         child: Icon(
           Icons.school,
           size: 40,
-          color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+          color: appTheme.primary.withOpacity(0.5),
         ),
       ),
     );
   }
 
   Widget _buildStatusBadge(BuildContext context) {
+    final appTheme = AppTheme.of(context);
     final status = inscricao.status;
 
     return Container(
@@ -151,12 +155,12 @@ class MeuCursoCard extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(status.icon, size: 14, color: Colors.white),
+          Icon(status.icon, size: 14, color: appTheme.info),
           const SizedBox(width: 4),
           Text(
             status.label,
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              color: appTheme.info,
               fontSize: 11,
               fontWeight: FontWeight.w600,
             ),
@@ -167,11 +171,13 @@ class MeuCursoCard extends StatelessWidget {
   }
 
   Widget _buildProgressCircle(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     return Container(
       width: 50,
       height: 50,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: appTheme.info,
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
@@ -190,10 +196,8 @@ class MeuCursoCard extends StatelessWidget {
             child: CircularProgressIndicator(
               value: progresso / 100,
               strokeWidth: 4,
-              backgroundColor: Colors.grey.shade200,
-              valueColor: AlwaysStoppedAnimation<Color>(
-                isConcluido ? Colors.green : Theme.of(context).colorScheme.primary,
-              ),
+              backgroundColor: appTheme.accent4,
+              valueColor: AlwaysStoppedAnimation<Color>(appTheme.primary),
             ),
           ),
           Text(
@@ -201,7 +205,7 @@ class MeuCursoCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.bold,
-              color: isConcluido ? Colors.green : Theme.of(context).colorScheme.primary,
+              color: appTheme.primary,
             ),
           ),
         ],
@@ -210,7 +214,7 @@ class MeuCursoCard extends StatelessWidget {
   }
 
   Widget _buildStatusInfo(BuildContext context) {
-    final theme = Theme.of(context);
+    final appTheme = AppTheme.of(context);
     final ultimoAcesso = inscricao.progresso.ultimoAcesso;
 
     return Row(
@@ -219,12 +223,12 @@ class MeuCursoCard extends StatelessWidget {
         Icon(
           Icons.check_circle_outline,
           size: 16,
-          color: theme.textTheme.bodySmall?.color,
+          color: appTheme.secondaryText,
         ),
         const SizedBox(width: 4),
         Text(
           '${inscricao.topicosCompletos}/${inscricao.totalTopicos} tópicos',
-          style: theme.textTheme.bodySmall,
+          style: appTheme.bodySmall,
         ),
 
         const SizedBox(width: 16),
@@ -234,12 +238,12 @@ class MeuCursoCard extends StatelessWidget {
           Icon(
             Icons.access_time,
             size: 16,
-            color: theme.textTheme.bodySmall?.color,
+            color: appTheme.secondaryText,
           ),
           const SizedBox(width: 4),
           Text(
             _formatarUltimoAcesso(ultimoAcesso),
-            style: theme.textTheme.bodySmall,
+            style: appTheme.bodySmall,
           ),
         ],
       ],
@@ -247,6 +251,8 @@ class MeuCursoCard extends StatelessWidget {
   }
 
   Widget _buildProgressBar(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -255,16 +261,16 @@ class MeuCursoCard extends StatelessWidget {
           children: [
             Text(
               'Progresso',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
+              style: appTheme.bodySmall.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
             ),
             Text(
               isConcluido ? 'Concluído!' : '${progresso.toStringAsFixed(0)}%',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: isConcluido ? Colors.green : null,
-                  ),
+              style: appTheme.bodySmall.copyWith(
+                fontWeight: FontWeight.bold,
+                color: isConcluido ? appTheme.primary : appTheme.primaryText,
+              ),
             ),
           ],
         ),
@@ -274,10 +280,8 @@ class MeuCursoCard extends StatelessWidget {
           child: LinearProgressIndicator(
             value: progresso / 100,
             minHeight: 8,
-            backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-            valueColor: AlwaysStoppedAnimation<Color>(
-              isConcluido ? Colors.green : Theme.of(context).colorScheme.primary,
-            ),
+            backgroundColor: appTheme.accent4,
+            valueColor: AlwaysStoppedAnimation<Color>(appTheme.primary),
           ),
         ),
       ],
@@ -285,6 +289,7 @@ class MeuCursoCard extends StatelessWidget {
   }
 
   Widget _buildActionButton(BuildContext context) {
+    final appTheme = AppTheme.of(context);
     final buttonText = inscricao.textoBotaoAcao;
     final icon = _getActionIcon();
 
@@ -296,10 +301,8 @@ class MeuCursoCard extends StatelessWidget {
         label: Text(buttonText),
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 12),
-          backgroundColor: isConcluido
-              ? Colors.green
-              : Theme.of(context).colorScheme.primary,
-          foregroundColor: Colors.white,
+          backgroundColor: appTheme.primary,
+          foregroundColor: appTheme.info,
         ),
       ),
     );

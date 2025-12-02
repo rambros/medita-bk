@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../domain/models/ead/index.dart';
+import '../../../core/theme/app_theme.dart';
 
 /// Header com informacoes do topico atual
 class TopicoHeaderWidget extends StatelessWidget {
@@ -23,12 +24,12 @@ class TopicoHeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final appTheme = AppTheme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
+        color: appTheme.secondaryBackground,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -48,7 +49,10 @@ class TopicoHeaderWidget extends StatelessWidget {
                 if (onBack != null)
                   IconButton(
                     onPressed: onBack,
-                    icon: const Icon(Icons.arrow_back),
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: appTheme.primary,
+                    ),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                   ),
@@ -56,8 +60,8 @@ class TopicoHeaderWidget extends StatelessWidget {
                 Expanded(
                   child: Text(
                     tituloAula,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.primary,
+                    style: appTheme.bodySmall.copyWith(
+                      color: appTheme.primary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -70,13 +74,13 @@ class TopicoHeaderWidget extends StatelessWidget {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.primaryContainer,
+                      color: appTheme.primary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
                       textoProgresso!,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onPrimaryContainer,
+                      style: appTheme.bodySmall.copyWith(
+                        color: appTheme.primary,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -91,15 +95,13 @@ class TopicoHeaderWidget extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: isCompleto
-                        ? Colors.green.withOpacity(0.1)
-                        : theme.colorScheme.primary.withOpacity(0.1),
+                    color: appTheme.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
                     isCompleto ? Icons.check_circle : tipo.icon,
                     size: 20,
-                    color: isCompleto ? Colors.green : theme.colorScheme.primary,
+                    color: appTheme.primary,
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -109,8 +111,9 @@ class TopicoHeaderWidget extends StatelessWidget {
                     children: [
                       Text(
                         tituloTopico,
-                        style: theme.textTheme.titleMedium?.copyWith(
+                        style: appTheme.titleMedium.copyWith(
                           fontWeight: FontWeight.bold,
+                          color: appTheme.primaryText,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -124,13 +127,14 @@ class TopicoHeaderWidget extends StatelessWidget {
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: theme.colorScheme.surfaceContainerHighest,
+                              color: appTheme.accent4,
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Text(
                               tipo.label,
-                              style: theme.textTheme.bodySmall?.copyWith(
+                              style: appTheme.bodySmall.copyWith(
                                 fontSize: 10,
+                                color: appTheme.secondaryText,
                               ),
                             ),
                           ),
@@ -138,16 +142,16 @@ class TopicoHeaderWidget extends StatelessWidget {
                             const SizedBox(width: 8),
                             Row(
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.check_circle,
                                   size: 14,
-                                  color: Colors.green,
+                                  color: appTheme.primary,
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
                                   'Concluido',
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    color: Colors.green,
+                                  style: appTheme.bodySmall.copyWith(
+                                    color: appTheme.primary,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),

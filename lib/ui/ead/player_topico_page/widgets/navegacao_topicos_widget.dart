@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_theme.dart';
+
 /// Widget de navegacao entre topicos
 class NavegacaoTopicosWidget extends StatelessWidget {
   const NavegacaoTopicosWidget({
@@ -19,21 +21,22 @@ class NavegacaoTopicosWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final appTheme = AppTheme.of(context);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
+        color: appTheme.secondaryBackground,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, -2),
+            blurRadius: 4,
+            offset: const Offset(0, -1),
           ),
         ],
       ),
       child: SafeArea(
+        top: false,
         child: Row(
           children: [
             // Botao anterior
@@ -41,10 +44,13 @@ class NavegacaoTopicosWidget extends StatelessWidget {
               child: hasAnterior
                   ? OutlinedButton.icon(
                       onPressed: onAnterior,
-                      icon: const Icon(Icons.arrow_back, size: 18),
+                      icon: const Icon(Icons.arrow_back, size: 16),
                       label: const Text('Anterior'),
                       style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        foregroundColor: appTheme.primary,
+                        side: BorderSide(color: appTheme.primary),
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        minimumSize: const Size(0, 36),
                       ),
                     )
                   : const SizedBox.shrink(),
@@ -52,14 +58,15 @@ class NavegacaoTopicosWidget extends StatelessWidget {
 
             // Indicador de progresso
             if (textoProgresso != null) ...[
-              const SizedBox(width: 16),
+              const SizedBox(width: 12),
               Text(
                 textoProgresso!,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.textTheme.bodySmall?.color?.withOpacity(0.6),
+                style: appTheme.bodySmall.copyWith(
+                  color: appTheme.secondaryText,
+                  fontSize: 11,
                 ),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: 12),
             ],
 
             // Botao proximo
@@ -67,18 +74,24 @@ class NavegacaoTopicosWidget extends StatelessWidget {
               child: hasProximo
                   ? ElevatedButton.icon(
                       onPressed: onProximo,
-                      icon: const Text('Proximo'),
-                      label: const Icon(Icons.arrow_forward, size: 18),
+                      icon: const Text('Próximo'),
+                      label: const Icon(Icons.arrow_forward, size: 16),
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        backgroundColor: appTheme.primary,
+                        foregroundColor: appTheme.info,
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        minimumSize: const Size(0, 36),
                       ),
                     )
                   : ElevatedButton.icon(
                       onPressed: null,
-                      icon: const Icon(Icons.check_circle, size: 18),
-                      label: const Text('Fim do curso'),
+                      icon: const Icon(Icons.check_circle, size: 16),
+                      label: const Text('Fim'),
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        backgroundColor: appTheme.primary,
+                        foregroundColor: appTheme.info,
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        minimumSize: const Size(0, 36),
                       ),
                     ),
             ),
@@ -106,17 +119,25 @@ class NavegacaoCompactaWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(
           onPressed: hasAnterior ? onAnterior : null,
-          icon: const Icon(Icons.skip_previous),
+          icon: Icon(
+            Icons.skip_previous,
+            color: hasAnterior ? appTheme.primary : appTheme.secondaryText,
+          ),
           tooltip: 'Topico anterior',
         ),
         IconButton(
           onPressed: hasProximo ? onProximo : null,
-          icon: const Icon(Icons.skip_next),
+          icon: Icon(
+            Icons.skip_next,
+            color: hasProximo ? appTheme.primary : appTheme.secondaryText,
+          ),
           tooltip: 'Proximo topico',
         ),
       ],

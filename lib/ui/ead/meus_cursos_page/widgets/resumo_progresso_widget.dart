@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_theme.dart';
 import '../view_model/meus_cursos_view_model.dart';
 
 /// Widget que exibe um resumo do progresso geral do usuário
@@ -17,7 +18,7 @@ class ResumoProgressoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final appTheme = AppTheme.of(context);
 
     return Container(
       margin: const EdgeInsets.all(16),
@@ -25,8 +26,8 @@ class ResumoProgressoWidget extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            theme.colorScheme.primary,
-            theme.colorScheme.primary.withOpacity(0.8),
+            appTheme.primary,
+            appTheme.secondary,
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -34,7 +35,7 @@ class ResumoProgressoWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: theme.colorScheme.primary.withOpacity(0.3),
+            color: appTheme.primary.withOpacity(0.3),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -44,7 +45,7 @@ class ResumoProgressoWidget extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.school, color: Colors.white, size: 28),
+              Icon(Icons.school, color: appTheme.info, size: 28),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -52,15 +53,15 @@ class ResumoProgressoWidget extends StatelessWidget {
                   children: [
                     Text(
                       'Meu Progresso',
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: Colors.white,
+                      style: appTheme.titleMedium.copyWith(
+                        color: appTheme.info,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
                       '$totalCursos ${totalCursos == 1 ? 'curso' : 'cursos'} no total',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: Colors.white.withOpacity(0.8),
+                      style: appTheme.bodySmall.copyWith(
+                        color: appTheme.white70,
                       ),
                     ),
                   ],
@@ -81,7 +82,7 @@ class ResumoProgressoWidget extends StatelessWidget {
               Container(
                 width: 1,
                 height: 40,
-                color: Colors.white.withOpacity(0.3),
+                color: appTheme.white70,
               ),
               Expanded(
                 child: _StatItem(
@@ -111,28 +112,30 @@ class _StatItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: Colors.white, size: 20),
+            Icon(icon, color: appTheme.info, size: 20),
             const SizedBox(width: 8),
             Text(
               value,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: appTheme.headlineSmall.copyWith(
+                color: appTheme.info,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
         const SizedBox(height: 4),
         Text(
           label,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Colors.white.withOpacity(0.8),
-              ),
+          style: appTheme.bodySmall.copyWith(
+            color: appTheme.white70,
+          ),
         ),
       ],
     );
@@ -158,6 +161,8 @@ class FiltroChipsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -170,10 +175,17 @@ class FiltroChipsWidget extends StatelessWidget {
             padding: const EdgeInsets.only(right: 8),
             child: FilterChip(
               selected: isSelected,
+              selectedColor: appTheme.primary,
+              checkmarkColor: appTheme.info,
               label: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(filtro.label),
+                  Text(
+                    filtro.label,
+                    style: TextStyle(
+                      color: isSelected ? appTheme.info : appTheme.primaryText,
+                    ),
+                  ),
                   if (count > 0 && filtro != FiltroMeusCursos.todos) ...[
                     const SizedBox(width: 6),
                     Container(
@@ -183,8 +195,8 @@ class FiltroChipsWidget extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         color: isSelected
-                            ? Colors.white.withOpacity(0.3)
-                            : Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                            ? appTheme.info.withOpacity(0.3)
+                            : appTheme.primary.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
@@ -192,9 +204,7 @@ class FiltroChipsWidget extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
-                          color: isSelected
-                              ? Colors.white
-                              : Theme.of(context).colorScheme.primary,
+                          color: isSelected ? appTheme.info : appTheme.primary,
                         ),
                       ),
                     ),
@@ -204,6 +214,7 @@ class FiltroChipsWidget extends StatelessWidget {
               avatar: Icon(
                 filtro.icon,
                 size: 18,
+                color: isSelected ? appTheme.info : appTheme.primary,
               ),
               onSelected: (_) => onFiltroChanged(filtro),
             ),
@@ -240,6 +251,8 @@ class EmptyCursosWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -249,20 +262,24 @@ class EmptyCursosWidget extends StatelessWidget {
             Icon(
               Icons.school_outlined,
               size: 80,
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+              color: appTheme.primary.withOpacity(0.3),
             ),
             const SizedBox(height: 24),
             Text(
               mensagem,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Theme.of(context).textTheme.bodySmall?.color,
-                  ),
+              style: appTheme.titleMedium.copyWith(
+                color: appTheme.secondaryText,
+              ),
             ),
             if (onExplorar != null) ...[
               const SizedBox(height: 24),
               ElevatedButton.icon(
                 onPressed: onExplorar,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: appTheme.primary,
+                  foregroundColor: appTheme.info,
+                ),
                 icon: const Icon(Icons.explore),
                 label: const Text('Explorar cursos'),
               ),

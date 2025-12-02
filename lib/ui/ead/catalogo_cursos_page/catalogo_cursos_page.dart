@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../data/repositories/auth_repository.dart';
 import '../../../routing/ead_routes.dart';
+import '../../core/theme/app_theme.dart';
 import 'view_model/catalogo_cursos_view_model.dart';
 import 'widgets/curso_card.dart';
 
@@ -43,23 +44,36 @@ class _CatalogoCursosPageState extends State<CatalogoCursosPage> {
     await _viewModel.carregarCursos(usuarioId: usuarioId);
   }
 
-  void _navegarParaDetalhes(String cursoId) {
-    context.pushNamed(
+  Future<void> _navegarParaDetalhes(String cursoId) async {
+    await context.pushNamed(
       EadRoutes.cursoDetalhes,
       pathParameters: {'cursoId': cursoId},
     );
+    // Recarrega os dados ao voltar para atualizar o progresso
+    await _recarregarDados();
+  }
+
+  Future<void> _recarregarDados() async {
+    final authRepo = context.read<AuthRepository>();
+    final usuarioId = authRepo.currentUserUid.isEmpty ? null : authRepo.currentUserUid;
+    await _viewModel.refresh(usuarioId: usuarioId);
   }
 
   @override
   Widget build(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     return ChangeNotifierProvider.value(
       value: _viewModel,
       child: Scaffold(
-        appBar: _buildAppBar(),
+        backgroundColor: appTheme.primaryBackground,
+        appBar: _buildAppBar(appTheme),
         body: Consumer<CatalogoCursosViewModel>(
           builder: (context, viewModel, child) {
             if (viewModel.isLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return Center(
+                child: CircularProgressIndicator(color: appTheme.primary),
+              );
             }
 
             if (viewModel.error != null) {
@@ -84,9 +98,19 @@ class _CatalogoCursosPageState extends State<CatalogoCursosPage> {
     );
   }
 
-  PreferredSizeWidget _buildAppBar() {
+  PreferredSizeWidget _buildAppBar(AppTheme appTheme) {
     return AppBar(
-      title: _showSearch ? _buildSearchField() : const Text('Cursos'),
+      backgroundColor: appTheme.primary,
+      foregroundColor: appTheme.info,
+      elevation: 2.0,
+      title: _showSearch
+          ? _buildSearchField(appTheme)
+          : Text(
+              'Cursos',
+              style: appTheme.headlineMedium.copyWith(
+                color: appTheme.info,
+              ),
+            ),
       actions: [
         IconButton(
           icon: Icon(_showSearch ? Icons.close : Icons.search),
@@ -104,12 +128,15 @@ class _CatalogoCursosPageState extends State<CatalogoCursosPage> {
     );
   }
 
-  Widget _buildSearchField() {
+  Widget _buildSearchField(AppTheme appTheme) {
     return TextField(
       controller: _searchController,
       autofocus: true,
-      decoration: const InputDecoration(
+      style: appTheme.bodyLarge.copyWith(color: appTheme.info),
+      cursorColor: appTheme.info,
+      decoration: InputDecoration(
         hintText: 'Buscar cursos...',
+        hintStyle: appTheme.bodyLarge.copyWith(color: appTheme.info.withOpacity(0.7)),
         border: InputBorder.none,
       ),
       onChanged: _viewModel.buscar,
@@ -117,6 +144,8 @@ class _CatalogoCursosPageState extends State<CatalogoCursosPage> {
   }
 
   Widget _buildError(CatalogoCursosViewModel viewModel) {
+    final appTheme = AppTheme.of(context);
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -126,17 +155,21 @@ class _CatalogoCursosPageState extends State<CatalogoCursosPage> {
             Icon(
               Icons.error_outline,
               size: 64,
-              color: Theme.of(context).colorScheme.error,
+              color: appTheme.error,
             ),
             const SizedBox(height: 16),
             Text(
               viewModel.error!,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: appTheme.bodyLarge,
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
               onPressed: _carregarDados,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: appTheme.primary,
+                foregroundColor: appTheme.info,
+              ),
               icon: const Icon(Icons.refresh),
               label: const Text('Tentar novamente'),
             ),
@@ -147,6 +180,7 @@ class _CatalogoCursosPageState extends State<CatalogoCursosPage> {
   }
 
   Widget _buildEmpty(CatalogoCursosViewModel viewModel) {
+    final appTheme = AppTheme.of(context);
     final isSearching = viewModel.searchQuery.isNotEmpty;
 
     return Center(
@@ -158,7 +192,7 @@ class _CatalogoCursosPageState extends State<CatalogoCursosPage> {
             Icon(
               isSearching ? Icons.search_off : Icons.school_outlined,
               size: 64,
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+              color: appTheme.primary.withOpacity(0.5),
             ),
             const SizedBox(height: 16),
             Text(
@@ -166,7 +200,7 @@ class _CatalogoCursosPageState extends State<CatalogoCursosPage> {
                   ? 'Nenhum curso encontrado para "${viewModel.searchQuery}"'
                   : 'Nenhum curso disponível no momento',
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: appTheme.bodyLarge,
             ),
             if (isSearching) ...[
               const SizedBox(height: 16),
@@ -175,6 +209,7 @@ class _CatalogoCursosPageState extends State<CatalogoCursosPage> {
                   _searchController.clear();
                   viewModel.limparBusca();
                 },
+                style: TextButton.styleFrom(foregroundColor: appTheme.primary),
                 child: const Text('Limpar busca'),
               ),
             ],

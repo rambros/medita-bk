@@ -214,14 +214,14 @@ class InscricaoCursoModel {
 
   /// Texto do botão baseado no status
   String get textoBotaoAcao {
-    if (!isAtivo) return 'Ver curso';
+    if (!isAtivo) return 'Ver Curso';
 
     if (!progresso.hasProgresso) {
-      return 'Iniciar curso';
+      return 'Iniciar Curso';
     } else if (progresso.isConcluido) {
-      return 'Revisar curso';
+      return 'Revisar Curso';
     } else {
-      return 'Continuar';
+      return 'Continuar Curso';
     }
   }
 

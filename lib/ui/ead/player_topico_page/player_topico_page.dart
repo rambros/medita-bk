@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../data/repositories/auth_repository.dart';
 import '../../../routing/ead_routes.dart';
+import '../../core/theme/app_theme.dart';
 import 'view_model/player_topico_view_model.dart';
 import 'widgets/mark_complete_button.dart';
 import 'widgets/navegacao_topicos_widget.dart';
@@ -134,7 +135,12 @@ class _PlayerTopicoPageState extends State<PlayerTopicoPage> {
         body: Consumer<PlayerTopicoViewModel>(
           builder: (context, viewModel, child) {
             if (viewModel.isLoading) {
-              return const Center(child: CircularProgressIndicator());
+              final appTheme = AppTheme.of(context);
+              return Center(
+                child: CircularProgressIndicator(
+                  color: appTheme.primary,
+                ),
+              );
             }
 
             if (viewModel.error != null) {
@@ -153,6 +159,8 @@ class _PlayerTopicoPageState extends State<PlayerTopicoPage> {
   }
 
   Widget _buildError(PlayerTopicoViewModel viewModel) {
+    final appTheme = AppTheme.of(context);
+
     return SafeArea(
       child: Center(
         child: Padding(
@@ -163,13 +171,13 @@ class _PlayerTopicoPageState extends State<PlayerTopicoPage> {
               Icon(
                 Icons.error_outline,
                 size: 64,
-                color: Theme.of(context).colorScheme.error,
+                color: appTheme.error,
               ),
               const SizedBox(height: 16),
               Text(
                 viewModel.error!,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: appTheme.bodyLarge,
               ),
               const SizedBox(height: 24),
               Row(
@@ -177,6 +185,10 @@ class _PlayerTopicoPageState extends State<PlayerTopicoPage> {
                 children: [
                   OutlinedButton(
                     onPressed: () => context.pop(),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: appTheme.primary,
+                      side: BorderSide(color: appTheme.primary),
+                    ),
                     child: const Text('Voltar'),
                   ),
                   const SizedBox(width: 16),
@@ -184,6 +196,10 @@ class _PlayerTopicoPageState extends State<PlayerTopicoPage> {
                     onPressed: _carregarDados,
                     icon: const Icon(Icons.refresh),
                     label: const Text('Tentar novamente'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: appTheme.primary,
+                      foregroundColor: appTheme.info,
+                    ),
                   ),
                 ],
               ),
@@ -195,6 +211,8 @@ class _PlayerTopicoPageState extends State<PlayerTopicoPage> {
   }
 
   Widget _buildNaoEncontrado() {
+    final appTheme = AppTheme.of(context);
+
     return SafeArea(
       child: Center(
         child: Column(
@@ -203,13 +221,20 @@ class _PlayerTopicoPageState extends State<PlayerTopicoPage> {
             Icon(
               Icons.article_outlined,
               size: 64,
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+              color: appTheme.primary.withOpacity(0.5),
             ),
             const SizedBox(height: 16),
-            const Text('Topico nao encontrado'),
+            Text(
+              'Topico nao encontrado',
+              style: appTheme.bodyLarge,
+            ),
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () => context.pop(),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: appTheme.primary,
+                foregroundColor: appTheme.info,
+              ),
               child: const Text('Voltar'),
             ),
           ],
@@ -256,19 +281,26 @@ class _PlayerTopicoPageState extends State<PlayerTopicoPage> {
 
                 // Botao para quiz (se for tipo quiz)
                 if (viewModel.isQuiz && viewModel.isInscrito)
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: _navegarParaQuiz,
-                        icon: const Icon(Icons.quiz),
-                        label: const Text('Iniciar Quiz'),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                  Builder(
+                    builder: (context) {
+                      final appTheme = AppTheme.of(context);
+                      return Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            onPressed: _navegarParaQuiz,
+                            icon: const Icon(Icons.quiz),
+                            label: const Text('Iniciar Quiz'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: appTheme.primary,
+                              foregroundColor: appTheme.info,
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
 
                 const SizedBox(height: 80), // Espaco para navegacao

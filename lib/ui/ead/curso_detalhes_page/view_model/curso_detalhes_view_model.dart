@@ -71,7 +71,13 @@ class CursoDetalhesViewModel extends ChangeNotifier {
     if (_inscricao == null) {
       return 'Inscrever-se';
     }
-    return _inscricao!.textoBotaoAcao;
+    if (_inscricao!.isConcluido) {
+      return 'Concluído';
+    }
+    if (!_inscricao!.progresso.hasProgresso) {
+      return 'Iniciar Curso';
+    }
+    return 'Continuar Curso';
   }
 
   /// Ícone do botão de ação principal
@@ -83,7 +89,7 @@ class CursoDetalhesViewModel extends ChangeNotifier {
       return Icons.play_arrow;
     }
     if (_inscricao!.isConcluido) {
-      return Icons.replay;
+      return Icons.check;
     }
     return Icons.play_arrow;
   }
@@ -119,7 +125,7 @@ class CursoDetalhesViewModel extends ChangeNotifier {
   // === Ações ===
 
   /// Carrega os dados do curso
-  Future<void> carregarDados({String? usuarioId}) async {
+  Future<void> carregarDados({String? usuarioId, bool forceRefresh = false}) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
@@ -136,7 +142,11 @@ class CursoDetalhesViewModel extends ChangeNotifier {
 
       // Se tiver usuário, carrega inscrição
       if (usuarioId != null) {
-        _inscricao = await _repository.getInscricao(cursoId, usuarioId);
+        _inscricao = await _repository.getInscricao(
+          cursoId,
+          usuarioId,
+          forceRefresh: forceRefresh,
+        );
       }
 
       _error = null;
@@ -208,6 +218,6 @@ class CursoDetalhesViewModel extends ChangeNotifier {
   /// Recarrega os dados
   Future<void> refresh({String? usuarioId}) async {
     _repository.limparCacheCurso(cursoId);
-    await carregarDados(usuarioId: usuarioId);
+    await carregarDados(usuarioId: usuarioId, forceRefresh: true);
   }
 }

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../data/repositories/auth_repository.dart';
 import '../../../routing/ead_routes.dart';
 import '../../../ui/core/widgets/html_display_widget.dart';
+import '../../core/theme/app_theme.dart';
 import 'view_model/curso_detalhes_view_model.dart';
 import 'widgets/curso_info_header.dart';
 import 'widgets/curriculo_section.dart';
@@ -70,8 +71,8 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
     }
   }
 
-  void _navegarParaTopico(String aulaId, String topicoId) {
-    context.pushNamed(
+  Future<void> _navegarParaTopico(String aulaId, String topicoId) async {
+    await context.pushNamed(
       EadRoutes.playerTopico,
       pathParameters: {
         'cursoId': widget.cursoId,
@@ -79,12 +80,21 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
         'topicoId': topicoId,
       },
     );
+    // Recarrega os dados ao voltar do player para atualizar o progresso
+    // Usa refresh para limpar o cache e buscar dados atualizados
+    await _recarregarProgresso();
   }
 
-  void _continuarCurso() {
+  Future<void> _recarregarProgresso() async {
+    final authRepo = context.read<AuthRepository>();
+    final usuarioId = authRepo.currentUserUid.isEmpty ? null : authRepo.currentUserUid;
+    await _viewModel.refresh(usuarioId: usuarioId);
+  }
+
+  Future<void> _continuarCurso() async {
     final proximo = _viewModel.proximoTopico;
     if (proximo != null) {
-      _navegarParaTopico(proximo.aulaId, proximo.topicoId);
+      await _navegarParaTopico(proximo.aulaId, proximo.topicoId);
     }
   }
 
@@ -102,7 +112,10 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
         body: Consumer<CursoDetalhesViewModel>(
           builder: (context, viewModel, child) {
             if (viewModel.isLoading) {
-              return const Center(child: CircularProgressIndicator());
+              final appTheme = AppTheme.of(context);
+              return Center(
+                child: CircularProgressIndicator(color: appTheme.primary),
+              );
             }
 
             if (viewModel.error != null) {
@@ -129,6 +142,8 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
   }
 
   Widget _buildError(CursoDetalhesViewModel viewModel) {
+    final appTheme = AppTheme.of(context);
+
     return CustomScrollView(
       slivers: [
         _buildAppBar(null),
@@ -142,16 +157,21 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
                   Icon(
                     Icons.error_outline,
                     size: 64,
-                    color: Theme.of(context).colorScheme.error,
+                    color: appTheme.error,
                   ),
                   const SizedBox(height: 16),
                   Text(
                     viewModel.error!,
                     textAlign: TextAlign.center,
+                    style: appTheme.bodyLarge,
                   ),
                   const SizedBox(height: 24),
                   ElevatedButton.icon(
                     onPressed: _carregarDados,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: appTheme.primary,
+                      foregroundColor: appTheme.info,
+                    ),
                     icon: const Icon(Icons.refresh),
                     label: const Text('Tentar novamente'),
                   ),
@@ -165,6 +185,8 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
   }
 
   Widget _buildNaoEncontrado() {
+    final appTheme = AppTheme.of(context);
+
     return CustomScrollView(
       slivers: [
         _buildAppBar(null),
@@ -176,13 +198,20 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
                 Icon(
                   Icons.school_outlined,
                   size: 64,
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                  color: appTheme.primary.withOpacity(0.5),
                 ),
                 const SizedBox(height: 16),
-                const Text('Curso não encontrado'),
+                Text(
+                  'Curso não encontrado',
+                  style: appTheme.bodyLarge,
+                ),
                 const SizedBox(height: 24),
                 ElevatedButton(
                   onPressed: () => context.pop(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: appTheme.primary,
+                    foregroundColor: appTheme.info,
+                  ),
                   child: const Text('Voltar'),
                 ),
               ],
@@ -216,6 +245,7 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
                 CursoInfoHeader(
                   curso: curso,
                   inscricao: viewModel.inscricao,
+                  totalTopicosCalculado: viewModel.totalTopicos,
                 ),
 
                 const Divider(),
@@ -246,8 +276,9 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
                       children: [
                         Text(
                           'Sobre o Curso',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          style: AppTheme.of(context).titleMedium.copyWith(
                                 fontWeight: FontWeight.bold,
+                                color: AppTheme.of(context).primaryText,
                               ),
                         ),
                         const SizedBox(height: 12),
@@ -288,9 +319,21 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
   }
 
   SliverAppBar _buildAppBar(String? titulo) {
+    final appTheme = AppTheme.of(context);
+
     return SliverAppBar(
       floating: true,
-      title: titulo != null ? Text(titulo) : null,
+      backgroundColor: appTheme.primary,
+      foregroundColor: appTheme.info,
+      elevation: 2.0,
+      title: titulo != null
+          ? Text(
+              titulo,
+              style: appTheme.titleLarge.copyWith(
+                color: appTheme.info,
+              ),
+            )
+          : null,
       actions: [
         IconButton(
           icon: const Icon(Icons.share),
@@ -303,10 +346,12 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
   }
 
   Widget _buildBottomBar(CursoDetalhesViewModel viewModel) {
+    final appTheme = AppTheme.of(context);
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
+        color: appTheme.secondaryBackground,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -327,7 +372,7 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
                   children: [
                     Text(
                       '${viewModel.topicosCompletos}/${viewModel.totalTopicos} tópicos',
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: appTheme.bodySmall,
                     ),
                     const SizedBox(height: 4),
                     ClipRRect(
@@ -335,6 +380,8 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
                       child: LinearProgressIndicator(
                         value: viewModel.progresso / 100,
                         minHeight: 6,
+                        backgroundColor: appTheme.accent4,
+                        valueColor: AlwaysStoppedAnimation<Color>(appTheme.primary),
                       ),
                     ),
                   ],
@@ -349,16 +396,25 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
               child: SizedBox(
                 width: viewModel.isInscrito ? null : double.infinity,
                 child: ElevatedButton.icon(
-                  onPressed: viewModel.isInscrevendo ? null : (viewModel.isInscrito ? _continuarCurso : _inscrever),
+                  onPressed: viewModel.isInscrevendo
+                      ? null
+                      : (viewModel.isInscrito
+                          ? (viewModel.isConcluido ? () => context.goNamed(EadRoutes.eadHome) : _continuarCurso)
+                          : _inscrever),
                   icon: viewModel.isInscrevendo
-                      ? const SizedBox(
+                      ? SizedBox(
                           width: 20,
                           height: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(appTheme.info),
+                          ),
                         )
                       : Icon(viewModel.iconeBotaoAcao),
                   label: Text(viewModel.textoBotaoAcao),
                   style: ElevatedButton.styleFrom(
+                    backgroundColor: appTheme.primary,
+                    foregroundColor: appTheme.info,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24,
                       vertical: 12,

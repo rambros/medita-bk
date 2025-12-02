@@ -4,6 +4,7 @@ import '/ui/core/flutter_flow/flutter_flow_util.dart';
 import '/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'seek_bar.dart';
+import '/ui/core/theme/app_theme.dart';
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
@@ -148,6 +149,9 @@ class AudioControlButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+    final buttonColor = colorButton ?? appTheme.primary;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -162,23 +166,23 @@ class AudioControlButtons extends StatelessWidget {
                 margin: const EdgeInsets.all(8.0),
                 width: 64.0,
                 height: 64.0,
-                child: CircularProgressIndicator(color: colorButton ?? Colors.black38),
+                child: CircularProgressIndicator(color: buttonColor),
               );
             } else if (playing != true) {
               return IconButton(
-                icon: Icon(Icons.play_arrow, color: colorButton ?? Colors.black38),
+                icon: Icon(Icons.play_arrow, color: buttonColor),
                 iconSize: 64.0,
                 onPressed: () => _play(),
               );
             } else if (processingState != ProcessingState.completed) {
               return IconButton(
-                icon: Icon(Icons.pause, color: colorButton ?? Colors.black38),
+                icon: Icon(Icons.pause, color: buttonColor),
                 iconSize: 64.0,
                 onPressed: () => _pause(),
               );
             } else {
               return IconButton(
-                icon: Icon(Icons.replay, color: colorButton ?? Colors.black38),
+                icon: Icon(Icons.replay, color: buttonColor),
                 iconSize: 64.0,
                 onPressed: () => player.seek(Duration.zero, index: player.effectiveIndices!.first),
               );

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:medita_b_k/data/repositories/auth_repository.dart';
 import 'package:medita_b_k/routing/ead_routes.dart';
+import '../../core/theme/app_theme.dart';
 import 'view_model/quiz_view_model.dart';
 import 'widgets/question_tile.dart';
 import 'widgets/quiz_result_widget.dart';
@@ -163,7 +164,10 @@ class _QuizPageState extends State<QuizPage> {
         body: Consumer<QuizViewModel>(
           builder: (context, viewModel, child) {
             if (viewModel.isLoading) {
-              return const Center(child: CircularProgressIndicator());
+              final appTheme = AppTheme.of(context);
+              return Center(
+                child: CircularProgressIndicator(color: appTheme.primary),
+              );
             }
 
             if (viewModel.error != null) {
@@ -350,7 +354,7 @@ class _QuizPageState extends State<QuizPage> {
             : const Icon(Icons.check, size: 18),
         label: const Text('Finalizar'),
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.green,
+          backgroundColor: AppTheme.of(context).primary,
         ),
       );
     }

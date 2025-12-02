@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../domain/models/ead/index.dart';
+import '../../../core/theme/app_theme.dart';
 
 /// Widget que exibe o currículo do curso (aulas e tópicos)
 class CurriculoSection extends StatelessWidget {
@@ -29,6 +30,8 @@ class CurriculoSection extends StatelessWidget {
       return _buildEmpty(context);
     }
 
+    final appTheme = AppTheme.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -40,22 +43,24 @@ class CurriculoSection extends StatelessWidget {
             children: [
               Text(
                 'Conteúdo do Curso',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: appTheme.titleMedium.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: appTheme.primaryText,
+                ),
               ),
               Text(
                 '${aulas.length} ${aulas.length == 1 ? 'aula' : 'aulas'}',
-                style: Theme.of(context).textTheme.bodySmall,
+                style: appTheme.bodySmall.copyWith(
+                  color: appTheme.secondaryText,
+                ),
               ),
             ],
           ),
         ),
-
         const SizedBox(height: 12),
-
         // Lista de aulas
         ListView.builder(
+          padding: EdgeInsets.zero,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: aulas.length,
@@ -81,6 +86,8 @@ class CurriculoSection extends StatelessWidget {
   }
 
   Widget _buildEmpty(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -89,18 +96,22 @@ class CurriculoSection extends StatelessWidget {
             Icon(
               Icons.folder_open,
               size: 48,
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+              color: appTheme.primary.withOpacity(0.5),
             ),
             const SizedBox(height: 16),
             Text(
               'Conteúdo em breve',
-              style: Theme.of(context).textTheme.titleMedium,
+              style: appTheme.titleMedium.copyWith(
+                color: appTheme.primaryText,
+              ),
             ),
             const SizedBox(height: 8),
             Text(
               'O conteúdo deste curso ainda está sendo preparado.',
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodySmall,
+              style: appTheme.bodySmall.copyWith(
+                color: appTheme.secondaryText,
+              ),
             ),
           ],
         ),
@@ -133,7 +144,7 @@ class _AulaTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final appTheme = AppTheme.of(context);
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -152,18 +163,18 @@ class _AulaTile extends StatelessWidget {
                     height: 32,
                     decoration: BoxDecoration(
                       color: isCompleta
-                          ? Colors.green
-                          : theme.colorScheme.primary.withOpacity(0.1),
+                          ? appTheme.primary
+                          : appTheme.primary.withOpacity(0.1),
                       shape: BoxShape.circle,
                     ),
                     child: Center(
                       child: isCompleta
-                          ? const Icon(Icons.check, size: 18, color: Colors.white)
+                          ? Icon(Icons.check, size: 18, color: appTheme.info)
                           : Text(
                               '$index',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: theme.colorScheme.primary,
+                                color: appTheme.primary,
                               ),
                             ),
                     ),
@@ -178,8 +189,9 @@ class _AulaTile extends StatelessWidget {
                       children: [
                         Text(
                           aula.titulo,
-                          style: theme.textTheme.titleSmall?.copyWith(
+                          style: appTheme.titleSmall.copyWith(
                             fontWeight: FontWeight.w600,
+                            color: appTheme.primaryText,
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -188,24 +200,28 @@ class _AulaTile extends StatelessWidget {
                             Icon(
                               Icons.article_outlined,
                               size: 14,
-                              color: theme.textTheme.bodySmall?.color,
+                              color: appTheme.secondaryText,
                             ),
                             const SizedBox(width: 4),
                             Text(
                               '${aula.numeroTopicos} ${aula.numeroTopicos == 1 ? 'tópico' : 'tópicos'}',
-                              style: theme.textTheme.bodySmall,
+                              style: appTheme.bodySmall.copyWith(
+                                color: appTheme.secondaryText,
+                              ),
                             ),
                             if (aula.duracaoEstimada != null) ...[
                               const SizedBox(width: 12),
                               Icon(
                                 Icons.schedule,
                                 size: 14,
-                                color: theme.textTheme.bodySmall?.color,
+                                color: appTheme.secondaryText,
                               ),
                               const SizedBox(width: 4),
                               Text(
                                 aula.duracaoEstimada!,
-                                style: theme.textTheme.bodySmall,
+                                style: appTheme.bodySmall.copyWith(
+                                  color: appTheme.secondaryText,
+                                ),
                               ),
                             ],
                           ],
@@ -218,7 +234,10 @@ class _AulaTile extends StatelessWidget {
                   AnimatedRotation(
                     turns: isExpandida ? 0.5 : 0,
                     duration: const Duration(milliseconds: 200),
-                    child: const Icon(Icons.keyboard_arrow_down),
+                    child: Icon(
+                      Icons.keyboard_arrow_down,
+                      color: appTheme.primary,
+                    ),
                   ),
                 ],
               ),
@@ -239,12 +258,16 @@ class _AulaTile extends StatelessWidget {
   }
 
   Widget _buildTopicos(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     if (aula.topicos.isEmpty) {
       return Padding(
         padding: const EdgeInsets.all(16),
         child: Text(
           'Nenhum tópico disponível',
-          style: Theme.of(context).textTheme.bodySmall,
+          style: appTheme.bodySmall.copyWith(
+            color: appTheme.secondaryText,
+          ),
         ),
       );
     }
@@ -253,6 +276,7 @@ class _AulaTile extends StatelessWidget {
       children: [
         const Divider(height: 1),
         ListView.separated(
+          padding: EdgeInsets.zero,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: aula.topicos.length,
@@ -293,13 +317,14 @@ class _TopicoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final appTheme = AppTheme.of(context);
     final canAccess = isInscrito;
 
     return InkWell(
       onTap: canAccess ? onTap : null,
-      child: Padding(
+      child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        color: isCompleto ? appTheme.primary.withOpacity(0.05) : null,
         child: Row(
           children: [
             // Ícone do tipo de conteúdo
@@ -308,14 +333,14 @@ class _TopicoTile extends StatelessWidget {
               height: 36,
               decoration: BoxDecoration(
                 color: isCompleto
-                    ? Colors.green.withOpacity(0.1)
-                    : theme.colorScheme.surfaceContainerHighest,
+                    ? appTheme.primary
+                    : appTheme.accent4,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
-                isCompleto ? Icons.check_circle : topico.tipo.icon,
+                isCompleto ? Icons.check : topico.tipo.icon,
                 size: 20,
-                color: isCompleto ? Colors.green : theme.colorScheme.primary,
+                color: isCompleto ? appTheme.info : appTheme.primary,
               ),
             ),
 
@@ -328,21 +353,48 @@ class _TopicoTile extends StatelessWidget {
                 children: [
                   Text(
                     topico.titulo,
-                    style: theme.textTheme.bodyMedium?.copyWith(
+                    style: appTheme.bodyMedium.copyWith(
                       fontWeight: FontWeight.w500,
-                      color: canAccess ? null : theme.disabledColor,
-                      decoration: isCompleto ? TextDecoration.lineThrough : null,
+                      color: canAccess
+                          ? (isCompleto ? appTheme.secondaryText : appTheme.primaryText)
+                          : appTheme.secondaryText,
                     ),
                   ),
-                  if (topico.duracaoFormatada.isNotEmpty) ...[
-                    const SizedBox(height: 2),
-                    Text(
-                      topico.duracaoFormatada,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.textTheme.bodySmall?.color?.withOpacity(0.6),
-                      ),
-                    ),
-                  ],
+                  const SizedBox(height: 2),
+                  Row(
+                    children: [
+                      if (isCompleto) ...[
+                        Icon(
+                          Icons.check_circle,
+                          size: 12,
+                          color: appTheme.primary,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          'Concluído',
+                          style: appTheme.bodySmall.copyWith(
+                            color: appTheme.primary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        if (topico.duracaoFormatada.isNotEmpty) ...[
+                          Text(
+                            ' • ',
+                            style: appTheme.bodySmall.copyWith(
+                              color: appTheme.secondaryText.withOpacity(0.6),
+                            ),
+                          ),
+                        ],
+                      ],
+                      if (topico.duracaoFormatada.isNotEmpty)
+                        Text(
+                          topico.duracaoFormatada,
+                          style: appTheme.bodySmall.copyWith(
+                            color: appTheme.secondaryText.withOpacity(0.6),
+                          ),
+                        ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -351,13 +403,16 @@ class _TopicoTile extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceContainerHighest,
+                color: isCompleto
+                    ? appTheme.primary.withOpacity(0.1)
+                    : appTheme.accent4,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
                 topico.tipo.label,
-                style: theme.textTheme.bodySmall?.copyWith(
+                style: appTheme.bodySmall.copyWith(
                   fontSize: 10,
+                  color: isCompleto ? appTheme.primary : appTheme.secondaryText,
                 ),
               ),
             ),
@@ -368,7 +423,7 @@ class _TopicoTile extends StatelessWidget {
               Icon(
                 Icons.lock_outline,
                 size: 18,
-                color: theme.disabledColor,
+                color: appTheme.secondaryText,
               ),
             ],
           ],

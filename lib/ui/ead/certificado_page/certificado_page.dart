@@ -5,6 +5,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../../data/repositories/auth_repository.dart';
 import '../../../routing/ead_routes.dart';
+import '../../core/theme/app_theme.dart';
 import 'view_model/certificado_view_model.dart';
 import 'widgets/certificado_widget.dart';
 
@@ -96,7 +97,10 @@ ${_viewModel.nomeAluno} concluiu o curso "${_viewModel.tituloCurso}"
         body: Consumer<CertificadoViewModel>(
           builder: (context, viewModel, child) {
             if (viewModel.isLoading) {
-              return const Center(child: CircularProgressIndicator());
+              final appTheme = AppTheme.of(context);
+              return Center(
+                child: CircularProgressIndicator(color: appTheme.primary),
+              );
             }
 
             if (viewModel.error != null) {

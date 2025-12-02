@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../domain/models/ead/index.dart';
+import '../../../core/theme/app_theme.dart';
 
 /// Header com informações do curso
 class CursoInfoHeader extends StatelessWidget {
@@ -9,14 +10,19 @@ class CursoInfoHeader extends StatelessWidget {
     super.key,
     required this.curso,
     this.inscricao,
+    this.totalTopicosCalculado,
   });
 
   final CursoModel curso;
   final InscricaoCursoModel? inscricao;
 
+  /// Total de tópicos calculado dinamicamente das aulas carregadas
+  /// Se não for fornecido, usa o valor do modelo do curso
+  final int? totalTopicosCalculado;
+
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final appTheme = AppTheme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,8 +44,9 @@ class CursoInfoHeader extends StatelessWidget {
               // Título
               Text(
                 curso.titulo,
-                style: theme.textTheme.headlineSmall?.copyWith(
+                style: appTheme.headlineSmall.copyWith(
                   fontWeight: FontWeight.bold,
+                  color: appTheme.primaryText,
                 ),
               ),
 
@@ -49,8 +56,8 @@ class CursoInfoHeader extends StatelessWidget {
               if (curso.descricaoCurta.isNotEmpty)
                 Text(
                   curso.descricaoCurta,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7),
+                  style: appTheme.bodyMedium.copyWith(
+                    color: appTheme.secondaryText,
                   ),
                 ),
 
@@ -78,6 +85,8 @@ class CursoInfoHeader extends StatelessWidget {
   }
 
   Widget _buildImagemCapa(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     return AspectRatio(
       aspectRatio: 16 / 9,
       child: Stack(
@@ -88,8 +97,12 @@ class CursoInfoHeader extends StatelessWidget {
               imageUrl: curso.imagemCapa!,
               fit: BoxFit.cover,
               placeholder: (context, url) => Container(
-                color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                child: const Center(child: CircularProgressIndicator()),
+                color: appTheme.accent4,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(appTheme.primary),
+                  ),
+                ),
               ),
               errorWidget: (context, url, error) => _buildPlaceholder(context),
             )
@@ -105,10 +118,10 @@ class CursoInfoHeader extends StatelessWidget {
                   color: Colors.black.withOpacity(0.5),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.play_arrow,
                   size: 48,
-                  color: Colors.white,
+                  color: appTheme.info,
                 ),
               ),
             ),
@@ -118,50 +131,72 @@ class CursoInfoHeader extends StatelessWidget {
   }
 
   Widget _buildPlaceholder(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     return Container(
-      color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+      color: appTheme.primary.withOpacity(0.1),
       child: Center(
         child: Icon(
           Icons.school,
           size: 64,
-          color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+          color: appTheme.primary.withOpacity(0.5),
         ),
       ),
     );
   }
 
   Widget _buildTags(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     return Wrap(
       spacing: 8,
       runSpacing: 4,
       children: curso.tags.map((tag) {
-        return Chip(
-          label: Text(tag),
-          labelStyle: const TextStyle(fontSize: 12),
-          padding: EdgeInsets.zero,
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          decoration: BoxDecoration(
+            color: appTheme.accent1,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Text(
+            tag,
+            style: TextStyle(
+              fontSize: 12,
+              color: appTheme.primaryText,
+            ),
+          ),
         );
       }).toList(),
     );
   }
 
   Widget _buildMetricas(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+    // Usa o total calculado das aulas carregadas, ou fallback para o valor do modelo
+    final totalTopicos = totalTopicosCalculado ?? curso.totalTopicos;
+
     return Row(
       children: [
         _MetricaItem(
           icon: Icons.play_lesson_outlined,
           label: '${curso.totalAulas} aulas',
+          iconColor: appTheme.primary,
+          textColor: appTheme.primaryText,
         ),
         const SizedBox(width: 24),
         _MetricaItem(
           icon: Icons.article_outlined,
-          label: '${curso.totalTopicos} tópicos',
+          label: '$totalTopicos tópicos',
+          iconColor: appTheme.primary,
+          textColor: appTheme.primaryText,
         ),
         if (curso.duracaoEstimada != null) ...[
           const SizedBox(width: 24),
           _MetricaItem(
             icon: Icons.schedule,
             label: curso.duracaoEstimada!,
+            iconColor: appTheme.primary,
+            textColor: appTheme.primaryText,
           ),
         ],
       ],
@@ -170,19 +205,19 @@ class CursoInfoHeader extends StatelessWidget {
 
   Widget _buildAutor(BuildContext context) {
     final autor = curso.autor!;
-    final theme = Theme.of(context);
+    final appTheme = AppTheme.of(context);
 
     return Row(
       children: [
         CircleAvatar(
           radius: 20,
-          backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+          backgroundColor: appTheme.primary.withOpacity(0.1),
           backgroundImage: autor.imagemUrl != null ? CachedNetworkImageProvider(autor.imagemUrl!) : null,
           child: autor.imagemUrl == null
               ? Text(
                   autor.iniciais,
                   style: TextStyle(
-                    color: theme.colorScheme.primary,
+                    color: appTheme.primary,
                     fontWeight: FontWeight.bold,
                   ),
                 )
@@ -194,14 +229,15 @@ class CursoInfoHeader extends StatelessWidget {
           children: [
             Text(
               'Instrutor',
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.textTheme.bodySmall?.color?.withOpacity(0.6),
+              style: appTheme.bodySmall.copyWith(
+                color: appTheme.secondaryText,
               ),
             ),
             Text(
               autor.nome,
-              style: theme.textTheme.titleSmall?.copyWith(
+              style: appTheme.titleSmall.copyWith(
                 fontWeight: FontWeight.w500,
+                color: appTheme.primaryText,
               ),
             ),
           ],
@@ -211,12 +247,13 @@ class CursoInfoHeader extends StatelessWidget {
   }
 
   Widget _buildProgresso(BuildContext context) {
+    final appTheme = AppTheme.of(context);
     final progresso = inscricao!.percentualConcluido;
 
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
+        color: appTheme.primary.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -230,23 +267,24 @@ class CursoInfoHeader extends StatelessWidget {
                   Icon(
                     inscricao!.status.icon,
                     size: 20,
-                    color: inscricao!.status.color,
+                    color: appTheme.primary,
                   ),
                   const SizedBox(width: 8),
                   Text(
                     inscricao!.status.label,
-                    style: TextStyle(
+                    style: appTheme.bodyMedium.copyWith(
                       fontWeight: FontWeight.w500,
-                      color: inscricao!.status.color,
+                      color: appTheme.primary,
                     ),
                   ),
                 ],
               ),
               Text(
                 '${progresso.toStringAsFixed(0)}%',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: appTheme.titleMedium.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: appTheme.primaryText,
+                ),
               ),
             ],
           ),
@@ -256,7 +294,8 @@ class CursoInfoHeader extends StatelessWidget {
             child: LinearProgressIndicator(
               value: progresso / 100,
               minHeight: 8,
-              backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+              backgroundColor: appTheme.accent4,
+              valueColor: AlwaysStoppedAnimation<Color>(appTheme.primary),
             ),
           ),
         ],
@@ -269,14 +308,18 @@ class _MetricaItem extends StatelessWidget {
   const _MetricaItem({
     required this.icon,
     required this.label,
+    required this.iconColor,
+    required this.textColor,
   });
 
   final IconData icon;
   final String label;
+  final Color iconColor;
+  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final appTheme = AppTheme.of(context);
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -284,12 +327,14 @@ class _MetricaItem extends StatelessWidget {
         Icon(
           icon,
           size: 18,
-          color: theme.colorScheme.primary,
+          color: iconColor,
         ),
         const SizedBox(width: 6),
         Text(
           label,
-          style: theme.textTheme.bodyMedium,
+          style: appTheme.bodyMedium.copyWith(
+            color: textColor,
+          ),
         ),
       ],
     );

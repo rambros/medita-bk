@@ -4,13 +4,19 @@ import '../../domain/models/ead/index.dart';
 /// Repository para o módulo EAD
 /// Camada de abstração entre Service e ViewModels
 /// Responsável por lógica de negócio e cache
+/// Implementado como Singleton para compartilhar cache entre ViewModels
 class EadRepository {
+  // Singleton instance
+  static final EadRepository _instance = EadRepository._internal();
+
+  factory EadRepository() => _instance;
+
+  EadRepository._internal() : _service = EadService();
+
   final EadService _service;
 
-  EadRepository({EadService? service}) : _service = service ?? EadService();
-
   // === Cache local (opcional, pode ser expandido) ===
-  
+
   final Map<String, CursoModel> _cursosCache = {};
   final Map<String, List<AulaModel>> _aulasCache = {};
   final Map<String, InscricaoCursoModel> _inscricoesCache = {};
@@ -24,7 +30,7 @@ class EadRepository {
     }
 
     final cursos = await _service.getCursosPublicados();
-    
+
     // Atualiza cache
     _cursosCache.clear();
     for (final curso in cursos) {
@@ -42,7 +48,7 @@ class EadRepository {
     }
 
     final curso = await _service.getCursoById(cursoId);
-    
+
     if (curso != null) {
       _cursosCache[cursoId] = curso;
     }
@@ -125,18 +131,21 @@ class EadRepository {
   /// Busca a inscrição do usuário em um curso
   Future<InscricaoCursoModel?> getInscricao(
     String cursoId,
-    String usuarioId,
-  ) async {
+    String usuarioId, {
+    bool forceRefresh = false,
+  }) async {
     final cacheKey = InscricaoCursoModel.gerarId(cursoId, usuarioId);
-    
-    if (_inscricoesCache.containsKey(cacheKey)) {
+
+    if (!forceRefresh && _inscricoesCache.containsKey(cacheKey)) {
       return _inscricoesCache[cacheKey];
     }
 
     final inscricao = await _service.getInscricao(cursoId, usuarioId);
-    
+
     if (inscricao != null) {
       _inscricoesCache[cacheKey] = inscricao;
+    } else {
+      _inscricoesCache.remove(cacheKey);
     }
 
     return inscricao;
@@ -207,7 +216,7 @@ class EadRepository {
   Future<void> cancelarInscricao(String cursoId, String usuarioId) async {
     final inscricaoId = InscricaoCursoModel.gerarId(cursoId, usuarioId);
     await _service.cancelarInscricao(inscricaoId);
-    
+
     // Remove do cache
     _inscricoesCache.remove(inscricaoId);
   }
@@ -229,25 +238,20 @@ class EadRepository {
     }
 
     // Atualiza progresso
-    var novoProgresso = inscricao.progresso
-        .adicionarTopicoCompleto(topicoId)
-        .atualizarUltimoAcesso(topicoId, aulaId);
+    var novoProgresso = inscricao.progresso.adicionarTopicoCompleto(topicoId).atualizarUltimoAcesso(topicoId, aulaId);
 
     // Verifica se completou a aula
     final topicosAula = await getTopicosByAula(cursoId, aulaId);
     final topicosAulaIds = topicosAula.map((t) => t.id).toSet();
-    final topicosCompletosAula = novoProgresso.topicosCompletos
-        .where((id) => topicosAulaIds.contains(id))
-        .length;
+    final topicosCompletosAula = novoProgresso.topicosCompletos.where((id) => topicosAulaIds.contains(id)).length;
 
     if (topicosCompletosAula == topicosAula.length) {
       novoProgresso = novoProgresso.adicionarAulaCompleta(aulaId);
     }
 
     // Calcula percentual
-    final percentual = inscricao.totalTopicos > 0
-        ? (novoProgresso.totalTopicosCompletos / inscricao.totalTopicos) * 100
-        : 0.0;
+    final percentual =
+        inscricao.totalTopicos > 0 ? (novoProgresso.totalTopicosCompletos / inscricao.totalTopicos) * 100 : 0.0;
 
     novoProgresso = novoProgresso.copyWith(percentualConcluido: percentual);
 
@@ -261,7 +265,7 @@ class EadRepository {
         StatusInscricao.concluido,
         dataConclusao: DateTime.now(),
       );
-      
+
       inscricao = inscricao.copyWith(
         status: StatusInscricao.concluido,
         dataConclusao: DateTime.now(),
@@ -295,9 +299,8 @@ class EadRepository {
     var novoProgresso = inscricao.progresso.removerTopicoCompleto(topicoId);
 
     // Recalcula percentual
-    final percentual = inscricao.totalTopicos > 0
-        ? (novoProgresso.totalTopicosCompletos / inscricao.totalTopicos) * 100
-        : 0.0;
+    final percentual =
+        inscricao.totalTopicos > 0 ? (novoProgresso.totalTopicosCompletos / inscricao.totalTopicos) * 100 : 0.0;
 
     novoProgresso = novoProgresso.copyWith(percentualConcluido: percentual);
 
@@ -369,14 +372,14 @@ class EadRepository {
   void limparCacheCurso(String cursoId) {
     _cursosCache.remove(cursoId);
     _aulasCache.remove(cursoId);
+    // Remove inscrições relacionadas a este curso
+    _inscricoesCache.removeWhere((key, _) => key.startsWith('${cursoId}_'));
   }
 
   /// Busca cursos com status de inscrição do usuário
-  Future<List<({CursoModel curso, InscricaoCursoModel? inscricao})>>
-      getCursosComInscricao(String usuarioId) async {
+  Future<List<({CursoModel curso, InscricaoCursoModel? inscricao})>> getCursosComInscricao(String usuarioId) async {
     final cursos = await getCursosDisponiveis();
-    final resultado =
-        <({CursoModel curso, InscricaoCursoModel? inscricao})>[];
+    final resultado = <({CursoModel curso, InscricaoCursoModel? inscricao})>[];
 
     for (final curso in cursos) {
       final inscricao = await getInscricao(curso.id, usuarioId);

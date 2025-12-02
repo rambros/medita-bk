@@ -41,18 +41,24 @@ class CatalogoCursosViewModel extends ChangeNotifier {
     }).toList();
   }
 
-  /// Verifica se um curso está inscrito
+  /// Verifica se um curso está inscrito (exclui cancelados)
   bool isInscrito(String cursoId) {
     final inscricao = _inscricoes[cursoId];
-    return inscricao != null && inscricao.isAtivo;
+    return inscricao != null && (inscricao.isAtivo || inscricao.isConcluido);
   }
 
-  /// Retorna a inscrição de um curso (se existir)
-  InscricaoCursoModel? getInscricao(String cursoId) => _inscricoes[cursoId];
+  /// Retorna a inscrição de um curso (se existir e não estiver cancelada)
+  InscricaoCursoModel? getInscricao(String cursoId) {
+    final inscricao = _inscricoes[cursoId];
+    if (inscricao == null || inscricao.isCancelado) return null;
+    return inscricao;
+  }
 
-  /// Retorna o progresso de um curso
+  /// Retorna o progresso de um curso (0 se cancelado)
   double getProgresso(String cursoId) {
-    return _inscricoes[cursoId]?.percentualConcluido ?? 0;
+    final inscricao = _inscricoes[cursoId];
+    if (inscricao == null || inscricao.isCancelado) return 0;
+    return inscricao.percentualConcluido;
   }
 
   // === Ações ===

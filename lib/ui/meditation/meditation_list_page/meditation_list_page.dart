@@ -383,6 +383,34 @@ class _MeditationListPageState extends State<MeditationListPage> {
       return StreamBuilder<List<MeditationModel>>(
         stream: viewModel.meditationsStream,
         builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.error_outline,
+                      size: 48,
+                      color: FlutterFlowTheme.of(context).error,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Erro ao carregar meditações',
+                      style: FlutterFlowTheme.of(context).titleMedium,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      '${snapshot.error}',
+                      textAlign: TextAlign.center,
+                      style: FlutterFlowTheme.of(context).bodySmall,
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
           if (!snapshot.hasData) {
             return Center(
               child: SizedBox(
@@ -397,6 +425,25 @@ class _MeditationListPageState extends State<MeditationListPage> {
             );
           }
           final listDocs = snapshot.data!;
+          if (listDocs.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.self_improvement_outlined,
+                    size: 64,
+                    color: FlutterFlowTheme.of(context).primary.withOpacity(0.5),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Nenhuma meditação disponível',
+                    style: FlutterFlowTheme.of(context).titleMedium,
+                  ),
+                ],
+              ),
+            );
+          }
           return _buildList(context, listDocs, 'Lista de Meditações');
         },
       );

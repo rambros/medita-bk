@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_theme.dart';
+
 /// Widget que exibe os objetivos do curso
 class ObjetivosSection extends StatelessWidget {
   const ObjetivosSection({
@@ -13,6 +15,8 @@ class ObjetivosSection extends StatelessWidget {
   Widget build(BuildContext context) {
     if (objetivos.isEmpty) return const SizedBox.shrink();
 
+    final appTheme = AppTheme.of(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -20,9 +24,10 @@ class ObjetivosSection extends StatelessWidget {
         children: [
           Text(
             'O que você vai aprender',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: appTheme.titleMedium.copyWith(
+              fontWeight: FontWeight.bold,
+              color: appTheme.primaryText,
+            ),
           ),
           const SizedBox(height: 12),
           ...objetivos.map((objetivo) => _ObjetivoItem(texto: objetivo)),
@@ -39,6 +44,8 @@ class _ObjetivoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
@@ -47,13 +54,15 @@ class _ObjetivoItem extends StatelessWidget {
           Icon(
             Icons.check_circle,
             size: 20,
-            color: Colors.green,
+            color: appTheme.primary,
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
               texto,
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: appTheme.bodyMedium.copyWith(
+                color: appTheme.primaryText,
+              ),
             ),
           ),
         ],
@@ -75,6 +84,8 @@ class RequisitosSection extends StatelessWidget {
   Widget build(BuildContext context) {
     if (requisitos.isEmpty) return const SizedBox.shrink();
 
+    final appTheme = AppTheme.of(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -82,9 +93,10 @@ class RequisitosSection extends StatelessWidget {
         children: [
           Text(
             'Requisitos',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: appTheme.titleMedium.copyWith(
+              fontWeight: FontWeight.bold,
+              color: appTheme.primaryText,
+            ),
           ),
           const SizedBox(height: 12),
           ...requisitos.map((requisito) => _RequisitoItem(texto: requisito)),
@@ -101,6 +113,8 @@ class _RequisitoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
@@ -109,13 +123,15 @@ class _RequisitoItem extends StatelessWidget {
           Icon(
             Icons.arrow_right,
             size: 20,
-            color: Theme.of(context).colorScheme.primary,
+            color: appTheme.primary,
           ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               texto,
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: appTheme.bodyMedium.copyWith(
+                color: appTheme.primaryText,
+              ),
             ),
           ),
         ],

@@ -42,8 +42,8 @@ class AulaModel {
       id: id,
       titulo: map['titulo'] as String? ?? '',
       descricao: map['descricao'] as String?,
-      ordem: map['ordem'] as int? ?? 0,
-      totalTopicos: map['totalTopicos'] as int? ?? 0,
+      ordem: _parseInt(map['ordem']),
+      totalTopicos: _parseInt(map['totalTopicos']),
       duracaoEstimada: map['duracaoEstimada'] as String?,
       dataCriacao: _parseTimestamp(map['dataCriacao']),
       cursoId: cursoId,
@@ -97,8 +97,8 @@ class AulaModel {
 
   /// Calcula a duração total dos tópicos (se disponível)
   int get duracaoTotalSegundos {
-    return topicos.fold(0, (sum, topico) {
-      return sum + (topico.duracao ?? 0);
+    return topicos.fold(0, (total, topico) {
+      return total + (topico.duracao ?? 0);
     });
   }
 
@@ -124,6 +124,14 @@ class AulaModel {
     if (value is Timestamp) return value.toDate();
     if (value is int) return DateTime.fromMillisecondsSinceEpoch(value);
     return null;
+  }
+
+  static int _parseInt(dynamic value) {
+    if (value == null) return 0;
+    if (value is int) return value;
+    if (value is double) return value.toInt();
+    if (value is String) return int.tryParse(value) ?? 0;
+    return 0;
   }
 
   @override

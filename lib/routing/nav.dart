@@ -667,7 +667,14 @@ extension GoRouterExtensions on GoRouter {
 }
 
 extension _GoRouterStateExtensions on GoRouterState {
-  Map<String, dynamic> get extraMap => extra != null ? extra as Map<String, dynamic> : {};
+  Map<String, dynamic> get extraMap {
+    if (extra == null) return {};
+    if (extra is Map<String, dynamic>) return extra as Map<String, dynamic>;
+    if (extra is Map) {
+      return Map<String, dynamic>.from(extra as Map);
+    }
+    return {};
+  }
   Map<String, dynamic> get allParams => <String, dynamic>{}
     ..addAll(pathParameters)
     ..addAll(uri.queryParameters)

@@ -60,7 +60,7 @@ class AuthRepository {
   }
 
   /// Current user helpers (sourced from auth_util).
-  UserModel? get currentUser => _currentUserModel;
+  UserModel? get currentUser => _currentUserModel ?? auth_util.currentUserDocument;
   String get currentUserEmail => auth_util.currentUserEmail;
   String get currentUserUid => auth_util.currentUserUid;
   DocumentReference? get currentUserRef => auth_util.currentUserReference;

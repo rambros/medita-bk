@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../domain/models/ead/index.dart';
+import '../../../core/theme/app_theme.dart';
 
 /// Widget que exibe uma pergunta do quiz
 class QuestionTile extends StatelessWidget {
@@ -23,7 +24,7 @@ class QuestionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final appTheme = AppTheme.of(context);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -34,13 +35,13 @@ class QuestionTile extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: theme.colorScheme.primaryContainer,
+              color: appTheme.primary.withOpacity(0.1),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
               'Pergunta $numeroPergunta de $totalPerguntas',
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onPrimaryContainer,
+              style: appTheme.bodySmall.copyWith(
+                color: appTheme.primary,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -51,8 +52,9 @@ class QuestionTile extends StatelessWidget {
           // Texto da pergunta
           Text(
             pergunta.pergunta,
-            style: theme.textTheme.titleLarge?.copyWith(
+            style: appTheme.titleLarge.copyWith(
               fontWeight: FontWeight.bold,
+              color: appTheme.primaryText,
             ),
           ),
 
@@ -80,18 +82,18 @@ class QuestionTile extends StatelessWidget {
   }
 
   Widget _buildExplicacao(BuildContext context) {
-    final theme = Theme.of(context);
+    final appTheme = AppTheme.of(context);
     final acertou = pergunta.isOpcaoCorreta(respostaSelecionada ?? '');
 
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: acertou
-            ? Colors.green.withOpacity(0.1)
-            : Colors.orange.withOpacity(0.1),
+            ? appTheme.primary.withOpacity(0.1)
+            : appTheme.secondary.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: acertou ? Colors.green : Colors.orange,
+          color: acertou ? appTheme.primary : appTheme.secondary,
           width: 1,
         ),
       ),
@@ -102,15 +104,15 @@ class QuestionTile extends StatelessWidget {
             children: [
               Icon(
                 acertou ? Icons.check_circle : Icons.info,
-                color: acertou ? Colors.green : Colors.orange,
+                color: acertou ? appTheme.primary : appTheme.secondary,
                 size: 20,
               ),
               const SizedBox(width: 8),
               Text(
                 acertou ? 'Correto!' : 'Explicacao',
-                style: theme.textTheme.titleSmall?.copyWith(
+                style: appTheme.titleSmall.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: acertou ? Colors.green : Colors.orange,
+                  color: acertou ? appTheme.primary : appTheme.secondary,
                 ),
               ),
             ],
@@ -118,7 +120,9 @@ class QuestionTile extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             pergunta.explicacao!,
-            style: theme.textTheme.bodyMedium,
+            style: appTheme.bodyMedium.copyWith(
+              color: appTheme.primaryText,
+            ),
           ),
         ],
       ),
@@ -143,7 +147,7 @@ class OptionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final appTheme = AppTheme.of(context);
 
     // Determina as cores baseado no estado
     Color backgroundColor;
@@ -153,31 +157,31 @@ class OptionTile extends StatelessWidget {
 
     if (mostrarResultado) {
       if (opcao.isCorreta) {
-        backgroundColor = Colors.green.withOpacity(0.1);
-        borderColor = Colors.green;
-        textColor = Colors.green.shade700;
+        backgroundColor = appTheme.primary.withOpacity(0.1);
+        borderColor = appTheme.primary;
+        textColor = appTheme.primary;
         icon = Icons.check_circle;
       } else if (isSelected && !opcao.isCorreta) {
-        backgroundColor = Colors.red.withOpacity(0.1);
-        borderColor = Colors.red;
-        textColor = Colors.red.shade700;
+        backgroundColor = appTheme.error.withOpacity(0.1);
+        borderColor = appTheme.error;
+        textColor = appTheme.error;
         icon = Icons.cancel;
       } else {
-        backgroundColor = theme.colorScheme.surface;
-        borderColor = theme.dividerColor;
-        textColor = theme.textTheme.bodyMedium?.color ?? Colors.black;
+        backgroundColor = appTheme.secondaryBackground;
+        borderColor = appTheme.accent4;
+        textColor = appTheme.primaryText;
         icon = null;
       }
     } else {
       if (isSelected) {
-        backgroundColor = theme.colorScheme.primaryContainer;
-        borderColor = theme.colorScheme.primary;
-        textColor = theme.colorScheme.onPrimaryContainer;
+        backgroundColor = appTheme.primary.withOpacity(0.1);
+        borderColor = appTheme.primary;
+        textColor = appTheme.primary;
         icon = Icons.radio_button_checked;
       } else {
-        backgroundColor = theme.colorScheme.surface;
-        borderColor = theme.dividerColor;
-        textColor = theme.textTheme.bodyMedium?.color ?? Colors.black;
+        backgroundColor = appTheme.secondaryBackground;
+        borderColor = appTheme.accent4;
+        textColor = appTheme.primaryText;
         icon = Icons.radio_button_unchecked;
       }
     }
@@ -199,7 +203,7 @@ class OptionTile extends StatelessWidget {
                 icon,
                 color: isSelected || mostrarResultado
                     ? borderColor
-                    : theme.disabledColor,
+                    : appTheme.secondaryText,
                 size: 24,
               ),
               const SizedBox(width: 12),
@@ -207,7 +211,7 @@ class OptionTile extends StatelessWidget {
             Expanded(
               child: Text(
                 opcao.texto,
-                style: theme.textTheme.bodyLarge?.copyWith(
+                style: appTheme.bodyLarge.copyWith(
                   color: textColor,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                 ),

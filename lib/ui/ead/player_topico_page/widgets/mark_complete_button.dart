@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_theme.dart';
+
 /// Botao para marcar/desmarcar um topico como completo
 class MarkCompleteButton extends StatelessWidget {
   const MarkCompleteButton({
@@ -28,30 +30,40 @@ class MarkCompleteButton extends StatelessWidget {
   }
 
   Widget _buildSmall(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     return IconButton(
       onPressed: isLoading ? null : onToggle,
       icon: isLoading
-          ? const SizedBox(
+          ? SizedBox(
               width: 20,
               height: 20,
-              child: CircularProgressIndicator(strokeWidth: 2),
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(appTheme.primary),
+              ),
             )
           : Icon(
               isCompleto ? Icons.check_circle : Icons.check_circle_outline,
-              color: isCompleto ? Colors.green : null,
+              color: appTheme.primary,
             ),
       tooltip: isCompleto ? 'Marcar como incompleto' : 'Marcar como completo',
     );
   }
 
   Widget _buildMedium(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     return OutlinedButton.icon(
       onPressed: isLoading ? null : onToggle,
       icon: isLoading
-          ? const SizedBox(
+          ? SizedBox(
               width: 18,
               height: 18,
-              child: CircularProgressIndicator(strokeWidth: 2),
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(appTheme.primary),
+              ),
             )
           : Icon(
               isCompleto ? Icons.check_circle : Icons.check_circle_outline,
@@ -59,26 +71,26 @@ class MarkCompleteButton extends StatelessWidget {
             ),
       label: Text(isCompleto ? 'Concluido' : 'Marcar como concluido'),
       style: OutlinedButton.styleFrom(
-        foregroundColor: isCompleto ? Colors.green : null,
-        side: BorderSide(
-          color: isCompleto ? Colors.green : Theme.of(context).dividerColor,
-        ),
+        foregroundColor: appTheme.primary,
+        side: BorderSide(color: appTheme.primary),
       ),
     );
   }
 
   Widget _buildLarge(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton.icon(
         onPressed: isLoading ? null : onToggle,
         icon: isLoading
-            ? const SizedBox(
+            ? SizedBox(
                 width: 20,
                 height: 20,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color: Colors.white,
+                  valueColor: AlwaysStoppedAnimation<Color>(appTheme.info),
                 ),
               )
             : Icon(
@@ -87,7 +99,8 @@ class MarkCompleteButton extends StatelessWidget {
         label: Text(isCompleto ? 'Concluido!' : 'Marcar como concluido'),
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 16),
-          backgroundColor: isCompleto ? Colors.green : null,
+          backgroundColor: appTheme.primary,
+          foregroundColor: appTheme.info,
         ),
       ),
     );
@@ -113,7 +126,7 @@ class CompletionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final appTheme = AppTheme.of(context);
 
     return Card(
       margin: const EdgeInsets.all(16),
@@ -127,14 +140,12 @@ class CompletionCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: isCompleto
-                        ? Colors.green.withOpacity(0.1)
-                        : theme.colorScheme.primary.withOpacity(0.1),
+                    color: appTheme.primary.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     isCompleto ? Icons.check_circle : Icons.school,
-                    color: isCompleto ? Colors.green : theme.colorScheme.primary,
+                    color: appTheme.primary,
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -144,14 +155,17 @@ class CompletionCard extends StatelessWidget {
                     children: [
                       Text(
                         isCompleto ? 'Topico concluido!' : 'Concluiu este topico?',
-                        style: theme.textTheme.titleSmall?.copyWith(
+                        style: appTheme.titleSmall.copyWith(
                           fontWeight: FontWeight.bold,
+                          color: appTheme.primaryText,
                         ),
                       ),
                       if (progressoCurso != null)
                         Text(
                           'Progresso do curso: ${progressoCurso!.toStringAsFixed(0)}%',
-                          style: theme.textTheme.bodySmall,
+                          style: appTheme.bodySmall.copyWith(
+                            color: appTheme.secondaryText,
+                          ),
                         ),
                     ],
                   ),

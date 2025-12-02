@@ -58,14 +58,12 @@ class CursoModel {
       imagemCapa: map['imagemCapa'] as String?,
       videoPreview: map['videoPreview'] as String?,
       status: StatusCurso.fromString(map['status'] as String?),
-      ordem: map['ordem'] as int? ?? 0,
+      ordem: _parseInt(map['ordem']),
       dataCriacao: _parseTimestamp(map['dataCriacao']),
       dataPublicacao: _parseTimestamp(map['dataPublicacao']),
-      autor: map['autor'] != null
-          ? AutorCursoModel.fromMap(map['autor'] as Map<String, dynamic>)
-          : null,
-      totalAulas: map['totalAulas'] as int? ?? 0,
-      totalTopicos: map['totalTopicos'] as int? ?? 0,
+      autor: map['autor'] != null ? AutorCursoModel.fromMap(map['autor'] as Map<String, dynamic>) : null,
+      totalAulas: _parseInt(map['totalAulas']),
+      totalTopicos: _parseInt(map['totalTopicos']),
       duracaoEstimada: map['duracaoEstimada'] as String?,
       tags: _parseStringList(map['tags']),
       objetivos: _parseStringList(map['objetivos']),
@@ -175,6 +173,14 @@ class CursoModel {
       return value.map((e) => e.toString()).toList();
     }
     return [];
+  }
+
+  static int _parseInt(dynamic value) {
+    if (value == null) return 0;
+    if (value is int) return value;
+    if (value is double) return value.toInt();
+    if (value is String) return int.tryParse(value) ?? 0;
+    return 0;
   }
 
   @override

@@ -21,7 +21,7 @@ class ConteudoTopicoModel {
 
     return ConteudoTopicoModel(
       url: map['url'] as String?,
-      duracao: map['duracao'] as int?,
+      duracao: _parseInt(map['duracao']),
       thumbnail: map['thumbnail'] as String?,
       htmlContent: map['htmlContent'] as String?,
     );
@@ -56,6 +56,14 @@ class ConteudoTopicoModel {
     final minutos = duracao! ~/ 60;
     final segundos = duracao! % 60;
     return '$minutos:${segundos.toString().padLeft(2, '0')}';
+  }
+
+  static int? _parseInt(dynamic value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    if (value is double) return value.toInt();
+    if (value is String) return int.tryParse(value);
+    return null;
   }
 
   @override
@@ -109,7 +117,7 @@ class TopicoModel {
       id: id,
       titulo: map['titulo'] as String? ?? '',
       descricao: map['descricao'] as String?,
-      ordem: map['ordem'] as int? ?? 0,
+      ordem: _parseInt(map['ordem']) ?? 0,
       tipo: TipoConteudoTopico.fromString(map['tipo'] as String?),
       conteudo: ConteudoTopicoModel.fromMap(
         map['conteudo'] as Map<String, dynamic>?,
@@ -233,6 +241,14 @@ class TopicoModel {
     return null;
   }
 
+  static int? _parseInt(dynamic value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    if (value is double) return value.toInt();
+    if (value is String) return int.tryParse(value);
+    return null;
+  }
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
@@ -243,6 +259,5 @@ class TopicoModel {
   int get hashCode => id.hashCode;
 
   @override
-  String toString() =>
-      'TopicoModel(id: $id, titulo: $titulo, tipo: ${tipo.name})';
+  String toString() => 'TopicoModel(id: $id, titulo: $titulo, tipo: ${tipo.name})';
 }

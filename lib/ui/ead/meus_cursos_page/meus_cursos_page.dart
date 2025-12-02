@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:medita_b_k/data/repositories/auth_repository.dart';
 import 'package:medita_b_k/routing/ead_routes.dart';
+import '../../core/theme/app_theme.dart';
 import 'view_model/meus_cursos_view_model.dart';
 import 'widgets/meu_curso_card.dart';
 import 'widgets/resumo_progresso_widget.dart';
@@ -47,20 +48,24 @@ class _MeusCursosPageState extends State<MeusCursosPage> {
     }
   }
 
-  void _navegarParaDetalhes(String cursoId) {
-    context.pushNamed(
+  Future<void> _navegarParaDetalhes(String cursoId) async {
+    await context.pushNamed(
       EadRoutes.cursoDetalhes,
       pathParameters: {'cursoId': cursoId},
     );
+    // Recarrega os dados ao voltar para atualizar o progresso
+    await _recarregarDados();
   }
 
-  void _navegarParaCatalogo() {
-    context.pushNamed(EadRoutes.catalogoCursos);
+  Future<void> _navegarParaCatalogo() async {
+    await context.pushNamed(EadRoutes.catalogoCursos);
+    // Recarrega os dados ao voltar caso tenha se inscrito em novo curso
+    await _recarregarDados();
   }
 
-  void _continuarCurso(String cursoId, String? aulaId, String? topicoId) {
+  Future<void> _continuarCurso(String cursoId, String? aulaId, String? topicoId) async {
     if (aulaId != null && topicoId != null) {
-      context.pushNamed(
+      await context.pushNamed(
         EadRoutes.playerTopico,
         pathParameters: {
           'cursoId': cursoId,
@@ -68,13 +73,24 @@ class _MeusCursosPageState extends State<MeusCursosPage> {
           'topicoId': topicoId,
         },
       );
+      // Recarrega os dados ao voltar para atualizar o progresso
+      await _recarregarDados();
     } else {
-      _navegarParaDetalhes(cursoId);
+      await _navegarParaDetalhes(cursoId);
+    }
+  }
+
+  Future<void> _recarregarDados() async {
+    final usuarioId = _usuarioId;
+    if (usuarioId != null) {
+      await _viewModel.refresh(usuarioId);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
     if (_usuarioId == null) {
       return _buildNaoLogado();
     }
@@ -82,8 +98,17 @@ class _MeusCursosPageState extends State<MeusCursosPage> {
     return ChangeNotifierProvider.value(
       value: _viewModel,
       child: Scaffold(
+        backgroundColor: appTheme.primaryBackground,
         appBar: AppBar(
-          title: const Text('Meus Cursos'),
+          backgroundColor: appTheme.primary,
+          foregroundColor: appTheme.info,
+          elevation: 2.0,
+          title: Text(
+            'Meus Cursos',
+            style: appTheme.headlineMedium.copyWith(
+              color: appTheme.info,
+            ),
+          ),
           actions: [
             IconButton(
               icon: const Icon(Icons.explore),
@@ -95,7 +120,9 @@ class _MeusCursosPageState extends State<MeusCursosPage> {
         body: Consumer<MeusCursosViewModel>(
           builder: (context, viewModel, child) {
             if (viewModel.isLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return Center(
+                child: CircularProgressIndicator(color: appTheme.primary),
+              );
             }
 
             if (viewModel.error != null) {
@@ -117,8 +144,21 @@ class _MeusCursosPageState extends State<MeusCursosPage> {
   }
 
   Widget _buildNaoLogado() {
+    final appTheme = AppTheme.of(context);
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Meus Cursos')),
+      backgroundColor: appTheme.primaryBackground,
+      appBar: AppBar(
+        backgroundColor: appTheme.primary,
+        foregroundColor: appTheme.info,
+        elevation: 2.0,
+        title: Text(
+          'Meus Cursos',
+          style: appTheme.headlineMedium.copyWith(
+            color: appTheme.info,
+          ),
+        ),
+      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(32),
@@ -128,21 +168,21 @@ class _MeusCursosPageState extends State<MeusCursosPage> {
               Icon(
                 Icons.lock_outline,
                 size: 80,
-                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
+                color: appTheme.primary.withOpacity(0.3),
               ),
               const SizedBox(height: 24),
               Text(
                 'Faca login para ver seus cursos',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleMedium,
+                style: appTheme.titleMedium,
               ),
               const SizedBox(height: 16),
               Text(
                 'Acesse sua conta para acompanhar seu progresso nos cursos',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).textTheme.bodySmall?.color,
-                    ),
+                style: appTheme.bodyMedium.copyWith(
+                  color: appTheme.secondaryText,
+                ),
               ),
             ],
           ),
@@ -152,6 +192,8 @@ class _MeusCursosPageState extends State<MeusCursosPage> {
   }
 
   Widget _buildError(MeusCursosViewModel viewModel) {
+    final appTheme = AppTheme.of(context);
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -161,17 +203,21 @@ class _MeusCursosPageState extends State<MeusCursosPage> {
             Icon(
               Icons.error_outline,
               size: 64,
-              color: Theme.of(context).colorScheme.error,
+              color: appTheme.error,
             ),
             const SizedBox(height: 16),
             Text(
               viewModel.error!,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: appTheme.bodyLarge,
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
               onPressed: _carregarDados,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: appTheme.primary,
+                foregroundColor: appTheme.info,
+              ),
               icon: const Icon(Icons.refresh),
               label: const Text('Tentar novamente'),
             ),

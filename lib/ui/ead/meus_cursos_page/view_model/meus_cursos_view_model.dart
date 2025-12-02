@@ -60,32 +60,36 @@ class MeusCursosViewModel extends ChangeNotifier {
 
   // === Getters computados ===
 
-  /// Inscrições filtradas pelo status selecionado
+  /// Inscrições ativas (exclui canceladas)
+  List<InscricaoCursoModel> get _inscricoesAtivas =>
+      _inscricoes.where((i) => !i.isCancelado).toList();
+
+  /// Inscrições filtradas pelo status selecionado (sempre exclui canceladas)
   List<InscricaoCursoModel> get inscricoesFiltradas {
     switch (_filtroAtual) {
       case FiltroMeusCursos.todos:
-        return _inscricoes;
+        return _inscricoesAtivas;
       case FiltroMeusCursos.emAndamento:
-        return _inscricoes.where((i) => i.isAtivo && !i.progresso.isConcluido).toList();
+        return _inscricoesAtivas.where((i) => i.isAtivo && !i.progresso.isConcluido).toList();
       case FiltroMeusCursos.concluidos:
-        return _inscricoes.where((i) => i.isConcluido).toList();
+        return _inscricoesAtivas.where((i) => i.isConcluido).toList();
       case FiltroMeusCursos.pausados:
-        return _inscricoes.where((i) => i.isPausado).toList();
+        return _inscricoesAtivas.where((i) => i.isPausado).toList();
     }
   }
 
-  /// Total de cursos em andamento
+  /// Total de cursos em andamento (exclui cancelados)
   int get totalEmAndamento =>
-      _inscricoes.where((i) => i.isAtivo && !i.progresso.isConcluido).length;
+      _inscricoesAtivas.where((i) => i.isAtivo && !i.progresso.isConcluido).length;
 
-  /// Total de cursos concluídos
-  int get totalConcluidos => _inscricoes.where((i) => i.isConcluido).length;
+  /// Total de cursos concluídos (exclui cancelados)
+  int get totalConcluidos => _inscricoesAtivas.where((i) => i.isConcluido).length;
 
-  /// Total de cursos pausados
-  int get totalPausados => _inscricoes.where((i) => i.isPausado).length;
+  /// Total de cursos pausados (exclui cancelados)
+  int get totalPausados => _inscricoesAtivas.where((i) => i.isPausado).length;
 
-  /// Verifica se tem algum curso
-  bool get hasCursos => _inscricoes.isNotEmpty;
+  /// Verifica se tem algum curso (exclui cancelados)
+  bool get hasCursos => _inscricoesAtivas.isNotEmpty;
 
   /// Verifica se a lista filtrada está vazia
   bool get listaVazia => inscricoesFiltradas.isEmpty;
