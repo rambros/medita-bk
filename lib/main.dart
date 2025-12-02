@@ -2,6 +2,7 @@ import '/core/services/audio_service.dart';
 import '/core/services/notification_service.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
@@ -27,6 +28,13 @@ import '/data/services/auth/firebase_auth/firebase_auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Força o app a ficar em modo portrait
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
   GoRouter.optionURLReflectsImperativeAPIs = true;
   usePathUrlStrategy();
 

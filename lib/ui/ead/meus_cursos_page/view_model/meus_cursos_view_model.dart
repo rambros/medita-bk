@@ -155,6 +155,22 @@ class MeusCursosViewModel extends ChangeNotifier {
     await carregarMeusCursos(usuarioId);
   }
 
+  /// Reinicia o progresso de um curso
+  Future<void> reiniciarCurso(String cursoId, String usuarioId) async {
+    try {
+      await _repository.reiniciarProgresso(
+        cursoId: cursoId,
+        usuarioId: usuarioId,
+      );
+      // Recarrega a lista para atualizar o estado
+      await carregarMeusCursos(usuarioId);
+    } catch (e) {
+      _error = 'Erro ao reiniciar curso: $e';
+      debugPrint(_error);
+      notifyListeners();
+    }
+  }
+
   /// Retorna informações de progresso resumidas
   ({int completos, int total, double percentual}) getResumoProgresso() {
     if (_inscricoes.isEmpty) {

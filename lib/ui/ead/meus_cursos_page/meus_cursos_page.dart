@@ -63,7 +63,28 @@ class _MeusCursosPageState extends State<MeusCursosPage> {
     await _recarregarDados();
   }
 
-  Future<void> _continuarCurso(String cursoId, String? aulaId, String? topicoId) async {
+  Future<void> _continuarCurso(
+    String cursoId,
+    String? aulaId,
+    String? topicoId, {
+    bool isConcluido = false,
+  }) async {
+    // Se o curso está concluído, pergunta se quer revisar ou reiniciar
+    if (isConcluido) {
+      final acao = await _mostrarDialogCursoConcluido();
+      if (acao == null) return; // Cancelou
+
+      if (acao == 'reiniciar') {
+        // Reinicia o progresso e navega para o início
+        await _viewModel.reiniciarCurso(cursoId, _usuarioId!);
+        await _navegarParaDetalhes(cursoId);
+        return;
+      }
+      // Se acao == 'revisar', continua para a página de detalhes
+      await _navegarParaDetalhes(cursoId);
+      return;
+    }
+
     if (aulaId != null && topicoId != null) {
       await context.pushNamed(
         EadRoutes.playerTopico,
@@ -78,6 +99,51 @@ class _MeusCursosPageState extends State<MeusCursosPage> {
     } else {
       await _navegarParaDetalhes(cursoId);
     }
+  }
+
+  /// Mostra dialog para curso concluído com opções de revisar ou reiniciar
+  Future<String?> _mostrarDialogCursoConcluido() async {
+    final appTheme = AppTheme.of(context);
+
+    return showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.emoji_events, color: appTheme.primary),
+            const SizedBox(width: 12),
+            const Text('Curso Concluído!'),
+          ],
+        ),
+        content: const Text(
+          'Parabéns! Você já completou este curso.\n\nO que deseja fazer?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              'Cancelar',
+              style: TextStyle(color: appTheme.secondaryText),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'revisar'),
+            child: Text(
+              'Revisar',
+              style: TextStyle(color: appTheme.primary),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, 'reiniciar'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: appTheme.primary,
+              foregroundColor: appTheme.info,
+            ),
+            child: const Text('Reiniciar'),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _recarregarDados() async {
@@ -286,6 +352,7 @@ class _MeusCursosPageState extends State<MeusCursosPage> {
                         inscricao.cursoId,
                         inscricao.progresso.ultimaAulaId,
                         inscricao.progresso.ultimoTopicoId,
+                        isConcluido: inscricao.isConcluido,
                       ),
                     ),
                   );

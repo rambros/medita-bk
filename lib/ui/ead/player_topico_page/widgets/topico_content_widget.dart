@@ -65,56 +65,21 @@ class TopicoContentWidget extends StatelessWidget {
   }
 
   Widget _buildAudioPlayer(BuildContext context) {
-    final appTheme = AppTheme.of(context);
     final url = topico.url;
     if (url == null || url.isEmpty) {
       return _buildConteudoIndisponivel(context, 'Audio nao disponivel');
     }
 
+    // Layout minimalista: player centralizado com titulo integrado
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Header compacto com icone e titulo
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                appTheme.primary,
-                appTheme.primary.withOpacity(0.8),
-              ],
-            ),
-          ),
-          child: Row(
-            children: [
-              Icon(
-                Icons.headphones,
-                size: 32,
-                color: appTheme.info.withOpacity(0.8),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  topico.titulo,
-                  style: appTheme.titleMedium.copyWith(
-                    color: appTheme.info,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        // Player de audio
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: AudioPlayerWidget(
-            audioUrl: url,
-            audioTitle: topico.titulo,
-            audioArt: cursoImagem ?? '',
-          ),
+        // Player de audio com titulo integrado
+        AudioPlayerWidget(
+          audioUrl: url,
+          audioTitle: topico.titulo,
+          audioArt: cursoImagem ?? '',
+          showTitle: true,
         ),
         _buildDescricao(context),
       ],

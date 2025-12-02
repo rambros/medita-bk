@@ -73,12 +73,6 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
               ParamType.String,
             ),
           }.withoutNulls,
-          extra: <String, dynamic>{
-            kTransitionInfoKey: const TransitionInfo(
-              hasTransition: true,
-              transitionType: PageTransitionType.leftToRight,
-            ),
-          },
         );
         await _refreshDownloadStatus();
       },

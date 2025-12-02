@@ -30,11 +30,14 @@ class MeditationRepositoryImpl implements MeditationRepository {
 
   @override
   Stream<List<MeditationModel>> getMeditations() {
+    logDebug('MeditationRepository: Getting meditations stream from $_collectionPath');
     return _firestoreService.streamCollection(
       collectionPath: _collectionPath,
       fromSnapshot: MeditationModel.fromFirestore,
       queryBuilder: (query) => query.orderBy('date', descending: true),
-    );
+    ).handleError((error) {
+      logDebug('MeditationRepository: Error getting meditations: $error');
+    });
   }
 
   @override

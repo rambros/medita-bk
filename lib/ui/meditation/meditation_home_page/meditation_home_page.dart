@@ -1,14 +1,14 @@
-import '/ui/core/flutter_flow/flutter_flow_animations.dart';
 import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import '/ui/core/flutter_flow/flutter_flow_theme.dart';
 import '/ui/core/flutter_flow/flutter_flow_util.dart';
 
 import '/ui/core/actions/actions.dart' as action_blocks;
 import '/ui/pages.dart';
+import '/routing/ead_routes.dart';
+import '/core/constants/course_constants.dart';
 import '/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 
 class MeditationHomePage extends StatefulWidget {
   const MeditationHomePage({super.key});
@@ -20,10 +20,8 @@ class MeditationHomePage extends StatefulWidget {
   State<MeditationHomePage> createState() => _MeditationHomePageState();
 }
 
-class _MeditationHomePageState extends State<MeditationHomePage> with TickerProviderStateMixin {
+class _MeditationHomePageState extends State<MeditationHomePage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
-  final animationsMap = <String, AnimationInfo>{};
 
   @override
   void initState() {
@@ -35,72 +33,8 @@ class _MeditationHomePageState extends State<MeditationHomePage> with TickerProv
       await action_blocks.checkInternetAccess(context);
     });
 
-    animationsMap.addAll({
-      'containerOnPageLoadAnimation1': AnimationInfo(
-        trigger: AnimationTrigger.onPageLoad,
-        effectsBuilder: () => [
-          MoveEffect(
-            curve: Curves.easeInOut,
-            delay: 0.0.ms,
-            duration: 800.0.ms,
-            begin: const Offset(18.0, 18.0),
-            end: const Offset(0.0, 0.0),
-          ),
-        ],
-      ),
-      'containerOnPageLoadAnimation2': AnimationInfo(
-        trigger: AnimationTrigger.onPageLoad,
-        effectsBuilder: () => [
-          MoveEffect(
-            curve: Curves.easeInOut,
-            delay: 0.0.ms,
-            duration: 800.0.ms,
-            begin: const Offset(18.0, 18.0),
-            end: const Offset(0.0, 0.0),
-          ),
-        ],
-      ),
-      'containerOnPageLoadAnimation3': AnimationInfo(
-        trigger: AnimationTrigger.onPageLoad,
-        effectsBuilder: () => [
-          MoveEffect(
-            curve: Curves.easeInOut,
-            delay: 0.0.ms,
-            duration: 800.0.ms,
-            begin: const Offset(18.0, 18.0),
-            end: const Offset(0.0, 0.0),
-          ),
-        ],
-      ),
-      'containerOnPageLoadAnimation4': AnimationInfo(
-        trigger: AnimationTrigger.onPageLoad,
-        effectsBuilder: () => [
-          MoveEffect(
-            curve: Curves.easeInOut,
-            delay: 0.0.ms,
-            duration: 800.0.ms,
-            begin: const Offset(18.0, 18.0),
-            end: const Offset(0.0, 0.0),
-          ),
-        ],
-      ),
-      'containerOnPageLoadAnimation5': AnimationInfo(
-        trigger: AnimationTrigger.onPageLoad,
-        effectsBuilder: () => [
-          MoveEffect(
-            curve: Curves.easeInOut,
-            delay: 0.0.ms,
-            duration: 800.0.ms,
-            begin: const Offset(18.0, 18.0),
-            end: const Offset(0.0, 0.0),
-          ),
-        ],
-      ),
-    });
-
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -136,15 +70,7 @@ class _MeditationHomePageState extends State<MeditationHomePage> with TickerProv
                             hoverColor: Colors.transparent,
                             highlightColor: Colors.transparent,
                             onTap: () async {
-                              context.pushNamed(
-                                ConfigPage.routeName,
-                                extra: <String, dynamic>{
-                                  kTransitionInfoKey: const TransitionInfo(
-                                    hasTransition: true,
-                                    transitionType: PageTransitionType.leftToRight,
-                                  ),
-                                },
-                              );
+                              context.pushNamed(ConfigPage.routeName);
                             },
                             child: Icon(
                               Icons.menu,
@@ -238,16 +164,7 @@ class _MeditationHomePageState extends State<MeditationHomePage> with TickerProv
                           highlightColor: Colors.transparent,
                           onTap: () async {
                             await action_blocks.checkInternetAccess(context);
-
-                            context.pushNamed(
-                              MeditationListPage.routeName,
-                              extra: <String, dynamic>{
-                                kTransitionInfoKey: const TransitionInfo(
-                                  hasTransition: true,
-                                  transitionType: PageTransitionType.leftToRight,
-                                ),
-                              },
-                            );
+                            context.pushNamed(MeditationListPage.routeName);
                           },
                           child: Container(
                             width: 100.0,
@@ -279,7 +196,7 @@ class _MeditationHomePageState extends State<MeditationHomePage> with TickerProv
                                       color: FlutterFlowTheme.of(context).secondaryText,
                                       size: 24.0,
                                     ),
-                                  ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation1']!),
+                                  ),
                                   Text(
                                     'Escolher uma meditação',
                                     textAlign: TextAlign.center,
@@ -322,16 +239,7 @@ class _MeditationHomePageState extends State<MeditationHomePage> with TickerProv
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
-                                context.pushNamed(
-                                  PlaylistListPage.routeName,
-                                  extra: <String, dynamic>{
-                                    kTransitionInfoKey: const TransitionInfo(
-                                      hasTransition: true,
-                                      transitionType: PageTransitionType.fade,
-                                      duration: Duration(milliseconds: 0),
-                                    ),
-                                  },
-                                );
+                                context.pushNamed(PlaylistListPage.routeName);
                               },
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
@@ -350,7 +258,7 @@ class _MeditationHomePageState extends State<MeditationHomePage> with TickerProv
                                       color: FlutterFlowTheme.of(context).secondaryText,
                                       size: 28.0,
                                     ),
-                                  ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation2']!),
+                                  ),
                                   Text(
                                     'Playlist de meditação',
                                     textAlign: TextAlign.center,
@@ -381,16 +289,7 @@ class _MeditationHomePageState extends State<MeditationHomePage> with TickerProv
                           highlightColor: Colors.transparent,
                           onTap: () async {
                             await action_blocks.checkInternetAccess(context);
-
-                            context.pushNamed(
-                              MeditationVideoListPage.routeName,
-                              extra: <String, dynamic>{
-                                kTransitionInfoKey: const TransitionInfo(
-                                  hasTransition: true,
-                                  transitionType: PageTransitionType.rightToLeft,
-                                ),
-                              },
-                            );
+                            context.pushNamed(MeditationVideoListPage.routeName);
                           },
                           child: Container(
                             width: 100.0,
@@ -422,7 +321,7 @@ class _MeditationHomePageState extends State<MeditationHomePage> with TickerProv
                                       color: FlutterFlowTheme.of(context).secondaryText,
                                       size: 20.0,
                                     ),
-                                  ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation3']!),
+                                  ),
                                   Text(
                                     'Meditação com vídeo',
                                     textAlign: TextAlign.center,
@@ -452,15 +351,7 @@ class _MeditationHomePageState extends State<MeditationHomePage> with TickerProv
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onTap: () async {
-                            context.pushNamed(
-                              MeditationStatisticsPage.routeName,
-                              extra: <String, dynamic>{
-                                kTransitionInfoKey: const TransitionInfo(
-                                  hasTransition: true,
-                                  transitionType: PageTransitionType.leftToRight,
-                                ),
-                              },
-                            );
+                            context.pushNamed(MeditationStatisticsPage.routeName);
                           },
                           child: Container(
                             width: 100.0,
@@ -492,7 +383,7 @@ class _MeditationHomePageState extends State<MeditationHomePage> with TickerProv
                                       color: FlutterFlowTheme.of(context).secondaryText,
                                       size: 24.0,
                                     ),
-                                  ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation4']!),
+                                  ),
                                   Text(
                                     'Estatísticas de meditação',
                                     textAlign: TextAlign.center,
@@ -522,7 +413,10 @@ class _MeditationHomePageState extends State<MeditationHomePage> with TickerProv
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onTap: () async {
-                            await launchURL('https://ead.brahmakumaris.org.br');
+                            context.pushNamed(
+                              EadRoutes.cursoDetalhes,
+                              pathParameters: {'cursoId': CourseConstants.cursoMeditacaoRajaYoga},
+                            );
                           },
                           child: Container(
                             width: 100.0,
@@ -550,13 +444,13 @@ class _MeditationHomePageState extends State<MeditationHomePage> with TickerProv
                                       borderRadius: BorderRadius.circular(50.0),
                                     ),
                                     child: Icon(
-                                      Icons.spa_sharp,
+                                      Icons.school_outlined,
                                       color: FlutterFlowTheme.of(context).secondaryText,
                                       size: 24.0,
                                     ),
-                                  ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation5']!),
+                                  ),
                                   Text(
-                                    'Aprenda a meditar',
+                                    'Aprenda a Meditar',
                                     textAlign: TextAlign.center,
                                     style: FlutterFlowTheme.of(context).bodyLarge.override(
                                           fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,

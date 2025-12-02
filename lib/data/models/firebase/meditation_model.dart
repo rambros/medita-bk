@@ -86,7 +86,7 @@ class MeditationModel extends Equatable {
       comments: _getCommentList(data['comments']),
       imageUrl: data['imageUrl'] as String? ?? '',
       audioUrl: data['audioUrl'] as String? ?? '',
-      reference: data['id'] as DocumentReference?,
+      reference: doc.reference,
     );
   }
 

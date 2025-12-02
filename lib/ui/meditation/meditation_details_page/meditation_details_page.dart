@@ -238,30 +238,24 @@ class _MeditationDetailsPageState extends State<MeditationDetailsPage> {
                                     useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
                                   ),
                             ),
-                            Container(
-                              width: 40.0,
-                              height: 28.0,
-                              decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context).primaryBackground,
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Text(
-                                    meditationDetailsPageMeditation.numLiked.toString(),
-                                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                          fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
-                                          letterSpacing: 0.0,
-                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
-                                        ),
-                                  ),
-                                  Icon(
-                                    Icons.favorite,
-                                    color: FlutterFlowTheme.of(context).primary,
-                                    size: 16.0,
-                                  ),
-                                ],
-                              ),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  meditationDetailsPageMeditation.numLiked.toString(),
+                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                        fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
+                                        letterSpacing: 0.0,
+                                        useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
+                                      ),
+                                ),
+                                const SizedBox(width: 2),
+                                Icon(
+                                  Icons.favorite,
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  size: 16.0,
+                                ),
+                              ],
                             ),
                             if (_isAudioDownloaded == true)
                               Align(

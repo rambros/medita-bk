@@ -15,6 +15,7 @@ import 'package:audio_session/audio_session.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rxdart/rxdart.dart';
+import '/core/controllers/index.dart';
 
 Stopwatch _watch = Stopwatch();
 
@@ -27,6 +28,7 @@ class AudioPlayerWidget extends StatefulWidget {
     required this.audioUrl,
     required this.audioArt,
     this.colorButton,
+    this.showTitle = false,
   });
 
   final double? width;
@@ -35,6 +37,7 @@ class AudioPlayerWidget extends StatefulWidget {
   final String audioUrl;
   final String audioArt;
   final Color? colorButton;
+  final bool showTitle;
 
   @override
   _AudioPlayerWidgetState createState() => _AudioPlayerWidgetState();
@@ -44,6 +47,10 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   late AudioPlayer _player;
   ConcatenatingAudioSource _playlist = ConcatenatingAudioSource(children: []);
 
+  // Estado do download/cache
+  bool _isDownloaded = false;
+  bool _isDownloading = false;
+
   @override
   void initState() {
     super.initState();
@@ -51,7 +58,56 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.black,
     ));
-    _init();
+    _prepareAudio();
+  }
+
+  /// Prepara o audio: verifica cache e baixa se necessario
+  void _prepareAudio() {
+    if (widget.audioUrl.isEmpty) return;
+
+    Future.microtask(() async {
+      // Verifica se ja esta em cache
+      final cached = await globalAudioPlayerController.isCached(widget.audioUrl);
+      if (!mounted) return;
+
+      if (cached) {
+        setState(() => _isDownloaded = true);
+        await _init();
+        return;
+      }
+
+      // Se nao esta em cache, baixa primeiro
+      await _downloadAudio();
+    });
+  }
+
+  /// Baixa o audio para o cache
+  Future<void> _downloadAudio() async {
+    if (!mounted || _isDownloading || widget.audioUrl.isEmpty) return;
+
+    setState(() {
+      _isDownloading = true;
+    });
+
+    try {
+      await globalAudioPlayerController.download(widget.audioUrl);
+    } catch (e) {
+      logDebug('Erro ao baixar audio: $e');
+    } finally {
+      if (mounted) {
+        final cached = await globalAudioPlayerController.isCached(widget.audioUrl);
+        if (mounted) {
+          setState(() {
+            _isDownloaded = cached;
+            _isDownloading = false;
+          });
+          // Inicializa o player apos o download
+          if (cached) {
+            await _init();
+          }
+        }
+      }
+    }
   }
 
   Future<void> _init() async {
@@ -62,8 +118,8 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
       AudioSource.uri(
         Uri.parse(widget.audioUrl),
         tag: MediaItem(
-          id: 'GoodWishes',
-          album: 'GoodWishes Album',
+          id: 'EAD_Audio',
+          album: 'MeditaBK EAD',
           title: widget.audioTitle,
           artUri: Uri.parse(widget.audioArt),
         ),
@@ -98,39 +154,367 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
       _player.durationStream,
       (position, bufferedPosition, duration) => PositionData(position, bufferedPosition, duration ?? Duration.zero));
 
+  String _formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+    if (duration.inHours > 0) {
+      return '${duration.inHours}:$minutes:$seconds';
+    }
+    return '$minutes:$seconds';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+    final buttonColor = widget.colorButton ?? appTheme.primary;
+
     return Container(
       width: widget.width,
       height: widget.height,
-      color: const Color(0x00F2F3F8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          AudioControlButtons(_player, colorButton: widget.colorButton),
+          // Icone grande centralizado
+          Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              color: buttonColor.withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.headphones_rounded,
+              size: 48,
+              color: buttonColor,
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // Titulo do audio (se showTitle = true)
+          if (widget.showTitle && widget.audioTitle.isNotEmpty) ...[
+            Text(
+              widget.audioTitle,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: appTheme.titleMedium.copyWith(
+                color: appTheme.primaryText,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 16),
+          ],
+
+          // Banner de download (se estiver baixando)
+          if (_isDownloading && !_isDownloaded) ...[
+            _DownloadBanner(buttonColor: buttonColor),
+            const SizedBox(height: 16),
+          ],
+
+          // Slider de progresso com tempos
           StreamBuilder<PositionData>(
             stream: _positionDataStream,
             builder: (context, snapshot) {
               final positionData = snapshot.data;
-              return SeekBar(
-                color: widget.colorButton,
-                duration: positionData?.duration ?? Duration.zero,
-                position: positionData?.position ?? Duration.zero,
-                bufferedPosition: positionData?.bufferedPosition ?? Duration.zero,
-                onChangeEnd: (newPosition) {
-                  _player.seek(newPosition);
-                },
+              final duration = positionData?.duration ?? Duration.zero;
+              final position = positionData?.position ?? Duration.zero;
+
+              return Column(
+                children: [
+                  // Slider customizado
+                  SliderTheme(
+                    data: SliderTheme.of(context).copyWith(
+                      trackHeight: 4.0,
+                      activeTrackColor: buttonColor,
+                      inactiveTrackColor: buttonColor.withOpacity(0.2),
+                      thumbColor: buttonColor,
+                      thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+                      overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
+                    ),
+                    child: Slider(
+                      min: 0.0,
+                      max: duration.inMilliseconds.toDouble().clamp(1, double.infinity),
+                      value: position.inMilliseconds.toDouble().clamp(0, duration.inMilliseconds.toDouble()),
+                      onChanged: _isDownloaded
+                          ? (value) {
+                              _player.seek(Duration(milliseconds: value.round()));
+                            }
+                          : null,
+                    ),
+                  ),
+
+                  // Tempos (posicao atual / duracao total)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          _formatDuration(position),
+                          style: appTheme.bodySmall.copyWith(
+                            color: appTheme.secondaryText,
+                          ),
+                        ),
+                        Text(
+                          _formatDuration(duration),
+                          style: appTheme.bodySmall.copyWith(
+                            color: appTheme.secondaryText,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               );
             },
           ),
-          const SizedBox(height: 8.0),
+
+          const SizedBox(height: 24),
+
+          // Controles de audio (botoes grandes)
+          _AudioControls(
+            player: _player,
+            buttonColor: buttonColor,
+            isReady: _isDownloaded,
+          ),
         ],
       ),
     );
   }
 }
 
+/// Banner de download mostrando progresso
+class _DownloadBanner extends StatelessWidget {
+  final Color buttonColor;
+
+  const _DownloadBanner({required this.buttonColor});
+
+  @override
+  Widget build(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: buttonColor.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: 16,
+            height: 16,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation<Color>(buttonColor),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Text(
+            'Preparando áudio...',
+            style: appTheme.bodySmall.copyWith(
+              color: buttonColor,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AudioControls extends StatelessWidget {
+  final AudioPlayer player;
+  final Color buttonColor;
+  final bool isReady;
+
+  const _AudioControls({
+    required this.player,
+    required this.buttonColor,
+    this.isReady = true,
+  });
+
+  void _play() {
+    player.play();
+    _watch.start();
+  }
+
+  void _pause() {
+    player.pause();
+    _watch.stop();
+  }
+
+  void _seekBackward() {
+    final newPosition = player.position - const Duration(seconds: 10);
+    player.seek(newPosition < Duration.zero ? Duration.zero : newPosition);
+  }
+
+  void _seekForward() {
+    final newPosition = player.position + const Duration(seconds: 10);
+    final duration = player.duration ?? Duration.zero;
+    player.seek(newPosition > duration ? duration : newPosition);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Se nao esta pronto, mostra loading
+    if (!isReady) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          IconButton(
+            onPressed: null,
+            icon: Icon(Icons.replay_10_rounded, color: buttonColor.withOpacity(0.3)),
+            iconSize: 40,
+          ),
+          const SizedBox(width: 16),
+          Container(
+            width: 72,
+            height: 72,
+            decoration: BoxDecoration(
+              color: buttonColor.withOpacity(0.5),
+              shape: BoxShape.circle,
+            ),
+            child: const Padding(
+              padding: EdgeInsets.all(16),
+              child: CircularProgressIndicator(
+                color: Colors.white,
+                strokeWidth: 3,
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
+          IconButton(
+            onPressed: null,
+            icon: Icon(Icons.forward_10_rounded, color: buttonColor.withOpacity(0.3)),
+            iconSize: 40,
+          ),
+        ],
+      );
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // Botao retroceder 10s
+        IconButton(
+          onPressed: _seekBackward,
+          icon: Icon(Icons.replay_10_rounded, color: buttonColor),
+          iconSize: 40,
+          tooltip: 'Voltar 10 segundos',
+        ),
+
+        const SizedBox(width: 16),
+
+        // Botao play/pause central (maior)
+        StreamBuilder<PlayerState>(
+          stream: player.playerStateStream,
+          builder: (context, snapshot) {
+            final playerState = snapshot.data;
+            final processingState = playerState?.processingState;
+            final playing = playerState?.playing;
+
+            // Loading/Buffering
+            if (processingState == ProcessingState.loading ||
+                processingState == ProcessingState.buffering) {
+              return Container(
+                width: 72,
+                height: 72,
+                decoration: BoxDecoration(
+                  color: buttonColor,
+                  shape: BoxShape.circle,
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 3,
+                  ),
+                ),
+              );
+            }
+
+            // Play
+            if (playing != true) {
+              return _PlayPauseButton(
+                icon: Icons.play_arrow_rounded,
+                onPressed: _play,
+                buttonColor: buttonColor,
+              );
+            }
+
+            // Pause
+            if (processingState != ProcessingState.completed) {
+              return _PlayPauseButton(
+                icon: Icons.pause_rounded,
+                onPressed: _pause,
+                buttonColor: buttonColor,
+              );
+            }
+
+            // Replay
+            return _PlayPauseButton(
+              icon: Icons.replay_rounded,
+              onPressed: () => player.seek(Duration.zero, index: player.effectiveIndices!.first),
+              buttonColor: buttonColor,
+            );
+          },
+        ),
+
+        const SizedBox(width: 16),
+
+        // Botao avancar 10s
+        IconButton(
+          onPressed: _seekForward,
+          icon: Icon(Icons.forward_10_rounded, color: buttonColor),
+          iconSize: 40,
+          tooltip: 'Avançar 10 segundos',
+        ),
+      ],
+    );
+  }
+}
+
+class _PlayPauseButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onPressed;
+  final Color buttonColor;
+
+  const _PlayPauseButton({
+    required this.icon,
+    required this.onPressed,
+    required this.buttonColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: buttonColor,
+      shape: const CircleBorder(),
+      elevation: 4,
+      child: InkWell(
+        onTap: onPressed,
+        customBorder: const CircleBorder(),
+        child: Container(
+          width: 72,
+          height: 72,
+          alignment: Alignment.center,
+          child: Icon(
+            icon,
+            color: Colors.white,
+            size: 40,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Mantido para compatibilidade com outros usos
 class AudioControlButtons extends StatelessWidget {
   final AudioPlayer player;
   final Color? colorButton;

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../domain/models/ead/index.dart';
 
@@ -138,10 +139,17 @@ class EadService {
     String usuarioId,
   ) async {
     final inscricaoId = InscricaoCursoModel.gerarId(cursoId, usuarioId);
+    debugPrint('EadService.getInscricao: Buscando inscricao $inscricaoId');
     final doc = await _inscricoesCollection.doc(inscricaoId).get();
 
-    if (!doc.exists) return null;
-    return InscricaoCursoModel.fromFirestore(doc);
+    if (!doc.exists) {
+      debugPrint('EadService.getInscricao: Inscricao nao encontrada');
+      return null;
+    }
+    final inscricao = InscricaoCursoModel.fromFirestore(doc);
+    debugPrint('EadService.getInscricao: topicosCompletos=${inscricao.progresso.topicosCompletos}');
+    debugPrint('EadService.getInscricao: percentual=${inscricao.progresso.percentualConcluido}');
+    return inscricao;
   }
 
   /// Busca todas as inscrições de um usuário
@@ -201,9 +209,13 @@ class EadService {
     String inscricaoId,
     ProgressoCursoModel progresso,
   ) async {
+    debugPrint('EadService.atualizarProgresso: inscricaoId=$inscricaoId');
+    debugPrint('EadService.atualizarProgresso: topicosCompletos=${progresso.topicosCompletos}');
+    debugPrint('EadService.atualizarProgresso: percentual=${progresso.percentualConcluido}');
     await _inscricoesCollection.doc(inscricaoId).update({
       'progresso': progresso.toMap(),
     });
+    debugPrint('EadService.atualizarProgresso: Salvo com sucesso!');
   }
 
   /// Atualiza status da inscrição

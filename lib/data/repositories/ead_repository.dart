@@ -325,6 +325,50 @@ class EadRepository {
     return inscricao;
   }
 
+  /// Reinicia o progresso de um curso (zera todos os tópicos completos)
+  Future<InscricaoCursoModel> reiniciarProgresso({
+    required String cursoId,
+    required String usuarioId,
+  }) async {
+    final inscricaoId = InscricaoCursoModel.gerarId(cursoId, usuarioId);
+    var inscricao = await getInscricao(cursoId, usuarioId, forceRefresh: true);
+
+    if (inscricao == null) {
+      throw Exception('Inscrição não encontrada');
+    }
+
+    // Cria um novo progresso zerado
+    final novoProgresso = ProgressoCursoModel(
+      topicosCompletos: [],
+      aulasCompletas: [],
+      ultimoAcesso: DateTime.now(),
+      percentualConcluido: 0.0,
+    );
+
+    // Atualiza no Firebase
+    await _service.atualizarProgresso(inscricaoId, novoProgresso);
+
+    // Atualiza status para ativo (se estava concluído)
+    if (inscricao.isConcluido) {
+      await _service.atualizarStatusInscricao(
+        inscricaoId,
+        StatusInscricao.ativo,
+      );
+      inscricao = inscricao.copyWith(
+        status: StatusInscricao.ativo,
+        dataConclusao: null,
+      );
+    }
+
+    // Atualiza modelo local
+    inscricao = inscricao.copyWith(progresso: novoProgresso);
+
+    // Atualiza cache
+    _inscricoesCache[inscricaoId] = inscricao;
+
+    return inscricao;
+  }
+
   /// Atualiza último acesso (sem marcar como completo)
   Future<void> atualizarUltimoAcesso({
     required String cursoId,
