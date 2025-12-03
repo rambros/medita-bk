@@ -10,3 +10,5 @@ export 'notification_repository.dart';
 export 'playlist_repository.dart';
 export 'user_repository.dart';
 export 'video_repository.dart';
+export 'ead_repository.dart';
+export 'comunicacao_repository.dart';

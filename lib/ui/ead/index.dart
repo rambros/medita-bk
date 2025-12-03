@@ -51,3 +51,37 @@ export 'ead_home_page/widgets/ead_home_widgets.dart';
 
 // Widgets - Certificado
 export 'certificado_page/widgets/certificado_widget.dart';
+
+// === SUPORTE - TICKETS ===
+
+// Pages
+export 'suporte/meus_tickets_page/meus_tickets_page.dart';
+export 'suporte/novo_ticket_page/novo_ticket_page.dart';
+export 'suporte/ticket_chat_page/ticket_chat_page.dart';
+
+// ViewModels
+export 'suporte/meus_tickets_page/view_model/meus_tickets_view_model.dart';
+export 'suporte/novo_ticket_page/view_model/novo_ticket_view_model.dart';
+export 'suporte/ticket_chat_page/view_model/ticket_chat_view_model.dart';
+
+// Widgets
+export 'suporte/meus_tickets_page/widgets/ticket_card.dart';
+export 'suporte/ticket_chat_page/widgets/mensagem_bubble.dart';
+export 'suporte/ticket_chat_page/widgets/input_mensagem.dart';
+
+// === DISCUSSÕES (Q&A) ===
+
+// Pages
+export 'discussoes/discussoes_curso_page/discussoes_curso_page.dart';
+export 'discussoes/discussao_detail_page/discussao_detail_page.dart';
+export 'discussoes/nova_discussao_page/nova_discussao_page.dart';
+
+// ViewModels
+export 'discussoes/discussoes_curso_page/view_model/discussoes_curso_view_model.dart';
+export 'discussoes/discussao_detail_page/view_model/discussao_detail_view_model.dart';
+export 'discussoes/nova_discussao_page/view_model/nova_discussao_view_model.dart';
+
+// Widgets
+export 'discussoes/discussoes_curso_page/widgets/discussao_card.dart';
+export 'discussoes/discussao_detail_page/widgets/resposta_card.dart';
+export 'discussoes/discussao_detail_page/widgets/input_resposta.dart';

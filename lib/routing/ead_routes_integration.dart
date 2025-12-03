@@ -63,6 +63,54 @@
                 inscricaoId: params.getParam('inscricaoId', ParamType.String) ?? '',
               ),
             ),
+            // === SUPORTE - TICKETS ===
+            FFRoute(
+              name: MeusTicketsPage.routeName,
+              path: MeusTicketsPage.routePath,
+              builder: (context, params) => const MeusTicketsPage(),
+            ),
+            FFRoute(
+              name: NovoTicketPage.routeName,
+              path: NovoTicketPage.routePath,
+              builder: (context, params) => const NovoTicketPage(),
+            ),
+            FFRoute(
+              name: TicketChatPage.routeName,
+              path: TicketChatPage.routePath,
+              builder: (context, params) => TicketChatPage(
+                ticketId: params.getParam('ticketId', ParamType.String) ?? '',
+              ),
+            ),
+            // === DISCUSSÕES (Q&A) ===
+            FFRoute(
+              name: DiscussoesCursoPage.routeName,
+              path: DiscussoesCursoPage.routePath,
+              builder: (context, params) {
+                final extra = params.extra as Map<String, dynamic>?;
+                return DiscussoesCursoPage(
+                  cursoId: params.getParam('cursoId', ParamType.String) ?? '',
+                  cursoTitulo: extra?['cursoTitulo'] ?? '',
+                );
+              },
+            ),
+            FFRoute(
+              name: NovaDiscussaoPage.routeName,
+              path: NovaDiscussaoPage.routePath,
+              builder: (context, params) {
+                final extra = params.extra as Map<String, dynamic>?;
+                return NovaDiscussaoPage(
+                  cursoId: params.getParam('cursoId', ParamType.String) ?? '',
+                  cursoTitulo: extra?['cursoTitulo'] ?? '',
+                );
+              },
+            ),
+            FFRoute(
+              name: DiscussaoDetailPage.routeName,
+              path: DiscussaoDetailPage.routePath,
+              builder: (context, params) => DiscussaoDetailPage(
+                discussaoId: params.getParam('discussaoId', ParamType.String) ?? '',
+              ),
+            ),
             // === FIM MÓDULO EAD ===
 */
 
@@ -110,5 +158,27 @@
 /// context.pushNamed(
 ///   EadRoutes.certificado,
 ///   pathParameters: {'inscricaoId': 'inscricao_abc'},
+/// );
+///
+/// // === DISCUSSÕES (Q&A) ===
+///
+/// // Ir para Discussões do Curso
+/// context.pushNamed(
+///   EadRoutes.discussoesCurso,
+///   pathParameters: {'cursoId': 'curso123'},
+///   extra: {'cursoTitulo': 'Nome do Curso'},
+/// );
+///
+/// // Ir para Nova Discussão
+/// context.pushNamed(
+///   EadRoutes.novaDiscussao,
+///   pathParameters: {'cursoId': 'curso123'},
+///   extra: {'cursoTitulo': 'Nome do Curso'},
+/// );
+///
+/// // Ir para Detalhes da Discussão
+/// context.pushNamed(
+///   EadRoutes.discussaoDetail,
+///   pathParameters: {'discussaoId': 'discussao123'},
 /// );
 /// ```

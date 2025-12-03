@@ -95,6 +95,13 @@ class EadHomePage extends StatelessWidget {
             context.pushNamed(EadRoutes.catalogoCursos);
           },
         ),
+        _MenuCard(
+          icon: Icons.support_agent,
+          title: 'Suporte Técnico',
+          onTap: () {
+            context.pushNamed(EadRoutes.meusTickets);
+          },
+        ),
       ],
     );
   }

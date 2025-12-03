@@ -599,6 +599,48 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 cursoId: params.getParam('cursoId', ParamType.String)!,
               ),
             ),
+            // === SUPORTE - TICKETS ===
+            FFRoute(
+              name: EadRoutes.meusTickets,
+              path: EadRoutes.meusTicketsPath,
+              builder: (context, params) => const MeusTicketsPage(),
+            ),
+            FFRoute(
+              name: EadRoutes.novoTicket,
+              path: EadRoutes.novoTicketPath,
+              builder: (context, params) => const NovoTicketPage(),
+            ),
+            FFRoute(
+              name: EadRoutes.ticketChat,
+              path: EadRoutes.ticketChatPath,
+              builder: (context, params) => TicketChatPage(
+                ticketId: params.getParam('ticketId', ParamType.String)!,
+              ),
+            ),
+            // === DISCUSSÕES (Q&A) ===
+            FFRoute(
+              name: EadRoutes.discussoesCurso,
+              path: EadRoutes.discussoesCursoPath,
+              builder: (context, params) => DiscussoesCursoPage(
+                cursoId: params.getParam('cursoId', ParamType.String)!,
+                cursoTitulo: params.getParam('cursoTitulo', ParamType.String) ?? '',
+              ),
+            ),
+            FFRoute(
+              name: EadRoutes.novaDiscussao,
+              path: EadRoutes.novaDiscussaoPath,
+              builder: (context, params) => NovaDiscussaoPage(
+                cursoId: params.getParam('cursoId', ParamType.String)!,
+                cursoTitulo: params.getParam('cursoTitulo', ParamType.String) ?? '',
+              ),
+            ),
+            FFRoute(
+              name: EadRoutes.discussaoDetail,
+              path: EadRoutes.discussaoDetailPath,
+              builder: (context, params) => DiscussaoDetailPage(
+                discussaoId: params.getParam('discussaoId', ParamType.String)!,
+              ),
+            ),
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ),
       ].map((r) => r.toRoute(appStateNotifier)).toList(),

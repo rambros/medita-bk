@@ -14,3 +14,15 @@ export 'topico_model.dart';
 export 'progresso_curso_model.dart';
 export 'inscricao_curso_model.dart';
 export 'quiz_question_model.dart';
+
+// Comunicação (Tickets)
+export 'comunicacao_enums.dart';
+export 'ticket_model.dart';
+export 'ticket_mensagem_model.dart';
+
+// Comunicação (Discussões Q&A)
+export 'discussao_model.dart';
+export 'resposta_discussao_model.dart';
+
+// Notificações EAD
+export 'notificacao_ead_model.dart';

@@ -77,3 +77,13 @@ export 'ead/meus_cursos_page/meus_cursos_page.dart' show MeusCursosPage;
 export 'ead/player_topico_page/player_topico_page.dart' show PlayerTopicoPage;
 export 'ead/quiz_page/quiz_page.dart' show QuizPage;
 export 'ead/certificado_page/certificado_page.dart' show CertificadoPage;
+
+// EAD - Suporte (Tickets)
+export 'ead/suporte/meus_tickets_page/meus_tickets_page.dart' show MeusTicketsPage;
+export 'ead/suporte/novo_ticket_page/novo_ticket_page.dart' show NovoTicketPage;
+export 'ead/suporte/ticket_chat_page/ticket_chat_page.dart' show TicketChatPage;
+
+// EAD - Discussões (Q&A)
+export 'ead/discussoes/discussoes_curso_page/discussoes_curso_page.dart' show DiscussoesCursoPage;
+export 'ead/discussoes/nova_discussao_page/nova_discussao_page.dart' show NovaDiscussaoPage;
+export 'ead/discussoes/discussao_detail_page/discussao_detail_page.dart' show DiscussaoDetailPage;

@@ -29,4 +29,24 @@ class EadRoutes {
   // Certificado
   static const String certificado = 'certificado';
   static const String certificadoPath = 'ead/certificado/:cursoId';
+
+  // Suporte - Tickets
+  static const String meusTickets = 'meusTickets';
+  static const String meusTicketsPath = 'ead/suporte/tickets';
+
+  static const String novoTicket = 'novoTicket';
+  static const String novoTicketPath = 'ead/suporte/novo-ticket';
+
+  static const String ticketChat = 'ticketChat';
+  static const String ticketChatPath = 'ead/suporte/ticket/:ticketId';
+
+  // Discussões (Q&A)
+  static const String discussoesCurso = 'discussoesCurso';
+  static const String discussoesCursoPath = 'ead/curso/:cursoId/discussoes';
+
+  static const String novaDiscussao = 'novaDiscussao';
+  static const String novaDiscussaoPath = 'ead/curso/:cursoId/discussoes/nova';
+
+  static const String discussaoDetail = 'discussaoDetail';
+  static const String discussaoDetailPath = 'ead/discussao/:discussaoId';
 }

@@ -336,6 +336,17 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
           : null,
       actions: [
         IconButton(
+          icon: const Icon(Icons.forum_outlined),
+          tooltip: 'Discussões',
+          onPressed: () {
+            context.pushNamed(
+              EadRoutes.discussoesCurso,
+              pathParameters: {'cursoId': widget.cursoId},
+              queryParameters: {'cursoTitulo': titulo ?? ''},
+            );
+          },
+        ),
+        IconButton(
           icon: const Icon(Icons.share),
           onPressed: () {
             // TODO: Implementar compartilhamento
