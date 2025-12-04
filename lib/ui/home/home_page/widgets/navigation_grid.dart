@@ -8,10 +8,14 @@ import 'navigation_card.dart';
 /// Grid of navigation cards for home page
 class NavigationGrid extends StatelessWidget {
   final Map<String, AnimationInfo> animationsMap;
+  final bool habilitaDesafio21;
+  final VoidCallback? onDesafio21Tap;
 
   const NavigationGrid({
     super.key,
     required this.animationsMap,
+    this.habilitaDesafio21 = true,
+    this.onDesafio21Tap,
   });
 
   @override
@@ -29,10 +33,10 @@ class NavigationGrid extends StatelessWidget {
         shrinkWrap: true,
         scrollDirection: Axis.vertical,
         children: [
-          // Meditation card
+          // 1. Meditation card
           NavigationCard(
             title: 'Fazer uma meditação',
-            icon: Icons.filter_vintage,
+            icon: FFIcons.kselfImprovementBlack24dp,
             gradientColors: const [Color(0xFFEC407A), Color(0xFFF48FB1)],
             gradientStops: const [0.0, 1.0],
             gradientBegin: const AlignmentDirectional(-1.0, -1.0),
@@ -51,7 +55,20 @@ class NavigationGrid extends StatelessWidget {
             animation: animationsMap['containerOnPageLoadAnimation2'],
           ),
 
-          // EAD/Cursos card
+          // 2. Desafio 21 dias card
+          if (habilitaDesafio21 && onDesafio21Tap != null)
+            NavigationCard(
+              title: 'Desafio 21 dias',
+              icon: Icons.emoji_events,
+              gradientColors: const [Color(0xFF8D4052), Color(0xFFB0747F)],
+              gradientStops: const [0.0, 1.0],
+              gradientBegin: const AlignmentDirectional(-1.0, -1.0),
+              gradientEnd: const AlignmentDirectional(1.0, 1.0),
+              onTap: onDesafio21Tap!,
+              animation: animationsMap['containerOnPageLoadAnimation1'],
+            ),
+
+          // 3. EAD/Cursos card
           NavigationCard(
             title: 'Aprender com cursos',
             icon: Icons.school,
@@ -73,32 +90,10 @@ class NavigationGrid extends StatelessWidget {
             animation: animationsMap['containerOnPageLoadAnimation3'],
           ),
 
-          // Agenda card
-          NavigationCard(
-            title: 'Ver agenda de atividades',
-            icon: Icons.calendar_today,
-            gradientColors: const [Colors.red, Color(0xFFEF9A9A)],
-            gradientStops: const [0.0, 1.0],
-            gradientBegin: const AlignmentDirectional(1.0, -1.0),
-            gradientEnd: const AlignmentDirectional(-1.0, 1.0),
-            onTap: () {
-              context.pushNamed(
-                AgendaListPage.routeName,
-                extra: <String, dynamic>{
-                  kTransitionInfoKey: const TransitionInfo(
-                    hasTransition: true,
-                    transitionType: PageTransitionType.leftToRight,
-                  ),
-                },
-              );
-            },
-            animation: animationsMap['containerOnPageLoadAnimation4'],
-          ),
-
-          // Daily message card
+          // 4. Daily message card
           NavigationCard(
             title: 'Ler mensagem para o dia',
-            icon: FFIcons.kselfImprovementBlack24dp,
+            icon: Icons.menu_book,
             gradientColors: const [Color(0xFFFFA726), Color(0xFFFFCC80)],
             gradientStops: const [0.0, 1.0],
             gradientBegin: const AlignmentDirectional(-1.0, 1.0),
@@ -114,10 +109,32 @@ class NavigationGrid extends StatelessWidget {
                 },
               );
             },
+            animation: animationsMap['containerOnPageLoadAnimation4'],
+          ),
+
+          // 5. Suporte Técnico card
+          NavigationCard(
+            title: 'Suporte Técnico',
+            icon: Icons.support_agent,
+            gradientColors: const [Color(0xFF26A69A), Color(0xFF80CBC4)],
+            gradientStops: const [0.0, 1.0],
+            gradientBegin: const AlignmentDirectional(1.0, -1.0),
+            gradientEnd: const AlignmentDirectional(-1.0, 1.0),
+            onTap: () {
+              context.pushNamed(
+                EadRoutes.meusTickets,
+                extra: <String, dynamic>{
+                  kTransitionInfoKey: const TransitionInfo(
+                    hasTransition: true,
+                    transitionType: PageTransitionType.leftToRight,
+                  ),
+                },
+              );
+            },
             animation: animationsMap['containerOnPageLoadAnimation5'],
           ),
 
-          // Support card
+          // 6. Ajude-nos a melhorar card
           NavigationCard(
             title: 'Ajude-nos a melhorar o app',
             icon: Icons.thumb_up_alt,

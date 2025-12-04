@@ -11,7 +11,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
 import 'view_model/home_view_model.dart';
 import 'widgets/home_app_bar.dart';
-import 'widgets/desafio_21_card.dart';
 import 'widgets/navigation_grid.dart';
 
 /// Home page - main landing page of the app
@@ -222,35 +221,26 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               ),
                             ),
 
-                            // Desafio 21 card (conditional)
-                            if (viewModel.habilitaDesafio21)
-                              Flexible(
-                                flex: 2,
-                                child: Desafio21Card(
-                                  onTap: () async {
-                                    await action_blocks.checkInternetAccess(context);
-                                    if (context.mounted) {
-                                      context.pushNamed(
-                                        HomeDesafioPage.routeName,
-                                        extra: <String, dynamic>{
-                                          kTransitionInfoKey: const TransitionInfo(
-                                            hasTransition: true,
-                                            transitionType: PageTransitionType.fade,
-                                            duration: Duration(milliseconds: 0),
-                                          ),
-                                        },
-                                      );
-                                    }
-                                  },
-                                  animation: animationsMap['containerOnPageLoadAnimation1'],
-                                ),
-                              ),
-
-                            // Navigation grid
-                            Flexible(
-                              flex: 4,
+                            // Navigation grid with all 6 cards
+                            Expanded(
                               child: NavigationGrid(
                                 animationsMap: animationsMap,
+                                habilitaDesafio21: viewModel.habilitaDesafio21,
+                                onDesafio21Tap: () async {
+                                  await action_blocks.checkInternetAccess(context);
+                                  if (context.mounted) {
+                                    context.pushNamed(
+                                      HomeDesafioPage.routeName,
+                                      extra: <String, dynamic>{
+                                        kTransitionInfoKey: const TransitionInfo(
+                                          hasTransition: true,
+                                          transitionType: PageTransitionType.fade,
+                                          duration: Duration(milliseconds: 0),
+                                        ),
+                                      },
+                                    );
+                                  }
+                                },
                               ),
                             ),
                           ],

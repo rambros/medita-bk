@@ -5,9 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:medita_b_k/data/repositories/auth_repository.dart';
 import 'package:medita_b_k/data/models/firebase/user_model.dart';
 import 'package:medita_b_k/routing/ead_routes.dart';
-import '../../../../domain/models/ead/index.dart';
-import '../../../core/theme/app_theme.dart';
-import 'view_model/novo_ticket_view_model.dart';
+import 'package:medita_b_k/domain/models/ead/index.dart';
+import 'package:medita_b_k/ui/core/theme/app_theme.dart';
+import 'package:medita_b_k/ui/suporte/novo_ticket_page/view_model/novo_ticket_view_model.dart';
 
 /// Página para criar um novo ticket de suporte
 class NovoTicketPage extends StatefulWidget {

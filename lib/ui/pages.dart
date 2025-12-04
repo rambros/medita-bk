@@ -78,10 +78,10 @@ export 'ead/player_topico_page/player_topico_page.dart' show PlayerTopicoPage;
 export 'ead/quiz_page/quiz_page.dart' show QuizPage;
 export 'ead/certificado_page/certificado_page.dart' show CertificadoPage;
 
-// EAD - Suporte (Tickets)
-export 'ead/suporte/meus_tickets_page/meus_tickets_page.dart' show MeusTicketsPage;
-export 'ead/suporte/novo_ticket_page/novo_ticket_page.dart' show NovoTicketPage;
-export 'ead/suporte/ticket_chat_page/ticket_chat_page.dart' show TicketChatPage;
+// Suporte (Tickets)
+export 'suporte/meus_tickets_page/meus_tickets_page.dart' show MeusTicketsPage;
+export 'suporte/novo_ticket_page/novo_ticket_page.dart' show NovoTicketPage;
+export 'suporte/ticket_chat_page/ticket_chat_page.dart' show TicketChatPage;
 
 // EAD - Discussões (Q&A)
 export 'ead/discussoes/discussoes_curso_page/discussoes_curso_page.dart' show DiscussoesCursoPage;

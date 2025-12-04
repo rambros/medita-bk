@@ -53,21 +53,16 @@ export 'ead_home_page/widgets/ead_home_widgets.dart';
 export 'certificado_page/widgets/certificado_widget.dart';
 
 // === SUPORTE - TICKETS ===
-
-// Pages
-export 'suporte/meus_tickets_page/meus_tickets_page.dart';
-export 'suporte/novo_ticket_page/novo_ticket_page.dart';
-export 'suporte/ticket_chat_page/ticket_chat_page.dart';
-
-// ViewModels
-export 'suporte/meus_tickets_page/view_model/meus_tickets_view_model.dart';
-export 'suporte/novo_ticket_page/view_model/novo_ticket_view_model.dart';
-export 'suporte/ticket_chat_page/view_model/ticket_chat_view_model.dart';
-
-// Widgets
-export 'suporte/meus_tickets_page/widgets/ticket_card.dart';
-export 'suporte/ticket_chat_page/widgets/mensagem_bubble.dart';
-export 'suporte/ticket_chat_page/widgets/input_mensagem.dart';
+// (Movido para /lib/ui/suporte)
+export '../suporte/meus_tickets_page/meus_tickets_page.dart';
+export '../suporte/novo_ticket_page/novo_ticket_page.dart';
+export '../suporte/ticket_chat_page/ticket_chat_page.dart';
+export '../suporte/meus_tickets_page/view_model/meus_tickets_view_model.dart';
+export '../suporte/novo_ticket_page/view_model/novo_ticket_view_model.dart';
+export '../suporte/ticket_chat_page/view_model/ticket_chat_view_model.dart';
+export '../suporte/meus_tickets_page/widgets/ticket_card.dart';
+export '../suporte/ticket_chat_page/widgets/mensagem_bubble.dart';
+export '../suporte/ticket_chat_page/widgets/input_mensagem.dart';
 
 // === DISCUSSÕES (Q&A) ===
 

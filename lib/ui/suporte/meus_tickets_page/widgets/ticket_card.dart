@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../domain/models/ead/index.dart';
-import '../../../../core/theme/app_theme.dart';
+import 'package:medita_b_k/domain/models/ead/index.dart';
+import 'package:medita_b_k/ui/core/theme/app_theme.dart';
 
 /// Card de Ticket para exibição na lista
 class TicketCard extends StatelessWidget {

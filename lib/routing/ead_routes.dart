@@ -32,13 +32,13 @@ class EadRoutes {
 
   // Suporte - Tickets
   static const String meusTickets = 'meusTickets';
-  static const String meusTicketsPath = 'ead/suporte/tickets';
+  static const String meusTicketsPath = 'suporte/tickets';
 
   static const String novoTicket = 'novoTicket';
-  static const String novoTicketPath = 'ead/suporte/novo-ticket';
+  static const String novoTicketPath = 'suporte/novo-ticket';
 
   static const String ticketChat = 'ticketChat';
-  static const String ticketChatPath = 'ead/suporte/ticket/:ticketId';
+  static const String ticketChatPath = 'suporte/ticket/:ticketId';
 
   // Discussões (Q&A)
   static const String discussoesCurso = 'discussoesCurso';

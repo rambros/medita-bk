@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../../domain/models/ead/index.dart';
+import 'package:medita_b_k/domain/models/ead/index.dart';
 
 /// Widget de bubble de mensagem para o chat
 class MensagemBubble extends StatelessWidget {
