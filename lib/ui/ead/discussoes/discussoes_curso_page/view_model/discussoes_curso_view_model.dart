@@ -5,7 +5,7 @@ import '../../../../../data/repositories/comunicacao_repository.dart';
 import '../../../../../domain/models/ead/index.dart';
 
 /// Filtro para a lista de discussões
-enum FiltroDiscussoes { todas, minhas, resolvidas, abertas }
+enum FiltroDiscussoes { todas, minhas, fechadas, abertas }
 
 /// ViewModel para a página de discussões do curso
 class DiscussoesCursoViewModel extends ChangeNotifier {
@@ -55,11 +55,11 @@ class DiscussoesCursoViewModel extends ChangeNotifier {
       case FiltroDiscussoes.minhas:
         // Este filtro será aplicado no carregamento
         break;
-      case FiltroDiscussoes.resolvidas:
-        lista = lista.where((d) => d.status.isResolvida).toList();
+      case FiltroDiscussoes.fechadas:
+        lista = lista.where((d) => d.status.isFechada).toList();
         break;
       case FiltroDiscussoes.abertas:
-        lista = lista.where((d) => !d.status.isFechada && !d.status.isResolvida).toList();
+        lista = lista.where((d) => !d.status.isFechada).toList();
         break;
     }
 
@@ -79,7 +79,7 @@ class DiscussoesCursoViewModel extends ChangeNotifier {
   int get totalDiscussoes => _discussoes.length;
   int get totalAbertas => _discussoes.where((d) => d.status == StatusDiscussao.aberta).length;
   int get totalRespondidas => _discussoes.where((d) => d.status == StatusDiscussao.respondida).length;
-  int get totalResolvidas => _discussoes.where((d) => d.status == StatusDiscussao.resolvida).length;
+  int get totalFechadas => _discussoes.where((d) => d.status == StatusDiscussao.fechada).length;
 
   bool get hasDiscussoes => _discussoes.isNotEmpty;
 
@@ -90,8 +90,8 @@ class DiscussoesCursoViewModel extends ChangeNotifier {
     switch (_filtroAtual) {
       case FiltroDiscussoes.minhas:
         return 'Você ainda não criou nenhuma discussão';
-      case FiltroDiscussoes.resolvidas:
-        return 'Nenhuma discussão resolvida';
+      case FiltroDiscussoes.fechadas:
+        return 'Nenhuma discussão fechada';
       case FiltroDiscussoes.abertas:
         return 'Nenhuma discussão em aberto';
       case FiltroDiscussoes.todas:

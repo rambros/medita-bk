@@ -92,7 +92,7 @@ class _DiscussoesCursoPageState extends State<DiscussoesCursoPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Discussões',
+                'Perguntas e Respostas',
                 style: TextStyle(color: appTheme.info),
               ),
               Text(
@@ -184,8 +184,8 @@ class _DiscussoesCursoPageState extends State<DiscussoesCursoPage> {
         return 'Minhas';
       case FiltroDiscussoes.abertas:
         return 'Abertas (${viewModel.totalAbertas})';
-      case FiltroDiscussoes.resolvidas:
-        return 'Resolvidas (${viewModel.totalResolvidas})';
+      case FiltroDiscussoes.fechadas:
+        return 'Fechadas (${viewModel.totalFechadas})';
     }
   }
 

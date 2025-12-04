@@ -13,6 +13,7 @@ class TopicoHeaderWidget extends StatelessWidget {
     this.isCompleto = false,
     this.textoProgresso,
     this.onBack,
+    this.onDiscussoes,
   });
 
   final String tituloAula;
@@ -21,6 +22,7 @@ class TopicoHeaderWidget extends StatelessWidget {
   final bool isCompleto;
   final String? textoProgresso;
   final VoidCallback? onBack;
+  final VoidCallback? onDiscussoes;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +45,7 @@ class TopicoHeaderWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Linha superior com voltar e progresso
+            // Linha superior: voltar | título | espaço | discussões | progresso
             Row(
               children: [
                 if (onBack != null)
@@ -67,10 +69,23 @@ class TopicoHeaderWidget extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
+                if (onDiscussoes != null) ...[
+                  IconButton(
+                    onPressed: onDiscussoes,
+                    icon: Icon(
+                      Icons.forum_outlined,
+                      color: appTheme.primary,
+                    ),
+                    tooltip: 'Discussões',
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                  const SizedBox(width: 8),
+                ],
                 if (textoProgresso != null)
                   Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
+                      horizontal: 10,
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
@@ -79,9 +94,10 @@ class TopicoHeaderWidget extends StatelessWidget {
                     ),
                     child: Text(
                       textoProgresso!,
-                      style: appTheme.bodySmall.copyWith(
+                      style: appTheme.bodyMedium.copyWith(
                         color: appTheme.primary,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
                       ),
                     ),
                   ),

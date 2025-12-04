@@ -479,7 +479,7 @@ class ComunicacaoRepository {
       if (_discussoesCache.containsKey(discussaoId)) {
         final discussao = _discussoesCache[discussaoId]!;
         _discussoesCache[discussaoId] = discussao.copyWith(
-          status: isSolucao ? StatusDiscussao.resolvida : StatusDiscussao.respondida,
+          status: isSolucao ? StatusDiscussao.fechada : StatusDiscussao.respondida,
           dataAtualizacao: DateTime.now(),
         );
       }

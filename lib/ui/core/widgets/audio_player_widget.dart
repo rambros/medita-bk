@@ -176,22 +176,8 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Icone grande centralizado
-          Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-              color: buttonColor.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.headphones_rounded,
-              size: 48,
-              color: buttonColor,
-            ),
-          ),
-
-          const SizedBox(height: 24),
+          // Espaço superior para layout limpo
+          const SizedBox(height: 32),
 
           // Titulo do audio (se showTitle = true)
           if (widget.showTitle && widget.audioTitle.isNotEmpty) ...[

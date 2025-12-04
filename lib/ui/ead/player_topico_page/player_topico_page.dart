@@ -108,6 +108,15 @@ class _PlayerTopicoPageState extends State<PlayerTopicoPage> {
     );
   }
 
+  void _navegarParaDiscussoes() {
+    final cursoTitulo = _viewModel.curso?.titulo ?? '';
+    context.pushNamed(
+      EadRoutes.discussoesCurso,
+      pathParameters: {'cursoId': widget.cursoId},
+      queryParameters: {'cursoTitulo': cursoTitulo},
+    );
+  }
+
   Future<void> _toggleCompleto() async {
     final usuarioId = _usuarioId;
     if (usuarioId == null) {
@@ -256,6 +265,7 @@ class _PlayerTopicoPageState extends State<PlayerTopicoPage> {
           isCompleto: viewModel.isTopicoCompleto,
           textoProgresso: viewModel.textoProgresso,
           onBack: () => context.pop(),
+          onDiscussoes: _navegarParaDiscussoes,
         ),
 
         // Conteudo principal

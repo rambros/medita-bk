@@ -229,7 +229,6 @@ enum TipoAutor {
 enum StatusDiscussao {
   aberta('Aberta'),
   respondida('Respondida'),
-  resolvida('Resolvida'),
   fechada('Fechada');
 
   final String label;
@@ -241,8 +240,7 @@ enum StatusDiscussao {
         return StatusDiscussao.aberta;
       case 'respondida':
         return StatusDiscussao.respondida;
-      case 'resolvida':
-        return StatusDiscussao.resolvida;
+      case 'resolvida': // Compatibilidade: converte resolvida para fechada
       case 'fechada':
         return StatusDiscussao.fechada;
       default:
@@ -256,10 +254,8 @@ enum StatusDiscussao {
         return Colors.blue;
       case StatusDiscussao.respondida:
         return Colors.orange;
-      case StatusDiscussao.resolvida:
-        return Colors.green;
       case StatusDiscussao.fechada:
-        return Colors.grey;
+        return Colors.green;
     }
   }
 
@@ -269,13 +265,10 @@ enum StatusDiscussao {
         return Icons.help_outline;
       case StatusDiscussao.respondida:
         return Icons.chat_bubble_outline;
-      case StatusDiscussao.resolvida:
-        return Icons.check_circle;
       case StatusDiscussao.fechada:
-        return Icons.lock_outline;
+        return Icons.check_circle;
     }
   }
 
   bool get isFechada => this == StatusDiscussao.fechada;
-  bool get isResolvida => this == StatusDiscussao.resolvida;
 }

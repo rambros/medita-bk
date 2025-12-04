@@ -607,7 +607,7 @@ class ComunicacaoService {
       // Atualiza o status da discussão
       await _discussoesCollection.doc(discussaoId).update({
         'status': isSolucao
-            ? StatusDiscussao.resolvida.name
+            ? StatusDiscussao.fechada.name
             : StatusDiscussao.respondida.name,
         'dataAtualizacao': FieldValue.serverTimestamp(),
       });
