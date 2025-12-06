@@ -81,20 +81,8 @@ class _HomeDesafioPageState extends State<HomeDesafioPage> {
                                     focusColor: Colors.transparent,
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
-                                    onTap: () async {
-                                      if (Navigator.of(context).canPop()) {
-                                        context.pop();
-                                      }
-                                      context.pushNamed(
-                                        HomePage.routeName,
-                                        extra: <String, dynamic>{
-                                          kTransitionInfoKey: const TransitionInfo(
-                                            hasTransition: true,
-                                            transitionType: PageTransitionType.fade,
-                                            duration: Duration(milliseconds: 0),
-                                          ),
-                                        },
-                                      );
+                                    onTap: () {
+                                      context.pop();
                                     },
                                     child: Icon(
                                       Icons.chevron_left,

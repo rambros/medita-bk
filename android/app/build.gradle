@@ -58,7 +58,7 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "app.brahmakumaris.meditabk"
-        minSdkVersion 23
+        minSdkVersion flutter.minSdkVersion
         targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -85,6 +85,14 @@ android {
 
 flutter {
     source '../..'
+}
+
+configurations.all {
+    resolutionStrategy {
+        force 'androidx.activity:activity:1.9.3'
+        force 'androidx.activity:activity-ktx:1.9.3'
+        force 'androidx.activity:activity-compose:1.9.3'
+    }
 }
 
 dependencies {

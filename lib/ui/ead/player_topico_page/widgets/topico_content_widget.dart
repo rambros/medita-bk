@@ -5,6 +5,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/you_tube_player_widget.dart';
 import '../../../core/widgets/audio_player_widget.dart';
 import '../../../core/widgets/html_display_widget.dart';
+import '../../../core/widgets/pdf_viewer_widget.dart';
 
 /// Widget que renderiza o conteudo do topico baseado no tipo
 class TopicoContentWidget extends StatelessWidget {
@@ -32,6 +33,8 @@ class TopicoContentWidget extends StatelessWidget {
         return _buildTextoContent(context);
       case TipoConteudoTopico.quiz:
         return _buildQuizPlaceholder(context);
+      case TipoConteudoTopico.pdf:
+        return _buildPdfViewer(context);
     }
   }
 
@@ -180,6 +183,19 @@ class TopicoContentWidget extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildPdfViewer(BuildContext context) {
+    final url = topico.url;
+    if (url == null || url.isEmpty) {
+      return _buildConteudoIndisponivel(context, 'PDF não disponível');
+    }
+
+    return PdfViewerWidget(
+      pdfUrl: url,
+      title: topico.titulo,
+      showDownloadButton: true,
     );
   }
 

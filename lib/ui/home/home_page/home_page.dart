@@ -234,8 +234,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                       extra: <String, dynamic>{
                                         kTransitionInfoKey: const TransitionInfo(
                                           hasTransition: true,
-                                          transitionType: PageTransitionType.fade,
-                                          duration: Duration(milliseconds: 0),
+                                          transitionType: PageTransitionType.leftToRight,
                                         ),
                                       },
                                     );

@@ -9,7 +9,8 @@ enum TipoConteudoTopico {
   video,
   audio,
   texto,
-  quiz;
+  quiz,
+  pdf;
 
   static TipoConteudoTopico fromString(String? value) {
     switch (value?.toLowerCase()) {
@@ -21,6 +22,8 @@ enum TipoConteudoTopico {
         return TipoConteudoTopico.texto;
       case 'quiz':
         return TipoConteudoTopico.quiz;
+      case 'pdf':
+        return TipoConteudoTopico.pdf;
       default:
         return TipoConteudoTopico.texto;
     }
@@ -36,6 +39,8 @@ enum TipoConteudoTopico {
         return 'Texto';
       case TipoConteudoTopico.quiz:
         return 'Quiz';
+      case TipoConteudoTopico.pdf:
+        return 'PDF';
     }
   }
 
@@ -49,6 +54,8 @@ enum TipoConteudoTopico {
         return Icons.article_outlined;
       case TipoConteudoTopico.quiz:
         return Icons.quiz_outlined;
+      case TipoConteudoTopico.pdf:
+        return Icons.picture_as_pdf;
     }
   }
 }

@@ -192,11 +192,15 @@ class TopicoModel {
   /// Verifica se é quiz
   bool get isQuiz => tipo == TipoConteudoTopico.quiz;
 
+  /// Verifica se é PDF
+  bool get isPdf => tipo == TipoConteudoTopico.pdf;
+
   /// Verifica se o tópico tem conteúdo válido
   bool get hasContent {
     switch (tipo) {
       case TipoConteudoTopico.video:
       case TipoConteudoTopico.audio:
+      case TipoConteudoTopico.pdf:
         return conteudo.url?.isNotEmpty ?? false;
       case TipoConteudoTopico.texto:
         return conteudo.htmlContent?.isNotEmpty ?? false;

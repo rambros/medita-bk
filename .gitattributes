@@ -1,0 +1,55 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Dart files
+*.dart text
+
+# Config files
+*.yaml text
+*.yml text
+*.json text
+*.xml text
+*.plist text
+*.properties text
+
+# Shell scripts
+*.sh text eol=lf
+*.bash text eol=lf
+
+# Batch scripts
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Images
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg text
+
+# Audio/Video
+*.mp3 binary
+*.mp4 binary
+*.m4a binary
+
+# Fonts
+*.ttf binary
+*.otf binary
+
+# Archives
+*.zip binary
+*.jar binary
+*.aar binary
+
+# iOS specific
+*.pbxproj merge=union
+
+# Documentation
+*.md text
+*.txt text
+
+# Git attributes for LFS (if needed in the future)
+# *.zip filter=lfs diff=lfs merge=lfs -text
+# *.jar filter=lfs diff=lfs merge=lfs -text
+
