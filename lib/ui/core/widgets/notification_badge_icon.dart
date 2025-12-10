@@ -38,7 +38,7 @@ class NotificationBadgeIcon extends StatelessWidget {
         return Stack(
           clipBehavior: Clip.none,
           children: [
-            // Ícone de notificações
+            // Ícone de notificações com área clicável aumentada
             IconButton(
               onPressed: onPressed,
               icon: Icon(
@@ -46,13 +46,21 @@ class NotificationBadgeIcon extends StatelessWidget {
                 size: iconSize,
                 color: iconColor,
               ),
+              // Aumenta a área clicável
+              padding: const EdgeInsets.all(12),
+              constraints: const BoxConstraints(
+                minWidth: 48,
+                minHeight: 48,
+              ),
+              splashRadius: 24,
+              tooltip: 'Notificações',
             ),
 
             // Badge com contador
             if (hasNotifications)
               Positioned(
-                right: 8,
-                top: 8,
+                right: 6,
+                top: 6,
                 child: Container(
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
