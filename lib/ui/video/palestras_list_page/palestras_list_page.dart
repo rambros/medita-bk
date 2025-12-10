@@ -1,13 +1,13 @@
-import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
-import '/ui/core/flutter_flow/flutter_flow_theme.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import '/ui/pages.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_icon_button.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/ui/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 import 'view_model/palestras_list_view_model.dart';
-import '/domain/models/video/video_model.dart';
-import '../widgets/video_error_indicator.dart';
+import 'package:medita_b_k/domain/models/video/video_model.dart';
+import 'package:medita_b_k/ui/video/widgets/video_error_indicator.dart';
 
 class PalestrasListPage extends StatefulWidget {
   const PalestrasListPage({super.key});

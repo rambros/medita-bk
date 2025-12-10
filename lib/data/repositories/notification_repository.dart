@@ -1,5 +1,5 @@
-import '/data/models/firebase/notification_model.dart';
-import '/data/services/firebase/firestore_service.dart';
+import 'package:medita_b_k/data/models/firebase/notification_model.dart';
+import 'package:medita_b_k/data/services/firebase/firestore_service.dart';
 
 /// Repository for notification data access
 /// Centralizes Firestore queries for notifications

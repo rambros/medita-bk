@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 
-import '/core/structs/index.dart';
-import '/data/models/firebase/desafio21_model.dart';
-import '/data/models/firebase/settings_model.dart';
-import '/data/models/firebase/user_model.dart';
-import '/data/services/firebase/firestore_service.dart';
+import 'package:medita_b_k/core/structs/index.dart';
+import 'package:medita_b_k/data/models/firebase/desafio21_model.dart';
+import 'package:medita_b_k/data/models/firebase/settings_model.dart';
+import 'package:medita_b_k/data/models/firebase/user_model.dart';
+import 'package:medita_b_k/data/services/firebase/firestore_service.dart';
 
 /// Repository for home page data access
 /// Centralizes Firestore queries for users, Desafio 21, and settings

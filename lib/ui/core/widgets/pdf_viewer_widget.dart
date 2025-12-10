@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:pdfx/pdfx.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../theme/app_theme.dart';
+import 'package:medita_b_k/ui/core/theme/app_theme.dart';
 
 /// Widget para visualizar arquivos PDF
 /// Suporta zoom (pinch e scroll), navegação entre páginas e download
@@ -251,6 +251,9 @@ class _PdfViewerWidgetState extends State<PdfViewerWidget> {
             onPageChanged: (page) {
               setState(() => _currentPage = page);
             },
+            minScale: 1.5, // Zoom inicial maior para melhor legibilidade
+            maxScale: 8.0, // Permite zoom de até 8x
+            padding: 8,
           ),
         ),
 
@@ -328,7 +331,7 @@ class _PdfViewerWidgetState extends State<PdfViewerWidget> {
         Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: Text(
-            'Use pinch ou scroll para zoom',
+            'Toque duas vezes para aumentar | Pinch para ajustar zoom',
             style: appTheme.bodySmall.copyWith(
               color: appTheme.secondaryText,
               fontStyle: FontStyle.italic,

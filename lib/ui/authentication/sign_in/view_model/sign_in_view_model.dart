@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '/data/repositories/auth_repository.dart';
-import '../../../../routing/nav.dart';
-import '/ui/home/home_page/home_page.dart';
+import 'package:medita_b_k/data/repositories/auth_repository.dart';
+import 'package:medita_b_k/routing/nav.dart';
+import 'package:medita_b_k/ui/home/home_page/home_page.dart';
 
 class SignInViewModel extends ChangeNotifier {
   final AuthRepository _authRepository;

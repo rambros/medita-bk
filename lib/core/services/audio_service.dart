@@ -7,7 +7,7 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '/core/enums/enums.dart';
+import 'package:medita_b_k/core/enums/enums.dart';
 
 /// Global audio handler instance for background audio playback
 late AudioHandler globalAudioHandler;

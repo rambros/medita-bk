@@ -1,8 +1,8 @@
 
-import '/core/structs/index.dart';
-import '/data/repositories/playlist_repository.dart';
-import '/ui/core/flutter_flow/custom_functions.dart' as functions;
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/core/structs/index.dart';
+import 'package:medita_b_k/data/repositories/playlist_repository.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/custom_functions.dart' as functions;
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 
 class PlaylistSavePageViewModel extends ChangeNotifier {

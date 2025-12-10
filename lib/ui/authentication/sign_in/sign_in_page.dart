@@ -1,11 +1,11 @@
-import '/ui/core/flutter_flow/flutter_flow_theme.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import '/ui/core/flutter_flow/flutter_flow_widgets.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'view_model/sign_in_view_model.dart';
-import '/ui/authentication/sign_up/sign_up_page.dart';
-import '/ui/authentication/forgot_password/forgot_password_page.dart';
+import 'package:medita_b_k/ui/authentication/sign_up/sign_up_page.dart';
+import 'package:medita_b_k/ui/authentication/forgot_password/forgot_password_page.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});

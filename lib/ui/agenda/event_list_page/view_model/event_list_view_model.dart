@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '/core/structs/index.dart';
-import '/data/repositories/agenda_repository.dart';
+import 'package:medita_b_k/core/structs/index.dart';
+import 'package:medita_b_k/data/repositories/agenda_repository.dart';
 
 class EventListViewModel extends ChangeNotifier {
   final AgendaRepository _repository;

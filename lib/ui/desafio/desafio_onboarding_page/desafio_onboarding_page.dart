@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
-import '/ui/core/flutter_flow/flutter_flow_theme.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import '/ui/desafio/widgets/desafio_onboarding_widget.dart';
-import '/ui/desafio/lista_etapas_page/lista_etapas_page.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_icon_button.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/ui/desafio/widgets/desafio_onboarding_widget.dart';
+import 'package:medita_b_k/ui/desafio/lista_etapas_page/lista_etapas_page.dart';
 
 class DesafioOnboardingPage extends StatefulWidget {
   const DesafioOnboardingPage({super.key});

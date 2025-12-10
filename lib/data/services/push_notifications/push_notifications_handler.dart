@@ -1,9 +1,10 @@
 import 'dart:async';
 
 import 'serialization_util.dart';
-import '/ui/core/flutter_flow/flutter_flow_theme.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import '/core/utils/logger.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/core/utils/logger.dart';
+import 'package:medita_b_k/data/services/badge_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -73,6 +74,18 @@ class _PushNotificationsHandlerState extends State<PushNotificationsHandler> {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((_) {
       handleOpenedPushNotification();
+      _setupForegroundNotificationListener();
+    });
+  }
+
+  /// Configura listener para notificações em foreground
+  void _setupForegroundNotificationListener() {
+    if (isWeb) return;
+
+    // Escuta notificações quando app está em foreground
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      // Atualiza o badge quando receber notificação
+      BadgeService().updateFromNotifications();
     });
   }
 

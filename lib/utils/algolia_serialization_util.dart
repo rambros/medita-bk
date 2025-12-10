@@ -1,8 +1,8 @@
-import '/core/enums/enums.dart';
-import '/core/structs/util/firestore_util.dart';
-import '/core/structs/util/schema_util.dart';
-import '/core/utils/logger.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/core/enums/enums.dart';
+import 'package:medita_b_k/core/structs/util/firestore_util.dart';
+import 'package:medita_b_k/core/structs/util/schema_util.dart';
+import 'package:medita_b_k/core/utils/logger.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
 
 dynamic convertAlgoliaParam<T>(
   dynamic data,

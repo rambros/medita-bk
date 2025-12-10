@@ -1,8 +1,8 @@
-import '/core/structs/index.dart';
-import '/data/services/auth/firebase_auth/auth_util.dart';
-import '/data/services/firebase/firestore_service.dart';
+import 'package:medita_b_k/core/structs/index.dart';
+import 'package:medita_b_k/data/services/auth/firebase_auth/auth_util.dart';
+import 'package:medita_b_k/data/services/firebase/firestore_service.dart';
 
-import '/data/models/firebase/desafio21_model.dart';
+import 'package:medita_b_k/data/models/firebase/desafio21_model.dart';
 import 'package:collection/collection.dart';
 
 class DesafioRepository {

@@ -6,7 +6,12 @@
       "Bash(flutter analyze:*)",
       "Bash(flutter build:*)",
       "Bash(flutter logs:*)",
-      "Bash(flutter clean:*)"
+      "Bash(flutter clean:*)",
+      "Bash(git checkout:*)",
+      "Bash(chmod:*)",
+      "Bash(python3:*)",
+      "Bash(flutter pub get:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

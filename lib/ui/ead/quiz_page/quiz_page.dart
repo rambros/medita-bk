@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:medita_b_k/data/repositories/auth_repository.dart';
 import 'package:medita_b_k/routing/ead_routes.dart';
-import '../../core/theme/app_theme.dart';
+import 'package:medita_b_k/ui/core/theme/app_theme.dart';
 import 'view_model/quiz_view_model.dart';
 import 'widgets/question_tile.dart';
 import 'widgets/quiz_result_widget.dart';

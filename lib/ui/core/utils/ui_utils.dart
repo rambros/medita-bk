@@ -4,8 +4,8 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '/core/structs/index.dart';
-import '/core/utils/logger.dart';
+import 'package:medita_b_k/core/structs/index.dart';
+import 'package:medita_b_k/core/utils/logger.dart';
 
 /// UI interaction utilities
 class UIUtils {

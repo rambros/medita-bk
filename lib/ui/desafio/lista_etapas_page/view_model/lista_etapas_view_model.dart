@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '/core/state/app_state.dart';
-import '/core/structs/index.dart';
-import '/data/repositories/desafio_repository.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import '/data/repositories/auth_repository.dart';
+import 'package:medita_b_k/core/state/app_state.dart';
+import 'package:medita_b_k/core/structs/index.dart';
+import 'package:medita_b_k/data/repositories/desafio_repository.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/data/repositories/auth_repository.dart';
 
 class ListaEtapasViewModel extends ChangeNotifier {
   ListaEtapasViewModel({

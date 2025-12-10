@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
-import '/data/repositories/auth_repository.dart';
+import 'package:medita_b_k/data/repositories/auth_repository.dart';
 
-import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
-import '/ui/core/flutter_flow/flutter_flow_theme.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import '/ui/desafio/widgets/desafio_diario_widget.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_icon_button.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/ui/desafio/widgets/desafio_diario_widget.dart';
 
 import 'view_model/diario_meditacao_view_model.dart';
 

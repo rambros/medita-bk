@@ -1,5 +1,5 @@
 import 'package:cloud_functions/cloud_functions.dart';
-import '/core/utils/logger.dart';
+import 'package:medita_b_k/core/utils/logger.dart';
 
 class CloudFunctionsService {
   static Future<Map<String, dynamic>> makeCloudCall(

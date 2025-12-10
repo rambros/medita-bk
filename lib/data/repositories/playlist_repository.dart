@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '/core/structs/index.dart';
-import '/core/structs/util/firestore_util.dart';
-import '/data/models/firebase/user_model.dart';
-import '/data/services/firebase/firestore_service.dart';
+import 'package:medita_b_k/core/structs/index.dart';
+import 'package:medita_b_k/core/structs/util/firestore_util.dart';
+import 'package:medita_b_k/data/models/firebase/user_model.dart';
+import 'package:medita_b_k/data/services/firebase/firestore_service.dart';
 
 /// Repository responsible for persisting playlist data for the current user.
 class PlaylistRepository {

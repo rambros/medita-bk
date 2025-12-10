@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'package:share_plus/share_plus.dart';
 import 'package:http/http.dart' as http;
-import '/core/utils/logger.dart';
+import 'package:medita_b_k/core/utils/logger.dart';
 
 /// Utility class for UI-related operations like sharing content
 class UIUtils {

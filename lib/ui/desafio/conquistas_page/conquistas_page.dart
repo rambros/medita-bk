@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 
-import '/data/repositories/auth_repository.dart';
-import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
-import '/ui/core/flutter_flow/flutter_flow_theme.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import '/ui/desafio/widgets/carousel_get_brasao_widget.dart';
-import '/ui/desafio/widgets/carousel_get_ebooks_widget.dart';
-import '/ui/desafio/widgets/carousel_get_mandalas_widget.dart';
+import 'package:medita_b_k/data/repositories/auth_repository.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_icon_button.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/ui/desafio/widgets/carousel_get_brasao_widget.dart';
+import 'package:medita_b_k/ui/desafio/widgets/carousel_get_ebooks_widget.dart';
+import 'package:medita_b_k/ui/desafio/widgets/carousel_get_mandalas_widget.dart';
 
 import 'view_model/conquistas_view_model.dart';
 

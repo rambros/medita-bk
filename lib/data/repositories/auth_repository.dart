@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '/data/services/auth/base_auth_user_provider.dart';
-import '/data/services/auth/firebase_auth/firebase_auth_service.dart';
-import '/data/services/auth/firebase_auth/auth_util.dart' as auth_util;
-import '/data/models/firebase/user_model.dart';
-import '/data/services/firebase/firestore_service.dart';
+import 'package:medita_b_k/data/services/auth/base_auth_user_provider.dart';
+import 'package:medita_b_k/data/services/auth/firebase_auth/firebase_auth_service.dart';
+import 'package:medita_b_k/data/services/auth/firebase_auth/auth_util.dart' as auth_util;
+import 'package:medita_b_k/data/models/firebase/user_model.dart';
+import 'package:medita_b_k/data/services/firebase/firestore_service.dart';
 
 class AuthRepository {
   AuthRepository({required FirebaseAuthService authService, FirestoreService? firestoreService})

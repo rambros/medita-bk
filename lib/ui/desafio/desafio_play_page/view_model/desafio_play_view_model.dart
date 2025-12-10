@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '/core/state/app_state.dart';
-import '/data/models/firebase/desafio21_model.dart';
-import '/data/repositories/home_repository.dart';
-import '/data/repositories/auth_repository.dart';
-import '/core/structs/index.dart';
+import 'package:medita_b_k/core/state/app_state.dart';
+import 'package:medita_b_k/data/models/firebase/desafio21_model.dart';
+import 'package:medita_b_k/data/repositories/home_repository.dart';
+import 'package:medita_b_k/data/repositories/auth_repository.dart';
+import 'package:medita_b_k/core/structs/index.dart';
 
 class DesafioPlayViewModel extends ChangeNotifier {
   final int meditationIndex;

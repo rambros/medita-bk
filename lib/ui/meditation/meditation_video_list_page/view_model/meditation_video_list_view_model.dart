@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '/data/services/youtube_service.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/data/services/youtube_service.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
 
 class MeditationVideoListViewModel extends ChangeNotifier {
   // ========== STATE ==========

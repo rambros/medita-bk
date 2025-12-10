@@ -1,11 +1,11 @@
-import '/core/enums/enums.dart';
-import '/core/structs/index.dart';
-import '/ui/core/flutter_flow/flutter_flow_theme.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import '/ui/core/flutter_flow/flutter_flow_widgets.dart';
+import 'package:medita_b_k/core/enums/enums.dart';
+import 'package:medita_b_k/core/structs/index.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
-import '/ui/core/actions/actions.dart' as actions;
-import '/ui/core/flutter_flow/custom_functions.dart' as functions;
+import 'package:medita_b_k/ui/core/actions/actions.dart' as actions;
+import 'package:medita_b_k/ui/core/flutter_flow/custom_functions.dart' as functions;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';

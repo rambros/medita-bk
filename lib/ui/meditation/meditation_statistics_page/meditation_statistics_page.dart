@@ -1,6 +1,6 @@
-import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
-import '/ui/core/flutter_flow/flutter_flow_theme.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_icon_button.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
 import 'widgets/daily_statistics_widget.dart';
 import 'widgets/weekly_statistics_widget.dart';
 import 'widgets/monthly_statistics_widget.dart';

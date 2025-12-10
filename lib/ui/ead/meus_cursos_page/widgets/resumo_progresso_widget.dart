@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_theme.dart';
-import '../view_model/meus_cursos_view_model.dart';
+import 'package:medita_b_k/ui/core/theme/app_theme.dart';
+import 'package:medita_b_k/ui/ead/meus_cursos_page/view_model/meus_cursos_view_model.dart';
 
 /// Widget que exibe um resumo do progresso geral do usuário
 class ResumoProgressoWidget extends StatelessWidget {

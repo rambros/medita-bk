@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '/data/models/firebase/user_model.dart';
-import '/data/repositories/user_repository.dart';
-import '/core/utils/logger.dart';
+import 'package:medita_b_k/data/models/firebase/user_model.dart';
+import 'package:medita_b_k/data/repositories/user_repository.dart';
+import 'package:medita_b_k/core/utils/logger.dart';
 
 class AboutAuthorsViewModel extends ChangeNotifier {
   final UserRepository _repository;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '/core/structs/index.dart';
-import '/data/repositories/auth_repository.dart';
+import 'package:medita_b_k/core/structs/index.dart';
+import 'package:medita_b_k/data/repositories/auth_repository.dart';
 
 class DiarioMeditacaoViewModel extends ChangeNotifier {
   DiarioMeditacaoViewModel({required AuthRepository authRepository}) : _authRepository = authRepository;

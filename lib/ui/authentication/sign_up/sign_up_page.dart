@@ -1,14 +1,14 @@
-import '/ui/core/flutter_flow/flutter_flow_checkbox_group.dart';
-import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
-import '/ui/core/flutter_flow/flutter_flow_theme.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import '/ui/core/flutter_flow/flutter_flow_widgets.dart';
-import '/ui/core/flutter_flow/form_field_controller.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_checkbox_group.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_icon_button.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_widgets.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/form_field_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'view_model/sign_up_view_model.dart';
-import '/ui/authentication/social_login/social_login_page.dart';
-import '/ui/authentication/sign_in/sign_in_page.dart';
+import 'package:medita_b_k/ui/authentication/social_login/social_login_page.dart';
+import 'package:medita_b_k/ui/authentication/sign_in/sign_in_page.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
-import '/data/models/firebase/notification_model.dart';
-import '/ui/core/flutter_flow/flutter_flow_animations.dart';
-import '/ui/core/flutter_flow/flutter_flow_theme.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import '/ui/notification/widgets/notification_card.dart';
+import 'package:medita_b_k/data/models/firebase/notification_model.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_animations.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/ui/notification/widgets/notification_card.dart';
 import 'view_model/notification_list_view_model.dart';
 
 /// Notification list page with tabs

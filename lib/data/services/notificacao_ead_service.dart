@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
-import '../../domain/models/ead/notificacao_ead_model.dart';
+import 'package:medita_b_k/domain/models/ead/notificacao_ead_model.dart';
 
 /// Service para gerenciar notificações do módulo EAD
 /// Responsável por criar, listar e marcar notificações como lidas

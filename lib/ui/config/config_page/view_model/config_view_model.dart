@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import '/data/models/firebase/user_model.dart';
-import '/data/repositories/auth_repository.dart';
-import '/data/repositories/user_repository.dart';
+import 'package:medita_b_k/data/models/firebase/user_model.dart';
+import 'package:medita_b_k/data/repositories/auth_repository.dart';
+import 'package:medita_b_k/data/repositories/user_repository.dart';
 
 class ConfigViewModel extends ChangeNotifier {
   final AuthRepository _authRepository;

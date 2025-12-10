@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pdfx/pdfx.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
 
 class FlutterFlowPdfViewer extends StatefulWidget {
   const FlutterFlowPdfViewer({

@@ -3,14 +3,14 @@ import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
 
-import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
-import '/ui/core/flutter_flow/flutter_flow_theme.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import '/ui/core/flutter_flow/flutter_flow_widgets.dart';
-import '/ui/desafio/widgets/confirma_reset_desafio_widget.dart';
-import '/ui/core/flutter_flow/custom_functions.dart' as functions;
-import '/ui/pages.dart';
-import '/core/utils/logger.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_icon_button.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_widgets.dart';
+import 'package:medita_b_k/ui/desafio/widgets/confirma_reset_desafio_widget.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/custom_functions.dart' as functions;
+import 'package:medita_b_k/ui/pages.dart';
+import 'package:medita_b_k/core/utils/logger.dart';
 
 import 'view_model/home_desafio_view_model.dart';
 

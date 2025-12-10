@@ -1,10 +1,10 @@
-import '/ui/core/flutter_flow/flutter_flow_drop_down.dart';
-import '/ui/core/flutter_flow/flutter_flow_theme.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import '/ui/core/flutter_flow/flutter_flow_widgets.dart';
-import '/ui/core/flutter_flow/form_field_controller.dart';
-import '/ui/core/flutter_flow/custom_functions.dart' as functions;
-import '/ui/pages.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_drop_down.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_widgets.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/form_field_controller.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/custom_functions.dart' as functions;
+import 'package:medita_b_k/ui/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'select_mandala_test_model.dart';

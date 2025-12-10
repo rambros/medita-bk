@@ -4,14 +4,14 @@ import 'package:provider/provider.dart';
 import 'package:expandable/expandable.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
 
-import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
-import '/ui/core/flutter_flow/flutter_flow_theme.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import '/ui/core/flutter_flow/custom_functions.dart' as functions;
-import '/ui/home/home_page/home_page.dart';
-import '/ui/desafio/widgets/card_dia_meditacao_widget.dart';
-import '/ui/desafio/widgets/confirma_reset_desafio_widget.dart';
-import '/ui/desafio/widgets/get_mandala_widget.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_icon_button.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/custom_functions.dart' as functions;
+import 'package:medita_b_k/ui/home/home_page/home_page.dart';
+import 'package:medita_b_k/ui/desafio/widgets/card_dia_meditacao_widget.dart';
+import 'package:medita_b_k/ui/desafio/widgets/confirma_reset_desafio_widget.dart';
+import 'package:medita_b_k/ui/desafio/widgets/get_mandala_widget.dart';
 
 import 'view_model/lista_etapas_view_model.dart';
 

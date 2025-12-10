@@ -3,13 +3,13 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '/data/repositories/auth_repository.dart';
-import '/data/repositories/desafio_repository.dart';
-import '/core/structs/index.dart';
-import '/ui/core/flutter_flow/flutter_flow_theme.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import '/ui/core/flutter_flow/flutter_flow_widgets.dart';
-import '/ui/home/home_page/home_page.dart';
+import 'package:medita_b_k/data/repositories/auth_repository.dart';
+import 'package:medita_b_k/data/repositories/desafio_repository.dart';
+import 'package:medita_b_k/core/structs/index.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_widgets.dart';
+import 'package:medita_b_k/ui/home/home_page/home_page.dart';
 
 class ConfirmaResetDesafioWidget extends StatelessWidget {
   const ConfirmaResetDesafioWidget({super.key});

@@ -1,9 +1,9 @@
 // Automatic FlutterFlow imports
-import '/core/structs/index.dart';
-import '/core/enums/enums.dart';
-import '/ui/core/flutter_flow/flutter_flow_theme.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import '/core/utils/logger.dart';
+import 'package:medita_b_k/core/structs/index.dart';
+import 'package:medita_b_k/core/enums/enums.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'seek_bar.dart';
 // Begin custom widget code

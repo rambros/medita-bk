@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import '/data/repositories/video_repository.dart';
-import '/domain/models/video/video_model.dart';
+import 'package:medita_b_k/data/repositories/video_repository.dart';
+import 'package:medita_b_k/domain/models/video/video_model.dart';
 
 class CongressoListViewModel extends ChangeNotifier {
   final VideoRepository _repository;

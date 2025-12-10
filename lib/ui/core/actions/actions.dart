@@ -1,5 +1,5 @@
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import '/core/utils/network_utils.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/core/utils/network_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
 

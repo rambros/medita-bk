@@ -4,8 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '/data/models/firebase/user_model.dart';
-import '/data/services/firebase/firestore_service.dart';
+import 'package:medita_b_k/data/models/firebase/user_model.dart';
+import 'package:medita_b_k/data/services/firebase/firestore_service.dart';
 import 'firebase_auth_manager.dart';
 import 'package:stream_transform/stream_transform.dart';
 

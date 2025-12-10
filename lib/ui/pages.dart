@@ -87,3 +87,6 @@ export 'suporte/ticket_chat_page/ticket_chat_page.dart' show TicketChatPage;
 export 'ead/discussoes/discussoes_curso_page/discussoes_curso_page.dart' show DiscussoesCursoPage;
 export 'ead/discussoes/nova_discussao_page/nova_discussao_page.dart' show NovaDiscussaoPage;
 export 'ead/discussoes/discussao_detail_page/discussao_detail_page.dart' show DiscussaoDetailPage;
+
+// Notificações EAD
+export 'notificacoes/notificacoes_page/notificacoes_page.dart' show NotificacoesPage;

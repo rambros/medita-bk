@@ -16,7 +16,7 @@ import 'package:http/http.dart' as http;
 import 'package:mime/mime.dart' as mime;
 import 'uploaded_file.dart';
 
-import '/main.dart';
+import 'package:medita_b_k/main.dart';
 
 export 'keep_alive_wrapper.dart';
 export 'lat_lng.dart';

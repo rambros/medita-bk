@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_theme.dart';
+import 'package:medita_b_k/ui/core/theme/app_theme.dart';
 
 /// Widget de navegacao entre topicos
 class NavegacaoTopicosWidget extends StatelessWidget {

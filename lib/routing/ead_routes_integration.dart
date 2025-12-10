@@ -5,8 +5,8 @@
 /// 1. No arquivo lib/routing/nav.dart, adicione os imports:
 /// 
 /// ```dart
-/// import '/ui/ead/index.dart';
-/// import '/routing/ead_routes.dart';
+/// import 'package:medita_b_k/ui/ead/index.dart';
+/// import 'package:medita_b_k/routing/ead_routes.dart';
 /// ```
 /// 
 /// 2. Adicione as rotas abaixo dentro da lista de FFRoutes

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '/ui/core/flutter_flow/flutter_flow_theme.dart';
-import '/ui/core/flutter_flow/flutter_flow_widgets.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_widgets.dart';
 
 /// Header section for profile page showing "Your Courses" title and Add Course button
 class ProfileHeader extends StatelessWidget {

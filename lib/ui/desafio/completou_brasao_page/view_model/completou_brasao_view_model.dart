@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '/core/state/app_state.dart';
-import '/core/structs/index.dart';
+import 'package:medita_b_k/core/state/app_state.dart';
+import 'package:medita_b_k/core/structs/index.dart';
 
 class CompletouBrasaoViewModel extends ChangeNotifier {
   final int indiceBrasao;

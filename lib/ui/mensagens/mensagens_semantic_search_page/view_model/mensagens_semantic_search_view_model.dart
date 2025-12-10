@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '/data/repositories/mensagem_repository.dart';
-import '/core/structs/index.dart';
-import '/core/utils/logger.dart';
+import 'package:medita_b_k/data/repositories/mensagem_repository.dart';
+import 'package:medita_b_k/core/structs/index.dart';
+import 'package:medita_b_k/core/utils/logger.dart';
 
 class MensagensSemanticSearchViewModel extends ChangeNotifier {
   final MensagemRepository _repository;

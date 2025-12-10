@@ -1,7 +1,7 @@
-import '/core/structs/index.dart';
+import 'package:medita_b_k/core/structs/index.dart';
 import 'package:flutter/material.dart';
 
-import '/data/repositories/playlist_repository.dart';
+import 'package:medita_b_k/data/repositories/playlist_repository.dart';
 
 class PlaylistDetailsPageViewModel extends ChangeNotifier {
   PlaylistDetailsPageViewModel({

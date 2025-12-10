@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '/core/structs/index.dart';
-import '/ui/core/flutter_flow/request_manager.dart';
-import '/data/models/firebase/firebase_models.dart';
+import 'package:medita_b_k/core/structs/index.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/request_manager.dart';
+import 'package:medita_b_k/data/models/firebase/firebase_models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import '/core/utils/logger.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/core/utils/logger.dart';
 
 class AppStateStore extends ChangeNotifier {
   static AppStateStore _instance = AppStateStore._internal();

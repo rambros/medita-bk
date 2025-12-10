@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/firebase/meditation_model.dart';
-import '../services/firebase/firestore_service.dart';
-import '/core/utils/logger.dart';
-import '/data/services/algolia_service.dart';
+import 'package:medita_b_k/data/models/firebase/meditation_model.dart';
+import 'package:medita_b_k/data/services/firebase/firestore_service.dart';
+import 'package:medita_b_k/core/utils/logger.dart';
+import 'package:medita_b_k/data/services/algolia_service.dart';
 
 /// Repository interface for meditation data operations
 abstract class MeditationRepository {

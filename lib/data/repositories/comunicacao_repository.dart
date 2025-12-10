@@ -1,5 +1,5 @@
-import '../services/comunicacao_service.dart';
-import '../../domain/models/ead/index.dart';
+import 'package:medita_b_k/data/services/comunicacao_service.dart';
+import 'package:medita_b_k/domain/models/ead/index.dart';
 
 /// Repository para o módulo de Comunicação (Tickets e Discussões)
 /// Camada de abstração entre Service e ViewModels

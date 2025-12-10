@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '/data/models/firebase/notification_model.dart';
-import '/data/repositories/notification_repository.dart';
+import 'package:medita_b_k/data/models/firebase/notification_model.dart';
+import 'package:medita_b_k/data/repositories/notification_repository.dart';
 
 /// ViewModel for NotificationListPage
 /// Manages state and business logic for the notification list with tabs

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '/ui/core/flutter_flow/flutter_flow_theme.dart';
-import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import '/ui/pages.dart';
-import '/core/utils/logger.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/ui/core/widgets/notification_badge_icon.dart';
+import 'package:medita_b_k/ui/pages.dart';
+import 'package:medita_b_k/core/utils/logger.dart';
 
 /// Custom app bar for home page
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -58,20 +58,15 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                         useGoogleFonts: !FlutterFlowTheme.of(context).headlineMediumIsCustom,
                       ),
                 ),
-                FlutterFlowIconButton(
-                  borderRadius: 20.0,
-                  borderWidth: 1.0,
-                  buttonSize: 40.0,
-                  fillColor: FlutterFlowTheme.of(context).primaryBackground,
-                    icon: Icon(
-                      Icons.notifications_none,
-                      color: FlutterFlowTheme.of(context).primary,
-                      size: 24.0,
-                    ),
-                    onPressed: () {
-                      logDebug('IconButton pressed ...');
-                    },
-                  ),
+                NotificationBadgeIcon(
+                  iconSize: 24.0,
+                  iconColor: FlutterFlowTheme.of(context).primary,
+                  badgeColor: FlutterFlowTheme.of(context).error,
+                  onPressed: () {
+                    logDebug('Notification icon pressed - navigating to notifications page');
+                    context.pushNamed('notificacoes');
+                  },
+                ),
               ],
             ),
           ),

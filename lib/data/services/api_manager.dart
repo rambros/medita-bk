@@ -11,7 +11,7 @@ import 'package:equatable/equatable.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime_type/mime_type.dart';
 
-import '/ui/core/flutter_flow/uploaded_file.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/uploaded_file.dart';
 
 import 'get_streamed_response.dart';
 

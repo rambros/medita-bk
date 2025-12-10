@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
-import '../../domain/models/ead/index.dart';
+import 'package:medita_b_k/domain/models/ead/index.dart';
 
 /// Service para acesso ao Firebase do módulo EAD
 /// Responsável por operações de leitura/escrita no Firestore

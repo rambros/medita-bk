@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '/ui/core/flutter_flow/flutter_flow_theme.dart';
-import '/ui/core/flutter_flow/flutter_flow_animations.dart';
-import '/ui/core/flutter_flow/custom_icons.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_animations.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/custom_icons.dart';
 
 /// Reusable navigation card widget for home page grid
 class NavigationCard extends StatelessWidget {

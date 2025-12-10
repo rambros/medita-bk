@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:medita_b_k/data/repositories/auth_repository.dart';
 import 'package:medita_b_k/routing/ead_routes.dart';
-import '../../core/theme/app_theme.dart';
+import 'package:medita_b_k/ui/core/theme/app_theme.dart';
 import 'view_model/meus_cursos_view_model.dart';
 import 'widgets/meu_curso_card.dart';
 import 'widgets/resumo_progresso_widget.dart';

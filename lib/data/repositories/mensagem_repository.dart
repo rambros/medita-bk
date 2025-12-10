@@ -1,6 +1,6 @@
-import '/data/models/firebase/message_model.dart';
-import '/data/services/firebase/firestore_service.dart';
-import '/data/services/messages_service.dart';
+import 'package:medita_b_k/data/models/firebase/message_model.dart';
+import 'package:medita_b_k/data/services/firebase/firestore_service.dart';
+import 'package:medita_b_k/data/services/messages_service.dart';
 
 class MensagemRepository {
   MensagemRepository({FirestoreService? firestoreService})

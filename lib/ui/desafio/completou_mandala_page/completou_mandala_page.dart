@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '/ui/core/flutter_flow/flutter_flow_icon_button.dart';
-import '/ui/core/flutter_flow/flutter_flow_theme.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import '/ui/core/flutter_flow/flutter_flow_widgets.dart';
-import '/core/utils/ui_utils.dart';
-import '/ui/core/flutter_flow/custom_functions.dart' as functions;
-import '/ui/desafio/home_desafio_page/home_desafio_page.dart';
-import '/ui/desafio/completou_brasao_page/completou_brasao_page.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_icon_button.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_widgets.dart';
+import 'package:medita_b_k/core/utils/ui_utils.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/custom_functions.dart' as functions;
+import 'package:medita_b_k/ui/desafio/home_desafio_page/home_desafio_page.dart';
+import 'package:medita_b_k/ui/desafio/completou_brasao_page/completou_brasao_page.dart';
 
 import 'view_model/completou_mandala_view_model.dart';
 

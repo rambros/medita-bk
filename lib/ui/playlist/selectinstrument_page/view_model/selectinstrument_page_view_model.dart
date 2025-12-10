@@ -1,4 +1,4 @@
-import '/core/structs/index.dart';
+import 'package:medita_b_k/core/structs/index.dart';
 import 'package:flutter/material.dart';
 
 class SelectinstrumentPageViewModel extends ChangeNotifier {

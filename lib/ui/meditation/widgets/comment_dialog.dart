@@ -1,11 +1,11 @@
-import '/ui/core/flutter_flow/flutter_flow_theme.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
-import '/ui/core/flutter_flow/flutter_flow_widgets.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
-import '/ui/core/flutter_flow/custom_functions.dart' as functions;
-import '/data/repositories/auth_repository.dart';
-import '/data/services/firebase/firestore_service.dart';
-import '/core/structs/comment_struct.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/custom_functions.dart' as functions;
+import 'package:medita_b_k/data/repositories/auth_repository.dart';
+import 'package:medita_b_k/data/services/firebase/firestore_service.dart';
+import 'package:medita_b_k/core/structs/comment_struct.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

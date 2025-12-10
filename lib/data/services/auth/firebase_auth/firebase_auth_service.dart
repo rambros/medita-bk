@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '/data/services/auth/firebase_auth/auth_util.dart';
+import 'package:medita_b_k/data/services/auth/firebase_auth/auth_util.dart';
 
 /// Service layer wrapping FirebaseAuthManager to keep UI/ViewModels isolated
 /// from Firebase/AuthManager implementation details.

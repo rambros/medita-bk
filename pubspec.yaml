@@ -43,6 +43,7 @@ dependencies:
   firebase_messaging: ^16.0.4
   firebase_storage: ^13.0.4
   flutter_animate: ^4.5.2
+  flutter_app_badger: ^1.5.0
   flutter_local_notifications: ^19.5.0
   flutter_slidable: ^4.0.3
   flutter_timezone: ^5.0.0

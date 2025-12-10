@@ -7,6 +7,7 @@ export 'meditation_repository.dart';
 export 'mensagem_repository.dart';
 export 'music_repository.dart';
 export 'notification_repository.dart';
+export 'notificacoes_repository.dart';
 export 'playlist_repository.dart';
 export 'user_repository.dart';
 export 'video_repository.dart';

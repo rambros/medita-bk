@@ -1,5 +1,5 @@
-import '../services/ead_service.dart';
-import '../../domain/models/ead/index.dart';
+import 'package:medita_b_k/data/services/ead_service.dart';
+import 'package:medita_b_k/domain/models/ead/index.dart';
 
 /// Repository para o módulo EAD
 /// Camada de abstração entre Service e ViewModels

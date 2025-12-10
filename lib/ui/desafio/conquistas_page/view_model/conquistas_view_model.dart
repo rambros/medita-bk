@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '/core/state/app_state.dart';
-import '/core/structs/index.dart';
-import '/data/repositories/auth_repository.dart';
-import '/ui/core/flutter_flow/custom_functions.dart' as functions;
+import 'package:medita_b_k/core/state/app_state.dart';
+import 'package:medita_b_k/core/structs/index.dart';
+import 'package:medita_b_k/data/repositories/auth_repository.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/custom_functions.dart' as functions;
 
 class ConquistasViewModel extends ChangeNotifier {
   ConquistasViewModel({required AuthRepository authRepository}) : _authRepository = authRepository;

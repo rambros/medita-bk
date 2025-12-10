@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
-import '../base_auth_user_provider.dart';
+import 'package:medita_b_k/data/services/auth/base_auth_user_provider.dart';
 
 export '../base_auth_user_provider.dart';
 

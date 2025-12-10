@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../domain/models/ead/index.dart';
+import 'package:medita_b_k/domain/models/ead/index.dart';
 
 /// Card de resposta da discussão
 class RespostaCard extends StatelessWidget {

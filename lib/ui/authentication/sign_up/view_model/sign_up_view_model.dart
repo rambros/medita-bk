@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '/data/models/firebase/user_model.dart';
-import '/data/repositories/auth_repository.dart';
-import '/data/repositories/user_repository.dart';
-import '/ui/home/home_page/home_page.dart';
-import '/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_b_k/data/models/firebase/user_model.dart';
+import 'package:medita_b_k/data/repositories/auth_repository.dart';
+import 'package:medita_b_k/data/repositories/user_repository.dart';
+import 'package:medita_b_k/ui/home/home_page/home_page.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
 
 class SignUpViewModel extends ChangeNotifier {
   final AuthRepository _authRepository;

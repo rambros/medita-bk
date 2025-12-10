@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '/data/models/firebase/notification_model.dart';
-import '/ui/core/flutter_flow/custom_functions.dart' as functions;
+import 'package:medita_b_k/data/models/firebase/notification_model.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/custom_functions.dart' as functions;
 
 /// ViewModel for NotificationViewPage
 /// Manages state for viewing a single notification

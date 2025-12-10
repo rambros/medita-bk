@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '/data/models/firebase/message_model.dart';
-import '/data/repositories/mensagem_repository.dart';
-import '/core/state/app_state.dart';
-import '/ui/core/flutter_flow/custom_functions.dart' as functions;
-import '/core/utils/logger.dart';
+import 'package:medita_b_k/data/models/firebase/message_model.dart';
+import 'package:medita_b_k/data/repositories/mensagem_repository.dart';
+import 'package:medita_b_k/core/state/app_state.dart';
+import 'package:medita_b_k/ui/core/flutter_flow/custom_functions.dart' as functions;
+import 'package:medita_b_k/core/utils/logger.dart';
 import 'package:share_plus/share_plus.dart';
 
 class MensagemDetailsViewModel extends ChangeNotifier {

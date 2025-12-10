@@ -179,6 +179,9 @@ testing/
   in `Model` | `UserModel` | | Domain entities | end in `Entity` | `UserEntity`
   | | Repository interfaces | end in `Repository` | `AuthRepository` |
 
+
+  - imports sempre absolutos a não ser quando relativo for mais conveniente
+
 ---
 
 10. Instruções para voce ao gerar código
