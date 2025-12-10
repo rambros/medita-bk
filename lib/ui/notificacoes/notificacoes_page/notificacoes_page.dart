@@ -204,6 +204,11 @@ class _NotificacoesPageContent extends StatelessWidget {
                       context,
                       notificacao,
                     ),
+                    onMarkAsRead: () => _handleMarkAsRead(context, notificacao),
+                    onDelete: () => _handleNotificacaoRemove(
+                      context,
+                      notificacao,
+                    ),
                   );
                 },
                 childCount: viewModel.notificacoesNaoLidas.length,
@@ -235,6 +240,10 @@ class _NotificacoesPageContent extends StatelessWidget {
                     notificacao: notificacao,
                     onTap: () => _handleNotificacaoTap(context, notificacao),
                     onDismiss: () => _handleNotificacaoRemove(
+                      context,
+                      notificacao,
+                    ),
+                    onDelete: () => _handleNotificacaoRemove(
                       context,
                       notificacao,
                     ),
@@ -312,10 +321,58 @@ class _NotificacoesPageContent extends StatelessWidget {
     }
   }
 
+  Future<void> _handleMarkAsRead(
+    BuildContext context,
+    dynamic notificacao,
+  ) async {
+    final viewModel = context.read<NotificacoesViewModel>();
+    final success = await viewModel.marcarComoLida(notificacao);
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            success
+                ? 'Notificação marcada como lida'
+                : 'Erro ao marcar notificação como lida',
+          ),
+          backgroundColor: success ? Colors.green : Colors.red,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
   Future<void> _handleNotificacaoRemove(
     BuildContext context,
     dynamic notificacao,
   ) async {
+    // Confirmar antes de deletar
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Excluir notificação'),
+        content: const Text(
+          'Tem certeza que deseja excluir esta notificação? Esta ação não pode ser desfeita.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.red,
+            ),
+            child: const Text('Excluir'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm != true || !context.mounted) return;
+
     final viewModel = context.read<NotificacoesViewModel>();
     final success = await viewModel.removerNotificacao(notificacao);
 
@@ -323,10 +380,11 @@ class _NotificacoesPageContent extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            success 
+            success
                 ? 'Notificação removida'
                 : 'Não é possível remover esta notificação',
           ),
+          backgroundColor: success ? Colors.green : Colors.red,
           duration: const Duration(seconds: 2),
         ),
       );

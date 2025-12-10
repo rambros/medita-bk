@@ -11,11 +11,138 @@ class NotificacaoCard extends StatelessWidget {
     required this.notificacao,
     required this.onTap,
     this.onDismiss,
+    this.onMarkAsRead,
+    this.onDelete,
   });
 
   final UnifiedNotification notificacao;
   final VoidCallback onTap;
   final VoidCallback? onDismiss;
+  final VoidCallback? onMarkAsRead;
+  final VoidCallback? onDelete;
+
+  void _showOptions(BuildContext context) {
+    final appTheme = AppTheme.of(context);
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: appTheme.primaryBackground,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Handle
+            Container(
+              margin: const EdgeInsets.only(top: 12, bottom: 20),
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: appTheme.lineColor,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+
+            // Título da notificação
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                notificacao.titulo,
+                style: appTheme.titleSmall.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: appTheme.primaryText,
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                notificacao.conteudo,
+                style: appTheme.bodySmall.copyWith(
+                  color: appTheme.secondaryText,
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            // Opções
+            // Ver detalhes (sempre disponível)
+            ListTile(
+              leading: Icon(
+                Icons.visibility_outlined,
+                color: appTheme.primary,
+              ),
+              title: Text(
+                'Ver detalhes',
+                style: appTheme.bodyMedium.copyWith(
+                  color: appTheme.primaryText,
+                ),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                onTap();
+              },
+            ),
+
+            // Marcar como lida (só para não lidas EAD)
+            if (!notificacao.lido &&
+                notificacao.source == NotificationSource.ead &&
+                onMarkAsRead != null)
+              ListTile(
+                leading: Icon(
+                  Icons.done,
+                  color: appTheme.success,
+                ),
+                title: Text(
+                  'Marcar como lida',
+                  style: appTheme.bodyMedium.copyWith(
+                    color: appTheme.primaryText,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  onMarkAsRead?.call();
+                },
+              ),
+
+            // Deletar (só para notificações EAD)
+            if (notificacao.source == NotificationSource.ead &&
+                onDelete != null)
+              ListTile(
+                leading: Icon(
+                  Icons.delete_outline,
+                  color: appTheme.error,
+                ),
+                title: Text(
+                  'Excluir notificação',
+                  style: appTheme.bodyMedium.copyWith(
+                    color: appTheme.error,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  onDelete?.call();
+                },
+              ),
+
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +150,7 @@ class NotificacaoCard extends StatelessWidget {
 
     final card = InkWell(
       onTap: onTap,
+      onLongPress: () => _showOptions(context),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -152,11 +280,16 @@ class NotificacaoCard extends StatelessWidget {
               ),
             ),
 
-            // Ícone de ação
-            Icon(
-              Icons.chevron_right,
-              color: appTheme.secondaryText,
-              size: 20,
+            // Botão de mais opções
+            IconButton(
+              icon: Icon(
+                Icons.more_vert,
+                color: appTheme.secondaryText,
+                size: 20,
+              ),
+              onPressed: () => _showOptions(context),
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
             ),
           ],
         ),
