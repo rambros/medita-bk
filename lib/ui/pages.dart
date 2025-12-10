@@ -6,8 +6,6 @@ export 'authentication/forgot_password/forgot_password_page.dart' show ForgotPas
 export 'home/home_page/home_page.dart' show HomePage;
 export 'config/profile_page/profile_page.dart' show ProfilePage;
 export 'meditation/meditation_home_page/meditation_home_page.dart' show MeditationHomePage;
-export 'notification/notification_list_page/notification_list_page.dart' show NotificationListPage;
-export 'notification/notification_view_page/notification_view_page.dart' show NotificationViewPage;
 export 'authentication/social_login/social_login_page.dart' show SocialLoginPage;
 export 'config/config_page/config_page.dart' show ConfigPage;
 export 'config/about_page/about_page.dart' show AboutPage;

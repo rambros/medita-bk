@@ -106,14 +106,6 @@ void main() async {
             previous ?? ListaEtapasViewModel(authRepository: authRepo, repository: repo),
       ),
 
-      // Notification Module
-      Provider(create: (_) => NotificationRepository()),
-      ChangeNotifierProxyProvider<NotificationRepository, NotificationListViewModel>(
-        create: (context) => NotificationListViewModel(context.read<NotificationRepository>()),
-        update: (context, repo, viewModel) => viewModel ?? NotificationListViewModel(repo),
-      ),
-      ChangeNotifierProvider(create: (_) => NotificationViewViewModel()),
-
       // Agenda Module
       Provider(create: (_) => AgendaRepository()),
       ChangeNotifierProvider(create: (_) => AgendaHomeViewModel()),

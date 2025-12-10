@@ -1,6 +1,4 @@
 export 'home/home_page/view_model/home_view_model.dart';
-export 'notification/notification_list_page/view_model/notification_list_view_model.dart';
-export 'notification/notification_view_page/view_model/notification_view_view_model.dart';
 export 'agenda/agenda_home_page/view_model/agenda_home_view_model.dart';
 export 'agenda/agenda_list_page/view_model/agenda_list_view_model.dart';
 export 'agenda/event_list_page/view_model/event_list_view_model.dart';

@@ -11,7 +11,10 @@
       "Bash(chmod:*)",
       "Bash(python3:*)",
       "Bash(flutter pub get:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git branch:*)",
+      "Bash(git restore:*)",
+      "Bash(git rm:*)"
     ],
     "deny": [],
     "ask": []

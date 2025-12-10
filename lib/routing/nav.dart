@@ -136,11 +136,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   : const MeditationHomePage(),
             ),
             FFRoute(
-              name: NotificationListPage.routeName,
-              path: NotificationListPage.routePath,
-              builder: (context, params) => const NotificationListPage(),
-            ),
-            FFRoute(
               name: SocialLoginPage.routeName,
               path: SocialLoginPage.routePath,
               builder: (context, params) => const SocialLoginPage(),
