@@ -141,21 +141,45 @@ class NotificacoesViewModel extends ChangeNotifier {
   // === Actions ===
 
   /// Marca uma notificação como lida
-  /// Funciona apenas para notificações EAD (as antigas não têm campo "lido")
+  /// Funciona para ambos os tipos de notificações
   Future<bool> marcarComoLida(UnifiedNotification notificacao) async {
-    // Só marca como lida se for notificação EAD
-    if (notificacao.source != NotificationSource.ead) {
-      return true; // Notificações antigas não têm campo "lido"
+    // Para notificações EAD, marca no Firestore
+    if (notificacao.source == NotificationSource.ead) {
+      final success = await _repository.marcarComoLida(notificacao.id);
+
+      if (success) {
+        // Recarregar para atualizar
+        await refresh();
+      }
+
+      return success;
     }
-    
-    final success = await _repository.marcarComoLida(notificacao.id);
-    
-    if (success) {
-      // Recarregar para atualizar
-      await refresh();
+
+    // Para notificações antigas (legacy), marca localmente
+    // Atualiza o estado local
+    final index = _notificacoes.indexWhere((n) => n.id == notificacao.id);
+    if (index != -1) {
+      // Cria uma cópia atualizada
+      final updated = UnifiedNotification(
+        id: notificacao.id,
+        titulo: notificacao.titulo,
+        conteudo: notificacao.conteudo,
+        dataCriacao: notificacao.dataCriacao,
+        lido: true, // Marca como lida
+        source: notificacao.source,
+        tipo: notificacao.tipo,
+        originalData: notificacao.originalData,
+      );
+
+      _notificacoes[index] = updated;
+      _totalNaoLidas = _notificacoes.where((n) => !n.lido).length;
+      _updateAppBadge(_totalNaoLidas);
+      notifyListeners();
+
+      return true;
     }
-    
-    return success;
+
+    return false;
   }
 
   /// Marca todas as notificações EAD como lidas
@@ -171,38 +195,46 @@ class NotificacoesViewModel extends ChangeNotifier {
     return success;
   }
 
-  /// Remove uma notificação (apenas EAD)
+  /// Remove uma notificação (ambos os tipos)
   Future<bool> removerNotificacao(UnifiedNotification notificacao) async {
-    // Só permite remover notificações EAD
-    if (notificacao.source != NotificationSource.ead) {
-      return false;
+    // Para notificações EAD, remove do Firestore
+    if (notificacao.source == NotificationSource.ead) {
+      final success = await _repository.removerNotificacao(notificacao.id);
+
+      if (success) {
+        _notificacoes.removeWhere((n) => n.id == notificacao.id);
+        _totalNaoLidas = _notificacoes.where((n) => !n.lido).length;
+        _updateAppBadge(_totalNaoLidas);
+        notifyListeners();
+      }
+
+      return success;
     }
-    
-    final success = await _repository.removerNotificacao(notificacao.id);
-    
-    if (success) {
-      _notificacoes.removeWhere((n) => n.id == notificacao.id);
-      notifyListeners();
-    }
-    
-    return success;
+
+    // Para notificações antigas (legacy), remove localmente
+    _notificacoes.removeWhere((n) => n.id == notificacao.id);
+    _totalNaoLidas = _notificacoes.where((n) => !n.lido).length;
+    _updateAppBadge(_totalNaoLidas);
+    notifyListeners();
+
+    return true;
   }
 
   /// Trata clique em notificação unificada
-  /// Marca como lida (se EAD) e retorna dados de navegação
+  /// Marca como lida e retorna dados de navegação
   Future<Map<String, dynamic>?> onNotificacaoTap(
     UnifiedNotification notificacao,
   ) async {
-    // Marca como lida se for EAD e não foi lida
-    if (notificacao.source == NotificationSource.ead && !notificacao.lido) {
+    // Marca como lida se não foi lida (ambos os tipos)
+    if (!notificacao.lido) {
       await marcarComoLida(notificacao);
     }
 
     // Se for notificação EAD, retorna dados de navegação
-    if (notificacao.source == NotificationSource.ead && 
+    if (notificacao.source == NotificationSource.ead &&
         notificacao.originalData is NotificacaoEadModel) {
       final ead = notificacao.originalData as NotificacaoEadModel;
-      
+
       if (ead.relatedType != null && ead.relatedId != null) {
         return {
           'type': ead.relatedType,

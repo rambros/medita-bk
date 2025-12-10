@@ -96,10 +96,8 @@ class NotificacaoCard extends StatelessWidget {
               },
             ),
 
-            // Marcar como lida (só para não lidas EAD)
-            if (!notificacao.lido &&
-                notificacao.source == NotificationSource.ead &&
-                onMarkAsRead != null)
+            // Marcar como lida (só para não lidas)
+            if (!notificacao.lido && onMarkAsRead != null)
               ListTile(
                 leading: Icon(
                   Icons.done,
@@ -117,9 +115,8 @@ class NotificacaoCard extends StatelessWidget {
                 },
               ),
 
-            // Deletar (só para notificações EAD)
-            if (notificacao.source == NotificationSource.ead &&
-                onDelete != null)
+            // Deletar (disponível para todas)
+            if (onDelete != null)
               ListTile(
                 leading: Icon(
                   Icons.delete_outline,
