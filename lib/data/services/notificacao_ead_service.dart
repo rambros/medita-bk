@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:medita_b_k/domain/models/ead/notificacao_ead_model.dart';
+import 'package:medita_b_k/domain/models/user_notification_state.dart';
 
 /// Service para gerenciar notificações do módulo EAD
 /// Responsável por criar, listar e marcar notificações como lidas
@@ -77,15 +78,35 @@ class NotificacaoEadService {
           .orderBy('dataCriacao', descending: true)
           .limit(limite);
 
-      if (apenasNaoLidas) {
-        query = query.where('lido', isEqualTo: false);
-      }
-
       final snapshot = await query.get();
 
-      return snapshot.docs
-          .map((doc) => NotificacaoEadModel.fromMap(doc.data(), doc.id))
-          .toList();
+      // Buscar estados do usuário para cada notificação
+      final notificacoes = <NotificacaoEadModel>[];
+
+      for (final doc in snapshot.docs) {
+        final userStateDoc = await doc.reference
+            .collection('user_states')
+            .doc(usuarioId)
+            .get();
+
+        final userState = userStateDoc.exists
+            ? UserNotificationState.fromMap(userStateDoc.data()!, usuarioId)
+            : UserNotificationState(userId: usuarioId);
+
+        // Pula notificações ocultadas
+        if (userState.ocultado) continue;
+
+        // Se está filtrando apenas não lidas, pula as lidas
+        if (apenasNaoLidas && userState.lido) continue;
+
+        // Cria modelo com estado de leitura do usuário
+        final notificacao = NotificacaoEadModel.fromMap(doc.data(), doc.id)
+            .copyWith(lido: userState.lido);
+
+        notificacoes.add(notificacao);
+      }
+
+      return notificacoes;
     } catch (e) {
       debugPrint('Erro ao buscar notificações: $e');
       return [];
@@ -93,6 +114,8 @@ class NotificacaoEadService {
   }
 
   /// Stream de notificações do usuário
+  /// NOTA: Para melhor performance com user_states, considere usar getNotificacoesByUsuario
+  /// Este stream não inclui estados de usuário em tempo real
   Stream<List<NotificacaoEadModel>> streamNotificacoesByUsuario(
     String usuarioId, {
     int limite = 50,
@@ -102,9 +125,32 @@ class NotificacaoEadService {
         .orderBy('dataCriacao', descending: true)
         .limit(limite)
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => NotificacaoEadModel.fromMap(doc.data(), doc.id))
-            .toList());
+        .asyncMap((snapshot) async {
+      // Para cada notificação, buscar o estado do usuário
+      final notificacoes = <NotificacaoEadModel>[];
+
+      for (final doc in snapshot.docs) {
+        final userStateDoc = await doc.reference
+            .collection('user_states')
+            .doc(usuarioId)
+            .get();
+
+        final userState = userStateDoc.exists
+            ? UserNotificationState.fromMap(userStateDoc.data()!, usuarioId)
+            : UserNotificationState(userId: usuarioId);
+
+        // Pula notificações ocultadas
+        if (userState.ocultado) continue;
+
+        // Cria modelo com estado de leitura do usuário
+        final notificacao = NotificacaoEadModel.fromMap(doc.data(), doc.id)
+            .copyWith(lido: userState.lido);
+
+        notificacoes.add(notificacao);
+      }
+
+      return notificacoes;
+    });
   }
 
   /// Stream de notificações não lidas do usuário
@@ -129,11 +175,26 @@ class NotificacaoEadService {
 
       final notificacao = NotificacaoEadModel.fromMap(doc.data()!, doc.id);
 
+      // Busca estado atual do usuário
+      final userStateDoc = await _notificacoesCollection
+          .doc(notificacaoId)
+          .collection('user_states')
+          .doc(usuarioId)
+          .get();
+
+      final currentState = userStateDoc.exists
+          ? UserNotificationState.fromMap(userStateDoc.data()!, usuarioId)
+          : UserNotificationState(userId: usuarioId);
+
       // Só atualiza se ainda não foi lida
-      if (!notificacao.lido) {
-        await _notificacoesCollection.doc(notificacaoId).update({
-          'lido': true,
-        });
+      if (!currentState.lido) {
+        final newState = currentState.marcarComoLida();
+
+        await _notificacoesCollection
+            .doc(notificacaoId)
+            .collection('user_states')
+            .doc(usuarioId)
+            .set(newState.toMap(), SetOptions(merge: true));
 
         // Decrementa contador
         await _decrementarContador(
@@ -154,14 +215,24 @@ class NotificacaoEadService {
     try {
       final snapshot = await _notificacoesCollection
           .where('destinatarioId', isEqualTo: usuarioId)
-          .where('lido', isEqualTo: false)
           .get();
 
       if (snapshot.docs.isEmpty) return true;
 
       final batch = _firestore.batch();
+      final now = DateTime.now();
+
       for (final doc in snapshot.docs) {
-        batch.update(doc.reference, {'lido': true});
+        // Cria/atualiza user_state para marcar como lida
+        final userStateRef = doc.reference.collection('user_states').doc(usuarioId);
+        batch.set(
+          userStateRef,
+          {
+            'lido': true,
+            'dataLeitura': Timestamp.fromDate(now),
+          },
+          SetOptions(merge: true),
+        );
       }
       await batch.commit();
 
@@ -180,7 +251,28 @@ class NotificacaoEadService {
     }
   }
 
-  /// Exclui uma notificação
+  /// Oculta uma notificação para um usuário específico
+  /// A notificação não é deletada, apenas marcada como ocultada para o usuário
+  Future<bool> ocultarNotificacao(String notificacaoId, String usuarioId) async {
+    try {
+      final userStateRef = _notificacoesCollection
+          .doc(notificacaoId)
+          .collection('user_states')
+          .doc(usuarioId);
+
+      final state = UserNotificationState(userId: usuarioId).marcarComoOcultada();
+      await userStateRef.set(state.toMap(), SetOptions(merge: true));
+
+      return true;
+    } catch (e) {
+      debugPrint('Erro ao ocultar notificação: $e');
+      return false;
+    }
+  }
+
+  /// Exclui uma notificação (apenas para uso administrativo)
+  /// IMPORTANTE: Isso remove permanentemente a notificação do Firestore
+  /// Para usuários, use ocultarNotificacao() ao invés disso
   Future<bool> excluirNotificacao(String notificacaoId) async {
     try {
       await _notificacoesCollection.doc(notificacaoId).delete();

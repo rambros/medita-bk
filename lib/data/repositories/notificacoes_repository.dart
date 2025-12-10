@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:medita_b_k/domain/models/ead/notificacao_ead_model.dart';
 import 'package:medita_b_k/domain/models/unified_notification.dart';
+import 'package:medita_b_k/domain/models/user_notification_state.dart';
 import 'package:medita_b_k/data/models/firebase/notification_model.dart';
 import 'package:medita_b_k/data/services/notificacao_ead_service.dart';
 import 'package:medita_b_k/data/services/auth/firebase_auth/auth_util.dart';
@@ -55,19 +56,38 @@ class NotificacoesRepository {
     try {
       // 2. Buscar notificações antigas (notifications)
       final userRef = _firestore.collection('users').doc(userId);
-      
+
       final legacySnapshot = await _firestore
           .collection('notifications')
           .where('recipientsRef', arrayContains: userRef)
           .orderBy('dataEnvio', descending: true)
           .limit(limite)
           .get();
-      
+
       for (final doc in legacySnapshot.docs) {
+        // Buscar estado do usuário
+        final userStateDoc = await doc.reference
+            .collection('user_states')
+            .doc(userId)
+            .get();
+
+        final userState = userStateDoc.exists
+            ? UserNotificationState.fromMap(userStateDoc.data()!, userId)
+            : UserNotificationState(userId: userId);
+
+        // Pula notificações ocultadas
+        if (userState.ocultado) continue;
+
+        // Se está filtrando apenas não lidas, pula as lidas
+        if (apenasNaoLidas && userState.lido) continue;
+
         final notification = NotificationModel.fromFirestore(doc);
-        allNotifications.add(UnifiedNotification.fromLegacy(notification));
+        // Passa o estado de leitura para o UnifiedNotification
+        allNotifications.add(
+          UnifiedNotification.fromLegacy(notification, lido: userState.lido),
+        );
       }
-      
+
       debugPrint('NotificacoesRepository: ${legacySnapshot.docs.length} da collection notifications');
     } catch (e) {
       debugPrint('NotificacoesRepository: Erro ao buscar notifications - $e');
@@ -166,15 +186,54 @@ class NotificacoesRepository {
 
   // === Mutations ===
 
-  /// Marca uma notificação como lida
+  /// Marca uma notificação como lida (ambas collections)
   Future<bool> marcarComoLida(String notificacaoId) async {
     final userId = currentUserUid;
     if (userId.isEmpty) return false;
 
     try {
-      return await _notificacaoService.marcarComoLida(notificacaoId, userId);
+      // Tenta marcar na collection notificacoes_ead primeiro
+      final eadSuccess = await _notificacaoService.marcarComoLida(notificacaoId, userId);
+      if (eadSuccess) return true;
+
+      // Se não encontrou em notificacoes_ead, tenta em notifications (legacy)
+      return await _marcarComoLidaLegacy(notificacaoId, userId);
     } catch (e) {
       debugPrint('NotificacoesRepository.marcarComoLida: Erro - $e');
+      return false;
+    }
+  }
+
+  /// Marca notificação legacy (notifications) como lida
+  Future<bool> _marcarComoLidaLegacy(String notificacaoId, String userId) async {
+    try {
+      final notificationRef = _firestore.collection('notifications').doc(notificacaoId);
+      final doc = await notificationRef.get();
+
+      if (!doc.exists) return false;
+
+      // Busca estado atual
+      final userStateDoc = await notificationRef
+          .collection('user_states')
+          .doc(userId)
+          .get();
+
+      final currentState = userStateDoc.exists
+          ? UserNotificationState.fromMap(userStateDoc.data()!, userId)
+          : UserNotificationState(userId: userId);
+
+      // Só atualiza se ainda não foi lida
+      if (!currentState.lido) {
+        final newState = currentState.marcarComoLida();
+        await notificationRef
+            .collection('user_states')
+            .doc(userId)
+            .set(newState.toMap(), SetOptions(merge: true));
+      }
+
+      return true;
+    } catch (e) {
+      debugPrint('NotificacoesRepository._marcarComoLidaLegacy: Erro - $e');
       return false;
     }
   }
@@ -192,12 +251,42 @@ class NotificacoesRepository {
     }
   }
 
-  /// Remove uma notificação
+  /// Remove (oculta) uma notificação para o usuário atual
+  /// A notificação não é deletada do Firestore, apenas marcada como ocultada
   Future<bool> removerNotificacao(String notificacaoId) async {
+    final userId = currentUserUid;
+    if (userId.isEmpty) return false;
+
     try {
-      return await _notificacaoService.excluirNotificacao(notificacaoId);
+      // Tenta ocultar na collection notificacoes_ead primeiro
+      final eadSuccess = await _notificacaoService.ocultarNotificacao(notificacaoId, userId);
+      if (eadSuccess) return true;
+
+      // Se não encontrou em notificacoes_ead, tenta em notifications (legacy)
+      return await _ocultarNotificacaoLegacy(notificacaoId, userId);
     } catch (e) {
       debugPrint('NotificacoesRepository.removerNotificacao: Erro - $e');
+      return false;
+    }
+  }
+
+  /// Oculta notificação legacy (notifications)
+  Future<bool> _ocultarNotificacaoLegacy(String notificacaoId, String userId) async {
+    try {
+      final notificationRef = _firestore.collection('notifications').doc(notificacaoId);
+      final doc = await notificationRef.get();
+
+      if (!doc.exists) return false;
+
+      final state = UserNotificationState(userId: userId).marcarComoOcultada();
+      await notificationRef
+          .collection('user_states')
+          .doc(userId)
+          .set(state.toMap(), SetOptions(merge: true));
+
+      return true;
+    } catch (e) {
+      debugPrint('NotificacoesRepository._ocultarNotificacaoLegacy: Erro - $e');
       return false;
     }
   }

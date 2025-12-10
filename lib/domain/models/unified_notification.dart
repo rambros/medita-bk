@@ -43,13 +43,16 @@ class UnifiedNotification {
   }
 
   /// Cria a partir de NotificationModel (collection: notifications)
-  factory UnifiedNotification.fromLegacy(NotificationModel notificacao) {
+  factory UnifiedNotification.fromLegacy(
+    NotificationModel notificacao, {
+    bool lido = false,
+  }) {
     return UnifiedNotification(
       id: notificacao.id,
       titulo: notificacao.title,
       conteudo: notificacao.content,
       dataCriacao: notificacao.sendDate ?? DateTime.now(),
-      lido: false, // Sistema antigo não tinha campo "lido" individual
+      lido: lido, // Agora aceita estado de leitura via user_states
       tipo: notificacao.type,
       source: NotificationSource.legacy,
       originalData: notificacao,
