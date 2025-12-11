@@ -1,7 +1,7 @@
-import 'package:medita_b_k/core/structs/index.dart';
-import 'package:medita_b_k/domain/agenda/services/agenda_service.dart';
-import 'package:medita_b_k/data/services/api_manager.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/core/structs/index.dart';
+import 'package:medita_bk/domain/agenda/services/agenda_service.dart';
+import 'package:medita_bk/data/services/api_manager.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
 
 class AgendaRepository {
   Future<List<EventModelStruct>> getEvents() async {

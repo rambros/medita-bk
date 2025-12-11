@@ -1,6 +1,6 @@
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_widgets.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'back_button_model.dart';
 export 'back_button_model.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_animations.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
-import 'package:medita_b_k/ui/pages.dart';
-import 'package:medita_b_k/routing/ead_routes.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_animations.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/ui/pages.dart';
+import 'package:medita_bk/routing/ead_routes.dart';
 import 'navigation_card.dart';
 
 /// Grid of navigation cards for home page

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
-import 'package:medita_b_k/core/utils/file_utils.dart';
-import 'package:medita_b_k/core/services/index.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_bk/core/utils/file_utils.dart';
+import 'package:medita_bk/core/services/index.dart';
 
 class SettingsViewModel extends ChangeNotifier {
   String _appVersion = '';

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
-import 'package:medita_b_k/domain/models/ead/index.dart';
+import 'package:medita_bk/domain/models/ead/index.dart';
 import 'notificacao_ead_service.dart';
 
 /// Service para acesso ao Firebase do módulo de Comunicação (Tickets e Discussões)

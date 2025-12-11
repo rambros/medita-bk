@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
 
 class InviteViewModel extends ChangeNotifier {
   void shareInvite(BuildContext context, String text) async {

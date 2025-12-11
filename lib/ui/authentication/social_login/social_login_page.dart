@@ -1,13 +1,13 @@
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_animations.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_widgets.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_animations.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'view_model/social_login_view_model.dart';
-import 'package:medita_b_k/ui/authentication/sign_in/sign_in_page.dart';
+import 'package:medita_bk/ui/authentication/sign_in/sign_in_page.dart';
 
 class SocialLoginPage extends StatefulWidget {
   const SocialLoginPage({super.key});

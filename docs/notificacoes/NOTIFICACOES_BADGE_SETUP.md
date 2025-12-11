@@ -167,20 +167,52 @@ Nenhuma permissão adicional necessária para badges.
 
 ## 📊 Firestore Collections
 
-### `notificacoes_ead`
+> **📝 Nota:** As collections foram renomeadas em Dezembro/2024:
+> - `notificacoes_ead` → `ead_push_notifications` (Push notifications EAD)
+> - `notificacoes` → `in_app_notifications` (Notificações in-app)
+> - `notifications` → `global_push_notifications` (Push notifications globais)
+
+### `in_app_notifications` (Notificações In-App)
 ```javascript
 {
   titulo: string,
-  conteudo: string,
-  tipo: string,
-  destinatarioId: string,
-  relatedType: string?,     // 'ticket', 'discussao', 'resposta'
-  relatedId: string?,
-  remetenteId: string?,
-  remetenteNome: string?,
+  corpo: string,
+  tipo: string,            // 'ticket_resposta', 'discussao_resposta', etc.
+  destinatarioId: string,  // UID do usuário
+  dados: {
+    ticketId: string?,
+    ticketNumero: number?,
+    mensagemId: string?
+  },
   dataCriacao: timestamp,
-  lido: boolean,
-  dados: map?              // dados extras para navegação
+  lida: boolean
+}
+```
+
+### `ead_push_notifications` (Push Notifications EAD)
+```javascript
+{
+  titulo: string,
+  mensagem: string,
+  destinatarioTipo: string,  // 'Todos', 'Curso', 'Grupo'
+  cursoId: string?,
+  grupoId: string?,
+  status: string,
+  dataAgendamento: timestamp?,
+  dataCriacao: timestamp
+}
+```
+
+### `global_push_notifications` (Push Notifications Globais)
+```javascript
+{
+  title: string,
+  content: string,
+  imagemUrl: string?,
+  typeRecipients: string,  // 'Todos', 'Específicos'
+  recipientsRef: array?,
+  status: string,
+  dataEnvio: timestamp
 }
 ```
 

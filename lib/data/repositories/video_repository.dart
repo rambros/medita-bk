@@ -1,6 +1,6 @@
-import 'package:medita_b_k/core/utils/logger.dart';
-import 'package:medita_b_k/data/services/youtube_service.dart';
-import 'package:medita_b_k/domain/models/video/video_model.dart';
+import 'package:medita_bk/core/utils/logger.dart';
+import 'package:medita_bk/data/services/youtube_service.dart';
+import 'package:medita_bk/domain/models/video/video_model.dart';
 
 class VideoRepository {
   Future<Channel?> getCanalViverMeditar() async {

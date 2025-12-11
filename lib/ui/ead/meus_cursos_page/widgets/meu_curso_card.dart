@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import 'package:medita_b_k/domain/models/ead/index.dart';
-import 'package:medita_b_k/ui/core/theme/app_theme.dart';
+import 'package:medita_bk/domain/models/ead/index.dart';
+import 'package:medita_bk/ui/core/theme/app_theme.dart';
 
 /// Card para exibição de um curso inscrito na lista "Meus Cursos"
 /// Foco em mostrar progresso e permitir continuação rápida

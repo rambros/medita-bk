@@ -5,14 +5,17 @@
 // COPIE E COLE TODO O CONTEÚDO ABAIXO NO FIREBASE CONSOLE
 // Firebase Console > Firestore Database > Regras
 //
+// ATUALIZADO: Dezembro/2024 - Collections renomeadas
+//
 // ============================================================
 
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Collection: notifications (Meditações/Push Global)
-    match /notifications/{notificationId} {
+    // Collection: global_push_notifications (Push Notifications Globais)
+    // Antiga: notifications
+    match /global_push_notifications/{notificationId} {
       // Usuários autenticados podem ler notificações onde são destinatários
       allow read: if request.auth != null &&
                      request.auth.uid != null &&
@@ -30,15 +33,35 @@ service cloud.firestore {
       }
     }
 
-    // Collection: notificacoes_ead (EAD - Tickets/Discussões)
-    match /notificacoes_ead/{notificacaoId} {
+    // Collection: ead_push_notifications (Push Notifications EAD)
+    // Antiga: notificacoes_ead
+    match /ead_push_notifications/{notificacaoId} {
+      // Usuários autenticados podem ler suas próprias notificações
+      allow read: if request.auth != null &&
+                     request.auth.uid != null &&
+                     (resource.data.destinatarioTipo == 'Todos' ||
+                      resource.data.destinatarioId == request.auth.uid);
+
+      // Apenas admins podem criar/atualizar/deletar
+      allow write: if request.auth != null &&
+                      get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+
+      // Subcollection: user_states (Estado por usuário)
+      match /user_states/{userId} {
+        // Usuário só pode ler/escrever seu próprio estado
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+
+    // Collection: in_app_notifications (Notificações In-App)
+    // Antiga: notificacoes
+    match /in_app_notifications/{notificacaoId} {
       // Usuários autenticados podem ler suas próprias notificações
       allow read: if request.auth != null &&
                      request.auth.uid != null &&
                      resource.data.destinatarioId == request.auth.uid;
 
-      // Apenas o app pode criar notificações (via service account)
-      // Ou admins podem criar manualmente
+      // Apenas o app pode criar notificações (via service account) ou admins
       allow create: if request.auth != null &&
                        (request.auth.uid == request.resource.data.destinatarioId ||
                         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true);
@@ -52,6 +75,17 @@ service cloud.firestore {
         // Usuário só pode ler/escrever seu próprio estado
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
+    }
+
+    // Collection: ead_whatsapp_messages (Mensagens WhatsApp EAD)
+    // Antiga: whatsapp_ead
+    match /ead_whatsapp_messages/{mensagemId} {
+      // Usuários autenticados podem ler
+      allow read: if request.auth != null;
+
+      // Apenas admins podem criar/atualizar/deletar
+      allow write: if request.auth != null &&
+                      get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
     }
 
     // IMPORTANTE: Adicione aqui as outras regras do seu projeto
@@ -68,9 +102,13 @@ service cloud.firestore {
 // Você DEVE manter as regras existentes do seu projeto e ADICIONAR
 // estas regras junto com elas.
 //
-// NÃO substitua todas as regras - apenas adicione os blocos
-// match /notifications/ e match /notificacoes_ead/ dentro do
-// match /databases/{database}/documents { ... } existente.
+// NÃO substitua todas as regras - apenas adicione os blocos:
+// - match /global_push_notifications/
+// - match /ead_push_notifications/
+// - match /in_app_notifications/
+// - match /ead_whatsapp_messages/
+//
+// Dentro do match /databases/{database}/documents { ... } existente.
 //
 // ============================================================
 
@@ -97,23 +135,37 @@ service cloud.firestore {
 //
 // No Firebase Console, use o "Simulador de regras":
 //
-// 1. Teste: Usuário pode ler seu próprio user_state
+// 1. Teste: Usuário pode ler seu próprio user_state (global_push_notifications)
 //    Tipo: get
-//    Localização: /notifications/{notificationId}/user_states/{userId}
+//    Localização: /global_push_notifications/{notificationId}/user_states/{userId}
 //    Auth: Authenticated as {userId}
 //    Resultado esperado: ✅ Permitido
 //
 // 2. Teste: Usuário NÃO pode ler user_state de outro
 //    Tipo: get
-//    Localização: /notifications/{notificationId}/user_states/{otherUserId}
+//    Localização: /global_push_notifications/{notificationId}/user_states/{otherUserId}
 //    Auth: Authenticated as {userId}
 //    Resultado esperado: ❌ Negado
 //
 // 3. Teste: Usuário pode criar seu próprio user_state
 //    Tipo: create
-//    Localização: /notifications/{notificationId}/user_states/{userId}
+//    Localização: /global_push_notifications/{notificationId}/user_states/{userId}
 //    Auth: Authenticated as {userId}
 //    Dados: { lido: true, ocultado: false }
 //    Resultado esperado: ✅ Permitido
+//
+// 4. Teste: Usuário pode ler notificação in-app destinada a ele
+//    Tipo: get
+//    Localização: /in_app_notifications/{notificacaoId}
+//    Auth: Authenticated as {userId}
+//    Dados do documento: { destinatarioId: {userId} }
+//    Resultado esperado: ✅ Permitido
+//
+// 5. Teste: Usuário NÃO pode ler notificação in-app de outro
+//    Tipo: get
+//    Localização: /in_app_notifications/{notificacaoId}
+//    Auth: Authenticated as {userId}
+//    Dados do documento: { destinatarioId: {otherUserId} }
+//    Resultado esperado: ❌ Negado
 //
 // ============================================================

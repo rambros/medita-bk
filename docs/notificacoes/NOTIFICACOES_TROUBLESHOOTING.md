@@ -1,5 +1,10 @@
 # Troubleshooting - Notificações não aparecem
 
+> **📝 Nota:** As collections foram renomeadas em Dezembro/2024:
+> - `notificacoes` → `in_app_notifications` (Notificações in-app)
+> - `notificacoes_ead` → `ead_push_notifications` (Push notifications EAD)
+> - `notifications` → `global_push_notifications` (Push notifications globais)
+
 ## 🔍 Checklist de Diagnóstico
 
 ### 1. Verificar Autenticação
@@ -14,19 +19,19 @@ print('Autenticado: ${currentUserUid.isNotEmpty}');
 A notificação deve ter esta estrutura:
 
 ```javascript
-// Collection: notificacoes_ead
+// Collection: in_app_notifications (para notificações in-app)
 {
   titulo: "Título da notificação",
-  conteudo: "Conteúdo da notificação",
-  tipo: "ticket_respondido",  // ou outro tipo válido
+  corpo: "Conteúdo da notificação",
+  tipo: "ticket_resposta",  // ou outro tipo válido
   destinatarioId: "UID_DO_USUARIO",  // ⚠️ IMPORTANTE: deve ser exatamente o UID do Firebase Auth
-  relatedType: "ticket",
-  relatedId: "123",
-  remetenteId: "admin_id",
-  remetenteNome: "Admin",
+  dados: {
+    ticketId: "123",
+    ticketNumero: 123,
+    mensagemId: "msg_456"
+  },
   dataCriacao: Timestamp,
-  lido: false,
-  dados: { /* dados extras */ }
+  lida: false
 }
 ```
 
@@ -34,9 +39,12 @@ A notificação deve ter esta estrutura:
 
 ### 3. Verificar Nome da Collection
 
-O app está buscando da collection: **`notificacoes_ead`**
+O app busca nas seguintes collections:
+- **`in_app_notifications`** - Para notificações internas (tickets/discussões)
+- **`ead_push_notifications`** - Para push notifications EAD
+- **`global_push_notifications`** - Para push notifications globais
 
-Se o módulo admin está salvando em outra collection (ex: `notificacoes`), as notificações não vão aparecer.
+Se o módulo admin está salvando em collection antiga, as notificações não vão aparecer.
 
 ### 4. Verificar Regras do Firestore
 
@@ -44,22 +52,33 @@ As regras de segurança devem permitir leitura:
 
 ```javascript
 // firestore.rules
-match /notificacoes_ead/{notificacaoId} {
+match /in_app_notifications/{notificacaoId} {
   // Usuário pode ler suas próprias notificações
-  allow read: if request.auth != null && 
+  allow read: if request.auth != null &&
               resource.data.destinatarioId == request.auth.uid;
-  
-  // Admin pode criar notificações
-  allow create: if request.auth != null && 
+
+  // Apenas o app pode criar notificações ou admins
+  allow create: if request.auth != null;
+}
+
+match /ead_push_notifications/{notificacaoId} {
+  allow read: if request.auth != null;
+  allow create: if request.auth != null &&
+                hasAdminRole(request.auth.uid);
+}
+
+match /global_push_notifications/{notificacaoId} {
+  allow read: if request.auth != null;
+  allow create: if request.auth != null &&
                 hasAdminRole(request.auth.uid);
 }
 ```
 
 ### 5. Verificar Índices Compostos
 
-O Firestore precisa de um índice composto para a query:
+O Firestore precisa de índices compostos para as queries:
 
-**Collection:** `notificacoes_ead`
+**Collection:** `in_app_notifications`
 **Campos indexados:**
 - `destinatarioId` (Ascending)
 - `dataCriacao` (Descending)
@@ -90,11 +109,15 @@ _notificacoesCollection
 ```javascript
 {
   titulo: "Teste",
-  conteudo: "Notificação de teste",
-  tipo: "ticket_criado",
+  corpo: "Notificação de teste",
+  tipo: "ticket_resposta",
   destinatarioId: "SEU_UID_AQUI",  // ⚠️ Copiar do debug info
+  dados: {
+    ticketId: "test123",
+    ticketNumero: 123
+  },
   dataCriacao: [Timestamp now],
-  lido: false
+  lida: false
 }
 ```
 
@@ -116,32 +139,22 @@ Um widget de debug foi adicionado temporariamente à página de notificações q
 O módulo admin deve usar este código:
 
 ```javascript
-// No admin web
+// No admin web - Para notificações in-app
 await admin.firestore()
-  .collection('notificacoes_ead')
+  .collection('in_app_notifications')
   .add({
     titulo: 'Nova resposta',
-    conteudo: 'Admin respondeu seu ticket',
-    tipo: 'ticket_respondido',
+    corpo: 'Admin respondeu seu ticket',
+    tipo: 'ticket_resposta',
     destinatarioId: userId,  // UID do usuário do app
-    relatedType: 'ticket',
-    relatedId: ticketId,
-    remetenteId: adminUid,
-    remetenteNome: 'Admin',
+    dados: {
+      ticketId: ticketId,
+      ticketNumero: 123,
+      mensagemId: mensagemId
+    },
     dataCriacao: admin.firestore.FieldValue.serverTimestamp(),
-    lido: false,
-    dados: { ticketId: ticketId }
+    lida: false
   });
-
-// Atualizar contador
-await admin.firestore()
-  .collection('contadores_comunicacao')
-  .doc(userId)
-  .set({
-    ticketsNaoLidos: admin.firestore.FieldValue.increment(1),
-    totalNaoLidas: admin.firestore.FieldValue.increment(1),
-    ultimaAtualizacao: admin.firestore.FieldValue.serverTimestamp()
-  }, { merge: true });
 ```
 
 ## 🔄 Verificações Comuns
@@ -155,8 +168,8 @@ Resultado: Notificação não aparece
 
 ### ❌ Problema: Collection Errada
 ```
-App busca em: "notificacoes_ead"
-Admin salva em: "notificacoes"
+App busca em: "in_app_notifications"
+Admin salva em: "notificacoes_ead" (collection antiga)
 Resultado: Notificação não aparece
 ```
 
@@ -178,7 +191,7 @@ Resultado: Notificação não carrega
 1. **Copiar UID do usuário** do debug info na página de notificações
 
 2. **Verificar no Firestore** se existe documento com:
-   - Collection: `notificacoes_ead`
+   - Collection: `in_app_notifications` (para notificações in-app)
    - Campo: `destinatarioId` = UID copiado
 
 3. **Se não existir**, criar manualmente para testar
@@ -187,10 +200,9 @@ Resultado: Notificação não carrega
    - Índice composto criado?
    - Regras permitem leitura?
    - Campo `dataCriacao` existe?
+   - Está usando `corpo` ao invés de `conteudo`?
 
 5. **Atualizar app** (pull to refresh ou reabrir)
-
-6. **Verificar contadores** em `contadores_comunicacao/{userId}`
 
 ## 📞 Suporte
 

@@ -1,5 +1,10 @@
 # Como Criar Notificação de Teste
 
+> **📝 Nota:** As collections foram renomeadas em Dezembro/2024:
+> - `notificacoes` → `in_app_notifications` (Notificações in-app para tickets/discussões)
+> - `notificacoes_ead` → `ead_push_notifications` (Push notifications EAD)
+> - `notifications` → `global_push_notifications` (Push notifications globais)
+
 ## 🧪 Opção 1: Via Firebase Console (Mais Fácil)
 
 ### Passo 1: Obter seu User ID
@@ -14,7 +19,7 @@
 2. Selecione seu projeto: **meditabk2020**
 3. Vá em **Firestore Database**
 4. Clique em **Start collection** (ou selecione a collection existente)
-5. Collection ID: `notificacoes_ead`
+5. Collection ID: `in_app_notifications` (para notificações in-app de tickets/discussões)
 6. Clique em **Add document**
 7. Deixe o **Document ID** em branco (auto-gerado)
 
@@ -25,13 +30,14 @@ Adicione estes campos **exatamente** como mostrado:
 | Campo | Tipo | Valor |
 |-------|------|-------|
 | `titulo` | string | Teste de Notificação |
-| `conteudo` | string | Esta é uma notificação de teste enviada manualmente |
-| `tipo` | string | ticket_criado |
+| `corpo` | string | Esta é uma notificação de teste enviada manualmente |
+| `tipo` | string | ticket_resposta |
 | `destinatarioId` | string | **[COLE SEU USER ID AQUI]** |
 | `dataCriacao` | timestamp | [Clique no relógio e selecione "Now"] |
-| `lido` | boolean | false |
-| `relatedType` | string | ticket |
-| `relatedId` | string | test123 |
+| `lida` | boolean | false |
+| `dados` | map | (Adicione subcampos abaixo) |
+| `dados.ticketId` | string | test123 |
+| `dados.ticketNumero` | number | 123 |
 
 ### Passo 4: Salvar
 
@@ -52,32 +58,20 @@ const admin = require('firebase-admin');
 const userId = 'SEU_USER_ID_AQUI';
 
 await admin.firestore()
-  .collection('notificacoes_ead')
+  .collection('in_app_notifications')
   .add({
     titulo: 'Notificação de Teste',
-    conteudo: 'Esta é uma notificação criada via script',
-    tipo: 'ticket_criado',
+    corpo: 'Esta é uma notificação criada via script',
+    tipo: 'ticket_resposta',
     destinatarioId: userId,
-    relatedType: 'ticket',
-    relatedId: 'test456',
-    remetenteId: 'admin',
-    remetenteNome: 'Sistema',
-    dataCriacao: admin.firestore.FieldValue.serverTimestamp(),
-    lido: false,
     dados: {
-      teste: true
-    }
+      ticketId: 'test456',
+      ticketNumero: 456,
+      mensagemId: 'msg_123'
+    },
+    dataCriacao: admin.firestore.FieldValue.serverTimestamp(),
+    lida: false
   });
-
-// Atualizar contador
-await admin.firestore()
-  .collection('contadores_comunicacao')
-  .doc(userId)
-  .set({
-    ticketsNaoLidos: admin.firestore.FieldValue.increment(1),
-    totalNaoLidas: admin.firestore.FieldValue.increment(1),
-    ultimaAtualizacao: admin.firestore.FieldValue.serverTimestamp()
-  }, { merge: true });
 
 console.log('Notificação criada com sucesso!');
 ```
@@ -88,17 +82,25 @@ Se você tem a API Key do Firebase:
 
 ```bash
 curl -X POST \
-  'https://firestore.googleapis.com/v1/projects/meditabk2020/databases/(default)/documents/notificacoes_ead' \
+  'https://firestore.googleapis.com/v1/projects/meditabk2020/databases/(default)/documents/in_app_notifications' \
   -H 'Authorization: Bearer YOUR_TOKEN' \
   -H 'Content-Type: application/json' \
   -d '{
     "fields": {
       "titulo": {"stringValue": "Teste via API"},
-      "conteudo": {"stringValue": "Notificação criada via REST API"},
-      "tipo": {"stringValue": "ticket_criado"},
+      "corpo": {"stringValue": "Notificação criada via REST API"},
+      "tipo": {"stringValue": "ticket_resposta"},
       "destinatarioId": {"stringValue": "SEU_USER_ID"},
       "dataCriacao": {"timestampValue": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"},
-      "lido": {"booleanValue": false}
+      "lida": {"booleanValue": false},
+      "dados": {
+        "mapValue": {
+          "fields": {
+            "ticketId": {"stringValue": "test789"},
+            "ticketNumero": {"integerValue": "789"}
+          }
+        }
+      }
     }
   }'
 ```
@@ -123,45 +125,41 @@ curl -X POST \
 ## 🔍 Se Não Aparecer
 
 1. **Verificar User ID está correto** (copie exatamente do debug info)
-2. **Verificar Collection está como** `notificacoes_ead` (não `notificacoes`)
+2. **Verificar Collection está como** `in_app_notifications` (nova collection renomeada)
 3. **Verificar campo** `destinatarioId` **está escrito corretamente**
 4. **Criar índice composto** no Firestore (se solicitado)
 5. **Verificar regras** do Firestore permitem leitura
+6. **Verificar campo** `corpo` ao invés de `conteudo`
 
 ## 📊 Tipos de Notificação Válidos
 
 Use um destes valores para o campo `tipo`:
 
 **Tickets:**
-- `ticket_criado`
-- `ticket_respondido`
-- `ticket_resolvido`
-- `ticket_fechado`
+- `ticket_resposta` - Nova resposta em um ticket
+- `ticket_resolvido` - Ticket marcado como resolvido
+- `ticket_reaberto` - Ticket reaberto
 
-**Discussões:**
-- `discussao_criada`
-- `discussao_respondida`
-- `discussao_resolvida`
-- `resposta_curtida`
-- `resposta_marcada_solucao`
+**Discussões (EAD):**
+- `discussao_resposta` - Nova resposta em discussão
+- `discussao_melhor_resposta` - Resposta marcada como melhor
+- `discussao_solucao` - Resposta marcada como solução
+- `discussao_like` - Alguém curtiu uma resposta
 
 ## 🎨 Exemplo Completo (JSON)
 
 ```json
 {
   "titulo": "🎉 Teste de Notificação",
-  "conteudo": "Se você está vendo isso, o sistema funciona!",
-  "tipo": "ticket_respondido",
+  "corpo": "Se você está vendo isso, o sistema funciona!",
+  "tipo": "ticket_resposta",
   "destinatarioId": "abc123xyz456",
-  "relatedType": "ticket",
-  "relatedId": "ticket_001",
-  "remetenteId": "admin_123",
-  "remetenteNome": "Admin Teste",
   "dataCriacao": "2024-01-15T10:30:00Z",
-  "lido": false,
+  "lida": false,
   "dados": {
     "ticketId": "ticket_001",
-    "ticketNumero": "001"
+    "ticketNumero": 1,
+    "mensagemId": "msg_123"
   }
 }
 ```

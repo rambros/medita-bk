@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:medita_b_k/data/models/firebase/user_model.dart';
-import 'package:medita_b_k/data/services/firebase/firestore_service.dart';
-import 'package:medita_b_k/core/utils/logger.dart';
+import 'package:medita_bk/data/models/firebase/user_model.dart';
+import 'package:medita_bk/data/services/firebase/firestore_service.dart';
+import 'package:medita_bk/core/utils/logger.dart';
 
 /// Repository for user data operations
 ///

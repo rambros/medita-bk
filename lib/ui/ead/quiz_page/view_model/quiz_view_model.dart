@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:medita_b_k/data/repositories/ead_repository.dart';
-import 'package:medita_b_k/data/services/ead_service.dart';
-import 'package:medita_b_k/domain/models/ead/index.dart';
+import 'package:medita_bk/data/repositories/ead_repository.dart';
+import 'package:medita_bk/data/services/ead_service.dart';
+import 'package:medita_bk/domain/models/ead/index.dart';
 
 /// ViewModel para a pagina de quiz
 class QuizViewModel extends ChangeNotifier {

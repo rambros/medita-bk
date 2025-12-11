@@ -1,10 +1,10 @@
 // ignore_for_file: unnecessary_getters_setters
-import 'package:medita_b_k/utils/algolia_serialization_util.dart';
+import 'package:medita_bk/utils/algolia_serialization_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:medita_b_k/core/structs/util/firestore_util.dart';
+import 'package:medita_bk/core/structs/util/firestore_util.dart';
 
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
 
 class AlarmTimeStruct extends FFFirebaseStruct {
   AlarmTimeStruct({

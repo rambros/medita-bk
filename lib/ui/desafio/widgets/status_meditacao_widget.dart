@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-import 'package:medita_b_k/core/enums/enums.dart';
-import 'package:medita_b_k/data/repositories/auth_repository.dart';
-import 'package:medita_b_k/ui/pages.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/custom_functions.dart' as functions;
+import 'package:medita_bk/core/enums/enums.dart';
+import 'package:medita_bk/data/repositories/auth_repository.dart';
+import 'package:medita_bk/ui/pages.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/ui/core/flutter_flow/custom_functions.dart' as functions;
 
 class StatusMeditacaoWidget extends StatelessWidget {
   const StatusMeditacaoWidget({

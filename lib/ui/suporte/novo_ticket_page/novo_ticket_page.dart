@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import 'package:medita_b_k/data/repositories/auth_repository.dart';
-import 'package:medita_b_k/data/models/firebase/user_model.dart';
-import 'package:medita_b_k/routing/ead_routes.dart';
-import 'package:medita_b_k/domain/models/ead/index.dart';
-import 'package:medita_b_k/ui/core/theme/app_theme.dart';
-import 'package:medita_b_k/ui/suporte/novo_ticket_page/view_model/novo_ticket_view_model.dart';
+import 'package:medita_bk/data/repositories/auth_repository.dart';
+import 'package:medita_bk/data/models/firebase/user_model.dart';
+import 'package:medita_bk/routing/ead_routes.dart';
+import 'package:medita_bk/domain/models/ead/index.dart';
+import 'package:medita_bk/ui/core/theme/app_theme.dart';
+import 'package:medita_bk/ui/suporte/novo_ticket_page/view_model/novo_ticket_view_model.dart';
 
 /// Página para criar um novo ticket de suporte
 class NovoTicketPage extends StatefulWidget {

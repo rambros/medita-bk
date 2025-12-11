@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import 'package:medita_b_k/data/repositories/auth_repository.dart';
-import 'package:medita_b_k/routing/ead_routes.dart';
-import 'package:medita_b_k/ui/core/theme/app_theme.dart';
+import 'package:medita_bk/data/repositories/auth_repository.dart';
+import 'package:medita_bk/routing/ead_routes.dart';
+import 'package:medita_bk/ui/core/theme/app_theme.dart';
 import 'view_model/meus_cursos_view_model.dart';
 import 'widgets/meu_curso_card.dart';
 import 'widgets/resumo_progresso_widget.dart';

@@ -1,10 +1,10 @@
-import 'package:medita_b_k/data/models/firebase/category_model.dart';
-import 'package:medita_b_k/data/repositories/category_repository.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_choice_chips.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_widgets.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/form_field_controller.dart';
+import 'package:medita_bk/data/models/firebase/category_model.dart';
+import 'package:medita_bk/data/repositories/category_repository.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_choice_chips.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_widgets.dart';
+import 'package:medita_bk/ui/core/flutter_flow/form_field_controller.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

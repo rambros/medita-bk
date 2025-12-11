@@ -3,11 +3,11 @@ import 'package:file_picker/file_picker.dart' as fp;
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'package:medita_b_k/core/structs/index.dart';
-import 'package:medita_b_k/core/enums/enums.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
-import 'package:medita_b_k/core/controllers/index.dart';
-import 'package:medita_b_k/core/utils/logger.dart';
+import 'package:medita_bk/core/structs/index.dart';
+import 'package:medita_bk/core/enums/enums.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/core/controllers/index.dart';
+import 'package:medita_bk/core/utils/logger.dart';
 
 /// Audio file management and playback utilities
 class AudioUtils {

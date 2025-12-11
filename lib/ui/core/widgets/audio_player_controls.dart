@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
-import 'package:medita_b_k/core/controllers/audio_player_controller.dart';
+import 'package:medita_bk/core/controllers/audio_player_controller.dart';
 
 class AudioProgressBar extends StatelessWidget {
   const AudioProgressBar({super.key});

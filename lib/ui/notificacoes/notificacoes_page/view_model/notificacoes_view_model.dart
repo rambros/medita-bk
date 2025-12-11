@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 
-import 'package:medita_b_k/data/repositories/notificacoes_repository.dart';
-import 'package:medita_b_k/domain/models/ead/notificacao_ead_model.dart';
-import 'package:medita_b_k/domain/models/unified_notification.dart';
+import 'package:medita_bk/data/repositories/notificacoes_repository.dart';
+import 'package:medita_bk/domain/models/ead/notificacao_ead_model.dart';
+import 'package:medita_bk/domain/models/unified_notification.dart';
 
 /// ViewModel para a página de notificações UNIFICADAS
 /// Gerencia notificações de AMBAS as collections (EAD + Meditações)

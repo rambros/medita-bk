@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:medita_b_k/data/repositories/video_repository.dart';
-import 'package:medita_b_k/domain/models/video/video_model.dart';
+import 'package:medita_bk/data/repositories/video_repository.dart';
+import 'package:medita_bk/domain/models/video/video_model.dart';
 
 class CanalViverListViewModel extends ChangeNotifier {
   final VideoRepository _repository;

@@ -1,5 +1,5 @@
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/form_field_controller.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/ui/core/flutter_flow/form_field_controller.dart';
 import 'filter_meditations_dialog.dart' show FilterMeditationsDialogWidget;
 import 'package:flutter/material.dart';
 

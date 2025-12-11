@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 
-import 'package:medita_b_k/data/repositories/notificacoes_repository.dart';
+import 'package:medita_bk/data/repositories/notificacoes_repository.dart';
 import 'auth/firebase_auth/auth_util.dart';
 
 /// Service para gerenciar o badge do ícone do app

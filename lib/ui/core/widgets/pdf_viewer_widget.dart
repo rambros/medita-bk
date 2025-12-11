@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:pdfx/pdfx.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:medita_b_k/ui/core/theme/app_theme.dart';
+import 'package:medita_bk/ui/core/theme/app_theme.dart';
 
 /// Widget para visualizar arquivos PDF
 /// Suporta zoom (pinch e scroll), navegação entre páginas e download

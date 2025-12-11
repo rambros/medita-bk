@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'package:medita_b_k/data/models/firebase/user_model.dart';
-import 'package:medita_b_k/data/models/firebase/desafio21_model.dart';
-import 'package:medita_b_k/data/models/firebase/settings_model.dart';
-import 'package:medita_b_k/data/repositories/auth_repository.dart';
-import 'package:medita_b_k/data/repositories/home_repository.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
-import 'package:medita_b_k/ui/core/actions/actions.dart' as action_blocks;
-import 'package:medita_b_k/core/structs/index.dart';
+import 'package:medita_bk/data/models/firebase/user_model.dart';
+import 'package:medita_bk/data/models/firebase/desafio21_model.dart';
+import 'package:medita_bk/data/models/firebase/settings_model.dart';
+import 'package:medita_bk/data/repositories/auth_repository.dart';
+import 'package:medita_bk/data/repositories/home_repository.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/ui/core/actions/actions.dart' as action_blocks;
+import 'package:medita_bk/core/structs/index.dart';
 
 /// ViewModel for HomePage
 /// Manages state and business logic for the home page

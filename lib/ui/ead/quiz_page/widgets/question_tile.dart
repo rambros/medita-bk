@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:medita_b_k/domain/models/ead/index.dart';
-import 'package:medita_b_k/ui/core/theme/app_theme.dart';
+import 'package:medita_bk/domain/models/ead/index.dart';
+import 'package:medita_bk/ui/core/theme/app_theme.dart';
 
 /// Widget que exibe uma pergunta do quiz
 class QuestionTile extends StatelessWidget {

@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
-import 'package:medita_b_k/domain/models/ead/notificacao_ead_model.dart';
-import 'package:medita_b_k/domain/models/user_notification_state.dart';
+import 'package:medita_bk/domain/models/ead/notificacao_ead_model.dart';
+import 'package:medita_bk/domain/models/user_notification_state.dart';
 
-/// Service para gerenciar notificações do módulo EAD
+/// Service para gerenciar notificações in-app
 /// Responsável por criar, listar e marcar notificações como lidas
+/// Collection: in_app_notifications (antiga: notificacoes_ead)
 class NotificacaoEadService {
   final FirebaseFirestore _firestore;
 
@@ -15,7 +16,7 @@ class NotificacaoEadService {
   // === Collections ===
 
   CollectionReference<Map<String, dynamic>> get _notificacoesCollection =>
-      _firestore.collection('notificacoes_ead');
+      _firestore.collection('in_app_notifications');
 
   CollectionReference<Map<String, dynamic>> get _contadoresCollection =>
       _firestore.collection('contadores_comunicacao');

@@ -1,6 +1,6 @@
-import 'package:medita_b_k/core/structs/index.dart';
-import 'package:medita_b_k/data/repositories/playlist_repository.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/custom_functions.dart' as functions;
+import 'package:medita_bk/core/structs/index.dart';
+import 'package:medita_bk/data/repositories/playlist_repository.dart';
+import 'package:medita_bk/ui/core/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 
 class PlaylistEditPageViewModel extends ChangeNotifier {

@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-import 'package:medita_b_k/data/repositories/comunicacao_repository.dart';
-import 'package:medita_b_k/domain/models/ead/index.dart';
+import 'package:medita_bk/data/repositories/comunicacao_repository.dart';
+import 'package:medita_bk/domain/models/ead/index.dart';
 
 /// ViewModel para a página de Chat do Ticket
 class TicketChatViewModel extends ChangeNotifier {

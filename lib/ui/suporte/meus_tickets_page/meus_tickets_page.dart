@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:medita_b_k/data/repositories/auth_repository.dart';
-import 'package:medita_b_k/routing/ead_routes.dart';
-import 'package:medita_b_k/ui/core/theme/app_theme.dart';
-import 'package:medita_b_k/ui/suporte/meus_tickets_page/view_model/meus_tickets_view_model.dart';
-import 'package:medita_b_k/ui/suporte/meus_tickets_page/widgets/ticket_card.dart';
-import 'package:medita_b_k/ui/suporte/novo_ticket_page/novo_ticket_page.dart';
-import 'package:medita_b_k/ui/suporte/ticket_chat_page/ticket_chat_page.dart';
+import 'package:medita_bk/data/repositories/auth_repository.dart';
+import 'package:medita_bk/routing/ead_routes.dart';
+import 'package:medita_bk/ui/core/theme/app_theme.dart';
+import 'package:medita_bk/ui/suporte/meus_tickets_page/view_model/meus_tickets_view_model.dart';
+import 'package:medita_bk/ui/suporte/meus_tickets_page/widgets/ticket_card.dart';
+import 'package:medita_bk/ui/suporte/novo_ticket_page/novo_ticket_page.dart';
+import 'package:medita_bk/ui/suporte/ticket_chat_page/ticket_chat_page.dart';
 
 /// Página que lista os tickets de suporte do usuário
 class MeusTicketsPage extends StatefulWidget {

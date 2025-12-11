@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:medita_b_k/data/repositories/auth_repository.dart';
-import 'package:medita_b_k/routing/nav.dart';
-import 'package:medita_b_k/ui/home/home_page/home_page.dart';
+import 'package:medita_bk/data/repositories/auth_repository.dart';
+import 'package:medita_bk/routing/nav.dart';
+import 'package:medita_bk/ui/home/home_page/home_page.dart';
 
 class SocialLoginViewModel extends ChangeNotifier {
   final AuthRepository _authRepository;

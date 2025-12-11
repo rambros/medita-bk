@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:medita_b_k/data/repositories/notificacoes_repository.dart';
-import 'package:medita_b_k/domain/models/unified_notification.dart';
+import 'package:medita_bk/data/repositories/notificacoes_repository.dart';
+import 'package:medita_bk/domain/models/unified_notification.dart';
 
 /// Widget que exibe um ícone de notificações com badge contador
 /// Mostra o número de notificações não lidas de AMBAS as collections

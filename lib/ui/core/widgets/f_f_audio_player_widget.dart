@@ -1,5 +1,5 @@
 // Automatic FlutterFlow imports
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
 // Imports other custom widgets
 // Imports custom actions
 // Imports custom functions
@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 
 // Imports other custom widgets
 
-import 'package:medita_b_k/core/controllers/index.dart';
+import 'package:medita_bk/core/controllers/index.dart';
 import 'audio_player_controls.dart';
 import 'package:flutter/services.dart';
 

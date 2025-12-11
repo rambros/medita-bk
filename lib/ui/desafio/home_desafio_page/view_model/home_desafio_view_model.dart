@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:medita_b_k/core/enums/enums.dart';
-import 'package:medita_b_k/core/structs/index.dart';
-import 'package:medita_b_k/data/repositories/auth_repository.dart';
-import 'package:medita_b_k/data/repositories/desafio_repository.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart'; // For valueOrDefault
+import 'package:medita_bk/core/enums/enums.dart';
+import 'package:medita_bk/core/structs/index.dart';
+import 'package:medita_bk/data/repositories/auth_repository.dart';
+import 'package:medita_bk/data/repositories/desafio_repository.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart'; // For valueOrDefault
 
 class HomeDesafioViewModel extends ChangeNotifier {
   final DesafioRepository _repository;

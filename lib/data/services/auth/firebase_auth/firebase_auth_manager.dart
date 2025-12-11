@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:medita_b_k/data/services/auth/auth_manager.dart';
+import 'package:medita_bk/data/services/auth/auth_manager.dart';
 import 'anonymous_auth.dart';
 import 'apple_auth.dart';
 import 'email_auth.dart';
@@ -11,7 +11,7 @@ import 'firebase_user_provider.dart';
 import 'google_auth.dart';
 import 'jwt_token_auth.dart';
 import 'github_auth.dart';
-import 'package:medita_b_k/core/utils/logger.dart';
+import 'package:medita_bk/core/utils/logger.dart';
 
 export '../base_auth_user_provider.dart';
 

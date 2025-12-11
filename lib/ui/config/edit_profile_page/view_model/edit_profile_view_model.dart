@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:medita_b_k/data/models/firebase/user_model.dart';
-import 'package:medita_b_k/data/services/firebase/firebase_storage_service.dart';
-import 'package:medita_b_k/data/repositories/auth_repository.dart';
-import 'package:medita_b_k/data/repositories/user_repository.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/upload_data.dart';
+import 'package:medita_bk/data/models/firebase/user_model.dart';
+import 'package:medita_bk/data/services/firebase/firebase_storage_service.dart';
+import 'package:medita_bk/data/repositories/auth_repository.dart';
+import 'package:medita_bk/data/repositories/user_repository.dart';
+import 'package:medita_bk/ui/core/flutter_flow/upload_data.dart';
 
 class EditProfileViewModel extends ChangeNotifier {
   EditProfileViewModel({

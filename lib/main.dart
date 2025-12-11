@@ -1,6 +1,6 @@
-import 'package:medita_b_k/core/services/audio_service.dart';
-import 'package:medita_b_k/core/services/notification_service.dart';
-import 'package:medita_b_k/data/services/badge_service.dart';
+import 'package:medita_bk/core/services/audio_service.dart';
+import 'package:medita_bk/core/services/notification_service.dart';
+import 'package:medita_bk/data/services/badge_service.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,19 +13,19 @@ import 'data/services/auth/firebase_auth/auth_util.dart';
 
 import 'data/services/push_notifications/push_notifications_util.dart';
 import 'data/services/firebase_config.dart';
-import 'package:medita_b_k/ui/core/theme/app_theme.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/internationalization.dart';
+import 'package:medita_bk/ui/core/theme/app_theme.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/ui/core/flutter_flow/internationalization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:medita_b_k/ui/pages.dart';
-import 'package:medita_b_k/core/controllers/index.dart';
+import 'package:medita_bk/ui/pages.dart';
+import 'package:medita_bk/core/controllers/index.dart';
 
 import 'dart:ui' as ui;
 
-import 'package:medita_b_k/data/repositories/index.dart';
-import 'package:medita_b_k/ui/view_models.dart';
-import 'package:medita_b_k/data/services/auth/firebase_auth/firebase_auth_service.dart';
+import 'package:medita_bk/data/repositories/index.dart';
+import 'package:medita_bk/ui/view_models.dart';
+import 'package:medita_bk/data/services/auth/firebase_auth/firebase_auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

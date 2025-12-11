@@ -1,5 +1,5 @@
 // Automatic FlutterFlow imports
-import 'package:medita_b_k/core/enums/enums.dart';
+import 'package:medita_bk/core/enums/enums.dart';
 // Imports custom functions
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
@@ -10,7 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as dialog;
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:medita_b_k/core/utils/logger.dart';
+import 'package:medita_bk/core/utils/logger.dart';
 
 Future showPickerNumberFormatValue(
   BuildContext context,

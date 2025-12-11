@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
-import 'package:medita_b_k/data/repositories/auth_repository.dart';
-import 'package:medita_b_k/data/repositories/home_repository.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_icon_button.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
-import 'package:medita_b_k/ui/desafio/widgets/f_f_desafio_audio_player_widget.dart';
-import 'package:medita_b_k/ui/desafio/lista_etapas_page/lista_etapas_page.dart';
-import 'package:medita_b_k/ui/desafio/completou_meditacao_page/completou_meditacao_page.dart';
+import 'package:medita_bk/data/repositories/auth_repository.dart';
+import 'package:medita_bk/data/repositories/home_repository.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_icon_button.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/ui/desafio/widgets/f_f_desafio_audio_player_widget.dart';
+import 'package:medita_bk/ui/desafio/lista_etapas_page/lista_etapas_page.dart';
+import 'package:medita_bk/ui/desafio/completou_meditacao_page/completou_meditacao_page.dart';
 
 import 'view_model/desafio_play_view_model.dart';
 

@@ -3,17 +3,17 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:medita_b_k/core/structs/util/schema_util.dart';
-import 'package:medita_b_k/core/structs/d21_meditation_model_struct.dart';
+import 'package:medita_bk/core/structs/util/schema_util.dart';
+import 'package:medita_bk/core/structs/d21_meditation_model_struct.dart';
 
-import 'package:medita_b_k/data/services/auth/base_auth_user_provider.dart';
+import 'package:medita_bk/data/services/auth/base_auth_user_provider.dart';
 
-import 'package:medita_b_k/data/services/push_notifications/push_notifications_handler.dart' show PushNotificationsHandler;
-import 'package:medita_b_k/ui/pages.dart';
-import 'package:medita_b_k/routing/ead_routes.dart';
-import 'package:medita_b_k/main.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/data/services/push_notifications/push_notifications_handler.dart' show PushNotificationsHandler;
+import 'package:medita_bk/ui/pages.dart';
+import 'package:medita_bk/routing/ead_routes.dart';
+import 'package:medita_bk/main.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
 
 export 'package:go_router/go_router.dart';
 export 'serialization_util.dart';

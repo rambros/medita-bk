@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:medita_b_k/data/services/auth/firebase_auth/auth_util.dart';
+import 'package:medita_bk/data/services/auth/firebase_auth/auth_util.dart';
 
 const kMaxEventNameLength = 40;
 const kMaxParameterLength = 100;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:medita_b_k/core/structs/index.dart';
+import 'package:medita_bk/core/structs/index.dart';
 
 class EventDetailsViewModel extends ChangeNotifier {
   EventModelStruct? _event;

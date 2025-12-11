@@ -2,12 +2,18 @@
 
 ## 📋 Visão Geral
 
-O app mobile agora unifica notificações de **DUAS collections diferentes**:
+O app mobile agora unifica notificações de **TRÊS collections diferentes**:
 
 | Collection | Admin | Conteúdo | Status |
 |-----------|-------|----------|--------|
-| `notificacoes_ead` | Cursos EAD | Tickets, Discussões | ✅ Unificado |
-| `notifications` | Meditações | Notificações gerais | ✅ Unificado |
+| `in_app_notifications` | App Mobile | Tickets, Discussões | ✅ Unificado |
+| `ead_push_notifications` | Cursos EAD | Push Notifications EAD | ✅ Unificado |
+| `global_push_notifications` | Meditações | Push Notifications Globais | ✅ Unificado |
+
+> **📝 Nota:** As collections foram renomeadas em Dezembro/2024:
+> - `notificacoes` → `in_app_notifications`
+> - `notificacoes_ead` → `ead_push_notifications`
+> - `notifications` → `global_push_notifications`
 
 **✨ Resultado**: O usuário vê TODAS as notificações em uma única lista, com badge contador unificado!
 
@@ -72,33 +78,39 @@ Cada notificação mostra:
 
 ### Badges de Origem
 
-Cada notificação tem um badge mostrando de qual sistema veio:
+Cada notificação tem um badge mostrando de qual collection veio:
 
 ```
-🟣 EAD          → notificacoes_ead
-🔵 Meditações   → notifications
+🟢 In-App       → in_app_notifications (tickets/discussões)
+🟣 EAD Push     → ead_push_notifications
+🔵 Global Push  → global_push_notifications
 ```
 
 ### Ações Disponíveis
 
-**Notificações EAD:**
+**Notificações In-App (`in_app_notifications`):**
 - ✅ Marcar como lida
-- ✅ Remover
+- ✅ Remover (ocultar)
 - ✅ Navegar para ticket/discussão
 
-**Notificações de Meditações:**
-- ✅ Visualizar (não tem "lida")
-- ❌ Não pode remover (sistema antigo)
-- ❌ Não tem navegação específica
+**Notificações EAD Push (`ead_push_notifications`):**
+- ✅ Marcar como lida
+- ✅ Remover (ocultar)
+- ✅ Navegar (se tiver dados de navegação)
+
+**Notificações Global Push (`global_push_notifications`):**
+- ✅ Marcar como lida
+- ✅ Remover (ocultar)
+- ❌ Navegação específica (sem dados de navegação)
 
 ## 🔧 Para os Admins
 
 ### Admin de Cursos EAD
 
-Continue salvando em `notificacoes_ead`:
+Salve em `ead_push_notifications`:
 
 ```javascript
-await firestore.collection('notificacoes_ead').add({
+await firestore.collection('ead_push_notifications').add({
   titulo: "Nova resposta",
   conteudo: "Admin respondeu seu ticket",
   tipo: "ticket_respondido",
@@ -111,10 +123,10 @@ await firestore.collection('notificacoes_ead').add({
 
 ### Admin de Meditações
 
-Continue salvando em `notifications`:
+Salve em `global_push_notifications`:
 
 ```javascript
-await firestore.collection('notifications').add({
+await firestore.collection('global_push_notifications').add({
   title: "Nova meditação disponível",
   content: "Confira a nova meditação...",
   type: "Enviada",
@@ -128,13 +140,13 @@ await firestore.collection('notifications').add({
 
 ## 📊 Diferenças Entre as Collections
 
-| Aspecto | notificacoes_ead | notifications |
-|---------|------------------|---------------|
-| Campo usuário | `destinatarioId` (UID) | `recipientsRef` (array de refs) |
-| Marcação lida | Campo `lido` | ❌ Não tem |
-| Campos | Português | Inglês |
-| Destinatários | 1 por documento | N por documento (array) |
-| Navegação | Sim (related*) | Não |
+| Aspecto | in_app_notifications | ead_push_notifications | global_push_notifications |
+|---------|---------------------|------------------------|---------------------------|
+| Campo usuário | `destinatarioId` (UID) | `destinatarioId` (UID) ou `destinatarioTipo` | `recipientsRef` (array de refs) |
+| Marcação lida | user_states | user_states | user_states |
+| Campos | Português | Português | Inglês |
+| Destinatários | 1 por documento | 1 ou "Todos" | N por documento (array) |
+| Navegação | Sim (tickets/discussões) | Sim (se tiver dados) | Não |
 
 ## 🎨 Visualização
 
@@ -165,13 +177,18 @@ await firestore.collection('notifications').add({
 O widget de debug agora mostra:
 
 ```
-📊 Collection: notificacoes_ead
+📊 Collection: in_app_notifications
 Total: X notificações
 
-📊 Collection: notifications
-Total: Y notificações
+📊 Collection: ead_push_notifications
+Total de documentos: Y
+Por destinatarioId=userId: A
+Por destinatarioTipo=Todos: B
 
-📊 TOTAL GERAL: X+Y notificações
+📊 Collection: global_push_notifications
+Total: Z notificações
+
+📊 TOTAL GERAL: X+Y+Z notificações
 ```
 
 ## ✅ Vantagens da Unificação
@@ -195,9 +212,9 @@ Total: Y notificações
 
 Se quiser unificar completamente as collections no futuro:
 
-1. Migrar dados de `notifications` para `notificacoes_ead`
+1. Migrar dados de `global_push_notifications` para `ead_push_notifications`
 2. Adicionar campo `origem` ou `categoria`
-3. Remover suporte a `notifications`
+3. Remover suporte a `global_push_notifications`
 
 **Mas não é necessário!** O sistema atual funciona perfeitamente com ambas.
 
@@ -212,8 +229,8 @@ Se quiser unificar completamente as collections no futuro:
 
 ### Testar:
 
-1. **Admin EAD**: Crie notificação em `notificacoes_ead`
-2. **Admin Meditações**: Crie notificação em `notifications`
+1. **Admin EAD**: Crie notificação em `ead_push_notifications`
+2. **Admin Meditações**: Crie notificação em `global_push_notifications`
 3. **App Mobile**: Deve mostrar ambas na lista
 4. **Badge**: Deve mostrar contagem total
 

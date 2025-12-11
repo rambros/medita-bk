@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
-import 'package:medita_b_k/core/structs/index.dart';
-import 'package:medita_b_k/core/utils/media/audio_utils.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/custom_functions.dart' as functions;
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
-import 'package:medita_b_k/ui/desafio/widgets/status_meditacao_widget.dart';
+import 'package:medita_bk/core/structs/index.dart';
+import 'package:medita_bk/core/utils/media/audio_utils.dart';
+import 'package:medita_bk/ui/core/flutter_flow/custom_functions.dart' as functions;
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/ui/desafio/widgets/status_meditacao_widget.dart';
 
 class CardDiaMeditacaoWidget extends StatefulWidget {
   const CardDiaMeditacaoWidget({

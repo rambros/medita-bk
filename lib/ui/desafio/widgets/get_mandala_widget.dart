@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:medita_b_k/core/structs/index.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/custom_functions.dart' as functions;
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_bk/core/structs/index.dart';
+import 'package:medita_bk/ui/core/flutter_flow/custom_functions.dart' as functions;
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
 
 class GetMandalaWidget extends StatelessWidget {
   const GetMandalaWidget({

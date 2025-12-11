@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:medita_b_k/data/models/firebase/meditation_model.dart';
-import 'package:medita_b_k/data/repositories/meditation_repository.dart';
-import 'package:medita_b_k/data/repositories/user_repository.dart';
-import 'package:medita_b_k/core/utils/network_utils.dart';
+import 'package:medita_bk/data/models/firebase/meditation_model.dart';
+import 'package:medita_bk/data/repositories/meditation_repository.dart';
+import 'package:medita_bk/data/repositories/user_repository.dart';
+import 'package:medita_bk/core/utils/network_utils.dart';
 
 class MeditationDetailsViewModel extends ChangeNotifier {
   final MeditationRepository _meditationRepository;

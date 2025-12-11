@@ -2,37 +2,41 @@
 
 ## 📋 Resumo Rápido
 
-Existem **DUAS collections** de notificações no sistema:
+Existem **QUATRO collections** de notificações no sistema:
 
 | Collection | Uso | Sistema | Campo Chave |
 |-----------|-----|---------|------------|
-| `notificacoes_ead` | ✅ **USAR ESTA** | Novo (EAD/Tickets/Discussões) | `destinatarioId` = UID do usuário |
-| `notifications` | ⚠️ Legado | Antigo (Broadcast geral) | `recipientsRef` = array de refs |
+| `ead_push_notifications` | ✅ Push EAD | Notificações push do módulo EAD | `destinatarioId` = UID do usuário |
+| `global_push_notifications` | ✅ Push Global | Notificações push gerais | `recipientsRef` = array de refs |
+| `in_app_notifications` | ✅ In-App | Notificações internas (Tickets/Discussões) | `destinatarioId` = UID do usuário |
+| `ead_whatsapp_messages` | ✅ WhatsApp | Mensagens WhatsApp EAD | Múltiplos destinatários |
 
-## ✅ Para Módulo Admin: Use `notificacoes_ead`
+> **📝 Nota:** As collections foram renomeadas em Dezembro/2024:
+> - `notificacoes_ead` → `ead_push_notifications`
+> - `notifications` → `global_push_notifications`
+> - `notificacoes` → `in_app_notifications`
+
+## ✅ Para Notificações In-App (Tickets/Discussões): Use `in_app_notifications`
 
 ### Estrutura Correta do Documento
 
 ```javascript
-// Collection: notificacoes_ead
+// Collection: in_app_notifications
 {
   // ⚠️ CAMPOS OBRIGATÓRIOS
   titulo: "Título da notificação",
-  conteudo: "Texto descritivo",
-  tipo: "ticket_respondido",  // ou outro tipo válido (veja lista abaixo)
+  corpo: "Texto descritivo",
+  tipo: "ticket_resposta",  // ou outro tipo válido (veja lista abaixo)
   destinatarioId: "abc123xyz",  // ⚠️ UID do usuário (Firebase Auth)
   dataCriacao: Timestamp,
-  lido: false,
-  
+  lida: false,
+
   // 📎 CAMPOS OPCIONAIS (úteis)
-  relatedType: "ticket",  // 'ticket', 'discussao', 'resposta'
-  relatedId: "ticket_123",
-  remetenteId: "admin_uid",
-  remetenteNome: "Nome do Admin",
   dados: {
     // Dados extras para navegação
     ticketId: "ticket_123",
-    ticketNumero: "001"
+    ticketNumero: 123,
+    mensagemId: "msg_456"
   }
 }
 ```
@@ -40,105 +44,132 @@ Existem **DUAS collections** de notificações no sistema:
 ### 🎯 Tipos de Notificação Válidos
 
 **Tickets:**
-- `ticket_criado`
-- `ticket_respondido` ← Use este quando responder
-- `ticket_resolvido`
-- `ticket_fechado`
+- `ticket_resposta` - Nova resposta em um ticket
+- `ticket_resolvido` - Ticket marcado como resolvido
+- `ticket_reaberto` - Ticket reaberto
 
-**Discussões:**
-- `discussao_criada`
-- `discussao_respondida`
-- `discussao_resolvida`
-- `resposta_curtida`
-- `resposta_marcada_solucao`
+**Discussões (EAD):**
+- `discussao_resposta` - Nova resposta em discussão
+- `discussao_melhor_resposta` - Resposta marcada como melhor
+- `discussao_solucao` - Resposta marcada como solução
+- `discussao_like` - Alguém curtiu uma resposta
 
-## 🚫 NÃO Use `notifications` (Sistema Antigo)
+## 📊 Outras Collections de Notificações
 
-A collection `notifications` é do sistema antigo e tem estrutura diferente:
+### `global_push_notifications` (Push Notifications Globais)
+
+Para notificações push gerais do app:
 
 ```javascript
-// ❌ NÃO USAR - Sistema Antigo
+// Collection: global_push_notifications
 {
-  title: "...",
-  content: "...",
+  title: "Nova meditação disponível",
+  content: "Confira a nova meditação...",
+  imagemUrl: "https://...",
   dataEnvio: Timestamp,
-  type: "Enviada",
-  recipientsRef: [
-    // Array de DocumentReferences
-    /users/abc123,
-    /users/xyz456
-  ]
+  status: "Enviada",
+  typeRecipients: "Todos",  // ou "Específicos"
+  recipientsRef: [],  // Array de DocumentReferences se específicos
+  usuariosIds: [],
+  usuariosEmails: []
 }
 ```
 
-**Problemas do sistema antigo:**
-- ❌ Usa `recipientsRef` (array de references)
-- ❌ Não tem campo `lido` individual
-- ❌ Campos em inglês
-- ❌ Não integra com o novo sistema de badges
+**Características:**
+- ✅ Notificações push globais via Firebase Cloud Messaging
+- ✅ Suporta envio para todos os usuários ou específicos
+- ✅ Suporta user_states para controle individual de leitura
+- ✅ Campos em inglês (legado)
 
-## 🔄 Como Verificar Qual Você Está Usando
+### `ead_push_notifications` (Push Notifications EAD)
 
-### Opção 1: Debug Info no App
+Para notificações push específicas do módulo EAD:
 
-1. Abra o app
-2. Vá para Notificações
-3. Veja o card amarelo de DEBUG INFO no topo
-4. Verifique qual collection tem notificações:
-   - ✅ Se `notificacoes_ead` tem notificações → Está correto!
-   - ⚠️ Se `notifications` tem mas `notificacoes_ead` está vazio → Admin está usando collection errada
+```javascript
+// Collection: ead_push_notifications
+{
+  titulo: "Nova aula disponível",
+  mensagem: "Curso X liberou nova aula",
+  destinatarioTipo: "Todos",  // "Curso", "Grupo", "Todos", "Individual"
 
-### Opção 2: Firebase Console
+  // Para notificações individuais
+  destinatarioId: "user_uid",
+
+  // Para notificações de grupo (IMPORTANTE!)
+  destinatariosIds: ["uid1", "uid2", "uid3"],         // Array de UIDs
+  destinatariosEmails: ["email1@..", "email2@.."],    // Array de emails
+
+  // Contexto
+  cursoId: "curso_123",
+  grupoId: "grupo_456",
+
+  status: "Pendente",
+  dataAgendamento: Timestamp,
+  dataCriacao: Timestamp
+}
+```
+
+**Características:**
+- ✅ Notificações push específicas do EAD
+- ✅ Segmentação por curso ou grupo
+- ✅ **Suporta notificações de grupo via arrays**
+- ✅ Suporta agendamento
+- ✅ Campos em português
+
+> **📝 Para notificações de grupo:** Consulte [NOTIFICACOES_GRUPO.md](NOTIFICACOES_GRUPO.md)
+
+## 🎯 Quando Usar Cada Collection?
+
+### Use `in_app_notifications` quando:
+- ✅ Notificação relacionada a ticket ou discussão
+- ✅ Notificação interna do app (não push)
+- ✅ Notificação para usuário específico
+
+### Use `global_push_notifications` quando:
+- ✅ Push notification geral para todos os usuários
+- ✅ Avisos importantes do app
+- ✅ Notificações de novas funcionalidades
+
+### Use `ead_push_notifications` quando:
+- ✅ Push notification relacionada a cursos EAD
+- ✅ Avisos para alunos de curso específico
+- ✅ Notificações de grupo de alunos
+
+### Use `ead_whatsapp_messages` quando:
+- ✅ Mensagem WhatsApp para alunos
+- ✅ Comunicação via WhatsApp Business
+
+## 🔄 Como Verificar no Firebase Console
 
 1. Abra Firebase Console
 2. Vá em Firestore Database
-3. Procure as collections:
-   - Tem documentos em `notificacoes_ead`? → ✅ Correto
-   - Só tem em `notifications`? → ⚠️ Precisa mudar
+3. Verifique as collections:
+   - `in_app_notifications` - Notificações internas
+   - `global_push_notifications` - Push globais
+   - `ead_push_notifications` - Push EAD
+   - `ead_whatsapp_messages` - WhatsApp
 
-## 🛠️ Como Migrar do Admin
+## 🛠️ Exemplo de Criação
 
-Se o admin está salvando em `notifications`, precisa mudar para `notificacoes_ead`:
+### Criar Notificação In-App (Tickets/Discussões):
 
-### Antes (❌ Errado):
 ```javascript
-// Admin salvando em 'notifications'
+// Collection: in_app_notifications
 await admin.firestore()
-  .collection('notifications')  // ❌ Collection errada
-  .add({
-    title: "...",
-    content: "...",
-    // ...
-  });
-```
-
-### Depois (✅ Correto):
-```javascript
-// Admin salvando em 'notificacoes_ead'
-await admin.firestore()
-  .collection('notificacoes_ead')  // ✅ Collection correta
+  .collection('in_app_notifications')
   .add({
     titulo: "Nova resposta no ticket",
-    conteudo: "Admin respondeu seu ticket",
-    tipo: "ticket_respondido",
+    corpo: "Admin respondeu seu ticket #123",
+    tipo: "ticket_resposta",
     destinatarioId: userId,  // UID do usuário
-    relatedType: "ticket",
-    relatedId: ticketId,
-    remetenteId: adminId,
-    remetenteNome: "Admin",
+    dados: {
+      ticketId: "ticket_123",
+      ticketNumero: 123,
+      mensagemId: "msg_456"
+    },
     dataCriacao: admin.firestore.FieldValue.serverTimestamp(),
-    lido: false
+    lida: false
   });
-
-// Atualizar contador
-await admin.firestore()
-  .collection('contadores_comunicacao')
-  .doc(userId)
-  .set({
-    ticketsNaoLidos: admin.firestore.FieldValue.increment(1),
-    totalNaoLidas: admin.firestore.FieldValue.increment(1),
-    ultimaAtualizacao: admin.firestore.FieldValue.serverTimestamp()
-  }, { merge: true });
 ```
 
 ## 📊 Campos Importantes
@@ -156,46 +187,42 @@ destinatarioId: "user@example.com"  // Não funciona!
 ```
 
 **Como obter o UID correto:**
-1. No app, vá em Notificações
-2. Copie o "User ID" do debug info
-3. Use esse valor exato no `destinatarioId`
+- Do Firebase Authentication
+- Geralmente fornecido pelo sistema que cria a notificação
+- Formato: string alfanumérica única
 
-### tipo (Importante para ícones e cores)
+### tipo (Importante para comportamento)
 
-O tipo define como a notificação aparece:
-- 🎨 Cor do ícone
-- 📍 Ícone usado
+O tipo define como a notificação aparece e se comporta:
+- 🎨 Ícone e cor
 - 🔗 Navegação quando clicada
+- 📱 Comportamento no app
 
 ```javascript
-tipo: "ticket_respondido"  // ✅ Use valores da lista acima
-tipo: "custom_type"        // ❌ Não vai ter ícone/cor corretos
+tipo: "ticket_resposta"  // ✅ Use valores da lista acima
+tipo: "custom_type"      // ❌ Pode não funcionar corretamente
 ```
 
-## 🔧 Ferramenta de Diagnóstico
+## 💡 Recomendações
 
-O app agora tem um debug info que mostra:
-- Quantas notificações em cada collection
-- Última notificação de cada tipo
-- User ID para usar no admin
-- Se o sistema está funcionando
+### Para Notificações In-App (Tickets/Discussões):
+1. ✅ Usar `in_app_notifications`
+2. ✅ Incluir `destinatarioId` com UID do Firebase Auth
+3. ✅ Usar `dataCriacao` com serverTimestamp
+4. ✅ Usar tipos válidos da lista
+5. ✅ Incluir `dados` com informações de contexto
 
-## 💡 Recomendação Final
+### Para Push Notifications Globais:
+1. ✅ Usar `global_push_notifications`
+2. ✅ Definir `typeRecipients` ("Todos" ou "Específicos")
+3. ✅ Incluir user_states para controle individual
 
-**Para o Módulo Admin:**
-1. ✅ Sempre usar collection `notificacoes_ead`
-2. ✅ Sempre incluir `destinatarioId` com UID correto
-3. ✅ Sempre usar timestamp para `dataCriacao`
-4. ✅ Sempre atualizar contador em `contadores_comunicacao`
-5. ✅ Usar tipos válidos da lista
-
-**Evitar:**
-1. ❌ Não usar collection `notifications`
-2. ❌ Não usar email em vez de UID
-3. ❌ Não esquecer de atualizar contador
-4. ❌ Não criar tipos customizados
+### Para Push Notifications EAD:
+1. ✅ Usar `ead_push_notifications`
+2. ✅ Definir `destinatarioTipo` (Todos/Curso/Grupo)
+3. ✅ Incluir IDs de curso/grupo quando aplicável
 
 ---
 
-**📌 Se tiver dúvidas, consulte o debug info no app para verificar o que está acontecendo!**
+**📌 Para mais detalhes sobre cada collection, consulte o arquivo [COLLECTIONS_NOTIFICACOES.md](../../medita-bk-web-admin/docs/01-notificacoes/COLLECTIONS_NOTIFICACOES.md) no projeto web admin.**
 

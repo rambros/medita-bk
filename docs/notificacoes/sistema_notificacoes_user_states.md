@@ -4,9 +4,13 @@
 
 Anteriormente, o sistema de notificações tinha os seguintes problemas:
 
-1. **Collection `notifications` (Meditação)**: Não tinha controle de leitura. Todas as notificações sempre apareciam como não lidas.
-2. **Collection `notificacoes_ead` (EAD)**: O campo `lido` era global - se um usuário marcava como lida, marcava para todos.
+1. **Collection `global_push_notifications` (Meditação)**: Não tinha controle de leitura. Todas as notificações sempre apareciam como não lidas.
+2. **Collection `ead_push_notifications` (EAD)**: O campo `lido` era global - se um usuário marcava como lida, marcava para todos.
 3. **Deleção**: Quando um usuário deletava uma notificação, ela era removida permanentemente do Firestore, afetando outros usuários.
+
+> **📝 Nota:** As collections foram renomeadas em Dezembro/2024:
+> - `notifications` → `global_push_notifications`
+> - `notificacoes_ead` → `ead_push_notifications`
 
 ## ✅ Solução Implementada
 
@@ -15,7 +19,7 @@ Foi implementado um sistema de **subcollections `user_states/{userId}`** em amba
 ### Estrutura Firestore
 
 ```
-notifications/{notificationId}/
+global_push_notifications/{notificationId}/
   ├── [campos da notificação]
   └── user_states/
       ├── {userId1}/
@@ -29,7 +33,7 @@ notifications/{notificationId}/
           ├── dataLeitura: null
           └── dataOcultacao: null
 
-notificacoes_ead/{notificacaoId}/
+ead_push_notifications/{notificacaoId}/
   ├── [campos da notificação]
   └── user_states/
       └── {userId}/
@@ -89,7 +93,7 @@ await notificacoesRepository.marcarComoLida(notificacaoId);
 // Internamente:
 1. Busca user_state atual (ou cria novo)
 2. Atualiza para lido: true, dataLeitura: now()
-3. Salva em: notificacoes_ead/{id}/user_states/{userId}
+3. Salva em: ead_push_notifications/{id}/user_states/{userId}
 4. Decrementa contador do usuário
 ```
 
@@ -101,7 +105,7 @@ await notificacoesRepository.removerNotificacao(notificacaoId);
 
 // Internamente:
 1. Marca como ocultado: true, dataOcultacao: now()
-2. Salva em: notificacoes_ead/{id}/user_states/{userId}
+2. Salva em: ead_push_notifications/{id}/user_states/{userId}
 3. Notificação permanece no Firestore para outros usuários
 ```
 
@@ -140,14 +144,14 @@ final notificacoes = await notificacoesRepository.getNotificacoesUnificadas();
 
 ## 📊 Collections Suportadas
 
-### 1. `notificacoes_ead` (EAD - Tickets/Discussões)
+### 1. `ead_push_notifications` (EAD - Tickets/Discussões)
 - Criadas pelo app mobile quando há:
   - Nova resposta em ticket
   - Nova resposta em discussão
   - Ticket resolvido
   - Discussão marcada como resolvida
 
-### 2. `notifications` (Meditações - Push Notifications)
+### 2. `global_push_notifications` (Meditações - Push Notifications)
 - Criadas pelo web admin
 - Enviadas via Firebase Cloud Messaging
 - Agora suportam estado de leitura por usuário
@@ -198,11 +202,11 @@ final notificacoes = await repository.getNotificacoesUnificadas();
 Necessário adicionar regras para permitir read/write em user_states:
 
 ```javascript
-match /notifications/{notificationId}/user_states/{userId} {
+match /global_push_notifications/{notificationId}/user_states/{userId} {
   allow read, write: if request.auth.uid == userId;
 }
 
-match /notificacoes_ead/{notificacaoId}/user_states/{userId} {
+match /ead_push_notifications/{notificacaoId}/user_states/{userId} {
   allow read, write: if request.auth.uid == userId;
 }
 ```

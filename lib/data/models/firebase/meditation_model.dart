@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:medita_b_k/core/structs/comment_struct.dart';
+import 'package:medita_bk/core/structs/comment_struct.dart';
 
 /// Meditation data model for Firebase Firestore
 ///

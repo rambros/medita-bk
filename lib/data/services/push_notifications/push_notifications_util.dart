@@ -1,7 +1,7 @@
 import 'dart:io' show Platform;
 
-import 'package:medita_b_k/data/services/auth/firebase_auth/auth_util.dart';
-import 'package:medita_b_k/data/services/cloud_functions_service.dart';
+import 'package:medita_bk/data/services/auth/firebase_auth/auth_util.dart';
+import 'package:medita_bk/data/services/cloud_functions_service.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:stream_transform/stream_transform.dart';

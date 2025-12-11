@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_icon_button.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_widgets.dart';
-import 'package:medita_b_k/ui/core/utils/ui_utils.dart';
-import 'package:medita_b_k/ui/core/widgets/confeti_widget.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/custom_functions.dart' as functions;
-import 'package:medita_b_k/ui/desafio/home_desafio_page/home_desafio_page.dart';
-import 'package:medita_b_k/ui/desafio/visualizar_premio_page/visualizar_premio_page.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_icon_button.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_widgets.dart';
+import 'package:medita_bk/ui/core/utils/ui_utils.dart';
+import 'package:medita_bk/ui/core/widgets/confeti_widget.dart';
+import 'package:medita_bk/ui/core/flutter_flow/custom_functions.dart' as functions;
+import 'package:medita_bk/ui/desafio/home_desafio_page/home_desafio_page.dart';
+import 'package:medita_bk/ui/desafio/visualizar_premio_page/visualizar_premio_page.dart';
 
 import 'view_model/completou_brasao_view_model.dart';
 

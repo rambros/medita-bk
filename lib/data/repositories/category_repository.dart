@@ -1,5 +1,5 @@
-import 'package:medita_b_k/data/models/firebase/category_model.dart';
-import 'package:medita_b_k/data/services/firebase/firestore_service.dart';
+import 'package:medita_bk/data/models/firebase/category_model.dart';
+import 'package:medita_bk/data/services/firebase/firestore_service.dart';
 
 /// Repository for categories (themes) used in meditation filters
 class CategoryRepository {

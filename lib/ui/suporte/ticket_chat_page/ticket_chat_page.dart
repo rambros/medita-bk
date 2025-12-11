@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:medita_b_k/data/repositories/auth_repository.dart';
-import 'package:medita_b_k/data/models/firebase/user_model.dart';
-import 'package:medita_b_k/routing/ead_routes.dart';
-import 'package:medita_b_k/domain/models/ead/index.dart';
-import 'package:medita_b_k/ui/core/theme/app_theme.dart';
-import 'package:medita_b_k/ui/suporte/ticket_chat_page/view_model/ticket_chat_view_model.dart';
-import 'package:medita_b_k/ui/suporte/ticket_chat_page/widgets/mensagem_bubble.dart';
-import 'package:medita_b_k/ui/suporte/ticket_chat_page/widgets/input_mensagem.dart';
+import 'package:medita_bk/data/repositories/auth_repository.dart';
+import 'package:medita_bk/data/models/firebase/user_model.dart';
+import 'package:medita_bk/routing/ead_routes.dart';
+import 'package:medita_bk/domain/models/ead/index.dart';
+import 'package:medita_bk/ui/core/theme/app_theme.dart';
+import 'package:medita_bk/ui/suporte/ticket_chat_page/view_model/ticket_chat_view_model.dart';
+import 'package:medita_bk/ui/suporte/ticket_chat_page/widgets/mensagem_bubble.dart';
+import 'package:medita_bk/ui/suporte/ticket_chat_page/widgets/input_mensagem.dart';
 
 /// Página de chat do ticket (mensagens)
 class TicketChatPage extends StatefulWidget {

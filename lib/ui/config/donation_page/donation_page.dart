@@ -1,9 +1,9 @@
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_animations.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_icon_button.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_widgets.dart';
-import 'package:medita_b_k/ui/pages.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_animations.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_icon_button.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_widgets.dart';
+import 'package:medita_bk/ui/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';

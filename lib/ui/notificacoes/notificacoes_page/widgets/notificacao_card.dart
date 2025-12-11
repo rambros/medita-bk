@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:medita_b_k/domain/models/unified_notification.dart';
-import 'package:medita_b_k/ui/core/theme/app_theme.dart';
+import 'package:medita_bk/domain/models/unified_notification.dart';
+import 'package:medita_bk/ui/core/theme/app_theme.dart';
 
 /// Card para exibir uma notificação UNIFICADA
 /// Funciona com notificações de ambas as collections

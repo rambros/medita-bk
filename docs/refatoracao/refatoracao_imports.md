@@ -2,7 +2,7 @@
 
 ## 1. Contexto e Motivação
 
-O projeto atualmente contém **124 imports relativos** (usando `../`) que precisam ser migrados para imports absolutos usando o prefixo `package:medita_b_k/`.
+O projeto atualmente contém **124 imports relativos** (usando `../`) que precisam ser migrados para imports absolutos usando o prefixo `package:medita_bk/`.
 
 ### Benefícios da migração:
 - **Clareza**: Imports absolutos deixam claro de onde vem cada dependência
@@ -13,7 +13,7 @@ O projeto atualmente contém **124 imports relativos** (usando `../`) que precis
 ### Estado atual:
 - ✅ Alguns arquivos já usam imports absolutos (ex: `/main.dart`)
 - ⚠️ Muitos arquivos ainda usam imports relativos (ex: `catalogo_cursos_page.dart`)
-- 📦 Nome do package: `medita_b_k`
+- 📦 Nome do package: `medita_bk`
 
 ---
 
@@ -28,13 +28,13 @@ import '../../core/theme/app_theme.dart';
 
 ### ✅ Formato desejado (absolutos):
 ```dart
-import 'package:medita_b_k/data/repositories/auth_repository.dart';
-import 'package:medita_b_k/routing/ead_routes.dart';
-import 'package:medita_b_k/ui/core/theme/app_theme.dart';
+import 'package:medita_bk/data/repositories/auth_repository.dart';
+import 'package:medita_bk/routing/ead_routes.dart';
+import 'package:medita_bk/ui/core/theme/app_theme.dart';
 ```
 
 ### 🔍 Nota sobre imports já absolutos:
-Alguns arquivos usam `/` no início (ex: `/core/services/audio_service.dart`). Estes também precisam ser convertidos para o formato `package:medita_b_k/`.
+Alguns arquivos usam `/` no início (ex: `/core/services/audio_service.dart`). Estes também precisam ser convertidos para o formato `package:medita_bk/`.
 
 ---
 
@@ -77,7 +77,7 @@ Alguns arquivos usam `/` no início (ex: `/core/services/audio_service.dart`). E
 
 4. **Definir regras de conversão**
    - `../` → calcular caminho absoluto a partir de lib/
-   - `/` no início → adicionar `package:medita_b_k`
+   - `/` no início → adicionar `package:medita_bk`
    - Preservar imports de pacotes externos
 
 ### Fase 3: Migração Incremental por Módulo (EXECUÇÃO)

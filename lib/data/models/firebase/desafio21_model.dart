@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:medita_b_k/core/structs/d21_etapa_model_struct.dart';
-import 'package:medita_b_k/core/structs/d21_model_struct.dart';
-import 'package:medita_b_k/core/structs/util/firestore_util.dart';
+import 'package:medita_bk/core/structs/d21_etapa_model_struct.dart';
+import 'package:medita_bk/core/structs/d21_model_struct.dart';
+import 'package:medita_bk/core/structs/util/firestore_util.dart';
 
 /// Pure Dart model for Desafio21 template documents
 class Desafio21Model extends Equatable {

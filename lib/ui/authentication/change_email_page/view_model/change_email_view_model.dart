@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:medita_b_k/data/repositories/auth_repository.dart';
+import 'package:medita_bk/data/repositories/auth_repository.dart';
 
 class ChangeEmailViewModel extends ChangeNotifier {
   final AuthRepository _authRepository;

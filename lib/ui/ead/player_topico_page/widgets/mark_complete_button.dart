@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:medita_b_k/ui/core/theme/app_theme.dart';
+import 'package:medita_bk/ui/core/theme/app_theme.dart';
 
 /// Botao para marcar/desmarcar um topico como completo
 class MarkCompleteButton extends StatelessWidget {

@@ -1,10 +1,10 @@
 // Automatic FlutterFlow imports
-import 'package:medita_b_k/core/structs/index.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
-import 'package:medita_b_k/core/utils/logger.dart';
+import 'package:medita_bk/core/structs/index.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'seek_bar.dart';
-import 'package:medita_b_k/ui/core/theme/app_theme.dart';
+import 'package:medita_bk/ui/core/theme/app_theme.dart';
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
@@ -15,7 +15,7 @@ import 'package:audio_session/audio_session.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:medita_b_k/core/controllers/index.dart';
+import 'package:medita_bk/core/controllers/index.dart';
 
 Stopwatch _watch = Stopwatch();
 

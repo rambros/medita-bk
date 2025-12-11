@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:medita_b_k/data/models/firebase/message_model.dart';
-import 'package:medita_b_k/data/services/firebase/firestore_service.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/custom_functions.dart' as functions;
+import 'package:medita_bk/data/models/firebase/message_model.dart';
+import 'package:medita_bk/data/services/firebase/firestore_service.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/ui/core/flutter_flow/custom_functions.dart' as functions;
 
 class DonationViewModel extends ChangeNotifier {
   DonationViewModel({FirestoreService? firestoreService})

@@ -1,7 +1,7 @@
-import 'package:medita_b_k/data/models/firebase/image_model.dart';
-import 'package:medita_b_k/data/services/firebase/firestore_service.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/data/models/firebase/image_model.dart';
+import 'package:medita_bk/data/services/firebase/firestore_service.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'view_model/select_images_playlist_view_model.dart';

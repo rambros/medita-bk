@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:medita_b_k/domain/models/ead/index.dart';
-import 'package:medita_b_k/ui/core/theme/app_theme.dart';
-import 'package:medita_b_k/ui/core/widgets/you_tube_player_widget.dart';
-import 'package:medita_b_k/ui/core/widgets/audio_player_widget.dart';
-import 'package:medita_b_k/ui/core/widgets/html_display_widget.dart';
-import 'package:medita_b_k/ui/core/widgets/pdf_viewer_widget.dart';
+import 'package:medita_bk/domain/models/ead/index.dart';
+import 'package:medita_bk/ui/core/theme/app_theme.dart';
+import 'package:medita_bk/ui/core/widgets/you_tube_player_widget.dart';
+import 'package:medita_bk/ui/core/widgets/audio_player_widget.dart';
+import 'package:medita_bk/ui/core/widgets/html_display_widget.dart';
+import 'package:medita_bk/ui/core/widgets/pdf_viewer_widget.dart';
 
 /// Widget que renderiza o conteudo do topico baseado no tipo
 class TopicoContentWidget extends StatelessWidget {

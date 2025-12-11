@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
-import 'package:medita_b_k/domain/models/ead/notificacao_ead_model.dart';
-import 'package:medita_b_k/data/models/firebase/notification_model.dart';
+import 'package:medita_bk/domain/models/ead/notificacao_ead_model.dart';
+import 'package:medita_bk/data/models/firebase/notification_model.dart';
 
 /// Service unificado que busca notificações de ambas as collections
 /// Collection "notifications" (sistema antigo - broadcast)

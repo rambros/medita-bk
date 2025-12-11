@@ -1,11 +1,11 @@
 // Automatic FlutterFlow imports
 // ignore_for_file: unnecessary_import, unused_import
-import 'package:medita_b_k/core/structs/index.dart';
-import 'package:medita_b_k/core/enums/enums.dart';
-import 'package:medita_b_k/ui/core/actions/actions.dart' as action_blocks;
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/custom_functions.dart'; // Imports custom functions
+import 'package:medita_bk/core/structs/index.dart';
+import 'package:medita_bk/core/enums/enums.dart';
+import 'package:medita_bk/ui/core/actions/actions.dart' as action_blocks;
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/ui/core/flutter_flow/custom_functions.dart'; // Imports custom functions
 import 'package:flutter/material.dart';
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!

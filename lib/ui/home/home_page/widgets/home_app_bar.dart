@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_theme.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
-import 'package:medita_b_k/ui/core/widgets/notification_badge_icon.dart';
-import 'package:medita_b_k/ui/pages.dart';
-import 'package:medita_b_k/core/utils/logger.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/ui/core/widgets/notification_badge_icon.dart';
+import 'package:medita_bk/ui/pages.dart';
+import 'package:medita_bk/core/utils/logger.dart';
 
 /// Custom app bar for home page
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {

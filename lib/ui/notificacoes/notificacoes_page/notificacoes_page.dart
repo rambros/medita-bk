@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import 'package:medita_b_k/ui/core/theme/app_theme.dart';
+import 'package:medita_bk/ui/core/theme/app_theme.dart';
 import 'view_model/notificacoes_view_model.dart';
 import 'widgets/notificacao_card.dart';
 import 'widgets/notificacoes_empty_state.dart';

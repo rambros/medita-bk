@@ -1,4 +1,4 @@
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
 import 'title_page_widget.dart' show TitlePageWidget;
 import 'package:flutter/material.dart';
 

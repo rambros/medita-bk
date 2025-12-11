@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:algolia/algolia.dart';
 import 'package:equatable/equatable.dart';
-import 'package:medita_b_k/core/utils/logger.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/lat_lng.dart';
+import 'package:medita_bk/core/utils/logger.dart';
+import 'package:medita_bk/ui/core/flutter_flow/lat_lng.dart';
 
 export 'package:algolia/algolia.dart';
 

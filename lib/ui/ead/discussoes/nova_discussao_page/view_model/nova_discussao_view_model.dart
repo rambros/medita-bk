@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:medita_b_k/data/repositories/comunicacao_repository.dart';
+import 'package:medita_bk/data/repositories/comunicacao_repository.dart';
 
 /// ViewModel para a página de nova discussão
 class NovaDiscussaoViewModel extends ChangeNotifier {

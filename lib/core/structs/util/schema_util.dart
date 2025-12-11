@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:from_css_color/from_css_color.dart';
-import 'package:medita_b_k/utils/algolia_serialization_util.dart';
-import 'package:medita_b_k/core/enums/enums.dart';
-import 'package:medita_b_k/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/utils/algolia_serialization_util.dart';
+import 'package:medita_bk/core/enums/enums.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
 
 export 'package:collection/collection.dart' show ListEquality;
 export 'package:flutter/material.dart' show Color, Colors;

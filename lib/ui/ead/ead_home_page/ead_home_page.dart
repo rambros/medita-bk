@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:medita_b_k/routing/ead_routes.dart';
-import 'package:medita_b_k/ui/core/theme/app_theme.dart';
+import 'package:medita_bk/routing/ead_routes.dart';
+import 'package:medita_bk/ui/core/theme/app_theme.dart';
 
 /// Página inicial do módulo EAD
 class EadHomePage extends StatelessWidget {

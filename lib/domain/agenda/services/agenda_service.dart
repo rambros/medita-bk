@@ -1,4 +1,4 @@
-import 'package:medita_b_k/core/structs/index.dart';
+import 'package:medita_bk/core/structs/index.dart';
 
 /// Service for agenda/event-specific utilities
 class AgendaService {

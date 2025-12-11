@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:medita_b_k/ui/core/theme/app_theme.dart';
+import 'package:medita_bk/ui/core/theme/app_theme.dart';
 
 /// Widget que exibe os objetivos do curso
 class ObjetivosSection extends StatelessWidget {
