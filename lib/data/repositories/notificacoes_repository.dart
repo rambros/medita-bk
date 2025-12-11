@@ -57,14 +57,63 @@ class NotificacoesRepository {
       // 2. Buscar notificações antigas (notifications)
       final userRef = _firestore.collection('users').doc(userId);
 
-      final legacySnapshot = await _firestore
+      // Buscar email do usuário para queries por email
+      String? userEmail;
+      try {
+        final userDoc = await _firestore.collection('users').doc(userId).get();
+        if (userDoc.exists) {
+          userEmail = userDoc.data()?['email'] as String?;
+        }
+      } catch (e) {
+        debugPrint('Erro ao buscar email do usuário: $e');
+      }
+
+      // Query 1: Notificações por recipientsRef (array de DocumentReference)
+      final legacySnapshotRef = await _firestore
           .collection('notifications')
           .where('recipientsRef', arrayContains: userRef)
           .orderBy('dataEnvio', descending: true)
           .limit(limite)
           .get();
 
-      for (final doc in legacySnapshot.docs) {
+      // Query 2: Notificações "Todos" (typeRecipients == 'Todos')
+      final legacySnapshotTodos = await _firestore
+          .collection('notifications')
+          .where('typeRecipients', isEqualTo: 'Todos')
+          .orderBy('dataEnvio', descending: true)
+          .limit(limite)
+          .get();
+
+      // Query 3: Notificações por email (se o usuário tiver email)
+      QuerySnapshot<Map<String, dynamic>>? legacySnapshotEmail;
+      if (userEmail != null && userEmail.isNotEmpty) {
+        legacySnapshotEmail = await _firestore
+            .collection('notifications')
+            .where('recipientEmail', isEqualTo: userEmail)
+            .orderBy('dataEnvio', descending: true)
+            .limit(limite)
+            .get();
+      }
+
+      // Combinar todas as notificações e remover duplicatas
+      final allDocs = <String, QueryDocumentSnapshot<Map<String, dynamic>>>{};
+
+      for (final doc in legacySnapshotRef.docs) {
+        allDocs[doc.id] = doc;
+      }
+
+      for (final doc in legacySnapshotTodos.docs) {
+        allDocs[doc.id] = doc;
+      }
+
+      if (legacySnapshotEmail != null) {
+        for (final doc in legacySnapshotEmail.docs) {
+          allDocs[doc.id] = doc;
+        }
+      }
+
+      // Processar todas as notificações únicas
+      for (final doc in allDocs.values) {
         // Buscar estado do usuário
         final userStateDoc = await doc.reference
             .collection('user_states')
@@ -88,7 +137,7 @@ class NotificacoesRepository {
         );
       }
 
-      debugPrint('NotificacoesRepository: ${legacySnapshot.docs.length} da collection notifications');
+      debugPrint('NotificacoesRepository: ${allDocs.length} notificações únicas da collection notifications (${legacySnapshotRef.docs.length} por ref, ${legacySnapshotTodos.docs.length} para todos, ${legacySnapshotEmail?.docs.length ?? 0} por email)');
     } catch (e) {
       debugPrint('NotificacoesRepository: Erro ao buscar notifications - $e');
     }
