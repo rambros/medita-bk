@@ -2,111 +2,77 @@
 // FIRESTORE SECURITY RULES - NOTIFICAÇÕES COM USER_STATES
 // ============================================================
 //
-// Adicionar estas regras ao arquivo firestore.rules no projeto
-// Firebase do web admin (medita-bk-web-admin/firebase/)
+// COPIE E COLE TODO O CONTEÚDO ABAIXO NO FIREBASE CONSOLE
+// Firebase Console > Firestore Database > Regras
 //
-// IMPORTANTE: Estas regras permitem que cada usuário gerencie
-// seu próprio estado de leitura/ocultação sem afetar outros.
 // ============================================================
 
-// Collection: notifications (Meditações/Push Global)
-match /notifications/{notificationId} {
-  // Usuários autenticados podem ler notificações onde são destinatários
-  allow read: if request.auth != null &&
-                 request.auth.uid != null &&
-                 (resource.data.typeRecipients == 'Todos' ||
-                  exists(/databases/$(database)/documents/users/$(request.auth.uid)) in resource.data.recipientsRef);
-
-  // Apenas admins podem criar/atualizar/deletar notificações
-  allow write: if request.auth != null &&
-                  get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
-
-  // Subcollection: user_states (Estado por usuário)
-  match /user_states/{userId} {
-    // Usuário só pode ler/escrever seu próprio estado
-    allow read, write: if request.auth != null && request.auth.uid == userId;
-  }
-}
-
-// Collection: notificacoes_ead (EAD - Tickets/Discussões)
-match /notificacoes_ead/{notificacaoId} {
-  // Usuários autenticados podem ler suas próprias notificações
-  allow read: if request.auth != null &&
-                 request.auth.uid != null &&
-                 resource.data.destinatarioId == request.auth.uid;
-
-  // Apenas o app pode criar notificações (via service account)
-  // Ou admins podem criar manualmente
-  allow create: if request.auth != null &&
-                   (request.auth.uid == request.resource.data.destinatarioId ||
-                    get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true);
-
-  // Apenas admins podem atualizar/deletar
-  allow update, delete: if request.auth != null &&
-                           get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
-
-  // Subcollection: user_states (Estado por usuário)
-  match /user_states/{userId} {
-    // Usuário só pode ler/escrever seu próprio estado
-    allow read, write: if request.auth != null && request.auth.uid == userId;
-  }
-}
-
-// ============================================================
-// EXEMPLO DE ARQUIVO firestore.rules COMPLETO
-// ============================================================
-/*
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Regra padrão: negar tudo
-    match /{document=**} {
-      allow read, write: if false;
-    }
-
-    // Usuários
-    match /users/{userId} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null && request.auth.uid == userId;
-    }
-
-    // COLE AS REGRAS DE NOTIFICAÇÕES AQUI
+    // Collection: notifications (Meditações/Push Global)
     match /notifications/{notificationId} {
+      // Usuários autenticados podem ler notificações onde são destinatários
       allow read: if request.auth != null &&
                      request.auth.uid != null &&
                      (resource.data.typeRecipients == 'Todos' ||
                       exists(/databases/$(database)/documents/users/$(request.auth.uid)) in resource.data.recipientsRef);
 
+      // Apenas admins podem criar/atualizar/deletar notificações
       allow write: if request.auth != null &&
                       get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
 
+      // Subcollection: user_states (Estado por usuário)
       match /user_states/{userId} {
+        // Usuário só pode ler/escrever seu próprio estado
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
     }
 
+    // Collection: notificacoes_ead (EAD - Tickets/Discussões)
     match /notificacoes_ead/{notificacaoId} {
+      // Usuários autenticados podem ler suas próprias notificações
       allow read: if request.auth != null &&
                      request.auth.uid != null &&
                      resource.data.destinatarioId == request.auth.uid;
 
+      // Apenas o app pode criar notificações (via service account)
+      // Ou admins podem criar manualmente
       allow create: if request.auth != null &&
                        (request.auth.uid == request.resource.data.destinatarioId ||
                         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true);
 
+      // Apenas admins podem atualizar/deletar
       allow update, delete: if request.auth != null &&
                                get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
 
+      // Subcollection: user_states (Estado por usuário)
       match /user_states/{userId} {
+        // Usuário só pode ler/escrever seu próprio estado
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
     }
 
-    // Outras collections...
+    // IMPORTANTE: Adicione aqui as outras regras do seu projeto
+    // (users, meditacoes, cursos, etc.)
+
   }
 }
-*/
+
+// ============================================================
+// NOTA IMPORTANTE
+// ============================================================
+//
+// As regras acima são apenas para as collections de notificações.
+// Você DEVE manter as regras existentes do seu projeto e ADICIONAR
+// estas regras junto com elas.
+//
+// NÃO substitua todas as regras - apenas adicione os blocos
+// match /notifications/ e match /notificacoes_ead/ dentro do
+// match /databases/{database}/documents { ... } existente.
+//
+// ============================================================
 
 // ============================================================
 // COMO APLICAR AS REGRAS
