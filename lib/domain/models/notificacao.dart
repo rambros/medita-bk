@@ -78,13 +78,14 @@ class Notificacao {
     UserNotificationState? userState,
   ) {
     final data = doc.data() as Map<String, dynamic>? ?? {};
+    final tipo = TipoNotificacao.fromString(data['tipo'] as String?);
 
     return Notificacao(
       id: doc.id,
       titulo: data['titulo'] as String? ?? '',
       conteudo: data['conteudo'] as String? ?? '',
       imagemUrl: data['imagemUrl'] as String?,
-      tipo: TipoNotificacao.fromString(data['tipo'] as String?),
+      tipo: tipo,
       destinatarios: _parseDestinatarios(data['destinatarios']),
       navegacao: data['navegacao'] != null
           ? NavegacaoNotificacao.fromMap(

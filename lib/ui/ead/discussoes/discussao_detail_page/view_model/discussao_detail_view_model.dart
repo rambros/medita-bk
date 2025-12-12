@@ -235,6 +235,33 @@ class DiscussaoDetailViewModel extends ChangeNotifier {
     }
   }
 
+  /// Edita a discussão (apenas autor)
+  Future<bool> editarDiscussao({
+    required String titulo,
+    required String conteudo,
+  }) async {
+    try {
+      return await _repository.editarDiscussao(
+        discussaoId: discussaoId,
+        titulo: titulo,
+        conteudo: conteudo,
+      );
+    } catch (e) {
+      debugPrint('Erro ao editar discussão: $e');
+      return false;
+    }
+  }
+
+  /// Deleta a discussão (apenas autor)
+  Future<bool> deletarDiscussao() async {
+    try {
+      return await _repository.deletarDiscussao(discussaoId: discussaoId);
+    } catch (e) {
+      debugPrint('Erro ao deletar discussão: $e');
+      return false;
+    }
+  }
+
   @override
   void dispose() {
     _discussaoSubscription?.cancel();

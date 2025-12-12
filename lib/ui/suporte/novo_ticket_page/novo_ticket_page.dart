@@ -77,7 +77,7 @@ class _NovoTicketPageState extends State<NovoTicketPage> {
         // Sucesso - volta para lista e mostra mensagem
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Ticket criado com sucesso!'),
+            content: Text('Solicitação criada com sucesso!'),
             backgroundColor: Colors.green,
           ),
         );
@@ -86,7 +86,7 @@ class _NovoTicketPageState extends State<NovoTicketPage> {
         // Erro
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(_viewModel.error ?? 'Erro ao criar ticket'),
+            content: Text(_viewModel.error ?? 'Erro ao criar solicitação'),
             backgroundColor: Colors.red,
           ),
         );
@@ -105,7 +105,7 @@ class _NovoTicketPageState extends State<NovoTicketPage> {
           backgroundColor: appTheme.primary,
           foregroundColor: appTheme.info,
           title: Text(
-            'Novo Ticket',
+            'Nova Solicitação',
             style: TextStyle(color: appTheme.info),
           ),
           actions: [
@@ -311,7 +311,7 @@ class _NovoTicketPageState extends State<NovoTicketPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Este ticket é sobre algum curso? (opcional)',
+          'Esta solicitação é sobre algum curso? (opcional)',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -367,7 +367,7 @@ class _NovoTicketPageState extends State<NovoTicketPage> {
               )
             : const Icon(Icons.send),
         label: Text(
-          viewModel.isCriando ? 'Criando ticket...' : 'Criar Ticket',
+          viewModel.isCriando ? 'Criando solicitação...' : 'Criar Solicitação',
           style: const TextStyle(fontSize: 16),
         ),
         style: ElevatedButton.styleFrom(
@@ -391,7 +391,7 @@ class _NovoTicketPageState extends State<NovoTicketPage> {
           children: [
             Icon(Icons.help_outline, color: appTheme.primary),
             const SizedBox(width: 8),
-            const Text('Dicas para criar um bom ticket'),
+            const Text('Dicas para criar uma boa solicitação'),
           ],
         ),
         content: const SingleChildScrollView(

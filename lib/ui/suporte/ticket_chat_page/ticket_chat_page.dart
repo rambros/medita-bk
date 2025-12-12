@@ -347,7 +347,7 @@ class _TicketChatPageState extends State<TicketChatPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
-                        'Detalhes do Ticket',
+                        'Detalhes da Solicitação',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,

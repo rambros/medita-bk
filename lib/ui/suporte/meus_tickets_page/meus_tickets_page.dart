@@ -90,7 +90,7 @@ class _MeusTicketsPageState extends State<MeusTicketsPage> {
           backgroundColor: appTheme.primary,
           foregroundColor: appTheme.info,
           title: Text(
-            'Meus Tickets',
+            'Minhas Solicitações',
             style: TextStyle(color: appTheme.info),
           ),
           actions: [
@@ -192,7 +192,7 @@ class _MeusTicketsPageState extends State<MeusTicketsPage> {
           backgroundColor: appTheme.primary,
           foregroundColor: appTheme.info,
           icon: const Icon(Icons.add),
-          label: const Text('Novo Ticket'),
+          label: const Text('Nova Solicitação'),
         ),
       ),
     );
@@ -220,7 +220,7 @@ class _MeusTicketsPageState extends State<MeusTicketsPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Resumo dos Tickets',
+            'Resumo das Solicitações',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -239,14 +239,14 @@ class _MeusTicketsPageState extends State<MeusTicketsPage> {
               ),
               Expanded(
                 child: _buildStatItem(
-                  'Abertos',
+                  'Abertas',
                   stats.abertos.toString(),
                   Icons.pending,
                 ),
               ),
               Expanded(
                 child: _buildStatItem(
-                  'Resolvidos',
+                  'Resolvidas',
                   stats.resolvidos.toString(),
                   Icons.check_circle,
                 ),
@@ -266,7 +266,9 @@ class _MeusTicketsPageState extends State<MeusTicketsPage> {
                   const Icon(Icons.warning, color: Colors.red, size: 20),
                   const SizedBox(width: 8),
                   Text(
-                    '${stats.urgentes} ticket${stats.urgentes > 1 ? 's' : ''} urgente${stats.urgentes > 1 ? 's' : ''}',
+                    stats.urgentes > 1
+                        ? '${stats.urgentes} solicitações urgentes'
+                        : '${stats.urgentes} solicitação urgente',
                     style: const TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.w600,
@@ -389,7 +391,7 @@ class _MeusTicketsPageState extends State<MeusTicketsPage> {
                 foregroundColor: appTheme.info,
               ),
               icon: const Icon(Icons.add),
-              label: const Text('Criar Primeiro Ticket'),
+              label: const Text('Criar Primeira Solicitação'),
             ),
           ],
         ),

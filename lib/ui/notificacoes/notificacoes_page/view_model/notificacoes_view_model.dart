@@ -185,10 +185,6 @@ class NotificacoesViewModel extends ChangeNotifier {
   Future<Map<String, dynamic>?> onNotificacaoTap(
     Notificacao notificacao,
   ) async {
-    debugPrint('🔔 onNotificacaoTap: Iniciando...');
-    debugPrint('🔔 notificacao.tipo: ${notificacao.tipo.label}');
-    debugPrint('🔔 notificacao.navegacao: ${notificacao.navegacao}');
-
     // Marca como lida se não foi lida
     if (!notificacao.lido) {
       await marcarComoLida(notificacao);
@@ -197,16 +193,13 @@ class NotificacoesViewModel extends ChangeNotifier {
     // Se tem dados de navegação, retorna
     if (notificacao.navegacao != null) {
       final nav = notificacao.navegacao!;
-      final navData = {
+      return {
         'type': nav.tipo,
         'id': nav.id,
         if (nav.dados != null) 'dados': nav.dados,
       };
-      debugPrint('🔔 ✅ Retornando navData: $navData');
-      return navData;
     }
 
-    debugPrint('🔔 ❌ Retornando null (sem navegação)');
     return null;
   }
 

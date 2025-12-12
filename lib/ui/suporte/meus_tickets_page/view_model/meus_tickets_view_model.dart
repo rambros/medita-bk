@@ -12,11 +12,11 @@ enum FiltroMeusTickets {
   String get label {
     switch (this) {
       case FiltroMeusTickets.todos:
-        return 'Todos';
+        return 'Todas';
       case FiltroMeusTickets.abertos:
-        return 'Abertos';
+        return 'Abertas';
       case FiltroMeusTickets.resolvidos:
-        return 'Resolvidos';
+        return 'Resolvidas';
     }
   }
 
@@ -83,11 +83,11 @@ class MeusTicketsViewModel extends ChangeNotifier {
   String get mensagemListaVazia {
     switch (_filtroAtual) {
       case FiltroMeusTickets.todos:
-        return 'Você ainda não criou nenhum ticket de suporte';
+        return 'Você ainda não criou nenhuma solicitação de suporte';
       case FiltroMeusTickets.abertos:
-        return 'Nenhum ticket aberto no momento';
+        return 'Nenhuma solicitação aberta no momento';
       case FiltroMeusTickets.resolvidos:
-        return 'Nenhum ticket resolvido ainda';
+        return 'Nenhuma solicitação resolvida ainda';
     }
   }
 

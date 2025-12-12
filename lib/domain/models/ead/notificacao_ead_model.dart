@@ -8,15 +8,15 @@ import 'package:flutter/material.dart';
 /// Tipos de notificação do EAD
 enum TipoNotificacaoEad {
   // Tickets
-  ticketCriado('ticket_criado', 'Novo Ticket'),
-  ticketRespondido('ticket_respondido', 'Resposta no Ticket'),
-  ticketResolvido('ticket_resolvido', 'Ticket Resolvido'),
-  ticketFechado('ticket_fechado', 'Ticket Fechado'),
+  ticketCriado('ticket_criado', 'Nova Solicitação'),
+  ticketRespondido('ticket_respondido', 'Resposta na Solicitação'),
+  ticketResolvido('ticket_resolvido', 'Solicitação Resolvida'),
+  ticketFechado('ticket_fechado', 'Solicitação Fechada'),
 
   // Discussões
-  discussaoCriada('discussao_criada', 'Nova Discussão'),
-  discussaoRespondida('discussao_respondida', 'Resposta na Discussão'),
-  discussaoResolvida('discussao_resolvida', 'Discussão Resolvida'),
+  discussaoCriada('discussao_criada', 'Nova Pergunta'),
+  discussaoRespondida('discussao_respondida', 'Resposta na sua Pergunta'),
+  discussaoResolvida('discussao_resolvida', 'Pergunta Resolvida'),
   respostaCurtida('resposta_curtida', 'Sua Resposta foi Curtida'),
   respostaMarcadaSolucao('resposta_marcada_solucao', 'Resposta Marcada como Solução'),
 

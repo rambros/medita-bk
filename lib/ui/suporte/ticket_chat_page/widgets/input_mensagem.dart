@@ -34,7 +34,7 @@ class InputMensagem extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                'Este ticket está fechado. Não é possível enviar mensagens.',
+                'Esta solicitação está fechada. Não é possível enviar mensagens.',
                 style: TextStyle(
                   color: Colors.orange.shade900,
                   fontWeight: FontWeight.w500,

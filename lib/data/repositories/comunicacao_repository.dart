@@ -538,4 +538,41 @@ class ComunicacaoRepository {
 
     return sucesso;
   }
+
+  /// Edita uma discussão (apenas autor)
+  Future<bool> editarDiscussao({
+    required String discussaoId,
+    required String titulo,
+    required String conteudo,
+  }) async {
+    final sucesso = await _service.editarDiscussao(
+      discussaoId: discussaoId,
+      titulo: titulo,
+      conteudo: conteudo,
+    );
+
+    if (sucesso) {
+      // Invalida cache para forçar reload
+      _discussoesCache.remove(discussaoId);
+    }
+
+    return sucesso;
+  }
+
+  /// Deleta uma discussão e todas suas respostas (apenas autor)
+  Future<bool> deletarDiscussao({
+    required String discussaoId,
+  }) async {
+    final sucesso = await _service.deletarDiscussao(
+      discussaoId: discussaoId,
+    );
+
+    if (sucesso) {
+      // Remove do cache
+      _discussoesCache.remove(discussaoId);
+      _respostasCache.remove(discussaoId);
+    }
+
+    return sucesso;
+  }
 }

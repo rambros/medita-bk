@@ -10,15 +10,15 @@ import 'package:flutter/material.dart';
 
 enum TipoNotificacao {
   // === TICKETS ===
-  ticketCriado('ticket_criado', 'Novo Ticket', 'ticket'),
-  ticketRespondido('ticket_respondido', 'Resposta no Ticket', 'ticket'),
-  ticketResolvido('ticket_resolvido', 'Ticket Resolvido', 'ticket'),
-  ticketFechado('ticket_fechado', 'Ticket Fechado', 'ticket'),
+  ticketCriado('ticket_criado', 'Nova Solicitação', 'ticket'),
+  ticketRespondido('ticket_respondido', 'Resposta na Solicitação', 'ticket'),
+  ticketResolvido('ticket_resolvido', 'Solicitação Resolvida', 'ticket'),
+  ticketFechado('ticket_fechado', 'Solicitação Fechada', 'ticket'),
 
   // === DISCUSSÕES ===
-  discussaoCriada('discussao_criada', 'Nova Discussão', 'discussao'),
-  discussaoRespondida('discussao_respondida', 'Resposta na Discussão', 'discussao'),
-  discussaoResolvida('discussao_resolvida', 'Discussão Resolvida', 'discussao'),
+  discussaoCriada('discussao_criada', 'Nova Pergunta', 'discussao'),
+  discussaoRespondida('discussao_respondida', 'Resposta na sua Pergunta', 'discussao'),
+  discussaoResolvida('discussao_resolvida', 'Pergunta Resolvida', 'discussao'),
   respostaCurtida('resposta_curtida', 'Sua Resposta foi Curtida', 'discussao'),
   respostaSolucao('resposta_solucao', 'Resposta Marcada como Solução', 'discussao'),
 

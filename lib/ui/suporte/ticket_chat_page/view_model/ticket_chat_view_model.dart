@@ -54,7 +54,7 @@ class TicketChatViewModel extends ChangeNotifier {
 
   String get tituloTicket {
     if (_ticket == null) return 'Carregando...';
-    return 'Ticket #${_ticket!.numero}';
+    return 'Solicitação #${_ticket!.numero}';
   }
 
   // === Ações ===

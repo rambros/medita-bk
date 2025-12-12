@@ -6,7 +6,6 @@ import 'package:medita_bk/ui/core/theme/app_theme.dart';
 import 'view_model/notificacoes_view_model.dart';
 import 'widgets/notificacao_card.dart';
 import 'widgets/notificacoes_empty_state.dart';
-import 'widgets/notificacoes_debug_info.dart';
 
 /// Página de notificações
 /// Exibe todas as notificações do usuário com badge counter no app
@@ -22,8 +21,15 @@ class NotificacoesPage extends StatelessWidget {
   }
 }
 
-class _NotificacoesPageContent extends StatelessWidget {
+class _NotificacoesPageContent extends StatefulWidget {
   const _NotificacoesPageContent();
+
+  @override
+  State<_NotificacoesPageContent> createState() => _NotificacoesPageContentState();
+}
+
+class _NotificacoesPageContentState extends State<_NotificacoesPageContent> {
+  bool _isNavigating = false;
 
   @override
   Widget build(BuildContext context) {
@@ -156,13 +162,8 @@ class _NotificacoesPageContent extends StatelessWidget {
 
     // Empty state
     if (!viewModel.hasNotificacoes) {
-      return SingleChildScrollView(
-        child: Column(
-          children: [
-            const NotificacoesDebugInfo(),
-            const NotificacoesEmptyState(),
-          ],
-        ),
+      return const SingleChildScrollView(
+        child: NotificacoesEmptyState(),
       );
     }
 
@@ -172,11 +173,6 @@ class _NotificacoesPageContent extends StatelessWidget {
       color: appTheme.primary,
       child: CustomScrollView(
         slivers: [
-          // Debug info
-          const SliverToBoxAdapter(
-            child: NotificacoesDebugInfo(),
-          ),
-
           // Notificações não lidas
           if (viewModel.notificacoesNaoLidas.isNotEmpty) ...[
             SliverToBoxAdapter(
@@ -299,43 +295,42 @@ class _NotificacoesPageContent extends StatelessWidget {
     BuildContext context,
     dynamic notificacao,
   ) async {
-    debugPrint('🔵 _handleNotificacaoTap: Iniciando...');
-    debugPrint('🔵 Notificação: ${notificacao.runtimeType}');
+    // Previne múltiplas navegações simultâneas
+    if (_isNavigating) {
+      return;
+    }
 
-    final viewModel = context.read<NotificacoesViewModel>();
-    final navData = await viewModel.onNotificacaoTap(notificacao);
+    _isNavigating = true;
 
-    debugPrint('🔵 navData retornado: $navData');
+    try {
+      final viewModel = context.read<NotificacoesViewModel>();
+      final navData = await viewModel.onNotificacaoTap(notificacao);
 
-    if (context.mounted && navData != null) {
-      // Navega baseado no tipo de notificação
-      final type = navData['type'] as String?;
-      final id = navData['id'] as String?;
-      final dados = navData['dados'] as Map<String, dynamic>?;
+      if (context.mounted && navData != null) {
+        // Navega baseado no tipo de notificação
+        final type = navData['type'] as String?;
+        final id = navData['id'] as String?;
+        final dados = navData['dados'] as Map<String, dynamic>?;
 
-      debugPrint('🔵 type: $type, id: $id, dados: $dados');
-
-      if (type == 'ticket' && id != null) {
-        // Navegar para ticket
-        final route = '/suporte/ticket/$id';
-        debugPrint('🔵 Navegando para ticket: $route');
-        context.push(route);
-      } else if (type == 'discussao' && id != null) {
-        // Navegar para discussão
-        final cursoId = dados?['cursoId'] as String?;
-        debugPrint('🔵 discussao - cursoId: $cursoId');
-        if (cursoId != null) {
-          final route = '/ead/curso/$cursoId/discussoes/$id';
-          debugPrint('🔵 Navegando para discussão: $route');
+        if (type == 'ticket' && id != null) {
+          // Navegar para ticket
+          final route = '/suporte/ticket/$id';
           context.push(route);
-        } else {
-          debugPrint('🔵 ❌ discussao sem cursoId - não pode navegar');
+        } else if (type == 'discussao' && id != null) {
+          // Navegar para discussão
+          final discussaoId = dados?['discussaoId'] as String? ?? id;
+
+          // A rota correta é /ead/discussao/:discussaoId
+          final route = '/ead/discussao/$discussaoId';
+          context.push(route);
         }
-      } else {
-        debugPrint('🔵 ❌ Tipo não reconhecido ou ID nulo');
       }
-    } else {
-      debugPrint('🔵 ❌ navData é null ou context não montado');
+    } finally {
+      // Aguarda um pouco antes de permitir nova navegação
+      await Future.delayed(const Duration(milliseconds: 500));
+      if (mounted) {
+        _isNavigating = false;
+      }
     }
   }
 

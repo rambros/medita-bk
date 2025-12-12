@@ -168,6 +168,146 @@ class _DiscussaoDetailPageState extends State<DiscussaoDetailPage> {
     }
   }
 
+  Future<void> _onEditarDiscussao() async {
+    final discussao = _viewModel.discussao;
+    if (discussao == null) return;
+
+    final appTheme = AppTheme.of(context);
+    final tituloController = TextEditingController(text: discussao.titulo);
+    final conteudoController = TextEditingController(text: discussao.conteudo);
+
+    final resultado = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Editar Pergunta'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                controller: tituloController,
+                decoration: const InputDecoration(
+                  labelText: 'Título',
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 1,
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: conteudoController,
+                decoration: const InputDecoration(
+                  labelText: 'Descrição',
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 5,
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (tituloController.text.trim().isEmpty) {
+                ScaffoldMessenger.of(ctx).showSnackBar(
+                  const SnackBar(
+                    content: Text('O título não pode estar vazio'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
+              Navigator.pop(ctx, true);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: appTheme.primary,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Salvar'),
+          ),
+        ],
+      ),
+    );
+
+    if (resultado == true && mounted) {
+      final sucesso = await _viewModel.editarDiscussao(
+        titulo: tituloController.text.trim(),
+        conteudo: conteudoController.text.trim(),
+      );
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              sucesso
+                  ? 'Pergunta editada com sucesso!'
+                  : 'Erro ao editar pergunta',
+            ),
+            backgroundColor: sucesso ? Colors.green : Colors.red,
+          ),
+        );
+      }
+    }
+
+    tituloController.dispose();
+    conteudoController.dispose();
+  }
+
+  Future<void> _onDeletarDiscussao() async {
+    final confirmar = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Deletar Pergunta'),
+        content: const Text(
+          'Tem certeza que deseja deletar esta pergunta? '
+          'Esta ação não pode ser desfeita e todas as respostas também serão removidas.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Deletar'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmar == true && mounted) {
+      final sucesso = await _viewModel.deletarDiscussao();
+
+      if (mounted) {
+        if (sucesso) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Pergunta deletada com sucesso!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          // Volta para a tela anterior
+          Navigator.pop(context);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Erro ao deletar pergunta'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final appTheme = AppTheme.of(context);
@@ -190,25 +330,70 @@ class _DiscussaoDetailPageState extends State<DiscussaoDetailPage> {
 
                 if (discussao == null) return const SizedBox.shrink();
 
-                // Botão de fechar discussão
-                if (discussao.podeFechar(usuarioId)) {
-                  return IconButton(
-                    icon: const Icon(Icons.check_circle_outline),
-                    tooltip: 'Marcar como resolvida',
-                    onPressed: _onFecharDiscussao,
-                  );
+                // Menu de opções - só para o criador
+                if (discussao.autorId != usuarioId) {
+                  return const SizedBox.shrink();
                 }
 
-                // Botão de reabrir discussão
-                if (discussao.podeReabrir(usuarioId)) {
-                  return IconButton(
-                    icon: const Icon(Icons.refresh),
-                    tooltip: 'Reabrir discussão',
-                    onPressed: _onReabrirDiscussao,
-                  );
-                }
-
-                return const SizedBox.shrink();
+                return PopupMenuButton<String>(
+                  icon: const Icon(Icons.more_vert),
+                  onSelected: (value) {
+                    if (value == 'editar') {
+                      _onEditarDiscussao();
+                    } else if (value == 'fechar') {
+                      _onFecharDiscussao();
+                    } else if (value == 'reabrir') {
+                      _onReabrirDiscussao();
+                    } else if (value == 'deletar') {
+                      _onDeletarDiscussao();
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    const PopupMenuItem(
+                      value: 'editar',
+                      child: Row(
+                        children: [
+                          Icon(Icons.edit, size: 20),
+                          SizedBox(width: 8),
+                          Text('Editar pergunta'),
+                        ],
+                      ),
+                    ),
+                    // Mostra fechar ou reabrir dependendo do status
+                    if (discussao.podeFechar(usuarioId))
+                      const PopupMenuItem(
+                        value: 'fechar',
+                        child: Row(
+                          children: [
+                            Icon(Icons.check_circle_outline, color: Colors.green, size: 20),
+                            SizedBox(width: 8),
+                            Text('Marcar como resolvida', style: TextStyle(color: Colors.green)),
+                          ],
+                        ),
+                      ),
+                    if (discussao.podeReabrir(usuarioId))
+                      const PopupMenuItem(
+                        value: 'reabrir',
+                        child: Row(
+                          children: [
+                            Icon(Icons.refresh, color: Colors.blue, size: 20),
+                            SizedBox(width: 8),
+                            Text('Reabrir pergunta', style: TextStyle(color: Colors.blue)),
+                          ],
+                        ),
+                      ),
+                    const PopupMenuItem(
+                      value: 'deletar',
+                      child: Row(
+                        children: [
+                          Icon(Icons.delete, color: Colors.red, size: 20),
+                          SizedBox(width: 8),
+                          Text('Deletar pergunta', style: TextStyle(color: Colors.red)),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
               },
             ),
           ],

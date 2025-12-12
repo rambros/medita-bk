@@ -732,4 +732,47 @@ class ComunicacaoService {
       return false;
     }
   }
+
+  /// Edita uma discussão (apenas autor)
+  Future<bool> editarDiscussao({
+    required String discussaoId,
+    required String titulo,
+    required String conteudo,
+  }) async {
+    try {
+      await _discussoesCollection.doc(discussaoId).update({
+        'titulo': titulo,
+        'conteudo': conteudo,
+        'dataAtualizacao': FieldValue.serverTimestamp(),
+      });
+
+      debugPrint('✅ Discussão editada: $discussaoId');
+      return true;
+    } catch (e) {
+      debugPrint('Erro ao editar discussão: $e');
+      return false;
+    }
+  }
+
+  /// Deleta uma discussão e todas suas respostas (apenas autor)
+  Future<bool> deletarDiscussao({
+    required String discussaoId,
+  }) async {
+    try {
+      // Deleta todas as respostas primeiro
+      final respostas = await _respostasCollection(discussaoId).get();
+      for (final doc in respostas.docs) {
+        await doc.reference.delete();
+      }
+
+      // Deleta a discussão
+      await _discussoesCollection.doc(discussaoId).delete();
+
+      debugPrint('✅ Discussão deletada: $discussaoId');
+      return true;
+    } catch (e) {
+      debugPrint('Erro ao deletar discussão: $e');
+      return false;
+    }
+  }
 }
