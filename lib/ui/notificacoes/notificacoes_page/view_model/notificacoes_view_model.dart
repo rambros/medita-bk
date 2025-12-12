@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 
 import 'package:medita_bk/data/repositories/notificacoes_repository.dart';
-import 'package:medita_bk/domain/models/ead/notificacao_ead_model.dart';
-import 'package:medita_bk/domain/models/unified_notification.dart';
+import 'package:medita_bk/domain/models/notificacao.dart';
 
-/// ViewModel para a página de notificações UNIFICADAS
-/// Gerencia notificações de AMBAS as collections (EAD + Meditações)
+/// ViewModel para a página de notificações
+/// Sistema simplificado com collection única
 class NotificacoesViewModel extends ChangeNotifier {
   final NotificacoesRepository _repository;
 
@@ -20,17 +19,17 @@ class NotificacoesViewModel extends ChangeNotifier {
 
   // === State ===
 
-  List<UnifiedNotification> _notificacoes = [];
+  List<Notificacao> _notificacoes = [];
   int _totalNaoLidas = 0;
   bool _isLoading = true;
   bool _isRefreshing = false;
   String? _errorMessage;
-  
-  StreamSubscription<List<UnifiedNotification>>? _notificacoesSubscription;
+
+  StreamSubscription<List<Notificacao>>? _notificacoesSubscription;
 
   // === Getters ===
 
-  List<UnifiedNotification> get notificacoes => _notificacoes;
+  List<Notificacao> get notificacoes => _notificacoes;
   bool get isLoading => _isLoading;
   bool get isRefreshing => _isRefreshing;
   String? get errorMessage => _errorMessage;
@@ -40,20 +39,24 @@ class NotificacoesViewModel extends ChangeNotifier {
   bool get temNaoLidas => _totalNaoLidas > 0;
 
   /// Notificações não lidas
-  List<UnifiedNotification> get notificacoesNaoLidas =>
+  List<Notificacao> get notificacoesNaoLidas =>
       _notificacoes.where((n) => !n.lido).toList();
 
   /// Notificações lidas
-  List<UnifiedNotification> get notificacoesLidas =>
+  List<Notificacao> get notificacoesLidas =>
       _notificacoes.where((n) => n.lido).toList();
 
-  /// Notificações EAD
-  List<UnifiedNotification> get notificacoesEad =>
-      _notificacoes.where((n) => n.source == NotificationSource.ead).toList();
+  /// Notificações de tickets
+  List<Notificacao> get notificacoesTickets =>
+      _notificacoes.where((n) => n.tipo.isTicket).toList();
 
-  /// Notificações de Meditações
-  List<UnifiedNotification> get notificacoesMeditacoes =>
-      _notificacoes.where((n) => n.source == NotificationSource.legacy).toList();
+  /// Notificações de discussões
+  List<Notificacao> get notificacoesDiscussoes =>
+      _notificacoes.where((n) => n.tipo.isDiscussao).toList();
+
+  /// Notificações de cursos
+  List<Notificacao> get notificacoesCursos =>
+      _notificacoes.where((n) => n.tipo.isCurso).toList();
 
   // === Initialization ===
 
@@ -62,10 +65,10 @@ class NotificacoesViewModel extends ChangeNotifier {
     loadNotificacoes();
   }
 
-  /// Configura listeners de streams para notificações UNIFICADAS
+  /// Configura listeners de streams para notificações
   void _setupListeners() {
-    // Listen para notificações unificadas
-    _notificacoesSubscription = _repository.streamNotificacoesUnificadas().listen(
+    // Listen para notificações
+    _notificacoesSubscription = _repository.streamNotificacoes().listen(
       (notificacoes) {
         _notificacoes = notificacoes;
         _totalNaoLidas = notificacoes.where((n) => !n.lido).length;
@@ -87,7 +90,7 @@ class NotificacoesViewModel extends ChangeNotifier {
     try {
       // Verifica se o dispositivo suporta badges
       final isSupported = await FlutterAppBadger.isAppBadgeSupported();
-      
+
       if (isSupported) {
         if (count > 0) {
           await FlutterAppBadger.updateBadgeCount(count);
@@ -102,15 +105,15 @@ class NotificacoesViewModel extends ChangeNotifier {
 
   // === Data Loading ===
 
-  /// Carrega notificações UNIFICADAS
+  /// Carrega notificações
   Future<void> loadNotificacoes() async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      _notificacoes = await _repository.getNotificacoesUnificadas();
-      _totalNaoLidas = await _repository.contarNaoLidasUnificadas();
+      _notificacoes = await _repository.getNotificacoes();
+      _totalNaoLidas = await _repository.contarNaoLidas();
       _updateAppBadge(_totalNaoLidas);
     } catch (e) {
       _errorMessage = 'Erro ao carregar notificações: $e';
@@ -126,8 +129,8 @@ class NotificacoesViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _notificacoes = await _repository.getNotificacoesUnificadas();
-      _totalNaoLidas = await _repository.contarNaoLidasUnificadas();
+      _notificacoes = await _repository.getNotificacoes();
+      _totalNaoLidas = await _repository.contarNaoLidas();
       _updateAppBadge(_totalNaoLidas);
       _errorMessage = null;
     } catch (e) {
@@ -141,110 +144,69 @@ class NotificacoesViewModel extends ChangeNotifier {
   // === Actions ===
 
   /// Marca uma notificação como lida
-  /// Funciona para ambos os tipos de notificações
-  Future<bool> marcarComoLida(UnifiedNotification notificacao) async {
-    // Para notificações EAD, marca no Firestore
-    if (notificacao.source == NotificationSource.ead) {
-      final success = await _repository.marcarComoLida(notificacao.id);
+  Future<bool> marcarComoLida(Notificacao notificacao) async {
+    final success = await _repository.marcarComoLida(notificacao.id);
 
-      if (success) {
-        // Recarregar para atualizar
-        await refresh();
-      }
-
-      return success;
-    }
-
-    // Para notificações antigas (legacy), marca localmente
-    // Atualiza o estado local
-    final index = _notificacoes.indexWhere((n) => n.id == notificacao.id);
-    if (index != -1) {
-      // Cria uma cópia atualizada
-      final updated = UnifiedNotification(
-        id: notificacao.id,
-        titulo: notificacao.titulo,
-        conteudo: notificacao.conteudo,
-        dataCriacao: notificacao.dataCriacao,
-        lido: true, // Marca como lida
-        source: notificacao.source,
-        tipo: notificacao.tipo,
-        originalData: notificacao.originalData,
-      );
-
-      _notificacoes[index] = updated;
-      _totalNaoLidas = _notificacoes.where((n) => !n.lido).length;
-      _updateAppBadge(_totalNaoLidas);
-      notifyListeners();
-
-      return true;
-    }
-
-    return false;
-  }
-
-  /// Marca todas as notificações EAD como lidas
-  /// Notificações antigas não são afetadas
-  Future<bool> marcarTodasComoLidas() async {
-    final success = await _repository.marcarTodasComoLidas();
-    
     if (success) {
-      _updateAppBadge(0);
-      await refresh();
+      // Stream já vai atualizar automaticamente
+      _updateAppBadge(_totalNaoLidas - 1);
     }
-    
+
     return success;
   }
 
-  /// Remove uma notificação (ambos os tipos)
-  Future<bool> removerNotificacao(UnifiedNotification notificacao) async {
-    // Para notificações EAD, remove do Firestore
-    if (notificacao.source == NotificationSource.ead) {
-      final success = await _repository.removerNotificacao(notificacao.id);
+  /// Marca todas as notificações como lidas
+  Future<bool> marcarTodasComoLidas() async {
+    final success = await _repository.marcarTodasComoLidas();
 
-      if (success) {
-        _notificacoes.removeWhere((n) => n.id == notificacao.id);
-        _totalNaoLidas = _notificacoes.where((n) => !n.lido).length;
-        _updateAppBadge(_totalNaoLidas);
-        notifyListeners();
-      }
-
-      return success;
+    if (success) {
+      _updateAppBadge(0);
     }
 
-    // Para notificações antigas (legacy), remove localmente
-    _notificacoes.removeWhere((n) => n.id == notificacao.id);
-    _totalNaoLidas = _notificacoes.where((n) => !n.lido).length;
-    _updateAppBadge(_totalNaoLidas);
-    notifyListeners();
-
-    return true;
+    return success;
   }
 
-  /// Trata clique em notificação unificada
+  /// Remove uma notificação
+  Future<bool> removerNotificacao(Notificacao notificacao) async {
+    final success = await _repository.removerNotificacao(notificacao.id);
+
+    if (success) {
+      // Stream já vai atualizar automaticamente
+      if (!notificacao.lido) {
+        _updateAppBadge(_totalNaoLidas - 1);
+      }
+    }
+
+    return success;
+  }
+
+  /// Trata clique em notificação
   /// Marca como lida e retorna dados de navegação
   Future<Map<String, dynamic>?> onNotificacaoTap(
-    UnifiedNotification notificacao,
+    Notificacao notificacao,
   ) async {
-    // Marca como lida se não foi lida (ambos os tipos)
+    debugPrint('🔔 onNotificacaoTap: Iniciando...');
+    debugPrint('🔔 notificacao.tipo: ${notificacao.tipo.label}');
+    debugPrint('🔔 notificacao.navegacao: ${notificacao.navegacao}');
+
+    // Marca como lida se não foi lida
     if (!notificacao.lido) {
       await marcarComoLida(notificacao);
     }
 
-    // Se for notificação EAD, retorna dados de navegação
-    if (notificacao.source == NotificationSource.ead &&
-        notificacao.originalData is NotificacaoEadModel) {
-      final ead = notificacao.originalData as NotificacaoEadModel;
-
-      if (ead.relatedType != null && ead.relatedId != null) {
-        return {
-          'type': ead.relatedType,
-          'id': ead.relatedId,
-          'dados': ead.dados,
-        };
-      }
+    // Se tem dados de navegação, retorna
+    if (notificacao.navegacao != null) {
+      final nav = notificacao.navegacao!;
+      final navData = {
+        'type': nav.tipo,
+        'id': nav.id,
+        if (nav.dados != null) 'dados': nav.dados,
+      };
+      debugPrint('🔔 ✅ Retornando navData: $navData');
+      return navData;
     }
 
-    // Notificações antigas não têm navegação específica
+    debugPrint('🔔 ❌ Retornando null (sem navegação)');
     return null;
   }
 
@@ -256,4 +218,3 @@ class NotificacoesViewModel extends ChangeNotifier {
     super.dispose();
   }
 }
-

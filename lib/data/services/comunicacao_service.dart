@@ -610,6 +610,8 @@ class ComunicacaoService {
             ? StatusDiscussao.fechada.name
             : StatusDiscussao.respondida.name,
         'dataAtualizacao': FieldValue.serverTimestamp(),
+        if (isSolucao && usuarioId != null) 'fechadaPor': usuarioId,
+        if (isSolucao) 'dataFechamento': FieldValue.serverTimestamp(),
       });
 
       // Notifica o autor da resposta (se não for ele mesmo marcando)
@@ -637,6 +639,96 @@ class ComunicacaoService {
       return true;
     } catch (e) {
       debugPrint('Erro ao marcar como solução: $e');
+      return false;
+    }
+  }
+
+  /// Fecha/marca discussão como resolvida (sem necessariamente marcar uma resposta)
+  Future<bool> fecharDiscussao({
+    required String discussaoId,
+    required String usuarioId,
+  }) async {
+    try {
+      // Busca discussão para verificar se o usuário é o autor
+      final discussao = await getDiscussaoById(discussaoId);
+      if (discussao == null || discussao.autorId != usuarioId) {
+        debugPrint('Usuário não autorizado a fechar esta discussão');
+        return false;
+      }
+
+      await _discussoesCollection.doc(discussaoId).update({
+        'status': StatusDiscussao.fechada.name,
+        'fechadaPor': usuarioId,
+        'dataFechamento': FieldValue.serverTimestamp(),
+        'dataAtualizacao': FieldValue.serverTimestamp(),
+      });
+
+      // Busca participantes para notificar (quem respondeu)
+      final respostas = await getRespostasByDiscussao(discussaoId);
+      final participantes = respostas
+          .map((r) => r.autorId)
+          .where((id) => id != usuarioId)
+          .toSet()
+          .toList();
+
+      // Notifica participantes que a discussão foi fechada
+      if (participantes.isNotEmpty) {
+        await _notificacaoService.notificarDiscussaoFechada(
+          discussaoId: discussaoId,
+          discussaoTitulo: discussao.titulo,
+          destinatariosIds: participantes,
+          remetenteId: usuarioId,
+          cursoId: discussao.cursoId,
+        );
+      }
+
+      return true;
+    } catch (e) {
+      debugPrint('Erro ao fechar discussão: $e');
+      return false;
+    }
+  }
+
+  /// Reabre uma discussão fechada
+  Future<bool> reabrirDiscussao({
+    required String discussaoId,
+    required String usuarioId,
+  }) async {
+    try {
+      // Busca discussão para verificar se o usuário é o autor
+      final discussao = await getDiscussaoById(discussaoId);
+      if (discussao == null || discussao.autorId != usuarioId) {
+        debugPrint('Usuário não autorizado a reabrir esta discussão');
+        return false;
+      }
+
+      // Define o status baseado se tem respostas ou não
+      final novoStatus = discussao.totalRespostas > 0
+          ? StatusDiscussao.respondida
+          : StatusDiscussao.aberta;
+
+      await _discussoesCollection.doc(discussaoId).update({
+        'status': novoStatus.name,
+        'fechadaPor': null,
+        'dataFechamento': null,
+        'dataAtualizacao': FieldValue.serverTimestamp(),
+      });
+
+      // Desmarca qualquer resposta marcada como solução
+      final respostas = await _respostasCollection(discussaoId)
+          .where('isSolucao', isEqualTo: true)
+          .get();
+
+      for (final doc in respostas.docs) {
+        await doc.reference.update({
+          'isSolucao': false,
+          'isResposta': false,
+        });
+      }
+
+      return true;
+    } catch (e) {
+      debugPrint('Erro ao reabrir discussão: $e');
       return false;
     }
   }

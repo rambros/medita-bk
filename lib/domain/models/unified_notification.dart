@@ -61,11 +61,19 @@ class UnifiedNotification {
 
   /// Retorna o ícone apropriado baseado no tipo e origem
   IconData get icon {
-    // Se for EAD, usa o ícone específico do tipo
+    // Se for EAD com originalData, verifica o tipo
     if (source == NotificationSource.ead && originalData is NotificacaoEadModel) {
-      return (originalData as NotificacaoEadModel).tipo.icon;
+      final eadModel = originalData as NotificacaoEadModel;
+
+      // Se é ticket ou discussão (tipo começa com ticket_ ou discussao_), usa ícone específico
+      if (eadModel.tipo.isTicket || eadModel.tipo.isDiscussao) {
+        return eadModel.tipo.icon;
+      }
+
+      // Caso contrário, é notificação de curso EAD - usa ícone de educação
+      return Icons.school_outlined;
     }
-    
+
     // Para notificações legadas, usa ícones genéricos
     switch (tipo.toLowerCase()) {
       case 'enviada':
@@ -78,11 +86,19 @@ class UnifiedNotification {
 
   /// Retorna a cor apropriada baseada no tipo e origem
   Color get color {
-    // Se for EAD, usa a cor específica do tipo
+    // Se for EAD com originalData, verifica o tipo
     if (source == NotificationSource.ead && originalData is NotificacaoEadModel) {
-      return (originalData as NotificacaoEadModel).tipo.color;
+      final eadModel = originalData as NotificacaoEadModel;
+
+      // Se é ticket ou discussão, usa cor específica
+      if (eadModel.tipo.isTicket || eadModel.tipo.isDiscussao) {
+        return eadModel.tipo.color;
+      }
+
+      // Caso contrário, é notificação de curso EAD - usa cor de educação
+      return Colors.deepPurple;
     }
-    
+
     // Para notificações legadas, usa cor padrão
     return Colors.blue;
   }
@@ -110,6 +126,16 @@ class UnifiedNotification {
   String get sourceLabel {
     switch (source) {
       case NotificationSource.ead:
+        // Diferencia entre in_app (tickets/discussões) e ead_push (cursos)
+        if (originalData is NotificacaoEadModel) {
+          final eadModel = originalData as NotificacaoEadModel;
+          // Se é ticket ou discussão, badge "Suporte"
+          if (eadModel.tipo.isTicket || eadModel.tipo.isDiscussao) {
+            return 'Suporte'; // in_app_notifications
+          }
+          // Caso contrário, badge "Cursos"
+          return 'Cursos'; // ead_push_notifications
+        }
         return 'EAD';
       case NotificationSource.legacy:
         return 'Meditações';

@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:medita_bk/data/repositories/notificacoes_repository.dart';
-import 'package:medita_bk/domain/models/unified_notification.dart';
 
 /// Widget que exibe um ícone de notificações com badge contador
-/// Mostra o número de notificações não lidas de AMBAS as collections
+/// Mostra o número de notificações não lidas
 class NotificationBadgeIcon extends StatelessWidget {
   const NotificationBadgeIcon({
     super.key,
@@ -28,11 +27,11 @@ class NotificationBadgeIcon extends StatelessWidget {
       listen: false,
     );
 
-    return StreamBuilder<List<UnifiedNotification>>(
-      stream: repository.streamNotificacoesUnificadas(limite: 100),
+    return StreamBuilder<int>(
+      // Stream otimizado que retorna diretamente o contador de não lidas
+      stream: repository.streamContadorNaoLidas(),
       builder: (context, snapshot) {
-        final notificacoes = snapshot.data ?? [];
-        final totalNaoLidas = notificacoes.where((n) => !n.lido).length;
+        final totalNaoLidas = snapshot.data ?? 0;
         final hasNotifications = totalNaoLidas > 0;
 
         return Stack(

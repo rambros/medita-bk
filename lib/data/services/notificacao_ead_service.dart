@@ -6,7 +6,7 @@ import 'package:medita_bk/domain/models/user_notification_state.dart';
 
 /// Service para gerenciar notificações in-app
 /// Responsável por criar, listar e marcar notificações como lidas
-/// Collection: in_app_notifications (antiga: notificacoes_ead)
+/// Collection: notifications (unificada)
 class NotificacaoEadService {
   final FirebaseFirestore _firestore;
 
@@ -16,7 +16,7 @@ class NotificacaoEadService {
   // === Collections ===
 
   CollectionReference<Map<String, dynamic>> get _notificacoesCollection =>
-      _firestore.collection('in_app_notifications');
+      _firestore.collection('notifications');
 
   CollectionReference<Map<String, dynamic>> get _contadoresCollection =>
       _firestore.collection('contadores_comunicacao');
@@ -38,17 +38,28 @@ class NotificacaoEadService {
     Map<String, dynamic>? dados,
   }) async {
     try {
+      // Formato novo: usa array de destinatarios e inclui navegacao
       final notificacaoData = {
         'titulo': titulo,
         'conteudo': conteudo,
         'tipo': tipo.value,
+        'destinatarios': [destinatarioId], // Array ao invés de string
+        'status': 'enviada', // Campo obrigatório no novo modelo
+        'dataCriacao': FieldValue.serverTimestamp(),
+        'dataEnvio': FieldValue.serverTimestamp(),
+        // Navegação estruturada (compatível com NotificacaoRepository)
+        if (relatedType != null && relatedId != null)
+          'navegacao': {
+            'tipo': relatedType,
+            'id': relatedId,
+            if (dados != null) 'dados': dados,
+          },
+        // Mantém campos legados para compatibilidade (se necessário)
         'destinatarioId': destinatarioId,
         'relatedType': relatedType,
         'relatedId': relatedId,
         'remetenteId': remetenteId,
         'remetenteNome': remetenteNome,
-        'dataCriacao': FieldValue.serverTimestamp(),
-        'lido': false,
         if (dados != null) 'dados': dados,
       };
 
@@ -74,8 +85,9 @@ class NotificacaoEadService {
     bool apenasNaoLidas = false,
   }) async {
     try {
+      // Usa arrayContains pois destinatarios é um array na collection nova
       Query<Map<String, dynamic>> query = _notificacoesCollection
-          .where('destinatarioId', isEqualTo: usuarioId)
+          .where('destinatarios', arrayContains: usuarioId)
           .orderBy('dataCriacao', descending: true)
           .limit(limite);
 
@@ -122,7 +134,7 @@ class NotificacaoEadService {
     int limite = 50,
   }) {
     return _notificacoesCollection
-        .where('destinatarioId', isEqualTo: usuarioId)
+        .where('destinatarios', arrayContains: usuarioId)
         .orderBy('dataCriacao', descending: true)
         .limit(limite)
         .snapshots()
@@ -155,17 +167,36 @@ class NotificacaoEadService {
   }
 
   /// Stream de notificações não lidas do usuário
+  /// NOTA: Este método está deprecated pois o campo 'lido' agora está em user_states
+  /// Use streamNotificacoesByUsuario + filtro manual ou getNotificacoesByUsuario
   Stream<List<NotificacaoEadModel>> streamNotificacoesNaoLidas(
     String usuarioId,
   ) {
     return _notificacoesCollection
-        .where('destinatarioId', isEqualTo: usuarioId)
-        .where('lido', isEqualTo: false)
+        .where('destinatarios', arrayContains: usuarioId)
         .orderBy('dataCriacao', descending: true)
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => NotificacaoEadModel.fromMap(doc.data(), doc.id))
-            .toList());
+        .asyncMap((snapshot) async {
+      // Filtra não lidas consultando user_states
+      final notificacoes = <NotificacaoEadModel>[];
+      for (final doc in snapshot.docs) {
+        final userStateDoc = await doc.reference
+            .collection('user_states')
+            .doc(usuarioId)
+            .get();
+
+        final userState = userStateDoc.exists
+            ? UserNotificationState.fromMap(userStateDoc.data()!, usuarioId)
+            : UserNotificationState(userId: usuarioId);
+
+        if (!userState.lido && !userState.ocultado) {
+          final notificacao = NotificacaoEadModel.fromMap(doc.data(), doc.id)
+              .copyWith(lido: false);
+          notificacoes.add(notificacao);
+        }
+      }
+      return notificacoes;
+    });
   }
 
   /// Marca uma notificação como lida
@@ -197,6 +228,12 @@ class NotificacaoEadService {
             .doc(usuarioId)
             .set(newState.toMap(), SetOptions(merge: true));
 
+        // CRITICAL: Atualiza o documento principal para disparar o stream
+        // Isso força o Firestore a emitir evento de mudança
+        await _notificacoesCollection.doc(notificacaoId).update({
+          'lastUpdated': FieldValue.serverTimestamp(),
+        });
+
         // Decrementa contador
         await _decrementarContador(
           usuarioId,
@@ -215,7 +252,7 @@ class NotificacaoEadService {
   Future<bool> marcarTodasComoLidas(String usuarioId) async {
     try {
       final snapshot = await _notificacoesCollection
-          .where('destinatarioId', isEqualTo: usuarioId)
+          .where('destinatarios', arrayContains: usuarioId)
           .get();
 
       if (snapshot.docs.isEmpty) return true;
@@ -256,14 +293,45 @@ class NotificacaoEadService {
   /// A notificação não é deletada, apenas marcada como ocultada para o usuário
   Future<bool> ocultarNotificacao(String notificacaoId, String usuarioId) async {
     try {
+      debugPrint('🟢 NotificacaoEadService.ocultarNotificacao: Iniciando para $notificacaoId, usuário $usuarioId');
+
       final userStateRef = _notificacoesCollection
           .doc(notificacaoId)
           .collection('user_states')
           .doc(usuarioId);
 
-      final state = UserNotificationState(userId: usuarioId).marcarComoOcultada();
-      await userStateRef.set(state.toMap(), SetOptions(merge: true));
+      // Verificar se o documento da notificação existe
+      final notificationDoc = await _notificacoesCollection.doc(notificacaoId).get();
+      if (!notificationDoc.exists) {
+        debugPrint('🟢 NotificacaoEadService.ocultarNotificacao: Documento não existe em notifications');
+        return false;
+      }
 
+      debugPrint('🟢 NotificacaoEadService.ocultarNotificacao: Documento encontrado, buscando user_state');
+
+      // Buscar estado atual do usuário para preservar campos como 'lido'
+      final userStateDoc = await userStateRef.get();
+
+      final currentState = userStateDoc.exists
+          ? UserNotificationState.fromMap(userStateDoc.data()!, usuarioId)
+          : UserNotificationState(userId: usuarioId);
+
+      debugPrint('🟢 NotificacaoEadService.ocultarNotificacao: Estado atual - lido: ${currentState.lido}, ocultado: ${currentState.ocultado}');
+
+      // Marca como ocultado preservando outros campos
+      final newState = currentState.marcarComoOcultada();
+
+      debugPrint('🟢 NotificacaoEadService.ocultarNotificacao: Novo estado - lido: ${newState.lido}, ocultado: ${newState.ocultado}');
+      debugPrint('🟢 NotificacaoEadService.ocultarNotificacao: Salvando no Firestore: ${newState.toMap()}');
+
+      await userStateRef.set(newState.toMap(), SetOptions(merge: true));
+
+      // CRITICAL: Atualiza o documento principal para disparar o stream
+      await _notificacoesCollection.doc(notificacaoId).update({
+        'lastUpdated': FieldValue.serverTimestamp(),
+      });
+
+      debugPrint('🟢 NotificacaoEadService.ocultarNotificacao: Salvo com sucesso e stream disparado!');
       return true;
     } catch (e) {
       debugPrint('Erro ao ocultar notificação: $e');
@@ -313,15 +381,31 @@ class NotificacaoEadService {
   }
 
   /// Conta notificações não lidas
+  /// NOTA: Como 'lido' agora está em user_states, precisa iterar
   Future<int> contarNaoLidas(String usuarioId) async {
     try {
       final snapshot = await _notificacoesCollection
-          .where('destinatarioId', isEqualTo: usuarioId)
-          .where('lido', isEqualTo: false)
-          .count()
+          .where('destinatarios', arrayContains: usuarioId)
           .get();
 
-      return snapshot.count ?? 0;
+      int count = 0;
+      for (final doc in snapshot.docs) {
+        final userStateDoc = await doc.reference
+            .collection('user_states')
+            .doc(usuarioId)
+            .get();
+
+        final userState = userStateDoc.exists
+            ? UserNotificationState.fromMap(userStateDoc.data()!, usuarioId)
+            : null;
+
+        // Conta se não lido e não ocultado
+        if (!(userState?.lido ?? false) && !(userState?.ocultado ?? false)) {
+          count++;
+        }
+      }
+
+      return count;
     } catch (e) {
       debugPrint('Erro ao contar não lidas: $e');
       return 0;
@@ -479,5 +563,61 @@ class NotificacaoEadService {
       remetenteNome: remetenteNome,
       dados: {'discussaoId': discussaoId, 'respostaId': respostaId},
     );
+  }
+
+  /// Notifica participantes quando discussão é fechada
+  /// Envia notificação para todos que responderam (exceto quem fechou)
+  Future<void> notificarDiscussaoFechada({
+    required String discussaoId,
+    required String discussaoTitulo,
+    required List<String> destinatariosIds,
+    required String remetenteId,
+    String? cursoId,
+  }) async {
+    try {
+      // Cria uma notificação para cada participante
+      final batch = _firestore.batch();
+
+      for (final destinatarioId in destinatariosIds) {
+        final dadosNavegacao = {
+          'discussaoId': discussaoId,
+          if (cursoId != null) 'cursoId': cursoId,
+        };
+
+        final notificacaoData = {
+          'titulo': 'Discussão Resolvida',
+          'conteudo': 'A discussão "$discussaoTitulo" foi marcada como resolvida',
+          'tipo': TipoNotificacaoEad.discussaoResolvida.value,
+          'destinatarios': [destinatarioId], // Array ao invés de string
+          'status': 'enviada',
+          'dataCriacao': FieldValue.serverTimestamp(),
+          'dataEnvio': FieldValue.serverTimestamp(),
+          // Navegação estruturada
+          'navegacao': {
+            'tipo': 'discussao',
+            'id': discussaoId,
+            'dados': dadosNavegacao,
+          },
+          // Campos legados para compatibilidade
+          'destinatarioId': destinatarioId,
+          'relatedType': 'discussao',
+          'relatedId': discussaoId,
+          'remetenteId': remetenteId,
+          'dados': dadosNavegacao,
+        };
+
+        final docRef = _notificacoesCollection.doc();
+        batch.set(docRef, notificacaoData);
+      }
+
+      await batch.commit();
+
+      // Incrementa contadores de cada destinatário
+      for (final destinatarioId in destinatariosIds) {
+        await _incrementarContador(destinatarioId, 'discussoesNaoLidas');
+      }
+    } catch (e) {
+      debugPrint('Erro ao notificar discussão fechada: $e');
+    }
   }
 }

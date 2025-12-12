@@ -1,34 +1,33 @@
-import 'package:flutter/foundation.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+/// Repository simplificado de notificações
+/// UMA collection, UMA query, sem complexidade
+///
+/// Collection: notifications (única)
+/// Query: arrayContainsAny com userId e "TODOS"
+library;
 
-import 'package:medita_bk/domain/models/ead/notificacao_ead_model.dart';
-import 'package:medita_bk/domain/models/unified_notification.dart';
+import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
+
+import 'package:medita_bk/domain/models/notificacao.dart';
 import 'package:medita_bk/domain/models/user_notification_state.dart';
-import 'package:medita_bk/data/models/firebase/notification_model.dart';
-import 'package:medita_bk/data/services/notificacao_ead_service.dart';
 import 'package:medita_bk/data/services/auth/firebase_auth/auth_util.dart';
 
-/// Repository para gerenciar notificações UNIFICADAS
-/// Busca de TRÊS collections:
-/// 1. in_app_notifications - Notificações in-app (tickets/discussões)
-/// 2. ead_push_notifications - Push notifications EAD
-/// 3. global_push_notifications - Push notifications globais
-/// Fonte de verdade para todas as operações relacionadas a notificações
+/// Repository para gerenciar notificações (sistema simplificado)
 class NotificacoesRepository {
-  final NotificacaoEadService _notificacaoService;
   final FirebaseFirestore _firestore;
 
-  NotificacoesRepository({
-    NotificacaoEadService? notificacaoService,
-    FirebaseFirestore? firestore,
-  }) : _notificacaoService = notificacaoService ?? NotificacaoEadService(),
-       _firestore = firestore ?? FirebaseFirestore.instance;
+  static const String _notificationsCollection = 'notifications';
 
-  // === Queries UNIFICADAS (Ambas collections) ===
+  NotificacoesRepository({FirebaseFirestore? firestore})
+      : _firestore = firestore ?? FirebaseFirestore.instance;
 
-  /// Busca notificações UNIFICADAS de ambas as collections
-  Future<List<UnifiedNotification>> getNotificacoesUnificadas({
-    int limite = 50,
+  // === QUERIES ===
+
+  /// Busca notificações do usuário
+  /// UMA query simples com arrayContainsAny!
+  Future<List<Notificacao>> getNotificacoes({
+    int limite = 20,
     bool apenasNaoLidas = false,
   }) async {
     final userId = currentUserUid;
@@ -37,205 +36,33 @@ class NotificacoesRepository {
       return [];
     }
 
-    final allNotifications = <UnifiedNotification>[];
-
     try {
-      // 1. Buscar notificações In-App (in_app_notifications)
-      final inAppNotifications = await _notificacaoService.getNotificacoesByUsuario(
-        userId,
-        limite: limite,
-        apenasNaoLidas: apenasNaoLidas,
-      );
+      debugPrint('🔔 Buscando notificações para userId: $userId');
 
-      allNotifications.addAll(
-        inAppNotifications.map((n) => UnifiedNotification.fromEad(n)),
-      );
-
-      debugPrint('NotificacoesRepository: ${inAppNotifications.length} da collection in_app_notifications');
-    } catch (e) {
-      debugPrint('NotificacoesRepository: Erro ao buscar in_app_notifications - $e');
-    }
-
-    try {
-      // 2. Buscar notificações EAD Push (ead_push_notifications)
-      // Buscar email do usuário para queries por array
-      String? userEmail;
-      try {
-        final userDoc = await _firestore.collection('users').doc(userId).get();
-        if (userDoc.exists) {
-          userEmail = userDoc.data()?['email'] as String?;
-        }
-      } catch (e) {
-        debugPrint('Erro ao buscar email do usuário para EAD: $e');
-      }
-
-      // Query 1: Por destinatarioId (notificação individual)
-      final eadPushSnapshotById = await _firestore
-          .collection('ead_push_notifications')
-          .where('destinatarioId', isEqualTo: userId)
+      // UMA query simples!
+      final snapshot = await _firestore
+          .collection(_notificationsCollection)
+          .where('destinatarios', arrayContainsAny: [userId, 'TODOS'])
           .orderBy('dataCriacao', descending: true)
           .limit(limite)
           .get();
 
-      // Query 2: Por destinatarioTipo = 'Todos' (notificação para todos)
-      final eadPushSnapshotTodos = await _firestore
-          .collection('ead_push_notifications')
-          .where('destinatarioTipo', isEqualTo: 'Todos')
-          .orderBy('dataCriacao', descending: true)
-          .limit(limite)
-          .get();
-
-      // Query 3: Por destinatariosIds array (notificação de grupo por UID)
-      QuerySnapshot<Map<String, dynamic>>? eadPushSnapshotByIdsArray;
-      try {
-        eadPushSnapshotByIdsArray = await _firestore
-            .collection('ead_push_notifications')
-            .where('destinatariosIds', arrayContains: userId)
-            .orderBy('dataCriacao', descending: true)
-            .limit(limite)
-            .get();
-      } catch (e) {
-        debugPrint('Query destinatariosIds não disponível ou falhou: $e');
-      }
-
-      // Query 4: Por destinatariosEmails array (notificação de grupo por email)
-      QuerySnapshot<Map<String, dynamic>>? eadPushSnapshotByEmailsArray;
-      if (userEmail != null && userEmail.isNotEmpty) {
-        try {
-          eadPushSnapshotByEmailsArray = await _firestore
-              .collection('ead_push_notifications')
-              .where('destinatariosEmails', arrayContains: userEmail)
-              .orderBy('dataCriacao', descending: true)
-              .limit(limite)
-              .get();
-        } catch (e) {
-          debugPrint('Query destinatariosEmails não disponível ou falhou: $e');
-        }
-      }
-
-      // Combinar e remover duplicatas
-      final allEadDocs = <String, QueryDocumentSnapshot<Map<String, dynamic>>>{};
-
-      for (final doc in eadPushSnapshotById.docs) {
-        allEadDocs[doc.id] = doc;
-      }
-
-      for (final doc in eadPushSnapshotTodos.docs) {
-        allEadDocs[doc.id] = doc;
-      }
-
-      if (eadPushSnapshotByIdsArray != null) {
-        for (final doc in eadPushSnapshotByIdsArray.docs) {
-          allEadDocs[doc.id] = doc;
-        }
-      }
-
-      if (eadPushSnapshotByEmailsArray != null) {
-        for (final doc in eadPushSnapshotByEmailsArray.docs) {
-          allEadDocs[doc.id] = doc;
-        }
-      }
-
-      // Processar notificações EAD Push com user_states
-      for (final doc in allEadDocs.values) {
-        final userStateDoc = await doc.reference
-            .collection('user_states')
-            .doc(userId)
-            .get();
-
-        final userState = userStateDoc.exists
-            ? UserNotificationState.fromMap(userStateDoc.data()!, userId)
-            : UserNotificationState(userId: userId);
-
-        // Pular notificações ocultadas
-        if (userState.ocultado) continue;
-
-        // Se filtro de não lidas, pular lidas
-        if (apenasNaoLidas && userState.lido) continue;
-
-        // Converter documento para UnifiedNotification
+      debugPrint('🔔 Encontradas ${snapshot.docs.length} notificações');
+      
+      // DEBUG: Log detalhado de cada notificação
+      for (final doc in snapshot.docs) {
         final data = doc.data();
-        final notification = NotificacaoEadModel(
-          id: doc.id,
-          titulo: data['titulo'] ?? '',
-          conteudo: data['mensagem'] ?? data['corpo'] ?? data['conteudo'] ?? '',
-          tipo: data['tipo'] ?? 'notificacao_geral',
-          destinatarioId: data['destinatarioId'] ?? '',
-          dataCriacao: (data['dataCriacao'] as Timestamp?)?.toDate() ?? DateTime.now(),
-          lido: userState.lido,
-          dados: data['dados'] as Map<String, dynamic>? ?? {},
-        );
-
-        allNotifications.add(UnifiedNotification.fromEad(notification));
+        debugPrint('📄 Notificação: ${doc.id}');
+        debugPrint('  - tipo: ${data['tipo']}');
+        debugPrint('  - titulo: ${data['titulo']}');
+        debugPrint('  - destinatarios: ${data['destinatarios']}');
+        debugPrint('  - dataCriacao: ${data['dataCriacao']}');
       }
 
-      debugPrint('NotificacoesRepository: ${allEadDocs.length} notificações únicas da collection ead_push_notifications (${eadPushSnapshotById.docs.length} por ID, ${eadPushSnapshotTodos.docs.length} para todos, ${eadPushSnapshotByIdsArray?.docs.length ?? 0} por array IDs, ${eadPushSnapshotByEmailsArray?.docs.length ?? 0} por array emails)');
-    } catch (e) {
-      debugPrint('NotificacoesRepository: Erro ao buscar ead_push_notifications - $e');
-    }
+      final notificacoes = <Notificacao>[];
 
-    try {
-      // 3. Buscar notificações push globais (global_push_notifications)
-      final userRef = _firestore.collection('users').doc(userId);
-
-      // Buscar email do usuário para queries por email
-      String? userEmail;
-      try {
-        final userDoc = await _firestore.collection('users').doc(userId).get();
-        if (userDoc.exists) {
-          userEmail = userDoc.data()?['email'] as String?;
-        }
-      } catch (e) {
-        debugPrint('Erro ao buscar email do usuário: $e');
-      }
-
-      // Query 1: Notificações por recipientsRef (array de DocumentReference)
-      final globalSnapshotRef = await _firestore
-          .collection('global_push_notifications')
-          .where('recipientsRef', arrayContains: userRef)
-          .orderBy('dataEnvio', descending: true)
-          .limit(limite)
-          .get();
-
-      // Query 2: Notificações "Todos" (typeRecipients == 'Todos')
-      final globalSnapshotTodos = await _firestore
-          .collection('global_push_notifications')
-          .where('typeRecipients', isEqualTo: 'Todos')
-          .orderBy('dataEnvio', descending: true)
-          .limit(limite)
-          .get();
-
-      // Query 3: Notificações por email (se o usuário tiver email)
-      QuerySnapshot<Map<String, dynamic>>? globalSnapshotEmail;
-      if (userEmail != null && userEmail.isNotEmpty) {
-        globalSnapshotEmail = await _firestore
-            .collection('global_push_notifications')
-            .where('recipientEmail', isEqualTo: userEmail)
-            .orderBy('dataEnvio', descending: true)
-            .limit(limite)
-            .get();
-      }
-
-      // Combinar todas as notificações e remover duplicatas
-      final allDocs = <String, QueryDocumentSnapshot<Map<String, dynamic>>>{};
-
-      for (final doc in globalSnapshotRef.docs) {
-        allDocs[doc.id] = doc;
-      }
-
-      for (final doc in globalSnapshotTodos.docs) {
-        allDocs[doc.id] = doc;
-      }
-
-      if (globalSnapshotEmail != null) {
-        for (final doc in globalSnapshotEmail.docs) {
-          allDocs[doc.id] = doc;
-        }
-      }
-
-      // Processar todas as notificações únicas
-      for (final doc in allDocs.values) {
-        // Buscar estado do usuário
+      for (final doc in snapshot.docs) {
+        // Busca estado do usuário
         final userStateDoc = await doc.reference
             .collection('user_states')
             .doc(userId)
@@ -243,206 +70,135 @@ class NotificacoesRepository {
 
         final userState = userStateDoc.exists
             ? UserNotificationState.fromMap(userStateDoc.data()!, userId)
-            : UserNotificationState(userId: userId);
+            : null;
 
-        // Pula notificações ocultadas
-        if (userState.ocultado) continue;
+        debugPrint('🔍 Processando ${doc.id}: lido=${userState?.lido}, ocultado=${userState?.ocultado}');
 
-        // Se está filtrando apenas não lidas, pula as lidas
-        if (apenasNaoLidas && userState.lido) continue;
+        // Pula se ocultado
+        if (userState?.ocultado ?? false) {
+          debugPrint('⏭️ Pulando ${doc.id} - ocultado');
+          continue;
+        }
 
-        final notification = NotificationModel.fromFirestore(doc);
-        // Passa o estado de leitura para o UnifiedNotification
-        allNotifications.add(
-          UnifiedNotification.fromLegacy(notification, lido: userState.lido),
-        );
+        // Pula se lido (quando filtrando não lidas)
+        if (apenasNaoLidas && (userState?.lido ?? false)) {
+          debugPrint('⏭️ Pulando ${doc.id} - lido (filtro ativo)');
+          continue;
+        }
+
+        final notificacao = Notificacao.fromFirestore(doc, userState);
+        debugPrint('✅ Adicionando notificação: ${notificacao.tipo.label}');
+        notificacoes.add(notificacao);
       }
 
-      debugPrint('NotificacoesRepository: ${allDocs.length} notificações únicas da collection global_push_notifications (${globalSnapshotRef.docs.length} por ref, ${globalSnapshotTodos.docs.length} para todos, ${globalSnapshotEmail?.docs.length ?? 0} por email)');
+      debugPrint('🔔 Total após filtros: ${notificacoes.length} notificações');
+      debugPrint('📋 Tipos: ${notificacoes.map((n) => n.tipo.label).join(", ")}');
+      return notificacoes;
     } catch (e) {
-      debugPrint('NotificacoesRepository: Erro ao buscar global_push_notifications - $e');
-    }
-
-    // Ordenar todas por data (mais recente primeiro)
-    allNotifications.sort((a, b) => b.dataCriacao.compareTo(a.dataCriacao));
-    
-    debugPrint('NotificacoesRepository: Total de ${allNotifications.length} notificações unificadas');
-    
-    return allNotifications;
-  }
-
-  /// Stream de notificações UNIFICADAS
-  Stream<List<UnifiedNotification>> streamNotificacoesUnificadas({
-    int limite = 50,
-  }) {
-    final userId = currentUserUid;
-    if (userId.isEmpty) {
-      return Stream.value([]);
-    }
-
-    // Combinar streams de ambas as collections
-    final eadStream = _notificacaoService
-        .streamNotificacoesByUsuario(userId, limite: limite)
-        .map((list) => list.map((n) => UnifiedNotification.fromEad(n)).toList());
-
-    final userRef = _firestore.collection('users').doc(userId);
-    final globalStream = _firestore
-        .collection('global_push_notifications')
-        .where('recipientsRef', arrayContains: userRef)
-        .orderBy('dataEnvio', descending: true)
-        .limit(limite)
-        .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => UnifiedNotification.fromLegacy(
-                  NotificationModel.fromFirestore(doc),
-                ))
-            .toList());
-
-    // Combinar ambos os streams
-    return eadStream.asyncMap((eadList) async {
-      final globalList = await globalStream.first;
-      final combined = [...eadList, ...globalList];
-      combined.sort((a, b) => b.dataCriacao.compareTo(a.dataCriacao));
-      return combined;
-    });
-  }
-
-  /// [DEPRECATED] Busca apenas notificações EAD (use getNotificacoesUnificadas)
-  Future<List<NotificacaoEadModel>> getNotificacoes({
-    int limite = 50,
-    bool apenasNaoLidas = false,
-  }) async {
-    final userId = currentUserUid;
-    if (userId.isEmpty) {
-      return [];
-    }
-
-    try {
-      return await _notificacaoService.getNotificacoesByUsuario(
-        userId,
-        limite: limite,
-        apenasNaoLidas: apenasNaoLidas,
-      );
-    } catch (e) {
-      debugPrint('NotificacoesRepository.getNotificacoes: Erro - $e');
+      debugPrint('❌ Erro ao buscar notificações: $e');
       return [];
     }
   }
 
-  /// Busca contador de notificações não lidas
-  Future<ContadorNotificacoesEad> getContador() async {
+  /// Stream de notificações
+  /// UM stream simples!
+  Stream<List<Notificacao>> streamNotificacoes({
+    int limite = 20,
+  }) async* {
     final userId = currentUserUid;
     if (userId.isEmpty) {
-      return const ContadorNotificacoesEad();
+      debugPrint('NotificacoesRepository Stream: Usuário não autenticado');
+      yield [];
+      return;
     }
+
+    debugPrint('🔔 Stream iniciado para userId: $userId');
 
     try {
-      return await _notificacaoService.getContadores(userId);
+      await for (final snapshot in _firestore
+          .collection(_notificationsCollection)
+          .where('destinatarios', arrayContainsAny: [userId, 'TODOS'])
+          .orderBy('dataCriacao', descending: true)
+          .limit(limite)
+          .snapshots()) {
+
+        debugPrint('🔔 Stream: ${snapshot.docs.length} notificações recebidas');
+
+        final notificacoes = <Notificacao>[];
+
+        for (final doc in snapshot.docs) {
+          final data = doc.data();
+          debugPrint('📄 Stream Doc: ${doc.id} tipo=${data['tipo']}');
+          
+          final userStateDoc = await doc.reference
+              .collection('user_states')
+              .doc(userId)
+              .get();
+
+          final userState = userStateDoc.exists
+              ? UserNotificationState.fromMap(userStateDoc.data()!, userId)
+              : null;
+
+          debugPrint('  - userState: lido=${userState?.lido}, ocultado=${userState?.ocultado}');
+
+          // Pula se ocultado
+          if (userState?.ocultado ?? false) {
+            debugPrint('  - ⏭️ Pulando (ocultado)');
+            continue;
+          }
+
+          final notif = Notificacao.fromFirestore(doc, userState);
+          debugPrint('  - ✅ Adicionando: ${notif.tipo.label}');
+          notificacoes.add(notif);
+        }
+
+        debugPrint('🔔 Stream: Emitindo ${notificacoes.length} notificações');
+        debugPrint('📋 Stream Tipos: ${notificacoes.map((n) => n.tipo.label).join(", ")}');
+        yield notificacoes;
+      }
     } catch (e) {
-      debugPrint('NotificacoesRepository.getContador: Erro - $e');
-      return const ContadorNotificacoesEad();
+      debugPrint('❌ Erro no stream de notificações: $e');
+      yield [];
     }
   }
 
-  /// Stream do contador de notificações
-  Stream<ContadorNotificacoesEad> streamContador() {
-    final userId = currentUserUid;
-    if (userId.isEmpty) {
-      return Stream.value(const ContadorNotificacoesEad());
-    }
+  // === MUTATIONS ===
 
-    return _notificacaoService.streamContadores(userId);
-  }
-
-  // === Mutations ===
-
-  /// Marca uma notificação como lida (TODAS as collections)
-  /// Collections: in_app_notifications, ead_push_notifications, global_push_notifications
+  /// Marca uma notificação como lida
   Future<bool> marcarComoLida(String notificacaoId) async {
     final userId = currentUserUid;
     if (userId.isEmpty) return false;
 
     try {
-      // 1. Tenta marcar na collection in_app_notifications
-      final inAppSuccess = await _notificacaoService.marcarComoLida(notificacaoId, userId);
-      if (inAppSuccess) return true;
+      debugPrint('📖 Marcando notificação $notificacaoId como lida');
 
-      // 2. Tenta marcar na collection ead_push_notifications
-      final eadSuccess = await _marcarComoLidaEad(notificacaoId, userId);
-      if (eadSuccess) return true;
+      final notifRef = _firestore
+          .collection(_notificationsCollection)
+          .doc(notificacaoId);
 
-      // 3. Tenta marcar na collection global_push_notifications
-      return await _marcarComoLidaGlobal(notificacaoId, userId);
-    } catch (e) {
-      debugPrint('NotificacoesRepository.marcarComoLida: Erro - $e');
-      return false;
-    }
-  }
-
-  /// Marca notificação EAD (ead_push_notifications) como lida
-  Future<bool> _marcarComoLidaEad(String notificacaoId, String userId) async {
-    try {
-      final notificationRef = _firestore.collection('ead_push_notifications').doc(notificacaoId);
-      final doc = await notificationRef.get();
-
-      if (!doc.exists) return false;
-
-      // Busca estado atual
-      final userStateDoc = await notificationRef
-          .collection('user_states')
-          .doc(userId)
-          .get();
-
-      final currentState = userStateDoc.exists
-          ? UserNotificationState.fromMap(userStateDoc.data()!, userId)
-          : UserNotificationState(userId: userId);
-
-      // Só atualiza se ainda não foi lida
-      if (!currentState.lido) {
-        final newState = currentState.marcarComoLida();
-        await notificationRef
-            .collection('user_states')
-            .doc(userId)
-            .set(newState.toMap(), SetOptions(merge: true));
+      // Verifica se notificação existe
+      final doc = await notifRef.get();
+      if (!doc.exists) {
+        debugPrint('❌ Notificação $notificacaoId não existe');
+        return false;
       }
 
+      // Atualiza user_state
+      await notifRef.collection('user_states').doc(userId).set({
+        'lido': true,
+        'dataLeitura': FieldValue.serverTimestamp(),
+        'ocultado': false, // Preserva ou cria campo
+      }, SetOptions(merge: true));
+
+      // Dummy update para trigger de stream
+      await notifRef.update({
+        'lastUpdated': FieldValue.serverTimestamp(),
+      });
+
+      debugPrint('✅ Notificação marcada como lida');
       return true;
     } catch (e) {
-      debugPrint('NotificacoesRepository._marcarComoLidaEad: Erro - $e');
-      return false;
-    }
-  }
-
-  /// Marca notificação global (global_push_notifications) como lida
-  Future<bool> _marcarComoLidaGlobal(String notificacaoId, String userId) async {
-    try {
-      final notificationRef = _firestore.collection('global_push_notifications').doc(notificacaoId);
-      final doc = await notificationRef.get();
-
-      if (!doc.exists) return false;
-
-      // Busca estado atual
-      final userStateDoc = await notificationRef
-          .collection('user_states')
-          .doc(userId)
-          .get();
-
-      final currentState = userStateDoc.exists
-          ? UserNotificationState.fromMap(userStateDoc.data()!, userId)
-          : UserNotificationState(userId: userId);
-
-      // Só atualiza se ainda não foi lida
-      if (!currentState.lido) {
-        final newState = currentState.marcarComoLida();
-        await notificationRef
-            .collection('user_states')
-            .doc(userId)
-            .set(newState.toMap(), SetOptions(merge: true));
-      }
-
-      return true;
-    } catch (e) {
-      debugPrint('NotificacoesRepository._marcarComoLidaGlobal: Erro - $e');
+      debugPrint('❌ Erro ao marcar como lida: $e');
       return false;
     }
   }
@@ -453,184 +209,145 @@ class NotificacoesRepository {
     if (userId.isEmpty) return false;
 
     try {
-      return await _notificacaoService.marcarTodasComoLidas(userId);
+      debugPrint('📖 Marcando todas as notificações como lidas');
+
+      final snapshot = await _firestore
+          .collection(_notificationsCollection)
+          .where('destinatarios', arrayContainsAny: [userId, 'TODOS'])
+          .get();
+
+      final batch = _firestore.batch();
+      int count = 0;
+
+      for (final doc in snapshot.docs) {
+        // Atualiza user_state
+        final userStateRef = doc.reference
+            .collection('user_states')
+            .doc(userId);
+
+        batch.set(userStateRef, {
+          'lido': true,
+          'dataLeitura': FieldValue.serverTimestamp(),
+          'ocultado': false,
+        }, SetOptions(merge: true));
+
+        // Dummy update
+        batch.update(doc.reference, {
+          'lastUpdated': FieldValue.serverTimestamp(),
+        });
+
+        count++;
+
+        // Firestore batch limit é 500
+        if (count % 500 == 0) {
+          await batch.commit();
+        }
+      }
+
+      if (count % 500 != 0) {
+        await batch.commit();
+      }
+
+      debugPrint('✅ $count notificações marcadas como lidas');
+      return true;
     } catch (e) {
-      debugPrint('NotificacoesRepository.marcarTodasComoLidas: Erro - $e');
+      debugPrint('❌ Erro ao marcar todas como lidas: $e');
       return false;
     }
   }
 
-  /// Remove (oculta) uma notificação para o usuário atual
-  /// A notificação não é deletada do Firestore, apenas marcada como ocultada
-  /// Collections: in_app_notifications, ead_push_notifications, global_push_notifications
+  /// Remove (oculta) uma notificação
   Future<bool> removerNotificacao(String notificacaoId) async {
     final userId = currentUserUid;
     if (userId.isEmpty) return false;
 
     try {
-      // 1. Tenta ocultar na collection in_app_notifications
-      final inAppSuccess = await _notificacaoService.ocultarNotificacao(notificacaoId, userId);
-      if (inAppSuccess) return true;
+      debugPrint('🗑️ Ocultando notificação $notificacaoId');
 
-      // 2. Tenta ocultar na collection ead_push_notifications
-      final eadSuccess = await _ocultarNotificacaoEad(notificacaoId, userId);
-      if (eadSuccess) return true;
+      final notifRef = _firestore
+          .collection(_notificationsCollection)
+          .doc(notificacaoId);
 
-      // 3. Tenta ocultar na collection global_push_notifications
-      return await _ocultarNotificacaoGlobal(notificacaoId, userId);
-    } catch (e) {
-      debugPrint('NotificacoesRepository.removerNotificacao: Erro - $e');
-      return false;
-    }
-  }
-
-  /// Oculta notificação EAD (ead_push_notifications)
-  Future<bool> _ocultarNotificacaoEad(String notificacaoId, String userId) async {
-    try {
-      final notificationRef = _firestore.collection('ead_push_notifications').doc(notificacaoId);
-      final doc = await notificationRef.get();
-
-      if (!doc.exists) return false;
-
-      final state = UserNotificationState(userId: userId).marcarComoOcultada();
-      await notificationRef
-          .collection('user_states')
-          .doc(userId)
-          .set(state.toMap(), SetOptions(merge: true));
-
-      return true;
-    } catch (e) {
-      debugPrint('NotificacoesRepository._ocultarNotificacaoEad: Erro - $e');
-      return false;
-    }
-  }
-
-  /// Oculta notificação global (global_push_notifications)
-  Future<bool> _ocultarNotificacaoGlobal(String notificacaoId, String userId) async {
-    try {
-      final notificationRef = _firestore.collection('global_push_notifications').doc(notificacaoId);
-      final doc = await notificationRef.get();
-
-      if (!doc.exists) return false;
-
-      final state = UserNotificationState(userId: userId).marcarComoOcultada();
-      await notificationRef
-          .collection('user_states')
-          .doc(userId)
-          .set(state.toMap(), SetOptions(merge: true));
-
-      return true;
-    } catch (e) {
-      debugPrint('NotificacoesRepository._ocultarNotificacaoGlobal: Erro - $e');
-      return false;
-    }
-  }
-
-  // === Helpers ===
-
-  /// Retorna total de notificações não lidas
-  Future<int> getTotalNaoLidas() async {
-    final contador = await getContador();
-    return contador.totalNaoLidas;
-  }
-
-  /// Conta notificações não lidas de TODAS as collections
-  /// Collections: in_app_notifications, ead_push_notifications, global_push_notifications
-  Future<int> contarNaoLidasUnificadas() async {
-    final userId = currentUserUid;
-    if (userId.isEmpty) return 0;
-
-    int totalNaoLidas = 0;
-
-    try {
-      // 1. Contar não lidas da collection in_app_notifications
-      final inAppNaoLidas = await _notificacaoService.contarNaoLidas(userId);
-      totalNaoLidas += inAppNaoLidas;
-      debugPrint('NotificacoesRepository: $inAppNaoLidas não lidas em in_app_notifications');
-    } catch (e) {
-      debugPrint('NotificacoesRepository: Erro ao contar in_app_notifications - $e');
-    }
-
-    try {
-      // 2. Contar notificações não lidas da collection ead_push_notifications
-      final eadSnapshot = await _firestore
-          .collection('ead_push_notifications')
-          .where('destinatarioId', isEqualTo: userId)
-          .get();
-
-      // Contar apenas as não lidas (verificando user_states)
-      int eadNaoLidas = 0;
-      for (final doc in eadSnapshot.docs) {
-        final userStateDoc = await doc.reference
-            .collection('user_states')
-            .doc(userId)
-            .get();
-
-        final userState = userStateDoc.exists
-            ? UserNotificationState.fromMap(userStateDoc.data()!, userId)
-            : UserNotificationState(userId: userId);
-
-        // Só conta se não foi lida e não está ocultada
-        if (!userState.lido && !userState.ocultado) {
-          eadNaoLidas++;
-        }
+      // Verifica se existe
+      final doc = await notifRef.get();
+      if (!doc.exists) {
+        debugPrint('❌ Notificação $notificacaoId não existe');
+        return false;
       }
 
-      totalNaoLidas += eadNaoLidas;
-      debugPrint('NotificacoesRepository: $eadNaoLidas não lidas em ead_push_notifications');
-    } catch (e) {
-      debugPrint('NotificacoesRepository: Erro ao contar ead_push_notifications - $e');
-    }
-
-    try {
-      // 3. Contar notificações não lidas da collection global_push_notifications
-      final userRef = _firestore.collection('users').doc(userId);
-
-      // Buscar todas as notificações globais para o usuário
-      final globalSnapshot = await _firestore
-          .collection('global_push_notifications')
-          .where('recipientsRef', arrayContains: userRef)
+      // Busca estado atual para preservar campo 'lido'
+      final userStateDoc = await notifRef
+          .collection('user_states')
+          .doc(userId)
           .get();
 
-      // Contar apenas as não lidas (verificando user_states)
-      int globalNaoLidas = 0;
-      for (final doc in globalSnapshot.docs) {
-        final userStateDoc = await doc.reference
-            .collection('user_states')
-            .doc(userId)
-            .get();
+      final currentState = userStateDoc.exists
+          ? UserNotificationState.fromMap(userStateDoc.data()!, userId)
+          : UserNotificationState(userId: userId);
 
-        final userState = userStateDoc.exists
-            ? UserNotificationState.fromMap(userStateDoc.data()!, userId)
-            : UserNotificationState(userId: userId);
+      // Marca como ocultado preservando 'lido'
+      final newState = currentState.marcarComoOcultada();
+      await notifRef.collection('user_states').doc(userId).set(
+        newState.toMap(),
+        SetOptions(merge: true),
+      );
 
-        // Só conta se não foi lida e não está ocultada
-        if (!userState.lido && !userState.ocultado) {
-          globalNaoLidas++;
-        }
-      }
+      // Dummy update
+      await notifRef.update({
+        'lastUpdated': FieldValue.serverTimestamp(),
+      });
 
-      totalNaoLidas += globalNaoLidas;
-      debugPrint('NotificacoesRepository: $globalNaoLidas não lidas em global_push_notifications');
+      debugPrint('✅ Notificação ocultada');
+      return true;
     } catch (e) {
-      debugPrint('NotificacoesRepository: Erro ao contar global_push_notifications - $e');
+      debugPrint('❌ Erro ao ocultar: $e');
+      return false;
     }
-
-    debugPrint('NotificacoesRepository: Total de $totalNaoLidas notificações não lidas');
-    return totalNaoLidas;
   }
 
-  /// [DEPRECATED] Conta apenas notificações EAD (use contarNaoLidasUnificadas)
+  // === CONTADORES ===
+
+  /// Conta notificações não lidas
   Future<int> contarNaoLidas() async {
     final userId = currentUserUid;
     if (userId.isEmpty) return 0;
 
     try {
-      return await _notificacaoService.contarNaoLidas(userId);
+      final snapshot = await _firestore
+          .collection(_notificationsCollection)
+          .where('destinatarios', arrayContainsAny: [userId, 'TODOS'])
+          .get();
+
+      int count = 0;
+
+      for (final doc in snapshot.docs) {
+        final userStateDoc = await doc.reference
+            .collection('user_states')
+            .doc(userId)
+            .get();
+
+        final userState = userStateDoc.exists
+            ? UserNotificationState.fromMap(userStateDoc.data()!, userId)
+            : null;
+
+        // Conta se não lido e não ocultado
+        if (!(userState?.lido ?? false) && !(userState?.ocultado ?? false)) {
+          count++;
+        }
+      }
+
+      return count;
     } catch (e) {
-      debugPrint('NotificacoesRepository.contarNaoLidas: Erro - $e');
+      debugPrint('❌ Erro ao contar não lidas: $e');
       return 0;
     }
   }
-}
 
+  /// Stream do contador de não lidas
+  Stream<int> streamContadorNaoLidas() async* {
+    await for (final notificacoes in streamNotificacoes()) {
+      final count = notificacoes.where((n) => !n.lido).length;
+      yield count;
+    }
+  }
+}

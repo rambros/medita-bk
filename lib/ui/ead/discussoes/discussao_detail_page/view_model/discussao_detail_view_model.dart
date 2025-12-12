@@ -205,6 +205,36 @@ class DiscussaoDetailViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Fecha a discussão (marca como resolvida)
+  Future<bool> fecharDiscussao({
+    required String usuarioId,
+  }) async {
+    try {
+      return await _repository.fecharDiscussao(
+        discussaoId: discussaoId,
+        usuarioId: usuarioId,
+      );
+    } catch (e) {
+      debugPrint('Erro ao fechar discussão: $e');
+      return false;
+    }
+  }
+
+  /// Reabre a discussão
+  Future<bool> reabrirDiscussao({
+    required String usuarioId,
+  }) async {
+    try {
+      return await _repository.reabrirDiscussao(
+        discussaoId: discussaoId,
+        usuarioId: usuarioId,
+      );
+    } catch (e) {
+      debugPrint('Erro ao reabrir discussão: $e');
+      return false;
+    }
+  }
+
   @override
   void dispose() {
     _discussaoSubscription?.cancel();

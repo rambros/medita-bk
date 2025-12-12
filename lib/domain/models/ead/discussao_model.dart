@@ -28,6 +28,10 @@ class DiscussaoModel {
   final int totalRespostas;
   final List<String> tags;
 
+  // Campos de fechamento
+  final String? fechadaPor;
+  final DateTime? dataFechamento;
+
   const DiscussaoModel({
     required this.id,
     required this.cursoId,
@@ -50,6 +54,8 @@ class DiscussaoModel {
     required this.dataAtualizacao,
     this.totalRespostas = 0,
     this.tags = const [],
+    this.fechadaPor,
+    this.dataFechamento,
   });
 
   factory DiscussaoModel.fromMap(Map<String, dynamic> map, String docId) {
@@ -82,6 +88,8 @@ class DiscussaoModel {
       dataAtualizacao: parseDate(map['dataAtualizacao']),
       totalRespostas: map['totalRespostas'] as int? ?? 0,
       tags: (map['tags'] as List<dynamic>?)?.cast<String>() ?? [],
+      fechadaPor: map['fechadaPor'] as String?,
+      dataFechamento: map['dataFechamento'] != null ? parseDate(map['dataFechamento']) : null,
     );
   }
 
@@ -107,6 +115,8 @@ class DiscussaoModel {
       'dataAtualizacao': Timestamp.fromDate(dataAtualizacao),
       'totalRespostas': totalRespostas,
       'tags': tags,
+      if (fechadaPor != null) 'fechadaPor': fechadaPor,
+      if (dataFechamento != null) 'dataFechamento': Timestamp.fromDate(dataFechamento!),
     };
   }
 
@@ -132,6 +142,8 @@ class DiscussaoModel {
     DateTime? dataAtualizacao,
     int? totalRespostas,
     List<String>? tags,
+    String? fechadaPor,
+    DateTime? dataFechamento,
   }) {
     return DiscussaoModel(
       id: id ?? this.id,
@@ -155,6 +167,8 @@ class DiscussaoModel {
       dataAtualizacao: dataAtualizacao ?? this.dataAtualizacao,
       totalRespostas: totalRespostas ?? this.totalRespostas,
       tags: tags ?? this.tags,
+      fechadaPor: fechadaPor ?? this.fechadaPor,
+      dataFechamento: dataFechamento ?? this.dataFechamento,
     );
   }
 
@@ -166,6 +180,12 @@ class DiscussaoModel {
 
   /// Verifica se está aberta para novas respostas
   bool get podeResponder => !status.isFechada;
+
+  /// Verifica se o usuário pode fechar a discussão
+  bool podeFechar(String usuarioId) => isMinhaDiscussao(usuarioId) && !status.isFechada;
+
+  /// Verifica se o usuário pode reabrir a discussão
+  bool podeReabrir(String usuarioId) => isMinhaDiscussao(usuarioId) && status.isFechada;
 
   /// Retorna o contexto da discussão (Curso > Aula > Tópico)
   String get contexto {

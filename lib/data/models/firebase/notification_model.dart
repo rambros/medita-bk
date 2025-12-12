@@ -2,6 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 /// Pure Dart model for notifications, replacing NotificationsRecord
+/// Usado para notificações das collections: global_push_notifications
+///
+/// NOTA: O campo 'typeRecipients' no código mapeia para 'destinatarioTipo' no Firestore
+/// para manter consistência com ead_push_notifications que usa 'destinatarioTipo'
 class NotificationModel extends Equatable {
   final String id;
   final String title;
@@ -9,7 +13,7 @@ class NotificationModel extends Equatable {
   final DateTime? sendDate;
   final String imagePath;
   final String content;
-  final String typeRecipients;
+  final String typeRecipients; // Mapeia para 'destinatarioTipo' no Firestore
   final String recipientEmail;
   final List<DocumentReference> recipientsRef;
   final DocumentReference? recipientRef;
@@ -56,14 +60,36 @@ class NotificationModel extends Equatable {
   factory NotificationModel.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>? ?? {};
     final timestamp = data['dataEnvio'];
+
+    // COMPATIBILIDADE: Aceita tanto 'destinatarioTipo' (novo) quanto 'typeRecipients' (antigo)
+    final typeRecipientsValue = (data['destinatarioTipo'] as String?) ??
+                                 (data['typeRecipients'] as String?) ?? '';
+
+    // COMPATIBILIDADE: Tenta vários nomes possíveis para título e conteúdo
+    final titleValue = (data['title'] as String?) ??
+                       (data['titulo'] as String?) ??
+                       (data['name'] as String?) ?? '';
+
+    final contentValue = (data['content'] as String?) ??
+                         (data['conteudo'] as String?) ??
+                         (data['message'] as String?) ??
+                         (data['body'] as String?) ?? '';
+
+    final typeValue = (data['type'] as String?) ??
+                      (data['tipo'] as String?) ?? '';
+
+    final imagePathValue = (data['imagePath'] as String?) ??
+                           (data['image'] as String?) ??
+                           (data['imageUrl'] as String?) ?? '';
+
     return NotificationModel(
       id: doc.id,
-      title: (data['title'] as String?) ?? '',
-      type: (data['type'] as String?) ?? '',
+      title: titleValue,
+      type: typeValue,
       sendDate: timestamp is Timestamp ? timestamp.toDate() : timestamp as DateTime?,
-      imagePath: (data['imagePath'] as String?) ?? '',
-      content: (data['content'] as String?) ?? '',
-      typeRecipients: (data['typeRecipients'] as String?) ?? '',
+      imagePath: imagePathValue,
+      content: contentValue,
+      typeRecipients: typeRecipientsValue,
       recipientEmail: (data['recipientEmail'] as String?) ?? '',
       recipientsRef: (data['recipientsRef'] as List<dynamic>?)
               ?.whereType<DocumentReference>()
@@ -80,7 +106,7 @@ class NotificationModel extends Equatable {
       'dataEnvio': sendDate,
       'imagePath': imagePath,
       'content': content,
-      'typeRecipients': typeRecipients,
+      'destinatarioTipo': typeRecipients, // Salva como 'destinatarioTipo' no Firestore
       'recipientEmail': recipientEmail,
       'recipientsRef': recipientsRef,
       'recipientRef': recipientRef,

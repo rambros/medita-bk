@@ -100,6 +100,74 @@ class _DiscussaoDetailPageState extends State<DiscussaoDetailPage> {
     }
   }
 
+  Future<void> _onFecharDiscussao() async {
+    final usuarioId = _usuarioId;
+    if (usuarioId == null) return;
+
+    final confirmar = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Marcar como Resolvida'),
+        content: const Text(
+          'Esta discussão será marcada como resolvida. '
+          'Você ainda poderá reabri-la se necessário.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton.icon(
+            onPressed: () => Navigator.pop(ctx, true),
+            icon: const Icon(Icons.check_circle),
+            label: const Text('Marcar como Resolvida'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              foregroundColor: Colors.white,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmar == true && mounted) {
+      final sucesso = await _viewModel.fecharDiscussao(usuarioId: usuarioId);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              sucesso
+                  ? 'Discussão marcada como resolvida!'
+                  : 'Erro ao fechar discussão',
+            ),
+            backgroundColor: sucesso ? Colors.green : Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _onReabrirDiscussao() async {
+    final usuarioId = _usuarioId;
+    if (usuarioId == null) return;
+
+    final sucesso = await _viewModel.reabrirDiscussao(usuarioId: usuarioId);
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            sucesso
+                ? 'Discussão reaberta!'
+                : 'Erro ao reabrir discussão',
+          ),
+          backgroundColor: sucesso ? Colors.blue : Colors.red,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final appTheme = AppTheme.of(context);
@@ -114,6 +182,36 @@ class _DiscussaoDetailPageState extends State<DiscussaoDetailPage> {
             'Discussão',
             style: TextStyle(color: appTheme.info),
           ),
+          actions: [
+            Consumer<DiscussaoDetailViewModel>(
+              builder: (context, viewModel, _) {
+                final discussao = viewModel.discussao;
+                final usuarioId = _usuarioId ?? '';
+
+                if (discussao == null) return const SizedBox.shrink();
+
+                // Botão de fechar discussão
+                if (discussao.podeFechar(usuarioId)) {
+                  return IconButton(
+                    icon: const Icon(Icons.check_circle_outline),
+                    tooltip: 'Marcar como resolvida',
+                    onPressed: _onFecharDiscussao,
+                  );
+                }
+
+                // Botão de reabrir discussão
+                if (discussao.podeReabrir(usuarioId)) {
+                  return IconButton(
+                    icon: const Icon(Icons.refresh),
+                    tooltip: 'Reabrir discussão',
+                    onPressed: _onReabrirDiscussao,
+                  );
+                }
+
+                return const SizedBox.shrink();
+              },
+            ),
+          ],
         ),
         body: Consumer<DiscussaoDetailViewModel>(
           builder: (context, viewModel, _) {
@@ -133,6 +231,10 @@ class _DiscussaoDetailPageState extends State<DiscussaoDetailPage> {
 
             return Column(
               children: [
+                // Banner se estiver fechada
+                if (viewModel.discussao!.status.isFechada)
+                  _buildBannerFechada(viewModel.discussao!),
+
                 // Conteúdo rolável
                 Expanded(
                   child: RefreshIndicator(
@@ -167,6 +269,76 @@ class _DiscussaoDetailPageState extends State<DiscussaoDetailPage> {
         ),
       ),
     );
+  }
+
+  Widget _buildBannerFechada(DiscussaoModel discussao) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.green.withOpacity(0.1),
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.green.withOpacity(0.3),
+            width: 1,
+          ),
+        ),
+      ),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.check_circle,
+            color: Colors.green,
+            size: 24,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Discussão Resolvida',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.green,
+                    fontSize: 16,
+                  ),
+                ),
+                if (discussao.dataFechamento != null)
+                  Text(
+                    'Fechada em ${_formatarData(discussao.dataFechamento!)}',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _formatarData(DateTime data) {
+    final agora = DateTime.now();
+    final diferenca = agora.difference(data);
+
+    if (diferenca.inDays == 0) {
+      if (diferenca.inHours == 0) {
+        if (diferenca.inMinutes == 0) {
+          return 'agora';
+        }
+        return '${diferenca.inMinutes}min atrás';
+      }
+      return '${diferenca.inHours}h atrás';
+    } else if (diferenca.inDays == 1) {
+      return 'ontem';
+    } else if (diferenca.inDays < 7) {
+      return '${diferenca.inDays} dias atrás';
+    } else {
+      return '${data.day}/${data.month}/${data.year}';
+    }
   }
 
   Widget _buildPergunta(DiscussaoModel discussao) {

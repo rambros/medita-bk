@@ -223,7 +223,7 @@ class _NotificacoesPageContent extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 color: appTheme.secondaryBackground,
                 child: Text(
-                  'ANTERIORES',
+                  'JÁ LIDAS',
                   style: appTheme.bodySmall.copyWith(
                     fontWeight: FontWeight.bold,
                     color: appTheme.secondaryText,
@@ -299,8 +299,13 @@ class _NotificacoesPageContent extends StatelessWidget {
     BuildContext context,
     dynamic notificacao,
   ) async {
+    debugPrint('🔵 _handleNotificacaoTap: Iniciando...');
+    debugPrint('🔵 Notificação: ${notificacao.runtimeType}');
+
     final viewModel = context.read<NotificacoesViewModel>();
     final navData = await viewModel.onNotificacaoTap(notificacao);
+
+    debugPrint('🔵 navData retornado: $navData');
 
     if (context.mounted && navData != null) {
       // Navega baseado no tipo de notificação
@@ -308,16 +313,29 @@ class _NotificacoesPageContent extends StatelessWidget {
       final id = navData['id'] as String?;
       final dados = navData['dados'] as Map<String, dynamic>?;
 
+      debugPrint('🔵 type: $type, id: $id, dados: $dados');
+
       if (type == 'ticket' && id != null) {
         // Navegar para ticket
-        context.push('/suporte/ticket/$id');
+        final route = '/suporte/ticket/$id';
+        debugPrint('🔵 Navegando para ticket: $route');
+        context.push(route);
       } else if (type == 'discussao' && id != null) {
         // Navegar para discussão
         final cursoId = dados?['cursoId'] as String?;
+        debugPrint('🔵 discussao - cursoId: $cursoId');
         if (cursoId != null) {
-          context.push('/ead/curso/$cursoId/discussoes/$id');
+          final route = '/ead/curso/$cursoId/discussoes/$id';
+          debugPrint('🔵 Navegando para discussão: $route');
+          context.push(route);
+        } else {
+          debugPrint('🔵 ❌ discussao sem cursoId - não pode navegar');
         }
+      } else {
+        debugPrint('🔵 ❌ Tipo não reconhecido ou ID nulo');
       }
+    } else {
+      debugPrint('🔵 ❌ navData é null ou context não montado');
     }
   }
 

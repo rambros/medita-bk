@@ -493,4 +493,49 @@ class ComunicacaoRepository {
     _discussoesCache.remove(discussaoId);
     _respostasCache.remove(discussaoId);
   }
+
+  /// Fecha uma discussão (marca como resolvida sem necessariamente marcar resposta)
+  Future<bool> fecharDiscussao({
+    required String discussaoId,
+    required String usuarioId,
+  }) async {
+    final sucesso = await _service.fecharDiscussao(
+      discussaoId: discussaoId,
+      usuarioId: usuarioId,
+    );
+
+    if (sucesso) {
+      // Atualiza o cache
+      if (_discussoesCache.containsKey(discussaoId)) {
+        final discussao = _discussoesCache[discussaoId]!;
+        _discussoesCache[discussaoId] = discussao.copyWith(
+          status: StatusDiscussao.fechada,
+          fechadaPor: usuarioId,
+          dataFechamento: DateTime.now(),
+          dataAtualizacao: DateTime.now(),
+        );
+      }
+    }
+
+    return sucesso;
+  }
+
+  /// Reabre uma discussão fechada
+  Future<bool> reabrirDiscussao({
+    required String discussaoId,
+    required String usuarioId,
+  }) async {
+    final sucesso = await _service.reabrirDiscussao(
+      discussaoId: discussaoId,
+      usuarioId: usuarioId,
+    );
+
+    if (sucesso) {
+      // Invalida caches para forçar reload
+      _discussoesCache.remove(discussaoId);
+      _respostasCache.remove(discussaoId);
+    }
+
+    return sucesso;
+  }
 }

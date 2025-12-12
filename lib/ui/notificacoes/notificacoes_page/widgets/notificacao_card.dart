@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:medita_bk/domain/models/unified_notification.dart';
+import 'package:medita_bk/domain/models/notificacao.dart';
 import 'package:medita_bk/ui/core/theme/app_theme.dart';
 
-/// Card para exibir uma notificação UNIFICADA
-/// Funciona com notificações de ambas as collections
+/// Card para exibir uma notificação
 class NotificacaoCard extends StatelessWidget {
   const NotificacaoCard({
     super.key,
@@ -15,7 +14,7 @@ class NotificacaoCard extends StatelessWidget {
     this.onDelete,
   });
 
-  final UnifiedNotification notificacao;
+  final Notificacao notificacao;
   final VoidCallback onTap;
   final VoidCallback? onDismiss;
   final VoidCallback? onMarkAsRead;
@@ -169,12 +168,12 @@ class NotificacaoCard extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: notificacao.color.withOpacity(0.1),
+                color: notificacao.tipo.color.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
-                notificacao.icon,
-                color: notificacao.color,
+                notificacao.tipo.icon,
+                color: notificacao.tipo.color,
                 size: 24,
               ),
             ),
@@ -225,7 +224,7 @@ class NotificacaoCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
 
-                  // Tempo desde + Badge de origem
+                  // Tempo desde + Badge de categoria
                   Row(
                     children: [
                       Icon(
@@ -242,30 +241,24 @@ class NotificacaoCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      // Badge mostrando origem
+                      // Badge mostrando categoria
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 8,
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: notificacao.source == NotificationSource.ead
-                              ? Colors.purple.withOpacity(0.1)
-                              : Colors.blue.withOpacity(0.1),
+                          color: notificacao.tipo.badgeColor.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: notificacao.source == NotificationSource.ead
-                                ? Colors.purple.withOpacity(0.3)
-                                : Colors.blue.withOpacity(0.3),
+                            color: notificacao.tipo.badgeColor.withOpacity(0.3),
                             width: 0.5,
                           ),
                         ),
                         child: Text(
-                          notificacao.sourceLabel,
+                          notificacao.tipo.badgeLabel,
                           style: appTheme.bodySmall.copyWith(
-                            color: notificacao.source == NotificationSource.ead
-                                ? Colors.purple
-                                : Colors.blue,
+                            color: notificacao.tipo.badgeColor,
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
                           ),
@@ -315,4 +308,3 @@ class NotificacaoCard extends StatelessWidget {
     return card;
   }
 }
-

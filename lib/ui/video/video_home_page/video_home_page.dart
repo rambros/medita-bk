@@ -1,7 +1,7 @@
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_animations.dart';
-import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/ui/core/widgets/notification_badge_icon.dart';
 import 'package:medita_bk/ui/core/actions/actions.dart' as action_blocks;
 import 'package:medita_bk/ui/pages.dart';
 import 'package:medita_bk/core/utils/logger.dart';
@@ -145,19 +145,13 @@ class _VideoHomePageState extends State<VideoHomePage> with TickerProviderStateM
                                   useGoogleFonts: !FlutterFlowTheme.of(context).headlineMediumIsCustom,
                                 ),
                           ),
-                          FlutterFlowIconButton(
-                            borderColor: Colors.transparent,
-                            borderRadius: 20.0,
-                            borderWidth: 1.0,
-                            buttonSize: 40.0,
-                            fillColor: FlutterFlowTheme.of(context).primaryBackground,
-                            icon: Icon(
-                              Icons.notifications_none,
-                              color: FlutterFlowTheme.of(context).primary,
-                              size: 24.0,
-                            ),
+                          NotificationBadgeIcon(
+                            iconSize: 24.0,
+                            iconColor: FlutterFlowTheme.of(context).primary,
+                            badgeColor: FlutterFlowTheme.of(context).error,
                             onPressed: () {
-                              logDebug('IconButton pressed ...');
+                              logDebug('Notification icon pressed - navigating to notifications page');
+                              context.pushNamed('notificacoes');
                             },
                           ),
                         ],

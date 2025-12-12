@@ -18,7 +18,12 @@
       "Bash(mkdir:*)",
       "Bash(git mv:*)",
       "Bash(tree:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(flutter run:*)",
+      "Bash(ls:*)",
+      "Bash(mv:*)",
+      "Bash(cat:*)",
+      "Bash(firebase deploy:*)"
     ],
     "deny": [],
     "ask": []

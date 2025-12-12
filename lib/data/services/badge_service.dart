@@ -22,10 +22,10 @@ class BadgeService {
     try {
       // Verifica suporte a badges
       _isSupported = await FlutterAppBadger.isAppBadgeSupported();
-      
+
       if (_isSupported) {
         debugPrint('BadgeService: Badges suportados neste dispositivo');
-        
+
         // Configura listener para atualizar badge automaticamente
         _setupBadgeListener();
       } else {
@@ -40,10 +40,10 @@ class BadgeService {
 
   /// Configura listener para atualizar badge automaticamente
   void _setupBadgeListener() {
-    // Escuta mudanças no contador de notificações
-    _repository.streamContador().listen(
-      (contador) {
-        updateBadge(contador.totalNaoLidas);
+    // Escuta mudanças no contador de notificações não lidas
+    _repository.streamContadorNaoLidas().listen(
+      (count) {
+        updateBadge(count);
       },
       onError: (error) {
         debugPrint('BadgeService: Erro no stream de contador - $error');
@@ -80,7 +80,7 @@ class BadgeService {
     }
   }
 
-  /// Atualiza badge baseado nas notificações não lidas de AMBAS as collections
+  /// Atualiza badge baseado nas notificações não lidas
   Future<void> updateFromNotifications() async {
     if (!_isSupported) return;
 
@@ -91,7 +91,7 @@ class BadgeService {
     }
 
     try {
-      final totalNaoLidas = await _repository.contarNaoLidasUnificadas();
+      final totalNaoLidas = await _repository.contarNaoLidas();
       await updateBadge(totalNaoLidas);
     } catch (e) {
       debugPrint('BadgeService.updateFromNotifications: Erro - $e');
@@ -103,4 +103,3 @@ class BadgeService {
     await removeBadge();
   }
 }
-

@@ -18,7 +18,14 @@ enum TipoNotificacaoEad {
   discussaoRespondida('discussao_respondida', 'Resposta na Discussão'),
   discussaoResolvida('discussao_resolvida', 'Discussão Resolvida'),
   respostaCurtida('resposta_curtida', 'Sua Resposta foi Curtida'),
-  respostaMarcadaSolucao('resposta_marcada_solucao', 'Resposta Marcada como Solução');
+  respostaMarcadaSolucao('resposta_marcada_solucao', 'Resposta Marcada como Solução'),
+
+  // Cursos EAD (ead_push_notifications)
+  cursoGeral('curso_geral', 'Notificação de Curso'),
+  cursoNovo('curso_novo', 'Novo Curso Disponível'),
+  moduloLancado('modulo_lancado', 'Novo Módulo'),
+  certificadoDisponivel('certificado_disponivel', 'Certificado Disponível'),
+  prazoProximo('prazo_proximo', 'Prazo se Aproximando');
 
   final String value;
   final String label;
@@ -27,7 +34,7 @@ enum TipoNotificacaoEad {
   static TipoNotificacaoEad fromString(String? value) {
     return TipoNotificacaoEad.values.firstWhere(
       (e) => e.value == value,
-      orElse: () => TipoNotificacaoEad.ticketCriado,
+      orElse: () => TipoNotificacaoEad.cursoGeral, // Padrão para notificações de curso
     );
   }
 
@@ -51,6 +58,13 @@ enum TipoNotificacaoEad {
         return Icons.thumb_up_outlined;
       case TipoNotificacaoEad.respostaMarcadaSolucao:
         return Icons.star_outline;
+      // Cursos EAD
+      case TipoNotificacaoEad.cursoGeral:
+      case TipoNotificacaoEad.cursoNovo:
+      case TipoNotificacaoEad.moduloLancado:
+      case TipoNotificacaoEad.certificadoDisponivel:
+      case TipoNotificacaoEad.prazoProximo:
+        return Icons.school_outlined;
     }
   }
 
@@ -74,6 +88,13 @@ enum TipoNotificacaoEad {
         return Colors.pink;
       case TipoNotificacaoEad.respostaMarcadaSolucao:
         return Colors.amber;
+      // Cursos EAD
+      case TipoNotificacaoEad.cursoGeral:
+      case TipoNotificacaoEad.cursoNovo:
+      case TipoNotificacaoEad.moduloLancado:
+      case TipoNotificacaoEad.certificadoDisponivel:
+      case TipoNotificacaoEad.prazoProximo:
+        return Colors.deepPurple;
     }
   }
 
@@ -82,6 +103,15 @@ enum TipoNotificacaoEad {
 
   /// Se é relacionado a discussão
   bool get isDiscussao => value.startsWith('discussao_') || value.startsWith('resposta_');
+
+  /// Se é relacionado a curso EAD
+  bool get isCurso => value.startsWith('curso_') ||
+                       value.startsWith('modulo_') ||
+                       value.startsWith('certificado_') ||
+                       value.startsWith('prazo_') ||
+                       value == 'push' ||  // Web admin salva como "push"
+                       value == 'email' ||  // Compatibilidade com web admin
+                       value == 'whatsapp';  // Compatibilidade com web admin
 }
 
 /// Modelo de Notificação EAD
