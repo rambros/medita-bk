@@ -55,18 +55,27 @@ class NavigationGrid extends StatelessWidget {
             animation: animationsMap['containerOnPageLoadAnimation2'],
           ),
 
-          // 2. Desafio 21 dias card
-          if (habilitaDesafio21 && onDesafio21Tap != null)
-            NavigationCard(
-              title: 'Desafio 21 dias',
-              icon: Icons.emoji_events,
-              gradientColors: const [Color(0xFF8D4052), Color(0xFFB0747F)],
-              gradientStops: const [0.0, 1.0],
-              gradientBegin: const AlignmentDirectional(-1.0, -1.0),
-              gradientEnd: const AlignmentDirectional(1.0, 1.0),
-              onTap: onDesafio21Tap!,
-              animation: animationsMap['containerOnPageLoadAnimation1'],
-            ),
+          // 2. Daily message card
+          NavigationCard(
+            title: 'Ler mensagem para o dia',
+            icon: Icons.menu_book,
+            gradientColors: const [Color(0xFFFFA726), Color(0xFFFFCC80)],
+            gradientStops: const [0.0, 1.0],
+            gradientBegin: const AlignmentDirectional(-1.0, 1.0),
+            gradientEnd: const AlignmentDirectional(1.0, -1.0),
+            onTap: () {
+              context.pushNamed(
+                MensagemDetailsPage.routeName,
+                extra: <String, dynamic>{
+                  kTransitionInfoKey: const TransitionInfo(
+                    hasTransition: true,
+                    transitionType: PageTransitionType.leftToRight,
+                  ),
+                },
+              );
+            },
+            animation: animationsMap['containerOnPageLoadAnimation4'],
+          ),
 
           // 3. EAD/Cursos card
           NavigationCard(
@@ -90,27 +99,18 @@ class NavigationGrid extends StatelessWidget {
             animation: animationsMap['containerOnPageLoadAnimation3'],
           ),
 
-          // 4. Daily message card
-          NavigationCard(
-            title: 'Ler mensagem para o dia',
-            icon: Icons.menu_book,
-            gradientColors: const [Color(0xFFFFA726), Color(0xFFFFCC80)],
-            gradientStops: const [0.0, 1.0],
-            gradientBegin: const AlignmentDirectional(-1.0, 1.0),
-            gradientEnd: const AlignmentDirectional(1.0, -1.0),
-            onTap: () {
-              context.pushNamed(
-                MensagemDetailsPage.routeName,
-                extra: <String, dynamic>{
-                  kTransitionInfoKey: const TransitionInfo(
-                    hasTransition: true,
-                    transitionType: PageTransitionType.leftToRight,
-                  ),
-                },
-              );
-            },
-            animation: animationsMap['containerOnPageLoadAnimation4'],
-          ),
+          // 4. Desafio 21 dias card
+          if (habilitaDesafio21 && onDesafio21Tap != null)
+            NavigationCard(
+              title: 'Desafio 21 dias',
+              icon: Icons.emoji_events,
+              gradientColors: const [Color(0xFF8D4052), Color(0xFFB0747F)],
+              gradientStops: const [0.0, 1.0],
+              gradientBegin: const AlignmentDirectional(-1.0, -1.0),
+              gradientEnd: const AlignmentDirectional(1.0, 1.0),
+              onTap: onDesafio21Tap!,
+              animation: animationsMap['containerOnPageLoadAnimation1'],
+            ),
 
           // 5. Suporte Técnico card
           NavigationCard(

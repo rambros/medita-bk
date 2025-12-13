@@ -215,4 +215,29 @@ class UserRepository {
       rethrow;
     }
   }
+
+  // ========== CONTACT INFO ==========
+
+  /// Update user contact information (fullName, whatsapp, cidade)
+  Future<void> updateContactInfo({
+    required String userId,
+    required String fullName,
+    required String whatsapp,
+    required String cidade,
+  }) async {
+    try {
+      await _firestoreService.updateDocument(
+        collectionPath: _collectionPath,
+        documentId: userId,
+        data: {
+          'fullName': fullName,
+          'whatsapp': whatsapp,
+          'cidade': cidade,
+        },
+      );
+    } catch (e) {
+      logDebug('Error updating contact info: $e');
+      rethrow;
+    }
+  }
 }

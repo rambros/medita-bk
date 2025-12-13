@@ -3,7 +3,7 @@ description:
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 3.2.1+162
+version: 3.2.3+163
 
 environment:
   sdk: ">=3.0.0 <4.0.0"

@@ -21,6 +21,10 @@ class EditProfileViewModel extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
   final TextEditingController fullNameTextController = TextEditingController();
   final FocusNode fullNameFocusNode = FocusNode();
+  final TextEditingController whatsappTextController = TextEditingController();
+  final FocusNode whatsappFocusNode = FocusNode();
+  final TextEditingController cidadeTextController = TextEditingController();
+  final FocusNode cidadeFocusNode = FocusNode();
 
   StreamSubscription<UserModel?>? _userSub;
   UserModel? _user;
@@ -53,6 +57,8 @@ class EditProfileViewModel extends ChangeNotifier {
         _user = user;
         if (!_initializedControllers && user != null) {
           fullNameTextController.text = user.fullName;
+          whatsappTextController.text = user.whatsapp;
+          cidadeTextController.text = user.cidade;
           _initializedControllers = true;
         }
         notifyListeners();
@@ -65,6 +71,10 @@ class EditProfileViewModel extends ChangeNotifier {
     _userSub?.cancel();
     fullNameTextController.dispose();
     fullNameFocusNode.dispose();
+    whatsappTextController.dispose();
+    whatsappFocusNode.dispose();
+    cidadeTextController.dispose();
+    cidadeFocusNode.dispose();
     super.dispose();
   }
 
@@ -127,6 +137,8 @@ class EditProfileViewModel extends ChangeNotifier {
       fullName: fullNameTextController.text,
       displayName: fullNameTextController.text,
       userImageUrl: _uploadedFileUrl.isNotEmpty ? _uploadedFileUrl : _user!.userImageUrl,
+      whatsapp: whatsappTextController.text,
+      cidade: cidadeTextController.text,
     );
 
     await _userRepository.updateUser(currentUserId, updatedUser);

@@ -3,9 +3,11 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:medita_bk/data/repositories/auth_repository.dart';
+import 'package:medita_bk/data/repositories/user_repository.dart';
 import 'package:medita_bk/routing/ead_routes.dart';
 import 'package:medita_bk/ui/core/widgets/html_display_widget.dart';
 import 'package:medita_bk/ui/core/theme/app_theme.dart';
+import 'package:medita_bk/ui/ead/widgets/update_user_info_dialog.dart';
 import 'view_model/curso_detalhes_view_model.dart';
 import 'widgets/curso_info_header.dart';
 import 'widgets/curriculo_section.dart';
@@ -57,9 +59,48 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
       return;
     }
 
+    // Busca os dados atuais do usuário
+    final userRepo = context.read<UserRepository>();
+    final currentUserData = await userRepo.getUserById(authRepo.currentUserUid);
+
+    if (currentUserData == null) {
+      _mostrarSnackBar('Erro ao carregar dados do usuário');
+      return;
+    }
+
+    // Mostra o modal de atualização (sempre solicita confirmação/atualização dos dados)
+    final result = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => UpdateUserInfoDialog(
+        currentUser: currentUserData,
+        onSave: (fullName, whatsapp, cidade) async {
+          await userRepo.updateContactInfo(
+            userId: authRepo.currentUserUid,
+            fullName: fullName,
+            whatsapp: whatsapp,
+            cidade: cidade,
+          );
+        },
+      ),
+    );
+
+    // Se o usuário cancelou, não continua com a inscrição
+    if (result != true) {
+      return;
+    }
+
+    // Busca novamente os dados atualizados
+    final updatedUserData = await userRepo.getUserById(authRepo.currentUserUid);
+    if (updatedUserData == null) {
+      _mostrarSnackBar('Erro ao carregar dados atualizados');
+      return;
+    }
+
+    // Realiza a inscrição com os dados atualizados
     final sucesso = await _viewModel.inscrever(
       usuarioId: authRepo.currentUserUid,
-      usuarioNome: user.displayName.isEmpty ? 'Usuário' : user.displayName,
+      usuarioNome: updatedUserData.fullName.isEmpty ? user.displayName : updatedUserData.fullName,
       usuarioEmail: user.email,
       usuarioFoto: user.photoUrl,
     );
@@ -336,20 +377,14 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
           : null,
       actions: [
         IconButton(
-          icon: const Icon(Icons.forum_outlined),
-          tooltip: 'Discussões',
+          icon: const Icon(Icons.question_answer),
+          tooltip: 'Perguntas',
           onPressed: () {
             context.pushNamed(
               EadRoutes.discussoesCurso,
               pathParameters: {'cursoId': widget.cursoId},
               queryParameters: {'cursoTitulo': titulo ?? ''},
             );
-          },
-        ),
-        IconButton(
-          icon: const Icon(Icons.share),
-          onPressed: () {
-            // TODO: Implementar compartilhamento
           },
         ),
       ],

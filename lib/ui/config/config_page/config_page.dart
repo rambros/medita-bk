@@ -222,7 +222,7 @@ class _ConfigPageState extends State<ConfigPage> {
                               child: Padding(
                                 padding: const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
                                 child: Text(
-                                  'Editar seu Perfil',
+                                  'Editar seus dados',
                                   style: FlutterFlowTheme.of(context).bodyLarge.override(
                                         fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
                                         color: FlutterFlowTheme.of(context).primaryText,

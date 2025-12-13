@@ -28,6 +28,8 @@ class UserModel extends Equatable {
   final bool desafio21Started;
   final List<String> userRole;
   final DateTime? lastAccess;
+  final String whatsapp;
+  final String cidade;
 
   const UserModel({
     required this.uid,
@@ -49,6 +51,8 @@ class UserModel extends Equatable {
     this.desafio21Started = false,
     this.userRole = const [],
     this.lastAccess,
+    this.whatsapp = '',
+    this.cidade = '',
   });
 
   // ========== FIRESTORE SERIALIZATION ==========
@@ -80,6 +84,8 @@ class UserModel extends Equatable {
       desafio21Started: data['desafio21Started'] as bool? ?? false,
       userRole: _getStringList(data['userRole']),
       lastAccess: _getDateTime(data['lastAccess']),
+      whatsapp: data['whatsapp'] as String? ?? '',
+      cidade: data['cidade'] as String? ?? '',
     );
   }
 
@@ -105,6 +111,8 @@ class UserModel extends Equatable {
       'desafio21Started': desafio21Started,
       'userRole': userRole,
       'lastAccess': lastAccess != null ? Timestamp.fromDate(lastAccess!) : null,
+      'whatsapp': whatsapp,
+      'cidade': cidade,
     };
   }
 
@@ -132,6 +140,8 @@ class UserModel extends Equatable {
       desafio21Started: json['desafio21Started'] as bool? ?? false,
       userRole: _getStringList(json['userRole']),
       lastAccess: json['lastAccess'] != null ? DateTime.parse(json['lastAccess']) : null,
+      whatsapp: json['whatsapp'] as String? ?? '',
+      cidade: json['cidade'] as String? ?? '',
     );
   }
 
@@ -157,6 +167,8 @@ class UserModel extends Equatable {
       'desafio21Started': desafio21Started,
       'userRole': userRole,
       'lastAccess': lastAccess?.toIso8601String(),
+      'whatsapp': whatsapp,
+      'cidade': cidade,
     };
   }
 
@@ -225,6 +237,8 @@ class UserModel extends Equatable {
     bool? desafio21Started,
     List<String>? userRole,
     DateTime? lastAccess,
+    String? whatsapp,
+    String? cidade,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
@@ -246,6 +260,8 @@ class UserModel extends Equatable {
       desafio21Started: desafio21Started ?? this.desafio21Started,
       userRole: userRole ?? this.userRole,
       lastAccess: lastAccess ?? this.lastAccess,
+      whatsapp: whatsapp ?? this.whatsapp,
+      cidade: cidade ?? this.cidade,
     );
   }
 
@@ -272,6 +288,8 @@ class UserModel extends Equatable {
         desafio21Started,
         userRole,
         lastAccess,
+        whatsapp,
+        cidade,
       ];
 
   @override

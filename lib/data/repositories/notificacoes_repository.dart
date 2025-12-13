@@ -37,8 +37,6 @@ class NotificacoesRepository {
     }
 
     try {
-      debugPrint('🔔 Buscando notificações para userId: $userId');
-
       // UMA query simples!
       final snapshot = await _firestore
           .collection(_notificationsCollection)
@@ -46,18 +44,6 @@ class NotificacoesRepository {
           .orderBy('dataCriacao', descending: true)
           .limit(limite)
           .get();
-
-      debugPrint('🔔 Encontradas ${snapshot.docs.length} notificações');
-      
-      // DEBUG: Log detalhado de cada notificação
-      for (final doc in snapshot.docs) {
-        final data = doc.data();
-        debugPrint('📄 Notificação: ${doc.id}');
-        debugPrint('  - tipo: ${data['tipo']}');
-        debugPrint('  - titulo: ${data['titulo']}');
-        debugPrint('  - destinatarios: ${data['destinatarios']}');
-        debugPrint('  - dataCriacao: ${data['dataCriacao']}');
-      }
 
       final notificacoes = <Notificacao>[];
 
@@ -72,27 +58,20 @@ class NotificacoesRepository {
             ? UserNotificationState.fromMap(userStateDoc.data()!, userId)
             : null;
 
-        debugPrint('🔍 Processando ${doc.id}: lido=${userState?.lido}, ocultado=${userState?.ocultado}');
-
         // Pula se ocultado
         if (userState?.ocultado ?? false) {
-          debugPrint('⏭️ Pulando ${doc.id} - ocultado');
           continue;
         }
 
         // Pula se lido (quando filtrando não lidas)
         if (apenasNaoLidas && (userState?.lido ?? false)) {
-          debugPrint('⏭️ Pulando ${doc.id} - lido (filtro ativo)');
           continue;
         }
 
         final notificacao = Notificacao.fromFirestore(doc, userState);
-        debugPrint('✅ Adicionando notificação: ${notificacao.tipo.label}');
         notificacoes.add(notificacao);
       }
 
-      debugPrint('🔔 Total após filtros: ${notificacoes.length} notificações');
-      debugPrint('📋 Tipos: ${notificacoes.map((n) => n.tipo.label).join(", ")}');
       return notificacoes;
     } catch (e) {
       debugPrint('❌ Erro ao buscar notificações: $e');
@@ -112,8 +91,6 @@ class NotificacoesRepository {
       return;
     }
 
-    debugPrint('🔔 Stream iniciado para userId: $userId');
-
     try {
       await for (final snapshot in _firestore
           .collection(_notificationsCollection)
@@ -122,14 +99,9 @@ class NotificacoesRepository {
           .limit(limite)
           .snapshots()) {
 
-        debugPrint('🔔 Stream: ${snapshot.docs.length} notificações recebidas');
-
         final notificacoes = <Notificacao>[];
 
         for (final doc in snapshot.docs) {
-          final data = doc.data();
-          debugPrint('📄 Stream Doc: ${doc.id} tipo=${data['tipo']}');
-          
           final userStateDoc = await doc.reference
               .collection('user_states')
               .doc(userId)
@@ -139,21 +111,15 @@ class NotificacoesRepository {
               ? UserNotificationState.fromMap(userStateDoc.data()!, userId)
               : null;
 
-          debugPrint('  - userState: lido=${userState?.lido}, ocultado=${userState?.ocultado}');
-
           // Pula se ocultado
           if (userState?.ocultado ?? false) {
-            debugPrint('  - ⏭️ Pulando (ocultado)');
             continue;
           }
 
           final notif = Notificacao.fromFirestore(doc, userState);
-          debugPrint('  - ✅ Adicionando: ${notif.tipo.label}');
           notificacoes.add(notif);
         }
 
-        debugPrint('🔔 Stream: Emitindo ${notificacoes.length} notificações');
-        debugPrint('📋 Stream Tipos: ${notificacoes.map((n) => n.tipo.label).join(", ")}');
         yield notificacoes;
       }
     } catch (e) {
@@ -170,8 +136,6 @@ class NotificacoesRepository {
     if (userId.isEmpty) return false;
 
     try {
-      debugPrint('📖 Marcando notificação $notificacaoId como lida');
-
       final notifRef = _firestore
           .collection(_notificationsCollection)
           .doc(notificacaoId);
@@ -179,7 +143,6 @@ class NotificacoesRepository {
       // Verifica se notificação existe
       final doc = await notifRef.get();
       if (!doc.exists) {
-        debugPrint('❌ Notificação $notificacaoId não existe');
         return false;
       }
 
@@ -195,7 +158,6 @@ class NotificacoesRepository {
         'lastUpdated': FieldValue.serverTimestamp(),
       });
 
-      debugPrint('✅ Notificação marcada como lida');
       return true;
     } catch (e) {
       debugPrint('❌ Erro ao marcar como lida: $e');
@@ -209,8 +171,6 @@ class NotificacoesRepository {
     if (userId.isEmpty) return false;
 
     try {
-      debugPrint('📖 Marcando todas as notificações como lidas');
-
       final snapshot = await _firestore
           .collection(_notificationsCollection)
           .where('destinatarios', arrayContainsAny: [userId, 'TODOS'])
@@ -248,7 +208,6 @@ class NotificacoesRepository {
         await batch.commit();
       }
 
-      debugPrint('✅ $count notificações marcadas como lidas');
       return true;
     } catch (e) {
       debugPrint('❌ Erro ao marcar todas como lidas: $e');
@@ -262,8 +221,6 @@ class NotificacoesRepository {
     if (userId.isEmpty) return false;
 
     try {
-      debugPrint('🗑️ Ocultando notificação $notificacaoId');
-
       final notifRef = _firestore
           .collection(_notificationsCollection)
           .doc(notificacaoId);
@@ -271,7 +228,6 @@ class NotificacoesRepository {
       // Verifica se existe
       final doc = await notifRef.get();
       if (!doc.exists) {
-        debugPrint('❌ Notificação $notificacaoId não existe');
         return false;
       }
 
@@ -297,7 +253,6 @@ class NotificacoesRepository {
         'lastUpdated': FieldValue.serverTimestamp(),
       });
 
-      debugPrint('✅ Notificação ocultada');
       return true;
     } catch (e) {
       debugPrint('❌ Erro ao ocultar: $e');

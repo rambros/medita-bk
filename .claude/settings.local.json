@@ -23,7 +23,12 @@
       "Bash(ls:*)",
       "Bash(mv:*)",
       "Bash(cat:*)",
-      "Bash(firebase deploy:*)"
+      "Bash(firebase deploy:*)",
+      "Bash(xcrun simctl:*)",
+      "Bash(flutter devices:*)",
+      "Bash(open:*)",
+      "Bash(xcodebuild -version -sdk:*)",
+      "Bash(xcodebuild:*)"
     ],
     "deny": [],
     "ask": []

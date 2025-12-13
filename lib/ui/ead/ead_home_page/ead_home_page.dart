@@ -22,7 +22,7 @@ class EadHomePage extends StatelessWidget {
         foregroundColor: appTheme.info,
         elevation: 2.0,
         title: Text(
-          'EAD',
+          'Cursos Online',
           style: appTheme.headlineMedium.copyWith(
             color: appTheme.info,
           ),
@@ -54,7 +54,7 @@ class EadHomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Bem-vindo ao EAD',
+              'Bem-vindo aos Cursos Online',
               style: appTheme.headlineSmall.copyWith(
                 fontWeight: FontWeight.bold,
                 color: appTheme.primaryText,
@@ -84,6 +84,7 @@ class EadHomePage extends StatelessWidget {
         _MenuCard(
           icon: Icons.school_outlined,
           title: 'Meus Cursos',
+          gradientColors: const [Color(0xFF7E57C2), Color(0xFFB39DDB)],
           onTap: () {
             context.pushNamed(EadRoutes.meusCursos);
           },
@@ -91,6 +92,7 @@ class EadHomePage extends StatelessWidget {
         _MenuCard(
           icon: Icons.search,
           title: 'Catálogo de Cursos',
+          gradientColors: const [Color(0xFFEC407A), Color(0xFFF48FB1)],
           onTap: () {
             context.pushNamed(EadRoutes.catalogoCursos);
           },
@@ -98,6 +100,7 @@ class EadHomePage extends StatelessWidget {
         _MenuCard(
           icon: Icons.support_agent,
           title: 'Suporte Técnico',
+          gradientColors: const [Color(0xFF26A69A), Color(0xFF80CBC4)],
           onTap: () {
             context.pushNamed(EadRoutes.meusTickets);
           },
@@ -111,11 +114,13 @@ class _MenuCard extends StatelessWidget {
   const _MenuCard({
     required this.icon,
     required this.title,
+    required this.gradientColors,
     required this.onTap,
   });
 
   final IconData icon;
   final String title;
+  final List<Color> gradientColors;
   final VoidCallback onTap;
 
   @override
@@ -123,39 +128,63 @@ class _MenuCard extends StatelessWidget {
     final appTheme = AppTheme.of(context);
 
     return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      clipBehavior: Clip.antiAlias,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      color: const Color(0xFFECCB9E),
+      elevation: 4.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.0),
+      ),
       child: InkWell(
+        splashColor: Colors.transparent,
+        focusColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        highlightColor: Colors.transparent,
         onTap: onTap,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: appTheme.primary.withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                icon,
-                size: 32,
-                color: appTheme.primary,
-              ),
+        child: Container(
+          width: 100.0,
+          height: 90.0,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: gradientColors,
+              stops: const [0.0, 1.0],
+              begin: const AlignmentDirectional(-1.0, -1.0),
+              end: const AlignmentDirectional(1.0, 1.0),
             ),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Text(
-                title,
-                textAlign: TextAlign.center,
-                style: appTheme.titleMedium.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: appTheme.primaryText,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 42.0,
+                  height: 42.0,
+                  decoration: BoxDecoration(
+                    color: appTheme.info,
+                    borderRadius: BorderRadius.circular(50.0),
+                  ),
+                  child: Icon(
+                    icon,
+                    color: appTheme.secondaryText,
+                    size: 24.0,
+                  ),
                 ),
-              ),
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: appTheme.bodyLarge.override(
+                    fontFamily: appTheme.bodyLargeFamily,
+                    color: appTheme.primaryText,
+                    letterSpacing: 0.0,
+                    fontWeight: FontWeight.w500,
+                    useGoogleFonts: !appTheme.bodyLargeIsCustom,
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

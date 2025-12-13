@@ -5,6 +5,7 @@ import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_widgets.dart';
 import 'package:medita_bk/ui/pages.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'view_model/edit_profile_view_model.dart';
 
@@ -68,7 +69,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   },
                 ),
                 title: Text(
-                  'Editar seu perfil',
+                  'Editar seus dados',
                   style: FlutterFlowTheme.of(context).titleLarge.override(
                         fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
                         color: FlutterFlowTheme.of(context).info,
@@ -270,7 +271,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     ),
                                     filled: true,
                                     fillColor: FlutterFlowTheme.of(context).primaryBackground,
-                                    contentPadding: const EdgeInsetsDirectional.fromSTEB(20.0, 24.0, 0.0, 24.0),
+                                    contentPadding: const EdgeInsetsDirectional.fromSTEB(20.0, 16.0, 20.0, 16.0),
                                   ),
                                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                                         fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
@@ -278,6 +279,148 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                         useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
                                       ),
                                   keyboardType: TextInputType.name,
+                                  validator: (val) {
+                                    if (val == null || val.isEmpty) {
+                                      return 'Campo obrigatório';
+                                    }
+                                    if (val.trim().split(' ').length < 2) {
+                                      return 'Por favor, informe nome e sobrenome';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 16.0),
+                                child: TextFormField(
+                                  controller: viewModel.whatsappTextController,
+                                  focusNode: viewModel.whatsappFocusNode,
+                                  obscureText: false,
+                                  decoration: InputDecoration(
+                                    labelText: 'WhatsApp/Celular',
+                                    hintText: '(00) 00000-0000',
+                                    labelStyle: FlutterFlowTheme.of(context).bodySmall.override(
+                                          fontFamily: FlutterFlowTheme.of(context).bodySmallFamily,
+                                          letterSpacing: 0.0,
+                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodySmallIsCustom,
+                                        ),
+                                    hintStyle: FlutterFlowTheme.of(context).bodySmall.override(
+                                          fontFamily: FlutterFlowTheme.of(context).bodySmallFamily,
+                                          letterSpacing: 0.0,
+                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodySmallIsCustom,
+                                        ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: FlutterFlowTheme.of(context).primary,
+                                        width: 2.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(50.0),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: FlutterFlowTheme.of(context).primary,
+                                        width: 2.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(50.0),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: FlutterFlowTheme.of(context).error,
+                                        width: 2.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(50.0),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: FlutterFlowTheme.of(context).error,
+                                        width: 2.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(50.0),
+                                    ),
+                                    filled: true,
+                                    fillColor: FlutterFlowTheme.of(context).primaryBackground,
+                                    contentPadding: const EdgeInsetsDirectional.fromSTEB(20.0, 16.0, 20.0, 16.0),
+                                  ),
+                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                        fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
+                                        letterSpacing: 0.0,
+                                        useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
+                                      ),
+                                  keyboardType: TextInputType.phone,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                    LengthLimitingTextInputFormatter(11),
+                                    _PhoneNumberFormatter(),
+                                  ],
+                                  validator: (val) {
+                                    if (val == null || val.isEmpty) {
+                                      return 'Campo obrigatório';
+                                    }
+                                    final numbers = val.replaceAll(RegExp(r'[^0-9]'), '');
+                                    if (numbers.length < 10 || numbers.length > 11) {
+                                      return 'Número inválido (use DDD + número)';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 16.0),
+                                child: TextFormField(
+                                  controller: viewModel.cidadeTextController,
+                                  focusNode: viewModel.cidadeFocusNode,
+                                  obscureText: false,
+                                  decoration: InputDecoration(
+                                    labelText: 'Cidade',
+                                    hintText: 'Digite sua cidade',
+                                    labelStyle: FlutterFlowTheme.of(context).bodySmall.override(
+                                          fontFamily: FlutterFlowTheme.of(context).bodySmallFamily,
+                                          letterSpacing: 0.0,
+                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodySmallIsCustom,
+                                        ),
+                                    hintStyle: FlutterFlowTheme.of(context).bodySmall.override(
+                                          fontFamily: FlutterFlowTheme.of(context).bodySmallFamily,
+                                          letterSpacing: 0.0,
+                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodySmallIsCustom,
+                                        ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: FlutterFlowTheme.of(context).primary,
+                                        width: 2.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(50.0),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: FlutterFlowTheme.of(context).primary,
+                                        width: 2.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(50.0),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: FlutterFlowTheme.of(context).error,
+                                        width: 2.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(50.0),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: FlutterFlowTheme.of(context).error,
+                                        width: 2.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(50.0),
+                                    ),
+                                    filled: true,
+                                    fillColor: FlutterFlowTheme.of(context).primaryBackground,
+                                    contentPadding: const EdgeInsetsDirectional.fromSTEB(20.0, 16.0, 20.0, 16.0),
+                                  ),
+                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                        fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
+                                        letterSpacing: 0.0,
+                                        useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
+                                      ),
+                                  textCapitalization: TextCapitalization.words,
                                   validator: (val) {
                                     if (val == null || val.isEmpty) {
                                       return 'Campo obrigatório';
@@ -420,6 +563,55 @@ class _EditAvatarPlaceholder extends StatelessWidget {
         size: size * 0.5,
         color: FlutterFlowTheme.of(context).primary,
       ),
+    );
+  }
+}
+
+/// Formatador de número de telefone
+class _PhoneNumberFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final text = newValue.text;
+    final textLength = text.length;
+
+    if (textLength == 0) {
+      return newValue;
+    }
+
+    var buffer = StringBuffer();
+
+    // Adiciona parênteses no DDD
+    if (textLength > 0) {
+      buffer.write('(');
+      buffer.write(text.substring(0, textLength >= 2 ? 2 : textLength));
+      if (textLength >= 2) {
+        buffer.write(') ');
+      }
+    }
+
+    // Adiciona os dígitos do número
+    if (textLength >= 3) {
+      if (textLength <= 6) {
+        buffer.write(text.substring(2, textLength));
+      } else if (textLength <= 10) {
+        buffer.write(text.substring(2, 6));
+        buffer.write('-');
+        buffer.write(text.substring(6, textLength));
+      } else {
+        buffer.write(text.substring(2, 7));
+        buffer.write('-');
+        buffer.write(text.substring(7, textLength));
+      }
+    }
+
+    final formatted = buffer.toString();
+
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
     );
   }
 }
