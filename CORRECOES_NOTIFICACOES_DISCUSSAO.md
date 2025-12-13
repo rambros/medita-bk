@@ -215,3 +215,4 @@ firebase deploy --only firestore:indexes
 
 🎯 **Próximo Passo:** Rode o app, peça para o professor responder uma discussão, e verifique os logs! 🚀
 
+
