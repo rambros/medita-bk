@@ -53,8 +53,13 @@ class PlayerTopicoViewModel extends ChangeNotifier {
   /// Verifica se o usuario esta inscrito
   bool get isInscrito => _inscricao != null && _inscricao!.isAtivo;
 
-  /// Progresso geral do curso
-  double get progressoCurso => _inscricao?.percentualConcluido ?? 0;
+  /// Progresso geral do curso (calculado dinamicamente)
+  double get progressoCurso {
+    if (_inscricao == null) return 0;
+    final totalTopicos = todosTopicos.length;
+    if (totalTopicos == 0) return 0;
+    return (_inscricao!.topicosCompletos / totalTopicos) * 100;
+  }
 
   /// Lista de todos os topicos do curso (achatada)
   List<({AulaModel aula, TopicoModel topico})> get todosTopicos {
@@ -164,7 +169,7 @@ class PlayerTopicoViewModel extends ChangeNotifier {
       // Carrega inscricao do usuario
       if (usuarioId != null) {
         _inscricao = await _repository.getInscricao(cursoId, usuarioId);
-        
+
         // Atualiza ultimo acesso
         if (_inscricao != null) {
           await _repository.atualizarUltimoAcesso(
@@ -179,7 +184,6 @@ class PlayerTopicoViewModel extends ChangeNotifier {
       _error = null;
     } catch (e) {
       _error = 'Erro ao carregar conteudo: $e';
-      debugPrint(_error);
     } finally {
       _isLoading = false;
       notifyListeners();

@@ -221,12 +221,14 @@ class QuizProgressIndicator extends StatelessWidget {
     required this.totalPerguntas,
     required this.perguntaAtual,
     required this.respostas,
+    this.perguntas,
     this.onPerguntaTap,
   });
 
   final int totalPerguntas;
   final int perguntaAtual;
-  final Map<String, String> respostas;
+  final Map<String, dynamic> respostas;
+  final List<dynamic>? perguntas; // Lista de perguntas para verificar IDs corretamente
   final Function(int index)? onPerguntaTap;
 
   @override
@@ -240,7 +242,18 @@ class QuizProgressIndicator extends StatelessWidget {
       child: Row(
         children: List.generate(totalPerguntas, (index) {
           final isAtual = index == perguntaAtual;
-          final isRespondida = index < respostas.length;
+          
+          // Verifica corretamente se a pergunta foi respondida
+          // usando o ID da pergunta e não o índice
+          bool isRespondida = false;
+          if (perguntas != null && index < perguntas!.length) {
+            final pergunta = perguntas![index];
+            final perguntaId = pergunta is Map ? pergunta['id'] : (pergunta as dynamic).id;
+            isRespondida = respostas.containsKey(perguntaId);
+          } else {
+            // Fallback: assume que as perguntas foram respondidas sequencialmente
+            isRespondida = index < respostas.length;
+          }
 
           return Expanded(
             child: GestureDetector(

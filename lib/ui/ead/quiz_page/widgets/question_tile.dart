@@ -10,7 +10,8 @@ class QuestionTile extends StatelessWidget {
     required this.pergunta,
     required this.numeroPergunta,
     required this.totalPerguntas,
-    required this.respostaSelecionada,
+    this.respostaSelecionada,
+    this.respostasSelecionadas,
     required this.onRespostaSelecionada,
     this.mostrarResultado = false,
   });
@@ -19,6 +20,7 @@ class QuestionTile extends StatelessWidget {
   final int numeroPergunta;
   final int totalPerguntas;
   final String? respostaSelecionada;
+  final Set<String>? respostasSelecionadas;
   final Function(String opcaoId) onRespostaSelecionada;
   final bool mostrarResultado;
 
@@ -60,16 +62,57 @@ class QuestionTile extends StatelessWidget {
 
           const SizedBox(height: 24),
 
-          // Opcoes
-          ...pergunta.opcoes.map((opcao) => Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: OptionTile(
-                  opcao: opcao,
-                  isSelected: respostaSelecionada == opcao.id,
-                  onTap: () => onRespostaSelecionada(opcao.id),
-                  mostrarResultado: mostrarResultado,
+          // Info box para múltiplas respostas
+          if (pergunta.isMultiplasRespostas && !mostrarResultado) ...[
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: appTheme.primary.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: appTheme.primary.withOpacity(0.3),
                 ),
-              )),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.info_outline,
+                    size: 18,
+                    color: appTheme.primary,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Selecione todas as opções corretas',
+                      style: appTheme.bodySmall.copyWith(
+                        color: appTheme.primary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+          ],
+
+          // Opcoes
+          ...pergunta.opcoes.map((opcao) {
+            final isSelected = pergunta.isMultiplasRespostas
+                ? (respostasSelecionadas?.contains(opcao.id) ?? false)
+                : respostaSelecionada == opcao.id;
+
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: OptionTile(
+                opcao: opcao,
+                isSelected: isSelected,
+                isMultiplasRespostas: pergunta.isMultiplasRespostas,
+                onTap: () => onRespostaSelecionada(opcao.id),
+                mostrarResultado: mostrarResultado,
+              ),
+            );
+          }),
 
           // Explicacao (apos responder, se disponivel)
           if (mostrarResultado && pergunta.hasExplicacao) ...[
@@ -83,7 +126,14 @@ class QuestionTile extends StatelessWidget {
 
   Widget _buildExplicacao(BuildContext context) {
     final appTheme = AppTheme.of(context);
-    final acertou = pergunta.isOpcaoCorreta(respostaSelecionada ?? '');
+
+    // Verificar se acertou baseado no tipo de pergunta
+    bool acertou;
+    if (pergunta.isMultiplasRespostas) {
+      acertou = pergunta.isRespostaCorreta(respostasSelecionadas ?? {});
+    } else {
+      acertou = pergunta.isOpcaoCorreta(respostaSelecionada ?? '');
+    }
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -137,12 +187,14 @@ class OptionTile extends StatelessWidget {
     required this.opcao,
     required this.isSelected,
     required this.onTap,
+    this.isMultiplasRespostas = false,
     this.mostrarResultado = false,
   });
 
   final QuizOpcaoModel opcao;
   final bool isSelected;
   final VoidCallback onTap;
+  final bool isMultiplasRespostas;
   final bool mostrarResultado;
 
   @override
@@ -177,12 +229,18 @@ class OptionTile extends StatelessWidget {
         backgroundColor = appTheme.primary.withOpacity(0.1);
         borderColor = appTheme.primary;
         textColor = appTheme.primary;
-        icon = Icons.radio_button_checked;
+        // Checkbox para múltiplas respostas, radio para única resposta
+        icon = isMultiplasRespostas
+            ? Icons.check_box
+            : Icons.radio_button_checked;
       } else {
         backgroundColor = appTheme.secondaryBackground;
         borderColor = appTheme.accent4;
         textColor = appTheme.primaryText;
-        icon = Icons.radio_button_unchecked;
+        // Checkbox para múltiplas respostas, radio para única resposta
+        icon = isMultiplasRespostas
+            ? Icons.check_box_outline_blank
+            : Icons.radio_button_unchecked;
       }
     }
 

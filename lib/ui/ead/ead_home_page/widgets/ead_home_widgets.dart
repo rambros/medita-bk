@@ -204,16 +204,26 @@ class CursoEmAndamentoCard extends StatelessWidget {
     required this.inscricao,
     this.onTap,
     this.onContinuar,
+    this.totalTopicosReal,
   });
 
   final InscricaoCursoModel inscricao;
   final VoidCallback? onTap;
   final VoidCallback? onContinuar;
 
+  /// Total real de tópicos do curso (calculado das aulas)
+  final int? totalTopicosReal;
+
+  /// Calcula o progresso baseado no total real de tópicos
+  double get progresso {
+    final total = totalTopicosReal ?? inscricao.totalTopicos;
+    if (total == 0) return 0;
+    return (inscricao.topicosCompletos / total) * 100;
+  }
+
   @override
   Widget build(BuildContext context) {
     final appTheme = AppTheme.of(context);
-    final progresso = inscricao.percentualConcluido;
 
     return Card(
       clipBehavior: Clip.antiAlias,

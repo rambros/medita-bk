@@ -140,7 +140,12 @@ class EadRepository {
       return _inscricoesCache[cacheKey];
     }
 
-    final inscricao = await _service.getInscricao(cursoId, usuarioId);
+    // Passa forceRefresh para o service para ignorar cache do Firestore também
+    final inscricao = await _service.getInscricao(
+      cursoId, 
+      usuarioId,
+      forceRefresh: forceRefresh,
+    );
 
     if (inscricao != null) {
       _inscricoesCache[cacheKey] = inscricao;
@@ -240,6 +245,10 @@ class EadRepository {
     // Atualiza progresso
     var novoProgresso = inscricao.progresso.adicionarTopicoCompleto(topicoId).atualizarUltimoAcesso(topicoId, aulaId);
 
+    // Carrega todas as aulas com tópicos para calcular o total REAL
+    final todasAulas = await getAulasComTopicos(cursoId);
+    final totalTopicosReal = todasAulas.fold(0, (sum, aula) => sum + aula.topicos.length);
+
     // Verifica se completou a aula
     final topicosAula = await getTopicosByAula(cursoId, aulaId);
     final topicosAulaIds = topicosAula.map((t) => t.id).toSet();
@@ -249,9 +258,9 @@ class EadRepository {
       novoProgresso = novoProgresso.adicionarAulaCompleta(aulaId);
     }
 
-    // Calcula percentual
+    // Calcula percentual usando o total REAL de tópicos
     final percentual =
-        inscricao.totalTopicos > 0 ? (novoProgresso.totalTopicosCompletos / inscricao.totalTopicos) * 100 : 0.0;
+        totalTopicosReal > 0 ? (novoProgresso.totalTopicosCompletos / totalTopicosReal) * 100 : 0.0;
 
     novoProgresso = novoProgresso.copyWith(percentualConcluido: percentual);
 
@@ -298,9 +307,13 @@ class EadRepository {
     // Atualiza progresso
     var novoProgresso = inscricao.progresso.removerTopicoCompleto(topicoId);
 
-    // Recalcula percentual
+    // Carrega todas as aulas com tópicos para calcular o total REAL
+    final todasAulas = await getAulasComTopicos(cursoId);
+    final totalTopicosReal = todasAulas.fold(0, (sum, aula) => sum + aula.topicos.length);
+
+    // Recalcula percentual usando o total REAL
     final percentual =
-        inscricao.totalTopicos > 0 ? (novoProgresso.totalTopicosCompletos / inscricao.totalTopicos) * 100 : 0.0;
+        totalTopicosReal > 0 ? (novoProgresso.totalTopicosCompletos / totalTopicosReal) * 100 : 0.0;
 
     novoProgresso = novoProgresso.copyWith(percentualConcluido: percentual);
 

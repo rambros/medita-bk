@@ -41,9 +41,9 @@ class QuizViewModel extends ChangeNotifier {
   String? _error;
   String? get error => _error;
 
-  // Respostas do usuario (perguntaId -> opcaoId)
-  final Map<String, String> _respostas = {};
-  Map<String, String> get respostas => Map.unmodifiable(_respostas);
+  // Respostas do usuario (perguntaId -> String para única resposta ou Set<String> para múltiplas)
+  final Map<String, dynamic> _respostas = {};
+  Map<String, dynamic> get respostas => Map.unmodifiable(_respostas);
 
   // Indice da pergunta atual
   int _perguntaAtual = 0;
@@ -92,11 +92,22 @@ class QuizViewModel extends ChangeNotifier {
     return _respostas.containsKey(pergunta.id);
   }
 
-  /// Resposta selecionada para a pergunta atual
+  /// Resposta selecionada para a pergunta atual (String ou null para única resposta)
   String? get respostaSelecionada {
     final pergunta = perguntaAtualModel;
     if (pergunta == null) return null;
-    return _respostas[pergunta.id];
+    final resposta = _respostas[pergunta.id];
+    return resposta is String ? resposta : null;
+  }
+
+  /// Respostas selecionadas para a pergunta atual (Set<String> para múltiplas respostas)
+  Set<String> get respostasSelecionadas {
+    final pergunta = perguntaAtualModel;
+    if (pergunta == null) return {};
+    final resposta = _respostas[pergunta.id];
+    if (resposta is Set<String>) return resposta;
+    if (resposta is String) return {resposta};
+    return {};
   }
 
   /// Verifica se todas as perguntas foram respondidas
@@ -144,7 +155,20 @@ class QuizViewModel extends ChangeNotifier {
     final pergunta = perguntaAtualModel;
     if (pergunta == null || _estado == QuizEstado.concluido) return;
 
-    _respostas[pergunta.id] = opcaoId;
+    if (pergunta.isMultiplasRespostas) {
+      // Múltiplas respostas: toggle checkbox
+      final respostasAtuais = _respostas[pergunta.id] as Set<String>? ?? <String>{};
+      if (respostasAtuais.contains(opcaoId)) {
+        respostasAtuais.remove(opcaoId);
+      } else {
+        respostasAtuais.add(opcaoId);
+      }
+      _respostas[pergunta.id] = respostasAtuais;
+    } else {
+      // Múltipla escolha ou V/F: radio button
+      _respostas[pergunta.id] = opcaoId;
+    }
+
     notifyListeners();
   }
 
@@ -184,12 +208,37 @@ class QuizViewModel extends ChangeNotifier {
       int acertos = 0;
       for (final pergunta in _perguntas) {
         final respostaUsuario = _respostas[pergunta.id];
-        if (respostaUsuario != null && pergunta.isOpcaoCorreta(respostaUsuario)) {
-          acertos++;
+
+        bool acertou = false;
+        if (pergunta.isMultiplasRespostas) {
+          // Múltiplas respostas: all-or-nothing
+          final respostasSet = respostaUsuario is Set<String>
+              ? respostaUsuario
+              : (respostaUsuario is String ? {respostaUsuario} : <String>{});
+          acertou = pergunta.isRespostaCorreta(respostasSet);
+        } else {
+          // Múltipla escolha ou V/F
+          if (respostaUsuario is String) {
+            acertou = pergunta.isOpcaoCorreta(respostaUsuario);
+          } else if (respostaUsuario is Set<String> && respostaUsuario.length == 1) {
+            acertou = pergunta.isOpcaoCorreta(respostaUsuario.first);
+          }
         }
+
+        if (acertou) acertos++;
       }
 
       final nota = (acertos / _perguntas.length) * 100;
+
+      // Converter respostas para formato que o resultado espera (Map<String, String>)
+      final respostasParaSalvar = <String, String>{};
+      _respostas.forEach((key, value) {
+        if (value is String) {
+          respostasParaSalvar[key] = value;
+        } else if (value is Set<String>) {
+          respostasParaSalvar[key] = value.join(','); // Salvar múltiplas separadas por vírgula
+        }
+      });
 
       _resultado = QuizResultadoModel(
         topicoId: topicoId,
@@ -197,7 +246,7 @@ class QuizViewModel extends ChangeNotifier {
         acertos: acertos,
         nota: nota,
         dataRealizacao: DateTime.now(),
-        respostas: Map.from(_respostas),
+        respostas: respostasParaSalvar,
       );
 
       _estado = QuizEstado.concluido;
@@ -233,7 +282,14 @@ class QuizViewModel extends ChangeNotifier {
 
   /// Verifica se uma opcao especifica foi selecionada
   bool isOpcaoSelecionada(String opcaoId) {
-    return respostaSelecionada == opcaoId;
+    final pergunta = perguntaAtualModel;
+    if (pergunta == null) return false;
+
+    if (pergunta.isMultiplasRespostas) {
+      return respostasSelecionadas.contains(opcaoId);
+    } else {
+      return respostaSelecionada == opcaoId;
+    }
   }
 
   /// Verifica se a opcao e a correta (apos concluir quiz)

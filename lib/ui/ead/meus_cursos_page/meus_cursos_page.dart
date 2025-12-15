@@ -347,6 +347,7 @@ class _MeusCursosPageState extends State<MeusCursosPage> {
                     padding: const EdgeInsets.only(bottom: 16),
                     child: MeuCursoCard(
                       inscricao: inscricao,
+                      totalTopicosReal: viewModel.getTotalTopicosReal(inscricao.cursoId),
                       onTap: () => _navegarParaDetalhes(inscricao.cursoId),
                       onContinuar: () => _continuarCurso(
                         inscricao.cursoId,

@@ -248,7 +248,10 @@ class CursoInfoHeader extends StatelessWidget {
 
   Widget _buildProgresso(BuildContext context) {
     final appTheme = AppTheme.of(context);
-    final progresso = inscricao!.percentualConcluido;
+    // Calcula o progresso baseado no total real de tópicos
+    final totalTopicos = totalTopicosCalculado ?? curso.totalTopicos;
+    final topicosCompletos = inscricao!.progresso.totalTopicosCompletos;
+    final progresso = totalTopicos > 0 ? (topicosCompletos / totalTopicos) * 100 : 0.0;
 
     return Container(
       padding: const EdgeInsets.all(16),

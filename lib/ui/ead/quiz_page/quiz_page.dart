@@ -139,8 +139,8 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   void _continuarCurso() {
-    // Volta para o curso
-    context.pop();
+    // Passa 'next' para indicar que deve navegar para o próximo tópico
+    context.pop('next');
   }
 
   void _mostrarSnackBar(String mensagem) {
@@ -274,6 +274,7 @@ class _QuizPageState extends State<QuizPage> {
           totalPerguntas: viewModel.totalPerguntas,
           perguntaAtual: viewModel.perguntaAtual,
           respostas: viewModel.respostas,
+          perguntas: viewModel.perguntas,
           onPerguntaTap: mostrarResultado ? viewModel.irParaPergunta : null,
         ),
 
@@ -284,6 +285,7 @@ class _QuizPageState extends State<QuizPage> {
             numeroPergunta: viewModel.perguntaAtual + 1,
             totalPerguntas: viewModel.totalPerguntas,
             respostaSelecionada: viewModel.respostaSelecionada,
+            respostasSelecionadas: viewModel.respostasSelecionadas,
             onRespostaSelecionada: _selecionarResposta,
             mostrarResultado: mostrarResultado,
           ),

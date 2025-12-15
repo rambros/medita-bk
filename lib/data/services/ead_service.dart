@@ -138,11 +138,16 @@ class EadService {
   /// Busca a inscrição de um usuário em um curso
   Future<InscricaoCursoModel?> getInscricao(
     String cursoId,
-    String usuarioId,
-  ) async {
+    String usuarioId, {
+    bool forceRefresh = false,
+  }) async {
     final inscricaoId = InscricaoCursoModel.gerarId(cursoId, usuarioId);
-    debugPrint('EadService.getInscricao: Buscando inscricao $inscricaoId');
-    final doc = await _inscricoesCollection.doc(inscricaoId).get();
+    debugPrint('EadService.getInscricao: Buscando inscricao $inscricaoId (forceRefresh: $forceRefresh)');
+    
+    // Se forceRefresh for true, força busca do servidor ignorando cache do Firestore
+    final doc = await _inscricoesCollection.doc(inscricaoId).get(
+      forceRefresh ? GetOptions(source: Source.server) : null,
+    );
 
     if (!doc.exists) {
       debugPrint('EadService.getInscricao: Inscricao nao encontrada');
@@ -279,13 +284,36 @@ class EadService {
       // Converte para o modelo QuizQuestionModel
       return perguntasList.asMap().entries.map((entry) {
         final perguntaMap = entry.value as Map<String, dynamic>;
-        final opcoesList = perguntaMap['opcoes'] as List<dynamic>? ?? [];
-        final respostaCorretaIndex = perguntaMap['respostaCorretaIndex'] as int? ?? 0;
 
-        // Converte opcoes (array de strings) para QuizOpcaoModel
-        final opcoes = opcoesList.asMap().entries.map((opcaoEntry) {
-          final texto = opcaoEntry.value as String? ?? '';
-          final isCorreta = opcaoEntry.key == respostaCorretaIndex;
+        // Detectar tipo de pergunta (novo formato ou legado)
+        final tipoStr = perguntaMap['tipo'] as String?;
+        final tipo = _parseTipoPergunta(tipoStr);
+
+        // Obter índices das respostas corretas
+        final respostasCorretasIndices =
+            (perguntaMap['respostasCorretasIndices'] as List<dynamic>?)
+                ?.map((e) => e as int)
+                .toList() ??
+            // Fallback para formato antigo
+            [perguntaMap['respostaCorretaIndex'] as int? ?? 0];
+
+        // Obter lista de opções
+        List<String> opcoesTextos;
+        if (tipo == TipoPergunta.verdadeiroFalso) {
+          // V/F: usar opções fixas
+          opcoesTextos = ['Verdadeiro', 'Falso'];
+        } else {
+          // Múltipla escolha ou múltiplas respostas: ler do JSON
+          opcoesTextos = (perguntaMap['opcoes'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ?? [];
+        }
+
+        // Converte opcoes para QuizOpcaoModel
+        final opcoes = opcoesTextos.asMap().entries.map((opcaoEntry) {
+          final texto = opcaoEntry.value;
+          final isCorreta = respostasCorretasIndices.contains(opcaoEntry.key);
+
           return QuizOpcaoModel(
             id: 'opcao_${opcaoEntry.key}',
             texto: texto,
@@ -297,6 +325,7 @@ class EadService {
         return QuizQuestionModel(
           id: 'question_${entry.key}',
           pergunta: perguntaMap['titulo'] as String? ?? '',
+          tipo: tipo,
           opcoes: opcoes,
           ordem: entry.key,
         );
@@ -304,6 +333,21 @@ class EadService {
     } catch (e) {
       debugPrint('EadService.getQuizByTopico: Erro ao fazer parse do quiz: $e');
       return [];
+    }
+  }
+
+  /// Parse do tipo de pergunta
+  static TipoPergunta _parseTipoPergunta(String? tipoStr) {
+    switch (tipoStr) {
+      case 'verdadeiro_falso':
+        return TipoPergunta.verdadeiroFalso;
+      case 'multipla_escolha':
+        return TipoPergunta.multiplaEscolha;
+      case 'multiplas_respostas':
+        return TipoPergunta.multiplasRespostas;
+      default:
+        // Fallback: assumir múltipla escolha para formatos antigos
+        return TipoPergunta.multiplaEscolha;
     }
   }
 

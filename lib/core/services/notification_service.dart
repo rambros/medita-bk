@@ -118,7 +118,7 @@ class NotificationService {
         if (canScheduleExact) {
           scheduleMode = AndroidScheduleMode.exactAllowWhileIdle;
         } else {
-          debugPrint('Exact alarm permission not granted; scheduling inexact alarm instead.');
+          // Exact alarm permission not granted; scheduling inexact alarm instead.
         }
       }
     }

@@ -1,5 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/// Tipo de pergunta do quiz
+enum TipoPergunta {
+  verdadeiroFalso,   // Duas opções fixas: Verdadeiro/Falso
+  multiplaEscolha,   // 4-6 opções customizáveis, 1 correta
+  multiplasRespostas // 4-6 opções customizáveis, N corretas
+}
+
 /// Model para uma opção de resposta do quiz
 class QuizOpcaoModel {
   final String id;
@@ -54,6 +61,7 @@ class QuizOpcaoModel {
 class QuizQuestionModel {
   final String id;
   final String pergunta;
+  final TipoPergunta tipo;
   final List<QuizOpcaoModel> opcoes;
   final int ordem;
   final String? explicacao; // Explicação mostrada após responder
@@ -62,6 +70,7 @@ class QuizQuestionModel {
   const QuizQuestionModel({
     required this.id,
     required this.pergunta,
+    this.tipo = TipoPergunta.multiplaEscolha,
     this.opcoes = const [],
     this.ordem = 0,
     this.explicacao,
@@ -75,10 +84,12 @@ class QuizQuestionModel {
 
   factory QuizQuestionModel.fromMap(Map<String, dynamic> map, [String? id]) {
     final opcoesData = map['opcoes'] as List<dynamic>? ?? [];
-    
+    final tipoStr = map['tipo'] as String? ?? 'multipla_escolha';
+
     return QuizQuestionModel(
       id: id ?? map['id'] as String? ?? '',
       pergunta: map['pergunta'] as String? ?? '',
+      tipo: _parseTipoPergunta(tipoStr),
       opcoes: opcoesData.asMap().entries.map((entry) {
         final opcaoMap = entry.value as Map<String, dynamic>;
         return QuizOpcaoModel.fromMap(opcaoMap, opcaoMap['id'] ?? 'opcao_${entry.key}');
@@ -89,10 +100,24 @@ class QuizQuestionModel {
     );
   }
 
+  static TipoPergunta _parseTipoPergunta(String tipoStr) {
+    switch (tipoStr) {
+      case 'verdadeiro_falso':
+        return TipoPergunta.verdadeiroFalso;
+      case 'multipla_escolha':
+        return TipoPergunta.multiplaEscolha;
+      case 'multiplas_respostas':
+        return TipoPergunta.multiplasRespostas;
+      default:
+        return TipoPergunta.multiplaEscolha;
+    }
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'pergunta': pergunta,
+      'tipo': _tipoToString(tipo),
       'opcoes': opcoes.map((o) => o.toMap()).toList(),
       'ordem': ordem,
       'explicacao': explicacao,
@@ -100,9 +125,21 @@ class QuizQuestionModel {
     };
   }
 
+  static String _tipoToString(TipoPergunta tipo) {
+    switch (tipo) {
+      case TipoPergunta.verdadeiroFalso:
+        return 'verdadeiro_falso';
+      case TipoPergunta.multiplaEscolha:
+        return 'multipla_escolha';
+      case TipoPergunta.multiplasRespostas:
+        return 'multiplas_respostas';
+    }
+  }
+
   QuizQuestionModel copyWith({
     String? id,
     String? pergunta,
+    TipoPergunta? tipo,
     List<QuizOpcaoModel>? opcoes,
     int? ordem,
     String? explicacao,
@@ -111,6 +148,7 @@ class QuizQuestionModel {
     return QuizQuestionModel(
       id: id ?? this.id,
       pergunta: pergunta ?? this.pergunta,
+      tipo: tipo ?? this.tipo,
       opcoes: opcoes ?? this.opcoes,
       ordem: ordem ?? this.ordem,
       explicacao: explicacao ?? this.explicacao,
@@ -120,13 +158,22 @@ class QuizQuestionModel {
 
   // === Getters úteis ===
 
-  /// Retorna a opção correta
+  bool get isVerdadeiroFalso => tipo == TipoPergunta.verdadeiroFalso;
+  bool get isMultiplaEscolha => tipo == TipoPergunta.multiplaEscolha;
+  bool get isMultiplasRespostas => tipo == TipoPergunta.multiplasRespostas;
+
+  /// Retorna a opção correta (para múltipla escolha ou V/F)
   QuizOpcaoModel? get opcaoCorreta {
     try {
       return opcoes.firstWhere((o) => o.isCorreta);
     } catch (_) {
       return null;
     }
+  }
+
+  /// Retorna todas as opções corretas (para múltiplas respostas)
+  List<QuizOpcaoModel> get opcoesCorretas {
+    return opcoes.where((o) => o.isCorreta).toList();
   }
 
   /// Retorna o índice da opção correta
@@ -137,6 +184,20 @@ class QuizQuestionModel {
   /// Verifica se uma opção está correta
   bool isOpcaoCorreta(String opcaoId) {
     return opcoes.any((o) => o.id == opcaoId && o.isCorreta);
+  }
+
+  /// Verifica se um conjunto de opções está correto (all-or-nothing para múltiplas respostas)
+  bool isRespostaCorreta(Set<String> opcaoIds) {
+    if (isMultiplasRespostas) {
+      // Múltiplas respostas: deve marcar TODAS as corretas E nenhuma incorreta
+      final opcoesCorretasIds = opcoesCorretas.map((o) => o.id).toSet();
+      return opcaoIds.length == opcoesCorretasIds.length &&
+          opcaoIds.every((id) => opcoesCorretasIds.contains(id));
+    } else {
+      // Múltipla escolha ou V/F: deve marcar a única correta
+      if (opcaoIds.length != 1) return false;
+      return isOpcaoCorreta(opcaoIds.first);
+    }
   }
 
   /// Número de opções

@@ -12,13 +12,27 @@ class MeuCursoCard extends StatelessWidget {
     required this.inscricao,
     this.onTap,
     this.onContinuar,
+    this.totalTopicosReal,
   });
 
   final InscricaoCursoModel inscricao;
   final VoidCallback? onTap;
   final VoidCallback? onContinuar;
 
-  double get progresso => inscricao.percentualConcluido;
+  /// Total real de tópicos do curso (calculado das aulas)
+  /// Se fornecido, será usado para calcular o progresso corretamente
+  final int? totalTopicosReal;
+
+  /// Calcula o progresso baseado no total real de tópicos
+  double get progresso {
+    final total = totalTopicosReal ?? inscricao.totalTopicos;
+    if (total == 0) return 0;
+    return (inscricao.topicosCompletos / total) * 100;
+  }
+
+  /// Retorna o total de tópicos a exibir
+  int get totalTopicos => totalTopicosReal ?? inscricao.totalTopicos;
+
   bool get isConcluido => inscricao.isConcluido;
 
   @override
@@ -227,7 +241,7 @@ class MeuCursoCard extends StatelessWidget {
         ),
         const SizedBox(width: 4),
         Text(
-          '${inscricao.topicosCompletos}/${inscricao.totalTopicos} tópicos',
+          '${inscricao.topicosCompletos}/$totalTopicos tópicos',
           style: appTheme.bodySmall,
         ),
 

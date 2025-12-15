@@ -32,7 +32,6 @@ class NotificacoesRepository {
   }) async {
     final userId = currentUserUid;
     if (userId.isEmpty) {
-      debugPrint('NotificacoesRepository: Usuário não autenticado');
       return [];
     }
 
@@ -68,13 +67,11 @@ class NotificacoesRepository {
           continue;
         }
 
-        final notificacao = Notificacao.fromFirestore(doc, userState);
-        notificacoes.add(notificacao);
+        notificacoes.add(Notificacao.fromFirestore(doc, userState));
       }
 
       return notificacoes;
     } catch (e) {
-      debugPrint('❌ Erro ao buscar notificações: $e');
       return [];
     }
   }
@@ -86,7 +83,6 @@ class NotificacoesRepository {
   }) async* {
     final userId = currentUserUid;
     if (userId.isEmpty) {
-      debugPrint('NotificacoesRepository Stream: Usuário não autenticado');
       yield [];
       return;
     }
@@ -112,18 +108,14 @@ class NotificacoesRepository {
               : null;
 
           // Pula se ocultado
-          if (userState?.ocultado ?? false) {
-            continue;
-          }
+          if (userState?.ocultado ?? false) continue;
 
-          final notif = Notificacao.fromFirestore(doc, userState);
-          notificacoes.add(notif);
+          notificacoes.add(Notificacao.fromFirestore(doc, userState));
         }
 
         yield notificacoes;
       }
     } catch (e) {
-      debugPrint('❌ Erro no stream de notificações: $e');
       yield [];
     }
   }
@@ -160,7 +152,6 @@ class NotificacoesRepository {
 
       return true;
     } catch (e) {
-      debugPrint('❌ Erro ao marcar como lida: $e');
       return false;
     }
   }
@@ -210,7 +201,6 @@ class NotificacoesRepository {
 
       return true;
     } catch (e) {
-      debugPrint('❌ Erro ao marcar todas como lidas: $e');
       return false;
     }
   }
@@ -255,7 +245,6 @@ class NotificacoesRepository {
 
       return true;
     } catch (e) {
-      debugPrint('❌ Erro ao ocultar: $e');
       return false;
     }
   }
@@ -293,7 +282,6 @@ class NotificacoesRepository {
 
       return count;
     } catch (e) {
-      debugPrint('❌ Erro ao contar não lidas: $e');
       return 0;
     }
   }

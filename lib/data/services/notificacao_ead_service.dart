@@ -73,7 +73,6 @@ class NotificacaoEadService {
 
       return docRef.id;
     } catch (e) {
-      debugPrint('Erro ao criar notificação: $e');
       return null;
     }
   }
@@ -121,7 +120,6 @@ class NotificacaoEadService {
 
       return notificacoes;
     } catch (e) {
-      debugPrint('Erro ao buscar notificações: $e');
       return [];
     }
   }
@@ -243,7 +241,6 @@ class NotificacaoEadService {
 
       return true;
     } catch (e) {
-      debugPrint('Erro ao marcar como lida: $e');
       return false;
     }
   }
@@ -284,7 +281,6 @@ class NotificacaoEadService {
 
       return true;
     } catch (e) {
-      debugPrint('Erro ao marcar todas como lidas: $e');
       return false;
     }
   }
@@ -293,8 +289,6 @@ class NotificacaoEadService {
   /// A notificação não é deletada, apenas marcada como ocultada para o usuário
   Future<bool> ocultarNotificacao(String notificacaoId, String usuarioId) async {
     try {
-      debugPrint('🟢 NotificacaoEadService.ocultarNotificacao: Iniciando para $notificacaoId, usuário $usuarioId');
-
       final userStateRef = _notificacoesCollection
           .doc(notificacaoId)
           .collection('user_states')
@@ -303,11 +297,8 @@ class NotificacaoEadService {
       // Verificar se o documento da notificação existe
       final notificationDoc = await _notificacoesCollection.doc(notificacaoId).get();
       if (!notificationDoc.exists) {
-        debugPrint('🟢 NotificacaoEadService.ocultarNotificacao: Documento não existe em notifications');
         return false;
       }
-
-      debugPrint('🟢 NotificacaoEadService.ocultarNotificacao: Documento encontrado, buscando user_state');
 
       // Buscar estado atual do usuário para preservar campos como 'lido'
       final userStateDoc = await userStateRef.get();
@@ -316,13 +307,8 @@ class NotificacaoEadService {
           ? UserNotificationState.fromMap(userStateDoc.data()!, usuarioId)
           : UserNotificationState(userId: usuarioId);
 
-      debugPrint('🟢 NotificacaoEadService.ocultarNotificacao: Estado atual - lido: ${currentState.lido}, ocultado: ${currentState.ocultado}');
-
       // Marca como ocultado preservando outros campos
       final newState = currentState.marcarComoOcultada();
-
-      debugPrint('🟢 NotificacaoEadService.ocultarNotificacao: Novo estado - lido: ${newState.lido}, ocultado: ${newState.ocultado}');
-      debugPrint('🟢 NotificacaoEadService.ocultarNotificacao: Salvando no Firestore: ${newState.toMap()}');
 
       await userStateRef.set(newState.toMap(), SetOptions(merge: true));
 
@@ -331,10 +317,8 @@ class NotificacaoEadService {
         'lastUpdated': FieldValue.serverTimestamp(),
       });
 
-      debugPrint('🟢 NotificacaoEadService.ocultarNotificacao: Salvo com sucesso e stream disparado!');
       return true;
     } catch (e) {
-      debugPrint('Erro ao ocultar notificação: $e');
       return false;
     }
   }
@@ -347,7 +331,6 @@ class NotificacaoEadService {
       await _notificacoesCollection.doc(notificacaoId).delete();
       return true;
     } catch (e) {
-      debugPrint('Erro ao excluir notificação: $e');
       return false;
     }
   }
@@ -407,7 +390,6 @@ class NotificacaoEadService {
 
       return count;
     } catch (e) {
-      debugPrint('Erro ao contar não lidas: $e');
       return 0;
     }
   }
@@ -421,7 +403,7 @@ class NotificacaoEadService {
         'ultimaAtualizacao': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
     } catch (e) {
-      debugPrint('Erro ao incrementar contador: $e');
+      // Falha silenciosa
     }
   }
 
@@ -434,7 +416,7 @@ class NotificacaoEadService {
         'ultimaAtualizacao': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
     } catch (e) {
-      debugPrint('Erro ao decrementar contador: $e');
+      // Falha silenciosa
     }
   }
 
@@ -617,7 +599,7 @@ class NotificacaoEadService {
         await _incrementarContador(destinatarioId, 'discussoesNaoLidas');
       }
     } catch (e) {
-      debugPrint('Erro ao notificar discussão fechada: $e');
+      // Falha silenciosa
     }
   }
 }

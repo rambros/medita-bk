@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:medita_bk/data/repositories/auth_repository.dart';
 import 'package:medita_bk/data/repositories/user_repository.dart';
 import 'package:medita_bk/routing/ead_routes.dart';
+import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart' show routeObserver;
 import 'package:medita_bk/ui/core/widgets/html_display_widget.dart';
 import 'package:medita_bk/ui/core/theme/app_theme.dart';
 import 'package:medita_bk/ui/ead/widgets/update_user_info_dialog.dart';
@@ -29,7 +30,7 @@ class CursoDetalhesPage extends StatefulWidget {
   State<CursoDetalhesPage> createState() => _CursoDetalhesPageState();
 }
 
-class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
+class _CursoDetalhesPageState extends State<CursoDetalhesPage> with RouteAware {
   late final CursoDetalhesViewModel _viewModel;
 
   @override
@@ -40,15 +41,34 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Registra para receber notificações de navegação
+    final route = ModalRoute.of(context);
+    if (route != null) {
+      routeObserver.subscribe(this, route);
+    }
+  }
+
+  @override
   void dispose() {
+    routeObserver.unsubscribe(this);
     _viewModel.dispose();
     super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    // Chamado quando uma rota acima é removida (usuário voltou para esta página)
+    _recarregarProgresso();
   }
 
   Future<void> _carregarDados() async {
     final authRepo = context.read<AuthRepository>();
     final usuarioId = authRepo.currentUserUid.isEmpty ? null : authRepo.currentUserUid;
-    await _viewModel.carregarDados(usuarioId: usuarioId);
+
+    // Força refresh para garantir dados atualizados do Firestore
+    await _viewModel.refresh(usuarioId: usuarioId);
   }
 
   Future<void> _inscrever() async {
@@ -121,9 +141,7 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> {
         'topicoId': topicoId,
       },
     );
-    // Recarrega os dados ao voltar do player para atualizar o progresso
-    // Usa refresh para limpar o cache e buscar dados atualizados
-    await _recarregarProgresso();
+    // O refresh é feito automaticamente via didPopNext
   }
 
   Future<void> _recarregarProgresso() async {

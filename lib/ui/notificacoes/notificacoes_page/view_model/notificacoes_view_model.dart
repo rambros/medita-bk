@@ -99,7 +99,7 @@ class NotificacoesViewModel extends ChangeNotifier {
         }
       }
     } catch (e) {
-      debugPrint('Erro ao atualizar badge: $e');
+      // Falha silenciosa
     }
   }
 

@@ -73,7 +73,8 @@ class _PlayerTopicoPageState extends State<PlayerTopicoPage> {
   }
 
   void _navegarParaTopico(String aulaId, String topicoId) {
-    context.pushReplacementNamed(
+    // Usa replace para substituir apenas esta rota, mantendo a página do curso na pilha
+    context.replaceNamed(
       EadRoutes.playerTopico,
       pathParameters: {
         'cursoId': widget.cursoId,
@@ -97,8 +98,8 @@ class _PlayerTopicoPageState extends State<PlayerTopicoPage> {
     }
   }
 
-  void _navegarParaQuiz() {
-    context.pushNamed(
+  Future<void> _navegarParaQuiz() async {
+    final resultado = await context.pushNamed<String>(
       EadRoutes.quiz,
       pathParameters: {
         'cursoId': widget.cursoId,
@@ -106,6 +107,27 @@ class _PlayerTopicoPageState extends State<PlayerTopicoPage> {
         'topicoId': widget.topicoId,
       },
     );
+    
+    // Se quiz foi concluído e usuário quer continuar
+    if (resultado == 'next' && mounted) {
+      // Mostra feedback positivo antes de voltar
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('✅ Avaliação concluída com sucesso!'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 2),
+        ),
+      );
+      
+      // Pequena pausa para o usuário ver o feedback
+      await Future.delayed(const Duration(milliseconds: 500));
+      
+      // Volta para a página do curso para que o usuário veja o quiz marcado como concluído
+      // Isso evita confusão, especialmente para usuários mais velhos
+      if (mounted) {
+        context.pop();
+      }
+    }
   }
 
   void _navegarParaDiscussoes() {
@@ -264,7 +286,7 @@ class _PlayerTopicoPageState extends State<PlayerTopicoPage> {
           tipo: topico.tipo,
           isCompleto: viewModel.isTopicoCompleto,
           textoProgresso: viewModel.textoProgresso,
-          onBack: () => context.pop(),
+          onBack: () => context.pop('refresh'), // Retorna valor para indicar refresh
           onDiscussoes: _navegarParaDiscussoes,
         ),
 

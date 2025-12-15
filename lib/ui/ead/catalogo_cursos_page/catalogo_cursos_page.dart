@@ -232,6 +232,7 @@ class _CatalogoCursosPageState extends State<CatalogoCursosPage> {
           child: CursoCard(
             curso: curso,
             inscricao: inscricao,
+            totalTopicosReal: viewModel.getTotalTopicosReal(curso.id),
             onTap: () => _navegarParaDetalhes(curso.id),
           ),
         );

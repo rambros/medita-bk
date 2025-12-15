@@ -11,14 +11,25 @@ class CursoCard extends StatelessWidget {
     required this.curso,
     this.inscricao,
     this.onTap,
+    this.totalTopicosReal,
   });
 
   final CursoModel curso;
   final InscricaoCursoModel? inscricao;
   final VoidCallback? onTap;
 
+  /// Total real de tópicos do curso (calculado das aulas)
+  final int? totalTopicosReal;
+
   bool get isInscrito => inscricao != null && (inscricao!.isAtivo || inscricao!.isConcluido);
-  double get progresso => inscricao?.percentualConcluido ?? 0;
+
+  /// Calcula o progresso baseado no total real de tópicos
+  double get progresso {
+    if (inscricao == null) return 0;
+    final total = totalTopicosReal ?? inscricao!.totalTopicos;
+    if (total == 0) return 0;
+    return (inscricao!.topicosCompletos / total) * 100;
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -11,12 +11,15 @@ class CatalogoCursosViewModel extends ChangeNotifier {
       : _repository = repository ?? EadRepository();
 
   // === Estado ===
-  
+
   List<CursoModel> _cursos = [];
   List<CursoModel> get cursos => _cursos;
 
   Map<String, InscricaoCursoModel> _inscricoes = {};
   Map<String, InscricaoCursoModel> get inscricoes => _inscricoes;
+
+  /// Mapa de total de tópicos reais por curso
+  final Map<String, int> _totalTopicosReais = {};
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -58,7 +61,17 @@ class CatalogoCursosViewModel extends ChangeNotifier {
   double getProgresso(String cursoId) {
     final inscricao = _inscricoes[cursoId];
     if (inscricao == null || inscricao.isCancelado) return 0;
-    return inscricao.percentualConcluido;
+    // Usa o total real de tópicos se disponível
+    final totalReal = _totalTopicosReais[cursoId];
+    if (totalReal == null || totalReal == 0) {
+      return inscricao.percentualConcluido;
+    }
+    return (inscricao.topicosCompletos / totalReal) * 100;
+  }
+
+  /// Retorna o total real de tópicos de um curso
+  int getTotalTopicosReal(String cursoId) {
+    return _totalTopicosReais[cursoId] ?? 0;
   }
 
   // === Ações ===
@@ -94,6 +107,14 @@ class CatalogoCursosViewModel extends ChangeNotifier {
       _inscricoes = {
         for (final inscricao in inscricoes) inscricao.cursoId: inscricao
       };
+
+      // Carrega o total real de tópicos para cursos inscritos
+      _totalTopicosReais.clear();
+      for (final inscricao in inscricoes) {
+        final aulas = await _repository.getAulasComTopicos(inscricao.cursoId);
+        final totalReal = aulas.fold(0, (sum, aula) => sum + aula.topicos.length);
+        _totalTopicosReais[inscricao.cursoId] = totalReal;
+      }
     } catch (e) {
       debugPrint('Erro ao carregar inscrições: $e');
     }

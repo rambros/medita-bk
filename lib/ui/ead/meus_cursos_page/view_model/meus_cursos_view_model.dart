@@ -49,6 +49,9 @@ class MeusCursosViewModel extends ChangeNotifier {
   List<InscricaoCursoModel> _inscricoes = [];
   List<InscricaoCursoModel> get inscricoes => _inscricoes;
 
+  /// Mapa de total de tópicos reais por curso (carregado das aulas)
+  final Map<String, int> _totalTopicosReais = {};
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
@@ -108,6 +111,21 @@ class MeusCursosViewModel extends ChangeNotifier {
     }
   }
 
+  /// Retorna o total real de tópicos de um curso
+  int getTotalTopicosReal(String cursoId) {
+    return _totalTopicosReais[cursoId] ?? 0;
+  }
+
+  /// Calcula o progresso real de uma inscrição
+  double calcularProgressoReal(InscricaoCursoModel inscricao) {
+    final totalReal = _totalTopicosReais[inscricao.cursoId];
+    if (totalReal == null || totalReal == 0) {
+      // Fallback para o valor armazenado se não tiver o real
+      return inscricao.percentualConcluido;
+    }
+    return (inscricao.topicosCompletos / totalReal) * 100;
+  }
+
   /// Cursos ordenados por último acesso
   List<InscricaoCursoModel> get cursosRecentes {
     final lista = List<InscricaoCursoModel>.from(inscricoesFiltradas);
@@ -132,6 +150,15 @@ class MeusCursosViewModel extends ChangeNotifier {
 
     try {
       _inscricoes = await _repository.getMeusInscritos(usuarioId);
+
+      // Carrega o total real de tópicos para cada curso
+      _totalTopicosReais.clear();
+      for (final inscricao in _inscricoes) {
+        final aulas = await _repository.getAulasComTopicos(inscricao.cursoId);
+        final totalReal = aulas.fold(0, (sum, aula) => sum + aula.topicos.length);
+        _totalTopicosReais[inscricao.cursoId] = totalReal;
+      }
+
       _error = null;
     } catch (e) {
       _error = 'Erro ao carregar seus cursos: $e';
@@ -182,11 +209,13 @@ class MeusCursosViewModel extends ChangeNotifier {
 
     for (final inscricao in _inscricoes.where((i) => i.isAtivo || i.isConcluido)) {
       totalTopicosCompletos += inscricao.progresso.totalTopicosCompletos;
-      totalTopicos += inscricao.totalTopicos;
+      // Usa o total real de tópicos se disponível
+      final totalReal = _totalTopicosReais[inscricao.cursoId];
+      totalTopicos += totalReal ?? inscricao.totalTopicos;
     }
 
-    final percentual = totalTopicos > 0 
-        ? (totalTopicosCompletos / totalTopicos) * 100 
+    final percentual = totalTopicos > 0
+        ? (totalTopicosCompletos / totalTopicos) * 100
         : 0.0;
 
     return (

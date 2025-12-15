@@ -45,8 +45,13 @@ class CursoDetalhesViewModel extends ChangeNotifier {
   /// Verifica se o curso foi concluído
   bool get isConcluido => _inscricao?.isConcluido ?? false;
 
-  /// Progresso do curso
-  double get progresso => _inscricao?.percentualConcluido ?? 0;
+  /// Progresso do curso (calculado dinamicamente)
+  double get progresso {
+    if (_inscricao == null) return 0;
+    final total = totalTopicos;
+    if (total == 0) return 0;
+    return (topicosCompletos / total) * 100;
+  }
 
   /// Total de tópicos do curso
   int get totalTopicos {
@@ -98,14 +103,38 @@ class CursoDetalhesViewModel extends ChangeNotifier {
   ({String aulaId, String topicoId})? get proximoTopico {
     if (_inscricao == null) return null;
 
-    // Se tem último acesso, retorna ele
+    // Estratégia: Encontra o primeiro tópico NÃO concluído
+    // Isso garante que ao concluir um quiz, o botão "Continuar" vai para o próximo não concluído
+    
     final ultimoTopico = _inscricao!.progresso.ultimoTopicoId;
     final ultimaAula = _inscricao!.progresso.ultimaAulaId;
-    if (ultimoTopico != null && ultimaAula != null) {
+    
+    // Se tem último acesso E ele não está completo, retorna ele
+    if (ultimoTopico != null && ultimaAula != null && !isTopicoCompleto(ultimoTopico)) {
       return (aulaId: ultimaAula, topicoId: ultimoTopico);
     }
+    
+    // Se o último está completo, busca o PRÓXIMO não concluído após ele
+    if (ultimoTopico != null && ultimaAula != null) {
+      bool encontrouUltimo = false;
+      
+      for (final aula in _aulas) {
+        for (final topico in aula.topicos) {
+          // Encontrou o último acessado
+          if (topico.id == ultimoTopico) {
+            encontrouUltimo = true;
+            continue; // Pula ele (já foi concluído)
+          }
+          
+          // Se já passou pelo último E este não está completo, retorna
+          if (encontrouUltimo && !isTopicoCompleto(topico.id)) {
+            return (aulaId: aula.id, topicoId: topico.id);
+          }
+        }
+      }
+    }
 
-    // Senão, encontra o primeiro tópico não completo
+    // Se não encontrou próximo após o último, busca o PRIMEIRO não concluído (do início)
     for (final aula in _aulas) {
       for (final topico in aula.topicos) {
         if (!isTopicoCompleto(topico.id)) {
@@ -114,7 +143,7 @@ class CursoDetalhesViewModel extends ChangeNotifier {
       }
     }
 
-    // Se todos completos, retorna o primeiro
+    // Se todos completos, retorna o primeiro tópico
     if (_aulas.isNotEmpty && _aulas.first.topicos.isNotEmpty) {
       return (aulaId: _aulas.first.id, topicoId: _aulas.first.topicos.first.id);
     }
