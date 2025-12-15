@@ -100,7 +100,6 @@ class CertificadoViewModel extends ChangeNotifier {
       _error = null;
     } catch (e) {
       _error = e.toString();
-      debugPrint('Erro ao carregar certificado: $e');
     } finally {
       _isLoading = false;
       notifyListeners();

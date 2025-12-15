@@ -162,7 +162,6 @@ class MeusCursosViewModel extends ChangeNotifier {
       _error = null;
     } catch (e) {
       _error = 'Erro ao carregar seus cursos: $e';
-      debugPrint(_error);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -193,7 +192,6 @@ class MeusCursosViewModel extends ChangeNotifier {
       await carregarMeusCursos(usuarioId);
     } catch (e) {
       _error = 'Erro ao reiniciar curso: $e';
-      debugPrint(_error);
       notifyListeners();
     }
   }

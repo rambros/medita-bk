@@ -143,7 +143,6 @@ class QuizViewModel extends ChangeNotifier {
       _error = null;
     } catch (e) {
       _error = 'Erro ao carregar quiz: $e';
-      debugPrint(_error);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -263,7 +262,6 @@ class QuizViewModel extends ChangeNotifier {
 
       return _resultado;
     } catch (e) {
-      debugPrint('Erro ao finalizar quiz: $e');
       return null;
     } finally {
       _isSubmitting = false;

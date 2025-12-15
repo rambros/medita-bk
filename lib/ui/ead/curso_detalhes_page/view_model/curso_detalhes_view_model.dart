@@ -181,7 +181,6 @@ class CursoDetalhesViewModel extends ChangeNotifier {
       _error = null;
     } catch (e) {
       _error = 'Erro ao carregar curso: $e';
-      debugPrint(_error);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -211,7 +210,6 @@ class CursoDetalhesViewModel extends ChangeNotifier {
 
       return true;
     } catch (e) {
-      debugPrint('Erro ao inscrever: $e');
       return false;
     } finally {
       _isInscrevendo = false;

@@ -93,7 +93,6 @@ class CatalogoCursosViewModel extends ChangeNotifier {
       _error = null;
     } catch (e) {
       _error = 'Erro ao carregar cursos: $e';
-      debugPrint(_error);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -116,7 +115,7 @@ class CatalogoCursosViewModel extends ChangeNotifier {
         _totalTopicosReais[inscricao.cursoId] = totalReal;
       }
     } catch (e) {
-      debugPrint('Erro ao carregar inscrições: $e');
+      // Silently ignore - inscriptions loading is optional
     }
   }
 

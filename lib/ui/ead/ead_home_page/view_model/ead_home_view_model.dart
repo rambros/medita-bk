@@ -105,7 +105,6 @@ class EadHomeViewModel extends ChangeNotifier {
       _error = null;
     } catch (e) {
       _error = 'Erro ao carregar dados: $e';
-      debugPrint(_error);
     } finally {
       _isLoading = false;
       notifyListeners();

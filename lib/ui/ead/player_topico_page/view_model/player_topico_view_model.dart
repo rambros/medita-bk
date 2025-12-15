@@ -206,7 +206,6 @@ class PlayerTopicoViewModel extends ChangeNotifier {
       );
       return true;
     } catch (e) {
-      debugPrint('Erro ao marcar topico completo: $e');
       return false;
     } finally {
       _isMarcandoCompleto = false;
@@ -230,7 +229,6 @@ class PlayerTopicoViewModel extends ChangeNotifier {
       );
       return true;
     } catch (e) {
-      debugPrint('Erro ao desmarcar topico: $e');
       return false;
     } finally {
       _isMarcandoCompleto = false;

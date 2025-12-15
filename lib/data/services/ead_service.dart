@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 
 import 'package:medita_bk/domain/models/ead/index.dart';
 
@@ -142,21 +141,16 @@ class EadService {
     bool forceRefresh = false,
   }) async {
     final inscricaoId = InscricaoCursoModel.gerarId(cursoId, usuarioId);
-    debugPrint('EadService.getInscricao: Buscando inscricao $inscricaoId (forceRefresh: $forceRefresh)');
-    
+
     // Se forceRefresh for true, força busca do servidor ignorando cache do Firestore
     final doc = await _inscricoesCollection.doc(inscricaoId).get(
       forceRefresh ? GetOptions(source: Source.server) : null,
     );
 
     if (!doc.exists) {
-      debugPrint('EadService.getInscricao: Inscricao nao encontrada');
       return null;
     }
-    final inscricao = InscricaoCursoModel.fromFirestore(doc);
-    debugPrint('EadService.getInscricao: topicosCompletos=${inscricao.progresso.topicosCompletos}');
-    debugPrint('EadService.getInscricao: percentual=${inscricao.progresso.percentualConcluido}');
-    return inscricao;
+    return InscricaoCursoModel.fromFirestore(doc);
   }
 
   /// Busca todas as inscrições de um usuário
@@ -216,13 +210,9 @@ class EadService {
     String inscricaoId,
     ProgressoCursoModel progresso,
   ) async {
-    debugPrint('EadService.atualizarProgresso: inscricaoId=$inscricaoId');
-    debugPrint('EadService.atualizarProgresso: topicosCompletos=${progresso.topicosCompletos}');
-    debugPrint('EadService.atualizarProgresso: percentual=${progresso.percentualConcluido}');
     await _inscricoesCollection.doc(inscricaoId).update({
       'progresso': progresso.toMap(),
     });
-    debugPrint('EadService.atualizarProgresso: Salvo com sucesso!');
   }
 
   /// Atualiza status da inscrição
@@ -259,7 +249,6 @@ class EadService {
         await _topicosCollection(cursoId, aulaId).doc(topicoId).get();
 
     if (!topicoDoc.exists) {
-      debugPrint('EadService.getQuizByTopico: Topico nao encontrado');
       return [];
     }
 
@@ -270,7 +259,6 @@ class EadService {
     final htmlContent = conteudo?['htmlContent'] as String?;
 
     if (htmlContent == null || htmlContent.isEmpty) {
-      debugPrint('EadService.getQuizByTopico: htmlContent vazio');
       return [];
     }
 
@@ -278,8 +266,6 @@ class EadService {
       // Parse do JSON
       final quizJson = jsonDecode(htmlContent) as Map<String, dynamic>;
       final perguntasList = quizJson['perguntas'] as List<dynamic>? ?? [];
-
-      debugPrint('EadService.getQuizByTopico: ${perguntasList.length} perguntas encontradas');
 
       // Converte para o modelo QuizQuestionModel
       return perguntasList.asMap().entries.map((entry) {
@@ -331,7 +317,6 @@ class EadService {
         );
       }).toList();
     } catch (e) {
-      debugPrint('EadService.getQuizByTopico: Erro ao fazer parse do quiz: $e');
       return [];
     }
   }
