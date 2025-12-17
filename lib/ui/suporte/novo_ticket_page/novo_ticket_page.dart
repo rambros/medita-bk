@@ -391,7 +391,9 @@ class _NovoTicketPageState extends State<NovoTicketPage> {
           children: [
             Icon(Icons.help_outline, color: appTheme.primary),
             const SizedBox(width: 8),
-            const Text('Dicas para criar uma boa solicitação'),
+            const Expanded(
+              child: Text('Dicas para criar uma boa solicitação'),
+            ),
           ],
         ),
         content: const SingleChildScrollView(

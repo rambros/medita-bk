@@ -66,7 +66,7 @@ class NovoTicketViewModel extends ChangeNotifier {
       return 'Por favor, descreva o problema';
     }
     if (value.trim().length < 20) {
-      return 'A descrição deve ter no mínimo 20 caracteres';
+      return 'Deve ter mais de 20 caracteres';
     }
     return null;
   }

@@ -79,7 +79,7 @@ class NavigationGrid extends StatelessWidget {
 
           // 3. EAD/Cursos card
           NavigationCard(
-            title: 'Aprender com cursos',
+            title: 'Aprenda a meditar',
             icon: Icons.school,
             gradientColors: const [Color(0xFF7E57C2), Color(0xFFB39DDB)],
             gradientStops: const [0.0, 1.0],
@@ -112,9 +112,9 @@ class NavigationGrid extends StatelessWidget {
               animation: animationsMap['containerOnPageLoadAnimation1'],
             ),
 
-          // 5. Suporte Técnico card
+          // 5. Ajuda card
           NavigationCard(
-            title: 'Suporte Técnico',
+            title: 'Ajuda',
             icon: Icons.support_agent,
             gradientColors: const [Color(0xFF26A69A), Color(0xFF80CBC4)],
             gradientStops: const [0.0, 1.0],

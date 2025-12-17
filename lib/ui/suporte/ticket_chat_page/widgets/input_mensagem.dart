@@ -70,6 +70,9 @@ class InputMensagem extends StatelessWidget {
                 ),
                 child: TextField(
                   controller: controller,
+                  style: const TextStyle(
+                    color: Colors.black87,
+                  ),
                   decoration: InputDecoration(
                     hintText: 'Digite sua mensagem...',
                     border: InputBorder.none,

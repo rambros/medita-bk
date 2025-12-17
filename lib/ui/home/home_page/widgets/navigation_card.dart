@@ -85,16 +85,19 @@ class NavigationCard extends StatelessWidget {
                         ),
                       ],
                     )),
-                Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: FlutterFlowTheme.of(context).bodyLarge.override(
-                        fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
-                        color: FlutterFlowTheme.of(context).primaryText,
-                        letterSpacing: 0.0,
-                        fontWeight: FontWeight.w500,
-                        useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
-                      ),
+                SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    style: FlutterFlowTheme.of(context).bodyLarge.override(
+                          fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
+                          color: FlutterFlowTheme.of(context).primaryText,
+                          letterSpacing: 0.0,
+                          fontWeight: FontWeight.w500,
+                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
+                        ),
+                  ),
                 ),
               ],
             ),
