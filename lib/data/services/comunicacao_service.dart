@@ -139,6 +139,7 @@ class ComunicacaoService {
         if (usuarioEmail != null) 'usuarioEmail': usuarioEmail,
         if (cursoId != null) 'cursoId': cursoId,
         if (cursoTitulo != null) 'cursoTitulo': cursoTitulo,
+        'isPrivada': true, // Padrão: privado
         'dataCriacao': FieldValue.serverTimestamp(),
         'dataAtualizacao': FieldValue.serverTimestamp(),
         'totalMensagens': 0,

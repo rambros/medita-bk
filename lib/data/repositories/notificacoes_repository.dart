@@ -7,7 +7,6 @@ library;
 
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 
 import 'package:medita_bk/domain/models/notificacao.dart';
 import 'package:medita_bk/domain/models/user_notification_state.dart';
@@ -19,8 +18,7 @@ class NotificacoesRepository {
 
   static const String _notificationsCollection = 'notifications';
 
-  NotificacoesRepository({FirebaseFirestore? firestore})
-      : _firestore = firestore ?? FirebaseFirestore.instance;
+  NotificacoesRepository({FirebaseFirestore? firestore}) : _firestore = firestore ?? FirebaseFirestore.instance;
 
   // === QUERIES ===
 
@@ -48,14 +46,9 @@ class NotificacoesRepository {
 
       for (final doc in snapshot.docs) {
         // Busca estado do usuário
-        final userStateDoc = await doc.reference
-            .collection('user_states')
-            .doc(userId)
-            .get();
+        final userStateDoc = await doc.reference.collection('user_states').doc(userId).get();
 
-        final userState = userStateDoc.exists
-            ? UserNotificationState.fromMap(userStateDoc.data()!, userId)
-            : null;
+        final userState = userStateDoc.exists ? UserNotificationState.fromMap(userStateDoc.data()!, userId) : null;
 
         // Pula se ocultado
         if (userState?.ocultado ?? false) {
@@ -94,18 +87,12 @@ class NotificacoesRepository {
           .orderBy('dataCriacao', descending: true)
           .limit(limite)
           .snapshots()) {
-
         final notificacoes = <Notificacao>[];
 
         for (final doc in snapshot.docs) {
-          final userStateDoc = await doc.reference
-              .collection('user_states')
-              .doc(userId)
-              .get();
+          final userStateDoc = await doc.reference.collection('user_states').doc(userId).get();
 
-          final userState = userStateDoc.exists
-              ? UserNotificationState.fromMap(userStateDoc.data()!, userId)
-              : null;
+          final userState = userStateDoc.exists ? UserNotificationState.fromMap(userStateDoc.data()!, userId) : null;
 
           // Pula se ocultado
           if (userState?.ocultado ?? false) continue;
@@ -128,9 +115,7 @@ class NotificacoesRepository {
     if (userId.isEmpty) return false;
 
     try {
-      final notifRef = _firestore
-          .collection(_notificationsCollection)
-          .doc(notificacaoId);
+      final notifRef = _firestore.collection(_notificationsCollection).doc(notificacaoId);
 
       // Verifica se notificação existe
       final doc = await notifRef.get();
@@ -164,23 +149,23 @@ class NotificacoesRepository {
     try {
       final snapshot = await _firestore
           .collection(_notificationsCollection)
-          .where('destinatarios', arrayContainsAny: [userId, 'TODOS'])
-          .get();
+          .where('destinatarios', arrayContainsAny: [userId, 'TODOS']).get();
 
       final batch = _firestore.batch();
       int count = 0;
 
       for (final doc in snapshot.docs) {
         // Atualiza user_state
-        final userStateRef = doc.reference
-            .collection('user_states')
-            .doc(userId);
+        final userStateRef = doc.reference.collection('user_states').doc(userId);
 
-        batch.set(userStateRef, {
-          'lido': true,
-          'dataLeitura': FieldValue.serverTimestamp(),
-          'ocultado': false,
-        }, SetOptions(merge: true));
+        batch.set(
+            userStateRef,
+            {
+              'lido': true,
+              'dataLeitura': FieldValue.serverTimestamp(),
+              'ocultado': false,
+            },
+            SetOptions(merge: true));
 
         // Dummy update
         batch.update(doc.reference, {
@@ -211,9 +196,7 @@ class NotificacoesRepository {
     if (userId.isEmpty) return false;
 
     try {
-      final notifRef = _firestore
-          .collection(_notificationsCollection)
-          .doc(notificacaoId);
+      final notifRef = _firestore.collection(_notificationsCollection).doc(notificacaoId);
 
       // Verifica se existe
       final doc = await notifRef.get();
@@ -222,10 +205,7 @@ class NotificacoesRepository {
       }
 
       // Busca estado atual para preservar campo 'lido'
-      final userStateDoc = await notifRef
-          .collection('user_states')
-          .doc(userId)
-          .get();
+      final userStateDoc = await notifRef.collection('user_states').doc(userId).get();
 
       final currentState = userStateDoc.exists
           ? UserNotificationState.fromMap(userStateDoc.data()!, userId)
@@ -234,9 +214,9 @@ class NotificacoesRepository {
       // Marca como ocultado preservando 'lido'
       final newState = currentState.marcarComoOcultada();
       await notifRef.collection('user_states').doc(userId).set(
-        newState.toMap(),
-        SetOptions(merge: true),
-      );
+            newState.toMap(),
+            SetOptions(merge: true),
+          );
 
       // Dummy update
       await notifRef.update({
@@ -259,20 +239,14 @@ class NotificacoesRepository {
     try {
       final snapshot = await _firestore
           .collection(_notificationsCollection)
-          .where('destinatarios', arrayContainsAny: [userId, 'TODOS'])
-          .get();
+          .where('destinatarios', arrayContainsAny: [userId, 'TODOS']).get();
 
       int count = 0;
 
       for (final doc in snapshot.docs) {
-        final userStateDoc = await doc.reference
-            .collection('user_states')
-            .doc(userId)
-            .get();
+        final userStateDoc = await doc.reference.collection('user_states').doc(userId).get();
 
-        final userState = userStateDoc.exists
-            ? UserNotificationState.fromMap(userStateDoc.data()!, userId)
-            : null;
+        final userState = userStateDoc.exists ? UserNotificationState.fromMap(userStateDoc.data()!, userId) : null;
 
         // Conta se não lido e não ocultado
         if (!(userState?.lido ?? false) && !(userState?.ocultado ?? false)) {

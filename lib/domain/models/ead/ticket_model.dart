@@ -34,6 +34,9 @@ class TicketModel {
   // Contadores
   final int totalMensagens;
 
+  // Privacidade
+  final bool isPrivada;
+
   const TicketModel({
     required this.id,
     required this.numero,
@@ -53,6 +56,7 @@ class TicketModel {
     required this.dataAtualizacao,
     this.dataFechamento,
     this.totalMensagens = 0,
+    this.isPrivada = true, // Default: privado
   });
 
   factory TicketModel.fromFirestore(DocumentSnapshot doc) {
@@ -80,6 +84,7 @@ class TicketModel {
       dataAtualizacao: _parseTimestamp(map['dataAtualizacao']),
       dataFechamento: _parseTimestamp(map['dataFechamento'], allowNull: true),
       totalMensagens: _parseInt(map['totalMensagens']),
+      isPrivada: map['isPrivada'] as bool? ?? true, // Default: privado
     );
   }
 
@@ -102,6 +107,7 @@ class TicketModel {
       'dataAtualizacao': Timestamp.fromDate(dataAtualizacao),
       if (dataFechamento != null) 'dataFechamento': Timestamp.fromDate(dataFechamento!),
       'totalMensagens': totalMensagens,
+      'isPrivada': isPrivada,
     };
   }
 
@@ -182,6 +188,7 @@ class TicketModel {
     DateTime? dataAtualizacao,
     DateTime? dataFechamento,
     int? totalMensagens,
+    bool? isPrivada,
   }) {
     return TicketModel(
       id: id ?? this.id,
@@ -202,6 +209,7 @@ class TicketModel {
       dataAtualizacao: dataAtualizacao ?? this.dataAtualizacao,
       dataFechamento: dataFechamento ?? this.dataFechamento,
       totalMensagens: totalMensagens ?? this.totalMensagens,
+      isPrivada: isPrivada ?? this.isPrivada,
     );
   }
 }

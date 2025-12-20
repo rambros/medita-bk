@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -16,57 +18,56 @@
 	<string>MeditaBK</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
 	<array>
-        <dict>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>com.googleusercontent.apps.12988405371-mp1ginmioaf4toj3aulhgcjrr2m7kmmb</string>
-                
-            </array>
-        </dict>
-
-        <dict>
-        <key>CFBundleTypeRole</key>
-        <string>Editor</string>
-        <key>CFBundleURLName</key>
-        <string>meditabk.com</string>
-        <key>CFBundleURLSchemes</key>
-        <array>
-        <string>meditabk</string>
-        </array>
-        </dict>
-    </array>
-    <key>FlutterDeepLinkingEnabled</key>
-    <true/>
-
-
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.12988405371-mp1ginmioaf4toj3aulhgcjrr2m7kmmb</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>meditabk.com</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>meditabk</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>FlutterDeepLinkingEnabled</key>
+	<true/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>https</string>
+		<string>http</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-
 	<key>NSCameraUsageDescription</key>
-    <string>Para que você possa personalizar sua imagem de perfil, o app MeditaBK precisa de permissão para acessar sua camera.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-    <string>Para que você possa personalizar sua imagem de perfil, o MeditaBK precisa de permissão para acessar  imagens do seu celular.</string>
+	<string>Para que você possa personalizar sua imagem de perfil, o app MeditaBK precisa de permissão para acessar sua camera.</string>
 	<key>NSMicrophoneUsageDescription</key>
-    <string>Para que você possa criar suas playlists de meditação,  o app meditaBK precisa de permissão para acessar o microfone</string>
-    <key>UIBackgroundModes</key>
-    <array>
-        <string>fetch</string>
-        <string>remote-notification</string>
-    </array>
-
-
-
+	<string>Para que você possa criar suas playlists de meditação,  o app meditaBK precisa de permissão para acessar o microfone</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Para que você possa personalizar sua imagem de perfil, o MeditaBK precisa de permissão para acessar  imagens do seu celular.</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+		<string>audio</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -86,17 +87,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
-	
-	<!-- Esquemas de URL permitidos para abrir links externos -->
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>https</string>
-		<string>http</string>
-	</array>
 </dict>
 </plist>

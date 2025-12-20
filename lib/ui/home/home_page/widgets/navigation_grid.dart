@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medita_bk/core/constants/course_constants.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_animations.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
 import 'package:medita_bk/ui/pages.dart';
@@ -87,7 +88,8 @@ class NavigationGrid extends StatelessWidget {
             gradientEnd: const AlignmentDirectional(1.0, -1.0),
             onTap: () {
               context.pushNamed(
-                EadRoutes.eadHome,
+                EadRoutes.cursoDetalhes,
+                pathParameters: {'cursoId': CourseConstants.cursoMeditacaoRajaYoga},
                 extra: <String, dynamic>{
                   kTransitionInfoKey: const TransitionInfo(
                     hasTransition: true,
