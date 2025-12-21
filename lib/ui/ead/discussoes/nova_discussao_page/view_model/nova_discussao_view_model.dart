@@ -19,7 +19,7 @@ class NovaDiscussaoViewModel extends ChangeNotifier {
   final TextEditingController conteudoController = TextEditingController();
 
   // === Estado ===
-  bool _isPrivada = false;
+  bool _isPrivada = true; // Default: privada
   bool _isCriando = false;
   String? _error;
 
@@ -115,7 +115,7 @@ class NovaDiscussaoViewModel extends ChangeNotifier {
   void _limparFormulario() {
     tituloController.clear();
     conteudoController.clear();
-    _isPrivada = false;
+    _isPrivada = true; // Volta para o padrão: privada
   }
 
   @override

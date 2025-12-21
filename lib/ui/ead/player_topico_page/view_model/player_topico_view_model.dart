@@ -17,6 +17,8 @@ class PlayerTopicoViewModel extends ChangeNotifier {
     EadRepository? repository,
   }) : _repository = repository ?? EadRepository();
 
+  bool _disposed = false;
+
   // === Estado ===
 
   CursoModel? _curso;
@@ -243,5 +245,18 @@ class PlayerTopicoViewModel extends ChangeNotifier {
     } else {
       return await marcarCompleto(usuarioId);
     }
+  }
+
+  @override
+  void notifyListeners() {
+    if (!_disposed) {
+      super.notifyListeners();
+    }
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
   }
 }

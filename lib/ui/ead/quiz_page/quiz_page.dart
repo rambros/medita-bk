@@ -112,9 +112,11 @@ class _QuizPageState extends State<QuizPage> {
 
     if (confirmar == true) {
       await _viewModel.finalizarQuiz(usuarioId);
-      setState(() {
-        _modoRevisao = false;
-      });
+      if (mounted) {
+        setState(() {
+          _modoRevisao = false;
+        });
+      }
     }
   }
 

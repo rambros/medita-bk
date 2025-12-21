@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:medita_bk/data/services/ead_service.dart';
 import 'package:medita_bk/domain/models/ead/index.dart';
 
@@ -269,20 +270,27 @@ class EadRepository {
 
     // Verifica se completou o curso (100%)
     if (percentual >= 100 && inscricao.isAtivo) {
+      debugPrint('🎓 CURSO COMPLETO! Atualizando status para concluído...');
+      final dataConclusao = DateTime.now();
+
       await _service.atualizarStatusInscricao(
         inscricaoId,
         StatusInscricao.concluido,
-        dataConclusao: DateTime.now(),
+        dataConclusao: dataConclusao,
       );
+      debugPrint('✅ Status atualizado no Firebase');
 
+      // Atualiza modelo local com progresso E status concluído
       inscricao = inscricao.copyWith(
+        progresso: novoProgresso,
         status: StatusInscricao.concluido,
-        dataConclusao: DateTime.now(),
+        dataConclusao: dataConclusao,
       );
+      debugPrint('✅ Modelo atualizado: status=${inscricao.status}, progresso=${inscricao.percentualConcluido}%');
+    } else {
+      // Apenas atualiza progresso (curso não completo)
+      inscricao = inscricao.copyWith(progresso: novoProgresso);
     }
-
-    // Atualiza modelo local
-    inscricao = inscricao.copyWith(progresso: novoProgresso);
 
     // Atualiza cache
     _inscricoesCache[inscricaoId] = inscricao;

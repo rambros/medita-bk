@@ -5,7 +5,7 @@ import 'package:medita_bk/data/repositories/comunicacao_repository.dart';
 import 'package:medita_bk/domain/models/ead/index.dart';
 
 /// Filtro para a lista de discussões
-enum FiltroDiscussoes { todas, minhas, fechadas, abertas }
+enum FiltroDiscussoes { minhas, todas, abertas, fechadas }
 
 /// ViewModel para a página de discussões do curso
 class DiscussoesCursoViewModel extends ChangeNotifier {
@@ -23,7 +23,7 @@ class DiscussoesCursoViewModel extends ChangeNotifier {
   List<DiscussaoModel> _discussoes = [];
   bool _isLoading = false;
   String? _error;
-  FiltroDiscussoes _filtroAtual = FiltroDiscussoes.todas;
+  FiltroDiscussoes _filtroAtual = FiltroDiscussoes.minhas;
   String _termoBusca = '';
   StreamSubscription<List<DiscussaoModel>>? _subscription;
 

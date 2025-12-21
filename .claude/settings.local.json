@@ -28,7 +28,8 @@
       "Bash(flutter devices:*)",
       "Bash(open:*)",
       "Bash(xcodebuild -version -sdk:*)",
-      "Bash(xcodebuild:*)"
+      "Bash(xcodebuild:*)",
+      "Bash(flutter pub:*)"
     ],
     "deny": [],
     "ask": []

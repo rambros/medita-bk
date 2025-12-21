@@ -78,8 +78,8 @@ class ProgressoCursoModel {
   /// Número de aulas completas
   int get totalAulasCompletas => aulasCompletas.length;
 
-  /// Verifica se tem algum progresso
-  bool get hasProgresso => topicosCompletos.isNotEmpty;
+  /// Verifica se tem algum progresso (completos ou apenas acesso)
+  bool get hasProgresso => topicosCompletos.isNotEmpty || ultimoTopicoId != null;
 
   /// Verifica se concluiu 100%
   bool get isConcluido => percentualConcluido >= 100;

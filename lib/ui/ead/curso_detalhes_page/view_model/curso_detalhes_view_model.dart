@@ -39,11 +39,15 @@ class CursoDetalhesViewModel extends ChangeNotifier {
 
   // === Getters computados ===
 
-  /// Verifica se o usuário está inscrito
-  bool get isInscrito => _inscricao != null && _inscricao!.isAtivo;
+  /// Verifica se o usuário está inscrito (ativo ou concluído)
+  bool get isInscrito => _inscricao != null && (_inscricao!.isAtivo || _inscricao!.isConcluido);
 
   /// Verifica se o curso foi concluído
-  bool get isConcluido => _inscricao?.isConcluido ?? false;
+  bool get isConcluido {
+    final concluido = _inscricao?.isConcluido ?? false;
+    debugPrint('📊 isConcluido: $concluido (status: ${_inscricao?.status}, percentual: ${_inscricao?.percentualConcluido}%)');
+    return concluido;
+  }
 
   /// Progresso do curso (calculado dinamicamente)
   double get progresso {
@@ -244,7 +248,9 @@ class CursoDetalhesViewModel extends ChangeNotifier {
 
   /// Recarrega os dados
   Future<void> refresh({String? usuarioId}) async {
+    debugPrint('🔄 Recarregando dados do curso após retorno...');
     _repository.limparCacheCurso(cursoId);
     await carregarDados(usuarioId: usuarioId, forceRefresh: true);
+    debugPrint('✅ Dados recarregados - Status: ${_inscricao?.status}');
   }
 }

@@ -3,7 +3,7 @@ description:
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 3.2.3+163
+version: 3.2.5+165
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -90,8 +90,6 @@ dependencies:
     git:
       url: https://github.com/FlutterFlow/webviewx_plus.git
       ref: 4f84ece5e06d52643c5d844f41880baf8440c584
-  youtube_player_flutter: ^9.1.3
-  youtube_player_iframe: any
 
 dependency_overrides:
   http: 1.4.0

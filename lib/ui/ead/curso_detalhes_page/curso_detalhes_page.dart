@@ -463,7 +463,7 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> with RouteAware {
                   onPressed: viewModel.isInscrevendo
                       ? null
                       : (viewModel.isInscrito
-                          ? (viewModel.isConcluido ? () => context.goNamed(EadRoutes.eadHome) : _continuarCurso)
+                          ? (viewModel.isConcluido ? null : _continuarCurso)
                           : _inscrever),
                   icon: viewModel.isInscrevendo
                       ? SizedBox(

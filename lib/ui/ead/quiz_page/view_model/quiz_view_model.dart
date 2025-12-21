@@ -21,6 +21,8 @@ class QuizViewModel extends ChangeNotifier {
   })  : _repository = repository ?? EadRepository(),
         _service = service ?? EadService();
 
+  bool _disposed = false;
+
   // === Estado ===
 
   TopicoModel? _topico;
@@ -295,6 +297,19 @@ class QuizViewModel extends ChangeNotifier {
     if (!quizConcluido) return false;
     final pergunta = perguntaAtualModel;
     return pergunta?.isOpcaoCorreta(opcaoId) ?? false;
+  }
+
+  @override
+  void notifyListeners() {
+    if (!_disposed) {
+      super.notifyListeners();
+    }
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
   }
 }
 
