@@ -10,6 +10,23 @@
 -dontwarn org.bouncycastle.pqc.jcajce.provider.BouncyCastlePQCProvider
 -keep class org.xmlpull.v1.** { *; }
 
+# Google Play Services
+-keep class com.google.android.gms.** { *; }
+-dontwarn com.google.android.gms.**
+-keep class com.google.firebase.** { *; }
+-dontwarn com.google.firebase.**
+
+# Keep Google API models
+-keepclassmembers class * {
+  @com.google.api.client.util.Key <fields>;
+}
+-keepattributes Signature,RuntimeVisibleAnnotations,AnnotationDefault
+
+# Firebase
+-keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable
+-keep public class * extends java.lang.Exception
+
 
 
 
