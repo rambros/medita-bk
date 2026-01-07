@@ -19,9 +19,17 @@ class ConfigViewModel extends ChangeNotifier {
   UserModel? _user;
   UserModel? get user => _user;
 
-  String get displayName => _user?.fullName ?? '';
+  String get displayName =>
+      _user?.fullName.isNotEmpty == true
+          ? _user!.fullName
+          : _authRepository.currentUser?.displayName ?? '';
+
   String get email => _authRepository.currentUserEmail;
-  String get photoUrl => _user?.userImageUrl ?? '';
+
+  String get photoUrl =>
+      _user?.userImageUrl.isNotEmpty == true
+          ? _user!.userImageUrl
+          : _authRepository.currentUser?.photoUrl ?? '';
 
   void init() {
     final currentUserId = _authRepository.currentUserUid;

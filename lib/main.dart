@@ -224,9 +224,17 @@ void main() async {
         create: (context) => ChangeEmailViewModel(context.read<AuthRepository>()),
         update: (context, repo, viewModel) => viewModel ?? ChangeEmailViewModel(repo),
       ),
-      ChangeNotifierProxyProvider<AuthRepository, SocialLoginViewModel>(
-        create: (context) => SocialLoginViewModel(context.read<AuthRepository>()),
-        update: (context, repo, viewModel) => viewModel ?? SocialLoginViewModel(repo),
+      ChangeNotifierProxyProvider2<AuthRepository, UserRepository, SocialLoginViewModel>(
+        create: (context) => SocialLoginViewModel(
+          authRepository: context.read<AuthRepository>(),
+          userRepository: context.read<UserRepository>(),
+        ),
+        update: (context, authRepo, userRepo, viewModel) =>
+            viewModel ??
+            SocialLoginViewModel(
+              authRepository: authRepo,
+              userRepository: userRepo,
+            ),
       ),
     ],
     child: const MyApp(),

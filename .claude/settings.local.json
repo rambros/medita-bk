@@ -29,7 +29,10 @@
       "Bash(open:*)",
       "Bash(xcodebuild -version -sdk:*)",
       "Bash(xcodebuild:*)",
-      "Bash(flutter pub:*)"
+      "Bash(flutter pub:*)",
+      "Bash(pod repo update)",
+      "Bash(pod install:*)",
+      "Bash(rm:*)"
     ],
     "deny": [],
     "ask": []

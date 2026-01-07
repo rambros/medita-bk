@@ -56,6 +56,22 @@ class AuthRepository {
   }
 
   Future<void> deleteUser(BuildContext context) async {
+    final userId = currentUserUid;
+
+    if (userId.isNotEmpty) {
+      // Primeiro deleta dados do Firestore
+      try {
+        await _firestoreService.deleteDocument(
+          collectionPath: 'users',
+          documentId: userId,
+        );
+      } catch (e) {
+        debugPrint('Erro ao deletar usuário do Firestore: $e');
+        // Continua mesmo se houver erro, para deletar do Authentication
+      }
+    }
+
+    // Depois deleta do Firebase Authentication
     await _authService.deleteUser(context);
   }
 
