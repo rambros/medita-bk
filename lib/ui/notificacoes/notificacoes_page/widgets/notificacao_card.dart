@@ -300,6 +300,30 @@ class NotificacaoCard extends StatelessWidget {
             color: Colors.white,
           ),
         ),
+        confirmDismiss: (direction) async {
+          // Mostra diálogo de confirmação ANTES de descartar
+          final confirm = await showDialog<bool>(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              title: const Text('Excluir notificação'),
+              content: const Text(
+                'Tem certeza que deseja excluir esta notificação?',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx, false),
+                  child: const Text('Cancelar'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx, true),
+                  style: TextButton.styleFrom(foregroundColor: Colors.red),
+                  child: const Text('Excluir'),
+                ),
+              ],
+            ),
+          );
+          return confirm ?? false;
+        },
         onDismissed: (_) => onDismiss?.call(),
         child: card,
       );

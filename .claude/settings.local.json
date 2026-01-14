@@ -32,7 +32,8 @@
       "Bash(flutter pub:*)",
       "Bash(pod repo update)",
       "Bash(pod install:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(adb:*)"
     ],
     "deny": [],
     "ask": []

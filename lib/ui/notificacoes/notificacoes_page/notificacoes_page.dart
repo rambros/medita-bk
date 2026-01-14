@@ -360,31 +360,9 @@ class _NotificacoesPageContentState extends State<_NotificacoesPageContent> {
     BuildContext context,
     dynamic notificacao,
   ) async {
-    // Confirmar antes de deletar
-    final confirm = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Excluir notificação'),
-        content: const Text(
-          'Tem certeza que deseja excluir esta notificação? Esta ação não pode ser desfeita.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancelar'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.red,
-            ),
-            child: const Text('Excluir'),
-          ),
-        ],
-      ),
-    );
-
-    if (confirm != true || !context.mounted) return;
+    // Confirmação já é feita pelo confirmDismiss no Dismissible
+    // Aqui apenas executa a remoção
+    if (!context.mounted) return;
 
     final viewModel = context.read<NotificacoesViewModel>();
     final success = await viewModel.removerNotificacao(notificacao);

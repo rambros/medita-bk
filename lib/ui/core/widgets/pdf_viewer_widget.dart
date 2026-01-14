@@ -1,7 +1,10 @@
-import 'dart:typed_data';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 import 'package:pdfx/pdfx.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:medita_bk/ui/core/theme/app_theme.dart';
@@ -115,14 +118,50 @@ class _PdfViewerWidgetState extends State<PdfViewerWidget> {
   Future<void> _downloadPdf() async {
     try {
       final fixedUrl = _fixFirebaseStorageUrl(widget.pdfUrl);
-      final uri = Uri.parse(fixedUrl);
-      if (await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
+
+      // No Android, baixa o arquivo e abre com share para salvar/abrir
+      // No iOS, usa launchUrl que funciona bem
+      if (!kIsWeb && Platform.isAndroid) {
+        // Mostra loading
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Baixando PDF...'),
+              duration: Duration(seconds: 1),
+            ),
+          );
+        }
+
+        // Baixa o PDF
+        final response = await http.get(Uri.parse(fixedUrl));
+        if (response.statusCode != 200) {
+          throw Exception('Falha ao baixar: ${response.statusCode}');
+        }
+
+        // Salva em arquivo temporário
+        final tempDir = await getTemporaryDirectory();
+        final fileName = widget.title?.replaceAll(RegExp(r'[^\w\s-]'), '') ?? 'documento';
+        final file = File('${tempDir.path}/$fileName.pdf');
+        await file.writeAsBytes(response.bodyBytes);
+
+        // Abre o share sheet para o usuário escolher o que fazer
+        if (mounted) {
+          await Share.shareXFiles(
+            [XFile(file.path)],
+            text: widget.title ?? 'PDF',
+          );
+        }
+      } else {
+        // iOS e Web: abre diretamente no navegador
+        final uri = Uri.parse(fixedUrl);
+        if (await canLaunchUrl(uri)) {
+          await launchUrl(uri, mode: LaunchMode.externalApplication);
+        }
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao abrir PDF: $e')),
+          SnackBar(content: Text('Erro ao baixar PDF: $e')),
         );
       }
     }
