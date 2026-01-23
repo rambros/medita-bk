@@ -2,6 +2,7 @@ import 'package:medita_bk/core/structs/comment_struct.dart';
 import 'package:medita_bk/data/models/firebase/meditation_model.dart';
 import 'package:medita_bk/data/repositories/meditation_repository.dart';
 import 'package:medita_bk/data/repositories/user_repository.dart';
+import 'package:medita_bk/data/services/user_document_service.dart';
 import 'package:medita_bk/data/services/firebase/firestore_service.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
@@ -491,7 +492,8 @@ class _MeditationDetailsPageState extends State<MeditationDetailsPage> {
                           ),
                           ToggleIcon(
                             onPressed: () async {
-                              final userId = context.read<AuthRepository>().currentUserUid;
+                              final authRepo = context.read<AuthRepository>();
+                              final userId = authRepo.currentUserUid;
                               if (userId.isEmpty) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
@@ -510,6 +512,33 @@ class _MeditationDetailsPageState extends State<MeditationDetailsPage> {
                                 );
                                 return;
                               }
+
+                              // DEFENSIVO: Garante que o documento do usuário existe
+                              final userDocService = UserDocumentService(
+                                userRepository: _userRepository,
+                                authRepository: authRepo,
+                              );
+                              final user = await userDocService.ensureUserDocument();
+
+                              if (user == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Erro ao processar sua ação.',
+                                      style: FlutterFlowTheme.of(context).titleSmall.override(
+                                            fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
+                                            color: FlutterFlowTheme.of(context).info,
+                                            letterSpacing: 0.0,
+                                            useGoogleFonts:
+                                                !FlutterFlowTheme.of(context).titleSmallIsCustom,
+                                          ),
+                                    ),
+                                    backgroundColor: FlutterFlowTheme.of(context).error,
+                                  ),
+                                );
+                                return;
+                              }
+
                               safeSetState(() => _isFavorite = !_isFavorite);
 
                               if (_isFavorite == true) {

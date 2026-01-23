@@ -4,6 +4,8 @@ import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import 'package:medita_bk/ui/core/flutter_flow/custom_functions.dart' as functions;
 import 'package:medita_bk/data/repositories/auth_repository.dart';
+import 'package:medita_bk/data/repositories/user_repository.dart';
+import 'package:medita_bk/data/services/user_document_service.dart';
 import 'package:medita_bk/data/services/firebase/firestore_service.dart';
 import 'package:medita_bk/core/structs/comment_struct.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -265,7 +267,37 @@ class _CommentDialogWidgetState extends State<CommentDialogWidget> {
                                 return;
                               }
                               if (_model.comentarioTextController.text != '') {
-                                final user = authRepo.currentUser;
+                                // DEFENSIVO: Garante que o documento do usuário existe
+                                final userDocService = UserDocumentService(
+                                  userRepository: UserRepository(),
+                                  authRepository: authRepo,
+                                );
+                                final user = await userDocService.ensureUserDocument();
+
+                                if (user == null) {
+                                  if (!context.mounted) return;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Erro ao carregar dados do usuário.',
+                                        style: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .override(
+                                              fontFamily: FlutterFlowTheme.of(context)
+                                                  .titleSmallFamily,
+                                              color: FlutterFlowTheme.of(context).info,
+                                              letterSpacing: 0.0,
+                                              useGoogleFonts: !FlutterFlowTheme.of(context)
+                                                  .titleSmallIsCustom,
+                                            ),
+                                      ),
+                                      backgroundColor:
+                                          FlutterFlowTheme.of(context).error,
+                                    ),
+                                  );
+                                  return;
+                                }
+
                                 await FirestoreService().updateDocument(
                                   collectionPath: 'meditations',
                                   documentId: widget.meditationRef!.id,
@@ -275,10 +307,10 @@ class _CommentDialogWidgetState extends State<CommentDialogWidget> {
                                         updateCommentStruct(
                                           CommentStruct(
                                             userId: userId,
-                                            userName: valueOrDefault(user?.fullName, ''),
+                                            userName: user.fullName.isEmpty ? user.displayName : user.fullName,
                                             comment: _model.comentarioTextController.text,
                                             commentDate: functions.commentDate(),
-                                            userImageUrl: valueOrDefault(user?.userImageUrl, ''),
+                                            userImageUrl: user.userImageUrl,
                                           ),
                                           clearUnsetFields: false,
                                         ),

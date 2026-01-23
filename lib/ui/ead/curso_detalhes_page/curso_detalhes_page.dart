@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:medita_bk/data/repositories/auth_repository.dart';
 import 'package:medita_bk/data/repositories/user_repository.dart';
+import 'package:medita_bk/data/services/user_document_service.dart';
 import 'package:medita_bk/routing/ead_routes.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart' show routeObserver;
 import 'package:medita_bk/ui/core/widgets/html_display_widget.dart';
@@ -79,9 +80,15 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> with RouteAware {
       return;
     }
 
-    // Busca os dados atuais do usuário
+    // DEFENSIVO: Garante que o documento do usuário existe
+    // Caso edge: documento foi deletado durante a sessão
     final userRepo = context.read<UserRepository>();
-    final currentUserData = await userRepo.getUserById(authRepo.currentUserUid);
+    final userDocService = UserDocumentService(
+      userRepository: userRepo,
+      authRepository: authRepo,
+    );
+
+    var currentUserData = await userDocService.ensureUserDocument();
 
     if (currentUserData == null) {
       _mostrarSnackBar('Erro ao carregar dados do usuário');

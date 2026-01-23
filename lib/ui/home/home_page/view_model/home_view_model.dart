@@ -5,6 +5,8 @@ import 'package:medita_bk/data/models/firebase/desafio21_model.dart';
 import 'package:medita_bk/data/models/firebase/settings_model.dart';
 import 'package:medita_bk/data/repositories/auth_repository.dart';
 import 'package:medita_bk/data/repositories/home_repository.dart';
+import 'package:medita_bk/data/repositories/user_repository.dart';
+import 'package:medita_bk/data/services/user_document_service.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
 import 'package:medita_bk/ui/core/actions/actions.dart' as action_blocks;
 import 'package:medita_bk/core/structs/index.dart';
@@ -82,11 +84,25 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   /// Load user data and update last access
+  /// Garante que o documento do usuário existe no Firestore antes de prosseguir
   Future<void> loadUserData() async {
     final userId = _authRepository.currentUserUid;
     if (userId.isEmpty) return;
 
-    _userRecord = await _repository.getUserById(userId);
+    // PREVENTIVO: Garante que o documento do usuário existe no Firestore
+    // Se não existir, cria automaticamente com dados do Firebase Auth
+    final userDocService = UserDocumentService(
+      userRepository: UserRepository(),
+      authRepository: _authRepository,
+    );
+
+    try {
+      _userRecord = await userDocService.ensureUserDocument();
+    } catch (e) {
+      debugPrint('❌ Erro ao garantir documento do usuário: $e');
+      // Fallback: tenta buscar diretamente
+      _userRecord = await _repository.getUserById(userId);
+    }
 
     if (_userRecord != null) {
       // Update last access timestamp

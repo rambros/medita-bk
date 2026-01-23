@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:medita_bk/data/models/firebase/user_model.dart';
 import 'package:medita_bk/data/repositories/auth_repository.dart';
 import 'package:medita_bk/data/repositories/user_repository.dart';
+import 'package:medita_bk/data/services/user_document_service.dart';
 
 class ConfigViewModel extends ChangeNotifier {
   final AuthRepository _authRepository;
@@ -44,6 +45,8 @@ class ConfigViewModel extends ChangeNotifier {
   }
 
   Future<void> signOut() async {
+    // Limpa o cache de verificação de documentos antes de fazer logout
+    UserDocumentService.clearCache();
     await _authRepository.signOut();
   }
 
