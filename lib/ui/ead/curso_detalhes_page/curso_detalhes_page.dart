@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import 'package:medita_bk/data/models/firebase/user_model.dart';
 import 'package:medita_bk/data/repositories/auth_repository.dart';
 import 'package:medita_bk/data/repositories/user_repository.dart';
 import 'package:medita_bk/data/services/user_document_service.dart';
 import 'package:medita_bk/routing/ead_routes.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart' show routeObserver;
 import 'package:medita_bk/ui/core/widgets/html_display_widget.dart';
+import 'package:medita_bk/ui/core/widgets/login_snackbar.dart';
 import 'package:medita_bk/ui/core/theme/app_theme.dart';
 import 'package:medita_bk/ui/ead/widgets/update_user_info_dialog.dart';
 import 'view_model/curso_detalhes_view_model.dart';
@@ -76,7 +78,7 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> with RouteAware {
     final authRepo = context.read<AuthRepository>();
     final user = authRepo.currentUser;
     if (user == null || authRepo.currentUserUid.isEmpty) {
-      _mostrarSnackBar('Faça login para se inscrever');
+      LoginSnackBar.show(context, message: 'Faça login para se inscrever no curso');
       return;
     }
 
@@ -88,10 +90,25 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> with RouteAware {
       authRepository: authRepo,
     );
 
-    var currentUserData = await userDocService.ensureUserDocument();
+    UserModel? currentUserData;
+    try {
+      currentUserData = await userDocService.ensureUserDocument();
 
-    if (currentUserData == null) {
-      _mostrarSnackBar('Erro ao carregar dados do usuário');
+      if (currentUserData == null) {
+        // Faz logout para limpar estado inconsistente
+        await authRepo.signOut();
+        UserDocumentService.clearCache();
+
+        if (!mounted) return;
+        LoginSnackBar.show(
+          context,
+          message: 'Ocorreu um erro com sua conta. Por favor, faça login novamente.',
+        );
+        return;
+      }
+    } catch (e) {
+      debugPrint('❌ Erro ao garantir documento do usuário: $e');
+      _mostrarSnackBar('Erro ao processar sua solicitação. Tente novamente.');
       return;
     }
 
@@ -100,7 +117,7 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> with RouteAware {
       context: context,
       barrierDismissible: false,
       builder: (context) => UpdateUserInfoDialog(
-        currentUser: currentUserData,
+        currentUser: currentUserData!,
         onSave: (fullName, whatsapp, cidade) async {
           await userRepo.updateContactInfo(
             userId: authRepo.currentUserUid,

@@ -13,7 +13,25 @@ class MensagemDetailsViewModel extends ChangeNotifier {
   String? dataHoje;
   bool isLoading = true;
 
+  double _fontSize = AppStateStore().messageFontSize;
+  double get fontSize => _fontSize;
+
+  bool _showBackground = AppStateStore().messageShowBackground;
+  bool get showBackground => _showBackground;
+
   MensagemDetailsViewModel(this._repository);
+
+  void setFontSize(double value) {
+    _fontSize = value;
+    AppStateStore().messageFontSize = value;
+    notifyListeners();
+  }
+
+  void toggleBackground(bool value) {
+    _showBackground = value;
+    AppStateStore().messageShowBackground = value;
+    notifyListeners();
+  }
 
   Future<void> loadMensagemDoDia() async {
     isLoading = true;

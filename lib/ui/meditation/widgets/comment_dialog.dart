@@ -1,6 +1,7 @@
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_widgets.dart';
+import 'package:medita_bk/ui/core/widgets/login_snackbar.dart';
 import 'dart:ui';
 import 'package:medita_bk/ui/core/flutter_flow/custom_functions.dart' as functions;
 import 'package:medita_bk/data/repositories/auth_repository.dart';
@@ -245,25 +246,7 @@ class _CommentDialogWidgetState extends State<CommentDialogWidget> {
                               final authRepo = context.read<AuthRepository>();
                               final userId = authRepo.currentUserUid;
                               if (userId.isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      'Faça login para comentar.',
-                                      style: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .override(
-                                            fontFamily: FlutterFlowTheme.of(context)
-                                                .titleSmallFamily,
-                                            color: FlutterFlowTheme.of(context).info,
-                                            letterSpacing: 0.0,
-                                            useGoogleFonts: !FlutterFlowTheme.of(context)
-                                                .titleSmallIsCustom,
-                                          ),
-                                    ),
-                                    backgroundColor:
-                                        FlutterFlowTheme.of(context).primary,
-                                  ),
-                                );
+                                LoginSnackBar.show(context, message: 'Faça login para comentar');
                                 return;
                               }
                               if (_model.comentarioTextController.text != '') {
@@ -272,31 +255,24 @@ class _CommentDialogWidgetState extends State<CommentDialogWidget> {
                                   userRepository: UserRepository(),
                                   authRepository: authRepo,
                                 );
-                                final user = await userDocService.ensureUserDocument();
 
-                                if (user == null) {
-                                  if (!context.mounted) return;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        'Erro ao carregar dados do usuário.',
-                                        style: FlutterFlowTheme.of(context)
-                                            .titleSmall
-                                            .override(
-                                              fontFamily: FlutterFlowTheme.of(context)
-                                                  .titleSmallFamily,
-                                              color: FlutterFlowTheme.of(context).info,
-                                              letterSpacing: 0.0,
-                                              useGoogleFonts: !FlutterFlowTheme.of(context)
-                                                  .titleSmallIsCustom,
-                                            ),
-                                      ),
-                                      backgroundColor:
-                                          FlutterFlowTheme.of(context).error,
-                                    ),
-                                  );
-                                  return;
-                                }
+                                try {
+                                  final user = await userDocService.ensureUserDocument();
+
+                                  if (user == null) {
+                                    // Faz logout para limpar estado inconsistente
+                                    await authRepo.signOut();
+                                    UserDocumentService.clearCache();
+
+                                    if (!context.mounted) return;
+                                    Navigator.pop(context);
+
+                                    LoginSnackBar.show(
+                                      context,
+                                      message: 'Ocorreu um erro com sua conta. Por favor, faça login novamente.',
+                                    );
+                                    return;
+                                  }
 
                                 await FirestoreService().updateDocument(
                                   collectionPath: 'meditations',
@@ -320,22 +296,45 @@ class _CommentDialogWidgetState extends State<CommentDialogWidget> {
                                   },
                                 );
 
-                                _model.updatePage(() {});
-                                if (!context.mounted) return;
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      'Comentário adicionado com sucesso.',
-                                      style: TextStyle(
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
+                                  _model.updatePage(() {});
+                                  if (!context.mounted) return;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Comentário adicionado com sucesso.',
+                                        style: TextStyle(
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryText,
+                                        ),
                                       ),
+                                      duration: const Duration(milliseconds: 4000),
+                                      backgroundColor:
+                                          FlutterFlowTheme.of(context).secondary,
                                     ),
-                                    duration: const Duration(milliseconds: 4000),
-                                    backgroundColor:
-                                        FlutterFlowTheme.of(context).secondary,
-                                  ),
-                                );
+                                  );
+                                } catch (e) {
+                                  debugPrint('❌ Erro ao criar comentário: $e');
+                                  if (!context.mounted) return;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Erro ao adicionar comentário. Tente novamente.',
+                                        style: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .override(
+                                              fontFamily: FlutterFlowTheme.of(context)
+                                                  .titleSmallFamily,
+                                              color: FlutterFlowTheme.of(context).info,
+                                              letterSpacing: 0.0,
+                                              useGoogleFonts: !FlutterFlowTheme.of(context)
+                                                  .titleSmallIsCustom,
+                                            ),
+                                      ),
+                                      backgroundColor:
+                                          FlutterFlowTheme.of(context).error,
+                                    ),
+                                  );
+                                }
                               }
                               Navigator.pop(context);
                             },

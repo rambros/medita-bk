@@ -89,70 +89,71 @@ class _MensagemDetailsPageState extends State<MensagemDetailsPage> with TickerPr
                 ? AppBar(
                     backgroundColor: FlutterFlowTheme.of(context).primary,
                     automaticallyImplyLeading: false,
-                    actions: const [],
-                    flexibleSpace: FlexibleSpaceBar(
-                      background: Align(
-                        alignment: const AlignmentDirectional(0.0, 1.0),
-                        child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 4.0, 0.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              FlutterFlowIconButton(
-                                borderColor: Colors.transparent,
-                                borderRadius: 30.0,
-                                borderWidth: 1.0,
-                                buttonSize: 60.0,
-                                icon: Icon(
-                                  Icons.arrow_back_rounded,
-                                  color: FlutterFlowTheme.of(context).info,
-                                  size: 30.0,
-                                ),
-                                onPressed: () async {
-                                  context.pop();
-                                },
-                              ),
-                              Text(
-                                'Mensagem para hoje',
-                                style: FlutterFlowTheme.of(context).titleLarge.override(
-                                      fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
-                                      color: FlutterFlowTheme.of(context).info,
-                                      letterSpacing: 0.0,
-                                      useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
-                                    ),
-                              ),
-                              FlutterFlowIconButton(
-                                borderColor: Colors.transparent,
-                                borderRadius: 30.0,
-                                borderWidth: 1.0,
-                                buttonSize: 60.0,
-                                icon: Icon(
-                                  Icons.search,
-                                  color: FlutterFlowTheme.of(context).info,
-                                  size: 30.0,
-                                ),
-                                onPressed: () async {
-                                  if (Navigator.of(context).canPop()) {
-                                    context.pop();
-                                  }
-                                  context.pushNamed(
-                                    'mensagensSemanticSearchPage',
-                                    extra: <String, dynamic>{
-                                      kTransitionInfoKey: const TransitionInfo(
-                                        hasTransition: true,
-                                        transitionType: PageTransitionType.leftToRight,
-                                      ),
-                                    },
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
+                    leading: FlutterFlowIconButton(
+                      borderColor: Colors.transparent,
+                      borderRadius: 30.0,
+                      borderWidth: 1.0,
+                      buttonSize: 60.0,
+                      icon: Icon(
+                        Icons.arrow_back_rounded,
+                        color: FlutterFlowTheme.of(context).info,
+                        size: 30.0,
                       ),
+                      onPressed: () async {
+                        context.pop();
+                      },
                     ),
+                    title: Text(
+                      'Mensagem para hoje',
+                      style: FlutterFlowTheme.of(context).titleLarge.override(
+                            fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
+                            color: FlutterFlowTheme.of(context).info,
+                            fontSize: 18.0,
+                            letterSpacing: 0.0,
+                            useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
+                          ),
+                    ),
+                    actions: [
+                      FlutterFlowIconButton(
+                        borderColor: Colors.transparent,
+                        borderRadius: 30.0,
+                        borderWidth: 1.0,
+                        buttonSize: 50.0,
+                        icon: Icon(
+                          Icons.format_size_rounded,
+                          color: FlutterFlowTheme.of(context).info,
+                          size: 28.0,
+                        ),
+                        onPressed: () async {
+                          _showSettingsBottomSheet(context);
+                        },
+                      ),
+                      FlutterFlowIconButton(
+                        borderColor: Colors.transparent,
+                        borderRadius: 30.0,
+                        borderWidth: 1.0,
+                        buttonSize: 50.0,
+                        icon: Icon(
+                          Icons.search,
+                          color: FlutterFlowTheme.of(context).info,
+                          size: 28.0,
+                        ),
+                        onPressed: () async {
+                          if (Navigator.of(context).canPop()) {
+                            context.pop();
+                          }
+                          context.pushNamed(
+                            'mensagensSemanticSearchPage',
+                            extra: <String, dynamic>{
+                              kTransitionInfoKey: const TransitionInfo(
+                                hasTransition: true,
+                                transitionType: PageTransitionType.leftToRight,
+                              ),
+                            },
+                          );
+                        },
+                      ),
+                    ],
                     centerTitle: true,
                     elevation: 2.0,
                   )
@@ -173,12 +174,14 @@ class _MensagemDetailsPageState extends State<MensagemDetailsPage> with TickerPr
                             height: MediaQuery.sizeOf(context).height * 0.94,
                             decoration: BoxDecoration(
                               color: FlutterFlowTheme.of(context).secondaryBackground,
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: Image.asset(
-                                  'assets/images/Shiva-03.jpg',
-                                ).image,
-                              ),
+                              image: viewModel.showBackground
+                                  ? DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: Image.asset(
+                                        'assets/images/Shiva-03.jpg',
+                                      ).image,
+                                    )
+                                  : null,
                             ),
                           ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation']!),
                           Padding(
@@ -212,14 +215,17 @@ class _MensagemDetailsPageState extends State<MensagemDetailsPage> with TickerPr
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Flexible(
-                                          child: Text(
-                                            viewModel.messageDoc != null ? viewModel.messageDoc!.mensagem : ' ',
-                                            style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                  fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
-                                                  letterSpacing: 0.0,
-                                                  lineHeight: 1.25,
-                                                  useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
-                                                ),
+                                          child: SelectionArea(
+                                            child: Text(
+                                              viewModel.messageDoc != null ? viewModel.messageDoc!.mensagem : ' ',
+                                              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                    fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
+                                                    fontSize: viewModel.fontSize,
+                                                    letterSpacing: 0.0,
+                                                    lineHeight: 1.25,
+                                                    useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
+                                                  ),
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -274,6 +280,145 @@ class _MensagemDetailsPageState extends State<MensagemDetailsPage> with TickerPr
               ),
             ),
           ),
+        );
+      },
+    );
+  }
+
+  void _showSettingsBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+      barrierColor: Colors.black.withOpacity(0.4),
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(28),
+          topRight: Radius.circular(28),
+        ),
+      ),
+      builder: (context) {
+        return Consumer<MensagemDetailsViewModel>(
+          builder: (context, model, child) {
+            return Container(
+              padding: EdgeInsets.only(
+                left: 24,
+                right: 24,
+                top: 12,
+                bottom: MediaQuery.of(context).padding.bottom + 24,
+              ),
+              decoration: BoxDecoration(
+                color: FlutterFlowTheme.of(context).secondaryBackground,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(28),
+                  topRight: Radius.circular(28),
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).alternate.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    children: [
+                      Icon(Icons.format_size_rounded, color: FlutterFlowTheme.of(context).secondaryText, size: 20),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Tamanho da Fonte',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
+                              fontWeight: FontWeight.w600,
+                              useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
+                            ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Text(
+                        'A',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
+                            ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                            activeTrackColor: FlutterFlowTheme.of(context).primary,
+                            inactiveTrackColor: FlutterFlowTheme.of(context).alternate.withOpacity(0.3),
+                            thumbColor: FlutterFlowTheme.of(context).primary,
+                            overlayColor: FlutterFlowTheme.of(context).primary.withOpacity(0.1),
+                            trackHeight: 4,
+                            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+                          ),
+                          child: Slider(
+                            value: model.fontSize,
+                            min: 14,
+                            max: 28,
+                            onChanged: (val) => model.setFontSize(val),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'A',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
+                            ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Divider(color: FlutterFlowTheme.of(context).alternate.withOpacity(0.3)),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.image_outlined, color: FlutterFlowTheme.of(context).secondaryText, size: 20),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Imagem de Fundo',
+                            style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                  fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
+                                  fontWeight: FontWeight.w600,
+                                  useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
+                                ),
+                          ),
+                        ],
+                      ),
+                      Switch.adaptive(
+                        value: model.showBackground,
+                        activeColor: FlutterFlowTheme.of(context).primary,
+                        activeTrackColor: FlutterFlowTheme.of(context).primary.withOpacity(0.3),
+                        onChanged: (val) => model.toggleBackground(val),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                ],
+              ),
+            );
+          },
         );
       },
     );

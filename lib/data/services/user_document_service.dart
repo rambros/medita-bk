@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medita_bk/data/repositories/user_repository.dart';
 import 'package:medita_bk/data/repositories/auth_repository.dart';
 import 'package:medita_bk/data/models/firebase/user_model.dart';
-import 'package:medita_bk/data/services/auth/base_auth_user_provider.dart';
+import 'package:medita_bk/data/services/auth/base_auth_user_provider.dart' as auth_provider;
 
 /// Serviço centralizado para garantir a existência do documento do usuário no Firestore
 ///
@@ -35,7 +35,6 @@ class UserDocumentService {
   Future<UserModel?> ensureUserDocument({bool forceCheck = false}) async {
     try {
       // Verifica se há usuário autenticado
-      final authUser = _authRepository.currentUser;
       final userId = _authRepository.currentUserUid;
 
       if (userId.isEmpty) {
@@ -62,26 +61,33 @@ class UserDocumentService {
       // Documento não existe, precisa criar
       debugPrint('⚠️ UserDocumentService: Documento do usuário $userId não encontrado');
 
-      // Obtém dados do Firebase Auth
-      final firebaseUser = _authRepository.currentUser;
-      if (firebaseUser == null) {
-        debugPrint('❌ UserDocumentService: Não foi possível obter dados do Firebase Auth');
+      // Obtém dados do Firebase Auth via AuthRepository
+      final email = _authRepository.currentUserEmail;
+      if (email.isEmpty) {
+        debugPrint('❌ UserDocumentService: Usuário sem email no Firebase Auth');
         return null;
       }
+
+      // Coleta dados disponíveis do Firebase Auth
+      final displayName = auth_provider.currentUser?.displayName ?? '';
+      final photoUrl = auth_provider.currentUser?.photoUrl ??
+        'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/medita-bk-web-admin-2vj9u4/assets/i10jga9fdqpj/autorImage.jpg';
+
+      debugPrint('🔍 UserDocumentService: Dados coletados - displayName: "$displayName", photoUrl: "${photoUrl.substring(0, 50)}..."');
 
       // Cria novo documento com dados do Firebase Auth
       final newUser = UserModel(
         uid: userId,
-        email: firebaseUser.email ?? '',
-        fullName: firebaseUser.displayName ?? '',
-        displayName: firebaseUser.displayName ?? '',
-        userImageUrl: firebaseUser.photoUrl ??
-          'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/medita-bk-web-admin-2vj9u4/assets/i10jga9fdqpj/autorImage.jpg',
+        email: email,
+        fullName: displayName,
+        displayName: displayName,
+        userImageUrl: photoUrl,
         createdTime: DateTime.now(),
         userRole: const ['User'],
-        loginType: _detectLoginType(firebaseUser),
+        loginType: _detectLoginType(email),
       );
 
+      debugPrint('📝 UserDocumentService: Tentando criar documento para usuário $userId...');
       await _userRepository.createUser(newUser);
       _verifiedUsers[userId] = true;
 
@@ -95,16 +101,14 @@ class UserDocumentService {
   }
 
   /// Detecta o tipo de login baseado no email do usuário
-  String _detectLoginType(BaseAuthUser authUser) {
-    final email = authUser.email ?? '';
-
-    // Se tem providerData, usa para detectar o provider
-    // Caso contrário, detecta pelo formato do email
+  /// Nota: Detecção heurística baseada no domínio do email
+  String _detectLoginType(String email) {
+    // Se não tem email, assume login anônimo
     if (email.isEmpty) {
       return 'anonymous';
     }
 
-    // Email providers comuns
+    // Detecta providers sociais pelo domínio do email
     if (email.contains('@gmail.com') || email.contains('@googlemail.com')) {
       return 'google';
     }

@@ -79,69 +79,71 @@ class _MensagemShowPageState extends State<MensagemShowPage> with TickerProvider
             ? AppBar(
                 backgroundColor: FlutterFlowTheme.of(context).primary,
                 automaticallyImplyLeading: false,
-                actions: const [],
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Align(
-                    alignment: const AlignmentDirectional(0.0, 1.0),
-                    child: Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 4.0, 0.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          FlutterFlowIconButton(
-                            borderColor: Colors.transparent,
-                            borderRadius: 30.0,
-                            borderWidth: 1.0,
-                            buttonSize: 60.0,
-                            icon: Icon(
-                              Icons.arrow_back_rounded,
-                              color: FlutterFlowTheme.of(context).info,
-                              size: 30.0,
-                            ),
-                            onPressed: () async {
-                              context.pop();
-                            },
-                          ),
-                          Text(
-                            'Mensagem para hoje',
-                            style: FlutterFlowTheme.of(context).titleLarge.override(
-                                  fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
-                                  color: FlutterFlowTheme.of(context).info,
-                                  letterSpacing: 0.0,
-                                  useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
-                                ),
-                          ),
-                          FlutterFlowIconButton(
-                            borderColor: Colors.transparent,
-                            borderRadius: 30.0,
-                            borderWidth: 1.0,
-                            buttonSize: 60.0,
-                            icon: Icon(
-                              Icons.search,
-                              color: FlutterFlowTheme.of(context).info,
-                              size: 30.0,
-                            ),
-                            onPressed: () async {
-                              if (Navigator.of(context).canPop()) {
-                                context.pop();
-                              }
-                              context.pushNamed(
-                                'mensagensSemanticSearchPage',
-                                extra: <String, dynamic>{
-                                  kTransitionInfoKey: const TransitionInfo(
-                                    hasTransition: true,
-                                    transitionType: PageTransitionType.leftToRight,
-                                  ),
-                                },
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
+                leading: FlutterFlowIconButton(
+                  borderColor: Colors.transparent,
+                  borderRadius: 30.0,
+                  borderWidth: 1.0,
+                  buttonSize: 60.0,
+                  icon: Icon(
+                    Icons.arrow_back_rounded,
+                    color: FlutterFlowTheme.of(context).info,
+                    size: 30.0,
                   ),
+                  onPressed: () async {
+                    context.pop();
+                  },
                 ),
+                title: Text(
+                  'Mensagem para hoje',
+                  style: FlutterFlowTheme.of(context).titleLarge.override(
+                        fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
+                        color: FlutterFlowTheme.of(context).info,
+                        fontSize: 18.0,
+                        letterSpacing: 0.0,
+                        useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
+                      ),
+                ),
+                actions: [
+                  FlutterFlowIconButton(
+                    borderColor: Colors.transparent,
+                    borderRadius: 30.0,
+                    borderWidth: 1.0,
+                    buttonSize: 50.0,
+                    icon: Icon(
+                      Icons.settings_outlined,
+                      color: FlutterFlowTheme.of(context).info,
+                      size: 28.0,
+                    ),
+                    onPressed: () async {
+                      _showSettingsBottomSheet(context);
+                    },
+                  ),
+                  FlutterFlowIconButton(
+                    borderColor: Colors.transparent,
+                    borderRadius: 30.0,
+                    borderWidth: 1.0,
+                    buttonSize: 50.0,
+                    icon: Icon(
+                      Icons.search,
+                      color: FlutterFlowTheme.of(context).info,
+                      size: 28.0,
+                    ),
+                    onPressed: () async {
+                      if (Navigator.of(context).canPop()) {
+                        context.pop();
+                      }
+                      context.pushNamed(
+                        'mensagensSemanticSearchPage',
+                        extra: <String, dynamic>{
+                          kTransitionInfoKey: const TransitionInfo(
+                            hasTransition: true,
+                            transitionType: PageTransitionType.leftToRight,
+                          ),
+                        },
+                      );
+                    },
+                  ),
+                ],
                 centerTitle: true,
                 elevation: 2.0,
               )
@@ -155,116 +157,123 @@ class _MensagemShowPageState extends State<MensagemShowPage> with TickerProvider
                 SizedBox(
                   width: double.infinity,
                   height: MediaQuery.sizeOf(context).height * 0.94,
-                  child: Stack(
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        height: MediaQuery.sizeOf(context).height * 0.94,
-                        decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).secondaryBackground,
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: Image.asset(
-                              'assets/images/Shiva-03.jpg',
-                            ).image,
-                          ),
-                        ),
-                      ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation']!),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 16.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    valueOrDefault<String>(
-                                      widget.tema,
-                                      'tema',
-                                    ),
-                                    style: FlutterFlowTheme.of(context).titleMedium.override(
-                                          fontFamily: FlutterFlowTheme.of(context).titleMediumFamily,
-                                          color: FlutterFlowTheme.of(context).primaryText,
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w600,
-                                          useGoogleFonts: !FlutterFlowTheme.of(context).titleMediumIsCustom,
-                                        ),
-                                  ),
-                                ],
-                              ),
+                  child: Consumer<MensagemShowViewModel>(
+                    builder: (context, model, child) {
+                      return Stack(
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            height: MediaQuery.sizeOf(context).height * 0.94,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context).secondaryBackground,
+                              image: model.showBackground
+                                  ? DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: Image.asset(
+                                        'assets/images/Shiva-03.jpg',
+                                      ).image,
+                                    )
+                                  : null,
                             ),
-                            Flexible(
-                              child: Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Flexible(
-                                      child: SelectionArea(
-                                          child: Text(
+                          ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation']!),
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 16.0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
                                         valueOrDefault<String>(
-                                          widget.mensagem,
-                                          'mensagem',
+                                          widget.tema,
+                                          'tema',
                                         ),
-                                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                              fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
-                                              letterSpacing: 0.0,
-                                              lineHeight: 1.25,
-                                              useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
-                                            ),
-                                      )),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Builder(
-                                    builder: (context) => FFButtonWidget(
-                                      onPressed: () async {
-                                        await _viewModel?.shareContent(
-                                          widget.tema ?? '',
-                                          widget.mensagem ?? '',
-                                          getWidgetBoundingBox(context),
-                                        );
-                                      },
-                                      text: 'Compartilhar esta mensagem',
-                                      options: FFButtonOptions(
-                                        height: 40.0,
-                                        padding: const EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
-                                        iconPadding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                        color: FlutterFlowTheme.of(context).primary,
-                                        textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                                              fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
+                                        style: FlutterFlowTheme.of(context).titleMedium.override(
+                                              fontFamily: FlutterFlowTheme.of(context).titleMediumFamily,
                                               color: FlutterFlowTheme.of(context).primaryText,
                                               letterSpacing: 0.0,
-                                              useGoogleFonts: !FlutterFlowTheme.of(context).titleSmallIsCustom,
+                                              fontWeight: FontWeight.w600,
+                                              useGoogleFonts: !FlutterFlowTheme.of(context).titleMediumIsCustom,
                                             ),
-                                        elevation: 3.0,
-                                        borderSide: const BorderSide(
-                                          color: Colors.transparent,
-                                          width: 1.0,
-                                        ),
-                                        borderRadius: BorderRadius.circular(8.0),
                                       ),
+                                    ],
+                                  ),
+                                ),
+                                Flexible(
+                                  child: Padding(
+                                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Flexible(
+                                          child: SelectionArea(
+                                              child: Text(
+                                            valueOrDefault<String>(
+                                              widget.mensagem,
+                                              'mensagem',
+                                            ),
+                                            style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                  fontFamily: FlutterFlowTheme.of(context).bodyMediumFamily,
+                                                  fontSize: model.fontSize,
+                                                  letterSpacing: 0.0,
+                                                  lineHeight: 1.25,
+                                                  useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
+                                                ),
+                                          )),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Builder(
+                                        builder: (context) => FFButtonWidget(
+                                          onPressed: () async {
+                                            await _viewModel?.shareContent(
+                                              widget.tema ?? '',
+                                              widget.mensagem ?? '',
+                                              getWidgetBoundingBox(context),
+                                            );
+                                          },
+                                          text: 'Compartilhar esta mensagem',
+                                          options: FFButtonOptions(
+                                            height: 40.0,
+                                            padding: const EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
+                                            iconPadding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                            color: FlutterFlowTheme.of(context).primary,
+                                            textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                                                  fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
+                                                  color: FlutterFlowTheme.of(context).primaryText,
+                                                  letterSpacing: 0.0,
+                                                  useGoogleFonts: !FlutterFlowTheme.of(context).titleSmallIsCustom,
+                                                ),
+                                            elevation: 3.0,
+                                            borderSide: const BorderSide(
+                                              color: Colors.transparent,
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: BorderRadius.circular(8.0),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                    ],
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
               ],
@@ -272,6 +281,84 @@ class _MensagemShowPageState extends State<MensagemShowPage> with TickerProvider
           ),
         ),
       ),
+    );
+  }
+
+  void _showSettingsBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      builder: (context) {
+        return Consumer<MensagemShowViewModel>(
+          builder: (context, model, child) {
+            return Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 4,
+                        decoration: BoxDecoration(
+                          color: FlutterFlowTheme.of(context).accent3,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Configurações de Visualização',
+                    style: FlutterFlowTheme.of(context).titleMedium,
+                  ),
+                  const SizedBox(height: 30),
+                  Row(
+                    children: [
+                      Text('A', style: TextStyle(fontSize: 12, color: FlutterFlowTheme.of(context).secondaryText)),
+                      Expanded(
+                        child: Slider(
+                          value: model.fontSize,
+                          min: 12,
+                          max: 32,
+                          activeColor: FlutterFlowTheme.of(context).primary,
+                          onChanged: (val) => model.setFontSize(val),
+                        ),
+                      ),
+                      Text('A', style: TextStyle(fontSize: 24, color: FlutterFlowTheme.of(context).secondaryText)),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Mostrar imagem de fundo',
+                        style: FlutterFlowTheme.of(context).bodyLarge,
+                      ),
+                      Switch(
+                        value: model.showBackground,
+                        activeColor: FlutterFlowTheme.of(context).primary,
+                        onChanged: (val) => model.toggleBackground(val),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }

@@ -52,6 +52,12 @@ class AppStateStore extends ChangeNotifier {
       _indexMensagemHoje = prefs.getInt('ff_indexMensagemHoje') ?? _indexMensagemHoje;
     });
     _safeInit(() {
+      _messageFontSize = prefs.getDouble('ff_messageFontSize') ?? _messageFontSize;
+    });
+    _safeInit(() {
+      _messageShowBackground = prefs.getBool('ff_messageShowBackground') ?? _messageShowBackground;
+    });
+    _safeInit(() {
       _meditationLogList = prefs
               .getStringList('ff_meditationLogList')
               ?.map((x) {
@@ -162,6 +168,20 @@ class AppStateStore extends ChangeNotifier {
   set indexMensagemHoje(int value) {
     _indexMensagemHoje = value;
     prefs.setInt('ff_indexMensagemHoje', value);
+  }
+
+  double _messageFontSize = 16.0;
+  double get messageFontSize => _messageFontSize;
+  set messageFontSize(double value) {
+    _messageFontSize = value;
+    prefs.setDouble('ff_messageFontSize', value);
+  }
+
+  bool _messageShowBackground = true;
+  bool get messageShowBackground => _messageShowBackground;
+  set messageShowBackground(bool value) {
+    _messageShowBackground = value;
+    prefs.setBool('ff_messageShowBackground', value);
   }
 
   List<MeditationLogStruct> _meditationLogList = [];

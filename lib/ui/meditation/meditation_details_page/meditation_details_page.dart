@@ -8,6 +8,7 @@ import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_toggle_icon.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
+import 'package:medita_bk/ui/core/widgets/login_snackbar.dart';
 import 'package:medita_bk/ui/meditation/widgets/comment_dialog.dart';
 import 'package:medita_bk/core/utils/network_utils.dart';
 import 'package:medita_bk/core/utils/media/audio_utils.dart';
@@ -495,21 +496,7 @@ class _MeditationDetailsPageState extends State<MeditationDetailsPage> {
                               final authRepo = context.read<AuthRepository>();
                               final userId = authRepo.currentUserUid;
                               if (userId.isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      'Faça login para curtir meditações.',
-                                      style: FlutterFlowTheme.of(context).titleSmall.override(
-                                            fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
-                                            color: FlutterFlowTheme.of(context).info,
-                                            letterSpacing: 0.0,
-                                            useGoogleFonts:
-                                                !FlutterFlowTheme.of(context).titleSmallIsCustom,
-                                          ),
-                                    ),
-                                    backgroundColor: FlutterFlowTheme.of(context).primary,
-                                  ),
-                                );
+                                LoginSnackBar.show(context, message: 'Faça login para curtir meditações');
                                 return;
                               }
 
@@ -518,13 +505,28 @@ class _MeditationDetailsPageState extends State<MeditationDetailsPage> {
                                 userRepository: _userRepository,
                                 authRepository: authRepo,
                               );
-                              final user = await userDocService.ensureUserDocument();
 
-                              if (user == null) {
+                              try {
+                                final user = await userDocService.ensureUserDocument();
+
+                                if (user == null) {
+                                  // Faz logout para limpar estado inconsistente
+                                  await authRepo.signOut();
+                                  UserDocumentService.clearCache();
+
+                                  if (!context.mounted) return;
+                                  LoginSnackBar.show(
+                                    context,
+                                    message: 'Ocorreu um erro com sua conta. Por favor, faça login novamente.',
+                                  );
+                                  return;
+                                }
+                              } catch (e) {
+                                debugPrint('❌ Erro ao garantir documento do usuário: $e');
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
-                                      'Erro ao processar sua ação.',
+                                      'Erro ao processar sua ação. Tente novamente.',
                                       style: FlutterFlowTheme.of(context).titleSmall.override(
                                             fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
                                             color: FlutterFlowTheme.of(context).info,

@@ -285,7 +285,7 @@ class _MyAppState extends State<MyApp> {
 
     _appStateNotifier = AppStateNotifier.instance;
     _router = createRouter(_appStateNotifier);
-    
+
     // Setup user stream with error handling
     try {
       userStream = meditaBKFirebaseUserStream()
@@ -298,12 +298,12 @@ class _MyAppState extends State<MyApp> {
             _appStateNotifier.stopShowingSplashImage();
           },
         );
-      
+
       jwtTokenStream.listen((_) {});
     } catch (e) {
       _appStateNotifier.stopShowingSplashImage();
     }
-    
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _appStateNotifier.stopShowingSplashImage();
     });
