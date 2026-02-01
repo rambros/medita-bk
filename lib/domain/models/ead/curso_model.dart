@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'ead_enums.dart';
 import 'autor_curso_model.dart';
+import 'avaliacao_curso_model.dart';
 
 /// Model para Curso no Mobile
 /// Versão simplificada do CursoCompletoModel do Web Admin
@@ -24,6 +25,12 @@ class CursoModel {
   final List<String> objetivos;
   final List<String> requisitos;
 
+  // Avaliação
+  final bool requerAvaliacao;
+  final bool notificarAvaliacao;
+  final List<String> emailsNotificacao;
+  final AvaliacaoCursoModel? avaliacao;
+
   const CursoModel({
     required this.id,
     required this.titulo,
@@ -42,6 +49,10 @@ class CursoModel {
     this.tags = const [],
     this.objetivos = const [],
     this.requisitos = const [],
+    this.requerAvaliacao = false,
+    this.notificarAvaliacao = false,
+    this.emailsNotificacao = const [],
+    this.avaliacao,
   });
 
   factory CursoModel.fromFirestore(DocumentSnapshot doc) {
@@ -68,6 +79,12 @@ class CursoModel {
       tags: _parseStringList(map['tags']),
       objetivos: _parseStringList(map['objetivos']),
       requisitos: _parseStringList(map['requisitos']),
+      requerAvaliacao: map['requerAvaliacao'] as bool? ?? false,
+      notificarAvaliacao: map['notificarAvaliacao'] as bool? ?? false,
+      emailsNotificacao: _parseStringList(map['emailsNotificacao']),
+      avaliacao: map['avaliacao'] != null
+          ? AvaliacaoCursoModel.fromMap(map['avaliacao'] as Map<String, dynamic>?)
+          : null,
     );
   }
 
@@ -89,6 +106,10 @@ class CursoModel {
       'tags': tags,
       'objetivos': objetivos,
       'requisitos': requisitos,
+      'requerAvaliacao': requerAvaliacao,
+      'notificarAvaliacao': notificarAvaliacao,
+      'emailsNotificacao': emailsNotificacao,
+      'avaliacao': avaliacao?.toMap(),
     };
   }
 
@@ -110,6 +131,10 @@ class CursoModel {
     List<String>? tags,
     List<String>? objetivos,
     List<String>? requisitos,
+    bool? requerAvaliacao,
+    bool? notificarAvaliacao,
+    List<String>? emailsNotificacao,
+    AvaliacaoCursoModel? avaliacao,
   }) {
     return CursoModel(
       id: id ?? this.id,
@@ -129,6 +154,10 @@ class CursoModel {
       tags: tags ?? this.tags,
       objetivos: objetivos ?? this.objetivos,
       requisitos: requisitos ?? this.requisitos,
+      requerAvaliacao: requerAvaliacao ?? this.requerAvaliacao,
+      notificarAvaliacao: notificarAvaliacao ?? this.notificarAvaliacao,
+      emailsNotificacao: emailsNotificacao ?? this.emailsNotificacao,
+      avaliacao: avaliacao ?? this.avaliacao,
     );
   }
 

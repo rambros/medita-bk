@@ -224,6 +224,7 @@ class UserRepository {
     required String fullName,
     required String whatsapp,
     required String cidade,
+    required String uf,
   }) async {
     try {
       await _firestoreService.updateDocument(
@@ -233,6 +234,7 @@ class UserRepository {
           'fullName': fullName,
           'whatsapp': whatsapp,
           'cidade': cidade,
+          'uf': uf,
         },
       );
     } catch (e) {

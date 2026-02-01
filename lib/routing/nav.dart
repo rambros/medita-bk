@@ -11,6 +11,7 @@ import 'package:medita_bk/data/services/auth/base_auth_user_provider.dart';
 import 'package:medita_bk/data/services/push_notifications/push_notifications_handler.dart' show PushNotificationsHandler;
 import 'package:medita_bk/ui/pages.dart';
 import 'package:medita_bk/routing/ead_routes.dart';
+import 'package:medita_bk/ui/ead/avaliacao_form_page/avaliacao_form_page.dart';
 import 'package:medita_bk/main.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
@@ -592,6 +593,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: EadRoutes.certificadoPath,
               builder: (context, params) => CertificadoPage(
                 cursoId: params.getParam('cursoId', ParamType.String)!,
+              ),
+            ),
+            // === AVALIAÇÃO ===
+            FFRoute(
+              name: EadRoutes.avaliacaoForm,
+              path: EadRoutes.avaliacaoFormPath,
+              builder: (context, params) => AvaliacaoFormPage(
+                inscricaoId: params.getParam('inscricaoId', ParamType.String)!,
               ),
             ),
             // === SUPORTE - TICKETS ===

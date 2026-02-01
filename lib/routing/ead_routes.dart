@@ -49,4 +49,8 @@ class EadRoutes {
 
   static const String discussaoDetail = 'discussaoDetail';
   static const String discussaoDetailPath = 'ead/discussao/:discussaoId';
+
+  // Avaliação
+  static const String avaliacaoForm = 'avaliacaoForm';
+  static const String avaliacaoFormPath = 'ead/avaliacao/:inscricaoId';
 }

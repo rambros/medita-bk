@@ -8,10 +8,8 @@ class CursoDetalhesViewModel extends ChangeNotifier {
   final EadRepository _repository;
   final String cursoId;
 
-  CursoDetalhesViewModel({
-    required this.cursoId,
-    EadRepository? repository,
-  }) : _repository = repository ?? EadRepository();
+  CursoDetalhesViewModel({required this.cursoId, EadRepository? repository})
+    : _repository = repository ?? EadRepository();
 
   // === Estado ===
 
@@ -45,13 +43,19 @@ class CursoDetalhesViewModel extends ChangeNotifier {
   /// Verifica se o curso foi concluído
   bool get isConcluido {
     final concluido = _inscricao?.isConcluido ?? false;
-    debugPrint('📊 isConcluido: $concluido (status: ${_inscricao?.status}, percentual: ${_inscricao?.percentualConcluido}%)');
+    debugPrint(
+      '📊 isConcluido: $concluido (status: ${_inscricao?.status}, percentual: ${_inscricao?.percentualConcluido}%)',
+    );
     return concluido;
   }
 
   /// Progresso do curso (calculado dinamicamente)
   double get progresso {
     if (_inscricao == null) return 0;
+
+    // Se a inscrição já está marcada como 100% (ex: via admin), respeita esse valor
+    if (_inscricao!.percentualConcluido >= 100) return 100;
+
     final total = totalTopicos;
     if (total == 0) return 0;
     return (topicosCompletos / total) * 100;
@@ -109,19 +113,19 @@ class CursoDetalhesViewModel extends ChangeNotifier {
 
     // Estratégia: Encontra o primeiro tópico NÃO concluído
     // Isso garante que ao concluir um quiz, o botão "Continuar" vai para o próximo não concluído
-    
+
     final ultimoTopico = _inscricao!.progresso.ultimoTopicoId;
     final ultimaAula = _inscricao!.progresso.ultimaAulaId;
-    
+
     // Se tem último acesso E ele não está completo, retorna ele
     if (ultimoTopico != null && ultimaAula != null && !isTopicoCompleto(ultimoTopico)) {
       return (aulaId: ultimaAula, topicoId: ultimoTopico);
     }
-    
+
     // Se o último está completo, busca o PRÓXIMO não concluído após ele
     if (ultimoTopico != null && ultimaAula != null) {
       bool encontrouUltimo = false;
-      
+
       for (final aula in _aulas) {
         for (final topico in aula.topicos) {
           // Encontrou o último acessado
@@ -129,7 +133,7 @@ class CursoDetalhesViewModel extends ChangeNotifier {
             encontrouUltimo = true;
             continue; // Pula ele (já foi concluído)
           }
-          
+
           // Se já passou pelo último E este não está completo, retorna
           if (encontrouUltimo && !isTopicoCompleto(topico.id)) {
             return (aulaId: aula.id, topicoId: topico.id);
@@ -175,11 +179,18 @@ class CursoDetalhesViewModel extends ChangeNotifier {
 
       // Se tiver usuário, carrega inscrição
       if (usuarioId != null) {
-        _inscricao = await _repository.getInscricao(
-          cursoId,
-          usuarioId,
-          forceRefresh: forceRefresh,
-        );
+        _inscricao = await _repository.getInscricao(cursoId, usuarioId, forceRefresh: forceRefresh);
+
+        if (_inscricao != null) {
+          debugPrint('🔍 DEBUG INSCRIÇÃO:');
+          debugPrint('  Status: ${_inscricao!.status}');
+          debugPrint('  Percentual (Model): ${_inscricao!.percentualConcluido}');
+          debugPrint('  Percentual (Progresso): ${_inscricao!.progresso.percentualConcluido}');
+          debugPrint('  Topicos Completos: ${_inscricao!.progresso.topicosCompletos.length}');
+          debugPrint('  Aulas Completas: ${_inscricao!.progresso.aulasCompletas.length}');
+          debugPrint('  Requer Avaliação: ${_curso!.requerAvaliacao}');
+          debugPrint('  Avaliação Preenchida: ${_inscricao!.avaliacaoPreenchida}');
+        }
       }
 
       _error = null;

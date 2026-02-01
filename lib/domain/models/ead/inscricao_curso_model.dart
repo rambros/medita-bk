@@ -25,6 +25,10 @@ class InscricaoCursoModel {
   final int totalTopicos;
   final int totalAulas;
 
+  // Campos de avaliação
+  final bool avaliacaoPreenchida;
+  final DateTime? dataAvaliacaoPreenchida;
+
   const InscricaoCursoModel({
     required this.id,
     required this.cursoId,
@@ -41,6 +45,8 @@ class InscricaoCursoModel {
     this.certificadoGerado = false,
     this.totalTopicos = 0,
     this.totalAulas = 0,
+    this.avaliacaoPreenchida = false,
+    this.dataAvaliacaoPreenchida,
   });
 
   /// Cria uma nova inscrição para o usuário atual
@@ -88,13 +94,13 @@ class InscricaoCursoModel {
       usuarioFoto: map['usuarioFoto'] as String?,
       dataInscricao: _parseTimestamp(map['dataInscricao']),
       status: StatusInscricao.fromString(map['status'] as String?),
-      progresso: ProgressoCursoModel.fromMap(
-        map['progresso'] as Map<String, dynamic>?,
-      ),
+      progresso: ProgressoCursoModel.fromMap(map['progresso'] as Map<String, dynamic>?),
       dataConclusao: _parseTimestamp(map['dataConclusao']),
       certificadoGerado: map['certificadoGerado'] as bool? ?? false,
       totalTopicos: map['totalTopicos'] as int? ?? 0,
       totalAulas: map['totalAulas'] as int? ?? 0,
+      avaliacaoPreenchida: map['avaliacaoPreenchida'] as bool? ?? false,
+      dataAvaliacaoPreenchida: _parseTimestamp(map['dataAvaliacaoPreenchida']),
     );
   }
 
@@ -114,6 +120,8 @@ class InscricaoCursoModel {
       'certificadoGerado': certificadoGerado,
       'totalTopicos': totalTopicos,
       'totalAulas': totalAulas,
+      'avaliacaoPreenchida': avaliacaoPreenchida,
+      'dataAvaliacaoPreenchida': dataAvaliacaoPreenchida,
       // Campos de busca
       'usuarioNomeSearch': usuarioNome.toLowerCase(),
       'usuarioEmailSearch': usuarioEmail.toLowerCase(),
@@ -136,6 +144,8 @@ class InscricaoCursoModel {
     bool? certificadoGerado,
     int? totalTopicos,
     int? totalAulas,
+    bool? avaliacaoPreenchida,
+    DateTime? dataAvaliacaoPreenchida,
   }) {
     return InscricaoCursoModel(
       id: id ?? this.id,
@@ -153,6 +163,8 @@ class InscricaoCursoModel {
       certificadoGerado: certificadoGerado ?? this.certificadoGerado,
       totalTopicos: totalTopicos ?? this.totalTopicos,
       totalAulas: totalAulas ?? this.totalAulas,
+      avaliacaoPreenchida: avaliacaoPreenchida ?? this.avaliacaoPreenchida,
+      dataAvaliacaoPreenchida: dataAvaliacaoPreenchida ?? this.dataAvaliacaoPreenchida,
     );
   }
 
@@ -250,6 +262,5 @@ class InscricaoCursoModel {
   int get hashCode => id.hashCode;
 
   @override
-  String toString() =>
-      'InscricaoCursoModel(id: $id, curso: $cursoTitulo, status: ${status.name})';
+  String toString() => 'InscricaoCursoModel(id: $id, curso: $cursoTitulo, status: ${status.name})';
 }

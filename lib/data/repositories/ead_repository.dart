@@ -98,19 +98,12 @@ class EadRepository {
   // === Tópicos ===
 
   /// Busca todos os tópicos de uma aula
-  Future<List<TopicoModel>> getTopicosByAula(
-    String cursoId,
-    String aulaId,
-  ) async {
+  Future<List<TopicoModel>> getTopicosByAula(String cursoId, String aulaId) async {
     return await _service.getTopicosByAula(cursoId, aulaId);
   }
 
   /// Busca um tópico específico
-  Future<TopicoModel?> getTopicoById(
-    String cursoId,
-    String aulaId,
-    String topicoId,
-  ) async {
+  Future<TopicoModel?> getTopicoById(String cursoId, String aulaId, String topicoId) async {
     return await _service.getTopicoById(cursoId, aulaId, topicoId);
   }
 
@@ -120,21 +113,14 @@ class EadRepository {
   }
 
   /// Stream de tópicos
-  Stream<List<TopicoModel>> streamTopicosByAula(
-    String cursoId,
-    String aulaId,
-  ) {
+  Stream<List<TopicoModel>> streamTopicosByAula(String cursoId, String aulaId) {
     return _service.streamTopicosByAula(cursoId, aulaId);
   }
 
   // === Inscrições ===
 
   /// Busca a inscrição do usuário em um curso
-  Future<InscricaoCursoModel?> getInscricao(
-    String cursoId,
-    String usuarioId, {
-    bool forceRefresh = false,
-  }) async {
+  Future<InscricaoCursoModel?> getInscricao(String cursoId, String usuarioId, {bool forceRefresh = false}) async {
     final cacheKey = InscricaoCursoModel.gerarId(cursoId, usuarioId);
 
     if (!forceRefresh && _inscricoesCache.containsKey(cacheKey)) {
@@ -142,11 +128,7 @@ class EadRepository {
     }
 
     // Passa forceRefresh para o service para ignorar cache do Firestore também
-    final inscricao = await _service.getInscricao(
-      cursoId, 
-      usuarioId,
-      forceRefresh: forceRefresh,
-    );
+    final inscricao = await _service.getInscricao(cursoId, usuarioId, forceRefresh: forceRefresh);
 
     if (inscricao != null) {
       _inscricoesCache[cacheKey] = inscricao;
@@ -163,9 +145,7 @@ class EadRepository {
   }
 
   /// Busca inscrições ativas de um usuário
-  Future<List<InscricaoCursoModel>> getMeusInscritosAtivos(
-    String usuarioId,
-  ) async {
+  Future<List<InscricaoCursoModel>> getMeusInscritosAtivos(String usuarioId) async {
     return await _service.getInscricoesAtivasByUsuario(usuarioId);
   }
 
@@ -260,8 +240,7 @@ class EadRepository {
     }
 
     // Calcula percentual usando o total REAL de tópicos
-    final percentual =
-        totalTopicosReal > 0 ? (novoProgresso.totalTopicosCompletos / totalTopicosReal) * 100 : 0.0;
+    final percentual = totalTopicosReal > 0 ? (novoProgresso.totalTopicosCompletos / totalTopicosReal) * 100 : 0.0;
 
     novoProgresso = novoProgresso.copyWith(percentualConcluido: percentual);
 
@@ -270,23 +249,35 @@ class EadRepository {
 
     // Verifica se completou o curso (100%)
     if (percentual >= 100 && inscricao.isAtivo) {
-      debugPrint('🎓 CURSO COMPLETO! Atualizando status para concluído...');
-      final dataConclusao = DateTime.now();
+      debugPrint('🎓 CURSO COMPLETO! Verificando requisitos...');
 
-      await _service.atualizarStatusInscricao(
-        inscricaoId,
-        StatusInscricao.concluido,
-        dataConclusao: dataConclusao,
-      );
-      debugPrint('✅ Status atualizado no Firebase');
+      // Buscar dados do curso para verificar se requer avaliação
+      final curso = await getCursoById(cursoId);
 
-      // Atualiza modelo local com progresso E status concluído
-      inscricao = inscricao.copyWith(
-        progresso: novoProgresso,
-        status: StatusInscricao.concluido,
-        dataConclusao: dataConclusao,
-      );
-      debugPrint('✅ Modelo atualizado: status=${inscricao.status}, progresso=${inscricao.percentualConcluido}%');
+      // Verifica se curso requer avaliação E se ela não foi preenchida
+      final podeConclui = !(curso?.requerAvaliacao ?? false) || inscricao.avaliacaoPreenchida;
+
+      if (podeConclui) {
+        // Pode concluir normalmente
+        debugPrint('✅ Requisitos atendidos. Concluindo curso...');
+        final dataConclusao = DateTime.now();
+
+        await _service.atualizarStatusInscricao(inscricaoId, StatusInscricao.concluido, dataConclusao: dataConclusao);
+        debugPrint('✅ Status atualizado no Firebase');
+
+        // Atualiza modelo local com progresso E status concluído
+        inscricao = inscricao.copyWith(
+          progresso: novoProgresso,
+          status: StatusInscricao.concluido,
+          dataConclusao: dataConclusao,
+        );
+        debugPrint('✅ Modelo atualizado: status=${inscricao.status}, progresso=${inscricao.percentualConcluido}%');
+      } else {
+        // Não pode concluir ainda - falta avaliação
+        debugPrint('⚠️  Avaliação obrigatória pendente. Curso não será concluído automaticamente.');
+        // Apenas atualiza progresso
+        inscricao = inscricao.copyWith(progresso: novoProgresso);
+      }
     } else {
       // Apenas atualiza progresso (curso não completo)
       inscricao = inscricao.copyWith(progresso: novoProgresso);
@@ -320,8 +311,7 @@ class EadRepository {
     final totalTopicosReal = todasAulas.fold(0, (sum, aula) => sum + aula.topicos.length);
 
     // Recalcula percentual usando o total REAL
-    final percentual =
-        totalTopicosReal > 0 ? (novoProgresso.totalTopicosCompletos / totalTopicosReal) * 100 : 0.0;
+    final percentual = totalTopicosReal > 0 ? (novoProgresso.totalTopicosCompletos / totalTopicosReal) * 100 : 0.0;
 
     novoProgresso = novoProgresso.copyWith(percentualConcluido: percentual);
 
@@ -330,10 +320,7 @@ class EadRepository {
 
     // Se estava concluído, volta para ativo
     if (inscricao.isConcluido) {
-      await _service.atualizarStatusInscricao(
-        inscricaoId,
-        StatusInscricao.ativo,
-      );
+      await _service.atualizarStatusInscricao(inscricaoId, StatusInscricao.ativo);
       inscricao = inscricao.copyWith(status: StatusInscricao.ativo);
     }
 
@@ -347,10 +334,7 @@ class EadRepository {
   }
 
   /// Reinicia o progresso de um curso (zera todos os tópicos completos)
-  Future<InscricaoCursoModel> reiniciarProgresso({
-    required String cursoId,
-    required String usuarioId,
-  }) async {
+  Future<InscricaoCursoModel> reiniciarProgresso({required String cursoId, required String usuarioId}) async {
     final inscricaoId = InscricaoCursoModel.gerarId(cursoId, usuarioId);
     var inscricao = await getInscricao(cursoId, usuarioId, forceRefresh: true);
 
@@ -371,14 +355,8 @@ class EadRepository {
 
     // Atualiza status para ativo (se estava concluído)
     if (inscricao.isConcluido) {
-      await _service.atualizarStatusInscricao(
-        inscricaoId,
-        StatusInscricao.ativo,
-      );
-      inscricao = inscricao.copyWith(
-        status: StatusInscricao.ativo,
-        dataConclusao: null,
-      );
+      await _service.atualizarStatusInscricao(inscricaoId, StatusInscricao.ativo);
+      inscricao = inscricao.copyWith(status: StatusInscricao.ativo, dataConclusao: null);
     }
 
     // Atualiza modelo local
@@ -402,10 +380,7 @@ class EadRepository {
 
     if (inscricao == null) return;
 
-    final novoProgresso = inscricao.progresso.atualizarUltimoAcesso(
-      topicoId,
-      aulaId,
-    );
+    final novoProgresso = inscricao.progresso.atualizarUltimoAcesso(topicoId, aulaId);
 
     await _service.atualizarProgresso(inscricaoId, novoProgresso);
 
@@ -416,11 +391,7 @@ class EadRepository {
   // === Quiz ===
 
   /// Busca questões do quiz
-  Future<List<QuizQuestionModel>> getQuizByTopico(
-    String cursoId,
-    String aulaId,
-    String topicoId,
-  ) async {
+  Future<List<QuizQuestionModel>> getQuizByTopico(String cursoId, String aulaId, String topicoId) async {
     return await _service.getQuizByTopico(cursoId, aulaId, topicoId);
   }
 

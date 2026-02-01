@@ -13,3 +13,4 @@ export 'user_repository.dart';
 export 'video_repository.dart';
 export 'ead_repository.dart';
 export 'comunicacao_repository.dart';
+export 'avaliacao_repository.dart';

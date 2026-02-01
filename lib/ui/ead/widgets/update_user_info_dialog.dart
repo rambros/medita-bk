@@ -12,7 +12,7 @@ class UpdateUserInfoDialog extends StatefulWidget {
   });
 
   final UserModel currentUser;
-  final Function(String fullName, String whatsapp, String cidade) onSave;
+  final Function(String fullName, String whatsapp, String cidade, String uf) onSave;
 
   @override
   State<UpdateUserInfoDialog> createState() => _UpdateUserInfoDialogState();
@@ -23,7 +23,38 @@ class _UpdateUserInfoDialogState extends State<UpdateUserInfoDialog> {
   late TextEditingController _fullNameController;
   late TextEditingController _whatsappController;
   late TextEditingController _cidadeController;
+  String? _selectedUF;
   bool _isSaving = false;
+
+  final List<String> _estadosBrasileiros = [
+    'AC',
+    'AL',
+    'AP',
+    'AM',
+    'BA',
+    'CE',
+    'DF',
+    'ES',
+    'GO',
+    'MA',
+    'MT',
+    'MS',
+    'MG',
+    'PA',
+    'PB',
+    'PR',
+    'PE',
+    'PI',
+    'RJ',
+    'RN',
+    'RS',
+    'RO',
+    'RR',
+    'SC',
+    'SP',
+    'SE',
+    'TO'
+  ];
 
   @override
   void initState() {
@@ -31,6 +62,9 @@ class _UpdateUserInfoDialogState extends State<UpdateUserInfoDialog> {
     _fullNameController = TextEditingController(text: widget.currentUser.fullName);
     _whatsappController = TextEditingController(text: widget.currentUser.whatsapp);
     _cidadeController = TextEditingController(text: widget.currentUser.cidade);
+    if (widget.currentUser.uf.isNotEmpty) {
+      _selectedUF = widget.currentUser.uf;
+    }
   }
 
   @override
@@ -55,6 +89,7 @@ class _UpdateUserInfoDialogState extends State<UpdateUserInfoDialog> {
         _fullNameController.text.trim(),
         _whatsappController.text.trim(),
         _cidadeController.text.trim(),
+        _selectedUF ?? '',
       );
       if (mounted) {
         Navigator.of(context).pop(true);
@@ -86,9 +121,8 @@ class _UpdateUserInfoDialogState extends State<UpdateUserInfoDialog> {
 
   String? _validateWhatsapp(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Por favor, informe seu WhatsApp';
+      return null; // Opcional
     }
-    // Remove caracteres não numéricos
     final numbers = value.replaceAll(RegExp(r'[^0-9]'), '');
     if (numbers.length < 10 || numbers.length > 11) {
       return 'Número inválido (use DDD + número)';
@@ -99,6 +133,13 @@ class _UpdateUserInfoDialogState extends State<UpdateUserInfoDialog> {
   String? _validateCidade(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'Por favor, informe sua cidade';
+    }
+    return null;
+  }
+
+  String? _validateGeneric(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Campo obrigatório';
     }
     return null;
   }
@@ -169,7 +210,7 @@ class _UpdateUserInfoDialogState extends State<UpdateUserInfoDialog> {
 
                   // Campo: WhatsApp
                   Text(
-                    'WhatsApp/Celular',
+                    'WhatsApp/Celular (opcional)',
                     style: appTheme.bodyMedium.copyWith(
                       fontWeight: FontWeight.w600,
                       color: appTheme.primaryText,
@@ -221,6 +262,43 @@ class _UpdateUserInfoDialogState extends State<UpdateUserInfoDialog> {
                     validator: _validateCidade,
                     textCapitalization: TextCapitalization.words,
                     enabled: !_isSaving,
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Campo: UF (Estado)
+                  Text(
+                    'Estado (UF)',
+                    style: appTheme.bodyMedium.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: appTheme.primaryText,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  DropdownButtonFormField<String>(
+                    value: _selectedUF,
+                    items: _estadosBrasileiros.map((String uf) {
+                      return DropdownMenuItem<String>(
+                        value: uf,
+                        child: Text(uf),
+                      );
+                    }).toList(),
+                    onChanged: _isSaving
+                        ? null
+                        : (String? newValue) {
+                            setState(() {
+                              _selectedUF = newValue;
+                            });
+                          },
+                    decoration: InputDecoration(
+                      hintText: 'Selecione o estado',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      filled: true,
+                      fillColor: appTheme.secondaryBackground,
+                      prefixIcon: Icon(Icons.map, color: appTheme.secondaryText),
+                    ),
+                    validator: _validateGeneric,
                   ),
                   const SizedBox(height: 24),
 

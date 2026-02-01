@@ -118,12 +118,13 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> with RouteAware {
       barrierDismissible: false,
       builder: (context) => UpdateUserInfoDialog(
         currentUser: currentUserData!,
-        onSave: (fullName, whatsapp, cidade) async {
+        onSave: (fullName, whatsapp, cidade, uf) async {
           await userRepo.updateContactInfo(
             userId: authRepo.currentUserUid,
             fullName: fullName,
             whatsapp: whatsapp,
             cidade: cidade,
+            uf: uf,
           );
         },
       ),
@@ -436,82 +437,248 @@ class _CursoDetalhesPageState extends State<CursoDetalhesPage> with RouteAware {
   Widget _buildBottomBar(CursoDetalhesViewModel viewModel) {
     final appTheme = AppTheme.of(context);
 
+    // Verifica se precisa mostrar botão de avaliação
+    final progresso100 = viewModel.progresso >= 100;
+    final cursoRequerAvaliacao = viewModel.curso?.requerAvaliacao ?? false;
+    final avaliacaoPreenchida = viewModel.inscricao?.avaliacaoPreenchida ?? false;
+    final mostrarBotaoAvaliacao = viewModel.isInscrito && progresso100 && cursoRequerAvaliacao && !avaliacaoPreenchida;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: appTheme.secondaryBackground,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, -2),
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 12,
+            offset: const Offset(0, -4),
           ),
         ],
       ),
       child: SafeArea(
-        child: Row(
-          children: [
-            // Info de progresso
-            if (viewModel.isInscrito) ...[
+        child: mostrarBotaoAvaliacao
+            ? _buildAvaliacaoSection(viewModel, appTheme)
+            : _buildBotaoPrincipal(viewModel, appTheme),
+      ),
+    );
+  }
+
+  // Seção de avaliação com design convidativo
+  Widget _buildAvaliacaoSection(CursoDetalhesViewModel viewModel, AppTheme appTheme) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: appTheme.primaryBackground,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: appTheme.primary.withOpacity(0.1),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Imagem do curso e título
+          Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: viewModel.curso?.imagemCapa != null
+                    ? Image.network(
+                        viewModel.curso!.imagemCapa!,
+                        width: 64,
+                        height: 64,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            width: 64,
+                            height: 64,
+                            decoration: BoxDecoration(
+                              color: appTheme.primary.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Icon(
+                              Icons.image_outlined,
+                              color: appTheme.primary,
+                              size: 32,
+                            ),
+                          );
+                        },
+                      )
+                    : Container(
+                        width: 64,
+                        height: 64,
+                        decoration: BoxDecoration(
+                          color: appTheme.primary.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          Icons.image_outlined,
+                          color: appTheme.primary,
+                          size: 32,
+                        ),
+                      ),
+              ),
+              const SizedBox(width: 16),
               Expanded(
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '${viewModel.topicosCompletos}/${viewModel.totalTopicos} tópicos',
-                      style: appTheme.bodySmall,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'Parabéns! Você concluiu o curso',
+                            style: appTheme.bodyMedium.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: appTheme.primaryText,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
+                          decoration: BoxDecoration(
+                            color: appTheme.secondary.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: appTheme.secondary.withOpacity(0.6),
+                              width: 1.5,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.pending_outlined,
+                                size: 16,
+                                color: appTheme.secondary,
+                              ),
+                              const SizedBox(width: 5),
+                              Text(
+                                'Pendente',
+                                style: appTheme.bodySmall.copyWith(
+                                  color: appTheme.secondary,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 4),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: LinearProgressIndicator(
-                        value: viewModel.progresso / 100,
-                        minHeight: 6,
-                        backgroundColor: appTheme.accent4,
-                        valueColor: AlwaysStoppedAnimation<Color>(appTheme.primary),
+                    Text(
+                      'Compartilhe sua experiência e nos ajude a melhorar',
+                      style: appTheme.bodySmall.copyWith(
+                        color: appTheme.secondaryText,
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(width: 16),
             ],
+          ),
 
-            // Botão principal
-            Expanded(
-              flex: viewModel.isInscrito ? 0 : 1,
-              child: SizedBox(
-                width: viewModel.isInscrito ? null : double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: viewModel.isInscrevendo
-                      ? null
-                      : (viewModel.isInscrito
-                          ? (viewModel.isConcluido ? null : _continuarCurso)
-                          : _inscrever),
-                  icon: viewModel.isInscrevendo
-                      ? SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(appTheme.info),
-                          ),
-                        )
-                      : Icon(viewModel.iconeBotaoAcao),
-                  label: Text(viewModel.textoBotaoAcao),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: appTheme.primary,
-                    foregroundColor: appTheme.info,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 12,
+          const SizedBox(height: 16),
+
+          // Botões
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () async {
+                    final inscricaoId = viewModel.inscricao!.id;
+                    final resultado = await context.pushNamed(
+                      EadRoutes.avaliacaoForm,
+                      pathParameters: {'inscricaoId': inscricaoId},
+                    );
+
+                    if (resultado == true) {
+                      await _recarregarProgresso();
+                    }
+                  },
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: appTheme.primary),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Text(
+                    'Avaliar Curso',
+                    style: TextStyle(
+                      color: appTheme.primary,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(width: 12),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: viewModel.isConcluido ? null : _continuarCurso,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: appTheme.primary,
+                    foregroundColor: appTheme.info,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 0,
+                  ),
+                  child: Text(
+                    'Continuar Curso',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Botão principal (quando não há avaliação)
+  Widget _buildBotaoPrincipal(CursoDetalhesViewModel viewModel, AppTheme appTheme) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton.icon(
+        onPressed: viewModel.isInscrevendo
+            ? null
+            : (viewModel.isInscrito ? (viewModel.isConcluido ? null : _continuarCurso) : _inscrever),
+        icon: viewModel.isInscrevendo
+            ? SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(appTheme.info),
+                ),
+              )
+            : Icon(viewModel.iconeBotaoAcao),
+        label: Text(
+          viewModel.textoBotaoAcao,
+          style: const TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 16,
+          ),
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: appTheme.primary,
+          foregroundColor: appTheme.info,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          elevation: 0,
         ),
       ),
     );

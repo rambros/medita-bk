@@ -102,7 +102,7 @@ class QuizViewModel extends ChangeNotifier {
     return resposta is String ? resposta : null;
   }
 
-  /// Respostas selecionadas para a pergunta atual (Set<String> para múltiplas respostas)
+  /// Respostas selecionadas para a pergunta atual (`Set<String>` para múltiplas respostas)
   Set<String> get respostasSelecionadas {
     final pergunta = perguntaAtualModel;
     if (pergunta == null) return {};

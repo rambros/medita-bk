@@ -111,6 +111,14 @@
                 discussaoId: params.getParam('discussaoId', ParamType.String) ?? '',
               ),
             ),
+            // === AVALIAÇÃO ===
+            FFRoute(
+              name: AvaliacaoFormPage.routeName,
+              path: AvaliacaoFormPage.routePath,
+              builder: (context, params) => AvaliacaoFormPage(
+                inscricaoId: params.getParam('inscricaoId', ParamType.String) ?? '',
+              ),
+            ),
             // === FIM MÓDULO EAD ===
 */
 
@@ -180,5 +188,13 @@
 /// context.pushNamed(
 ///   EadRoutes.discussaoDetail,
 ///   pathParameters: {'discussaoId': 'discussao123'},
+/// );
+///
+/// // === AVALIAÇÃO ===
+///
+/// // Ir para Formulário de Avaliação
+/// context.pushNamed(
+///   EadRoutes.avaliacaoForm,
+///   pathParameters: {'inscricaoId': 'curso123_user456'},
 /// );
 /// ```

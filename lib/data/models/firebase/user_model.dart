@@ -30,6 +30,7 @@ class UserModel extends Equatable {
   final DateTime? lastAccess;
   final String whatsapp;
   final String cidade;
+  final String uf;
 
   const UserModel({
     required this.uid,
@@ -53,6 +54,7 @@ class UserModel extends Equatable {
     this.lastAccess,
     this.whatsapp = '',
     this.cidade = '',
+    this.uf = '',
   });
 
   // ========== FIRESTORE SERIALIZATION ==========
@@ -86,6 +88,7 @@ class UserModel extends Equatable {
       lastAccess: _getDateTime(data['lastAccess']),
       whatsapp: data['whatsapp'] as String? ?? '',
       cidade: data['cidade'] as String? ?? '',
+      uf: data['uf'] as String? ?? '',
     );
   }
 
@@ -142,6 +145,7 @@ class UserModel extends Equatable {
       lastAccess: json['lastAccess'] != null ? DateTime.parse(json['lastAccess']) : null,
       whatsapp: json['whatsapp'] as String? ?? '',
       cidade: json['cidade'] as String? ?? '',
+      uf: json['uf'] as String? ?? '',
     );
   }
 
@@ -239,6 +243,7 @@ class UserModel extends Equatable {
     DateTime? lastAccess,
     String? whatsapp,
     String? cidade,
+    String? uf,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
@@ -262,6 +267,7 @@ class UserModel extends Equatable {
       lastAccess: lastAccess ?? this.lastAccess,
       whatsapp: whatsapp ?? this.whatsapp,
       cidade: cidade ?? this.cidade,
+      uf: uf ?? this.uf,
     );
   }
 
@@ -290,6 +296,7 @@ class UserModel extends Equatable {
         lastAccess,
         whatsapp,
         cidade,
+        uf,
       ];
 
   @override

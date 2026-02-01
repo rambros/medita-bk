@@ -28,19 +28,19 @@ class DailyLog {
     this.sessions,
   });
 
-  int? compareTo(other) {
+  int? compareTo(DailyLog? other) {
     if (day == null || other == null) {
       return null;
     }
-    if (day!.isBefore(other.day)) {
+    if (day!.isBefore(other.day!)) {
       return 1;
     }
 
-    if (day!.isAfter(other.day)) {
+    if (day!.isAfter(other.day!)) {
       return -1;
     }
 
-    if ((day!.day == other.day) && (day!.month == other.month) && (day!.year == other.year)) {
+    if ((day!.day == other.day!.day) && (day!.month == other.day!.month) && (day!.year == other.day!.year)) {
       return 0;
     }
 

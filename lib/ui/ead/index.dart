@@ -80,3 +80,17 @@ export 'discussoes/nova_discussao_page/view_model/nova_discussao_view_model.dart
 export 'discussoes/discussoes_curso_page/widgets/discussao_card.dart';
 export 'discussoes/discussao_detail_page/widgets/resposta_card.dart';
 export 'discussoes/discussao_detail_page/widgets/input_resposta.dart';
+
+// === AVALIAÇÃO ===
+
+// Pages
+export 'avaliacao_form_page/avaliacao_form_page.dart';
+
+// ViewModels
+export 'avaliacao_form_page/view_model/avaliacao_form_view_model.dart';
+
+// Widgets
+export 'avaliacao_form_page/widgets/emoji_scale_selector.dart';
+export 'avaliacao_form_page/widgets/multipla_escolha_selector.dart';
+export 'avaliacao_form_page/widgets/texto_longo_input.dart';
+export 'avaliacao_form_page/widgets/pergunta_card.dart';
