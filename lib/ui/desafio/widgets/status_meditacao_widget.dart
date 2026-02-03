@@ -8,6 +8,7 @@ import 'package:medita_bk/ui/pages.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
 import 'package:medita_bk/ui/core/flutter_flow/custom_functions.dart' as functions;
+import 'package:medita_bk/ui/desafio/constants/desafio_strings.dart';
 
 class StatusMeditacaoWidget extends StatelessWidget {
   const StatusMeditacaoWidget({
@@ -37,10 +38,10 @@ class StatusMeditacaoWidget extends StatelessWidget {
     // Check start date globally - blocks everything if future
     final startDate = AppStateStore().diaInicioDesafio21;
     if (startDate != null && getCurrentTimestamp < startDate) {
+      final formattedDate = dateTimeFormat("d/M/y", startDate, locale: FFLocalizations.of(context).languageCode);
       return _buildTooltip(
         context,
-        message:
-            'Aguarde até ${dateTimeFormat("d/M/y", startDate, locale: FFLocalizations.of(context).languageCode)} para iniciar o desafio.',
+        message: DesafioStrings.waitUntilDate(formattedDate),
       );
     }
 
@@ -49,7 +50,7 @@ class StatusMeditacaoWidget extends StatelessWidget {
     }
 
     if (statusMeditacao == D21Status.closed) {
-      String message = 'Você precisa completar o dia anterior primeiro.';
+      String message = DesafioStrings.completePreviousDay;
       bool isPermanentLock = true;
 
       final currentDay = dia ?? 0;
@@ -59,7 +60,7 @@ class StatusMeditacaoWidget extends StatelessWidget {
         // Se a anterior foi completada (por data ou status), a trava aqui é de tempo (dia seguinte)
         if (previousMeditation != null &&
             (previousMeditation.dateCompleted != null || previousMeditation.meditationStatus == D21Status.completed)) {
-          message = 'Precisa aguardar o próximo dia para fazer esta meditação';
+          message = DesafioStrings.waitNextDay;
           isPermanentLock = false; // Bloqueio temporal
         }
       }

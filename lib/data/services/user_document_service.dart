@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:medita_bk/data/repositories/user_repository.dart';
 import 'package:medita_bk/data/repositories/auth_repository.dart';
 import 'package:medita_bk/data/models/firebase/user_model.dart';
@@ -38,13 +37,11 @@ class UserDocumentService {
       final userId = _authRepository.currentUserUid;
 
       if (userId.isEmpty) {
-        debugPrint('⚠️ UserDocumentService: Nenhum usuário autenticado');
         return null;
       }
 
       // Verifica cache (evita verificações redundantes)
       if (!forceCheck && _verifiedUsers.containsKey(userId)) {
-        debugPrint('✅ UserDocumentService: Usuário $userId já verificado (cache)');
         return await _userRepository.getUserById(userId);
       }
 
@@ -54,26 +51,19 @@ class UserDocumentService {
       if (existingUser != null) {
         // Documento existe, adiciona ao cache
         _verifiedUsers[userId] = true;
-        debugPrint('✅ UserDocumentService: Documento do usuário $userId já existe');
         return existingUser;
       }
-
-      // Documento não existe, precisa criar
-      debugPrint('⚠️ UserDocumentService: Documento do usuário $userId não encontrado');
 
       // Obtém dados do Firebase Auth via AuthRepository
       final email = _authRepository.currentUserEmail;
       if (email.isEmpty) {
-        debugPrint('❌ UserDocumentService: Usuário sem email no Firebase Auth');
         return null;
       }
 
       // Coleta dados disponíveis do Firebase Auth
       final displayName = auth_provider.currentUser?.displayName ?? '';
       final photoUrl = auth_provider.currentUser?.photoUrl ??
-        'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/medita-bk-web-admin-2vj9u4/assets/i10jga9fdqpj/autorImage.jpg';
-
-      debugPrint('🔍 UserDocumentService: Dados coletados - displayName: "$displayName", photoUrl: "${photoUrl.substring(0, 50)}..."');
+          'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/medita-bk-web-admin-2vj9u4/assets/i10jga9fdqpj/autorImage.jpg';
 
       // Cria novo documento com dados do Firebase Auth
       final newUser = UserModel(
@@ -87,15 +77,11 @@ class UserDocumentService {
         loginType: _detectLoginType(email),
       );
 
-      debugPrint('📝 UserDocumentService: Tentando criar documento para usuário $userId...');
       await _userRepository.createUser(newUser);
       _verifiedUsers[userId] = true;
 
-      debugPrint('✅ UserDocumentService: Documento criado para usuário $userId (${newUser.loginType})');
-
       return newUser;
     } catch (e) {
-      debugPrint('❌ UserDocumentService: Erro ao garantir documento do usuário: $e');
       rethrow;
     }
   }
@@ -125,12 +111,10 @@ class UserDocumentService {
   /// Útil para forçar nova verificação após logout ou troca de usuário
   static void clearCache() {
     _verifiedUsers.clear();
-    debugPrint('🗑️ UserDocumentService: Cache limpo');
   }
 
   /// Limpa cache de um usuário específico
   static void clearUserCache(String userId) {
     _verifiedUsers.remove(userId);
-    debugPrint('🗑️ UserDocumentService: Cache do usuário $userId limpo');
   }
 }
