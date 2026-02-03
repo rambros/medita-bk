@@ -17,6 +17,7 @@ class CompletouBrasaoViewModel extends ChangeNotifier {
   }
 
   String get brasaoUrl => brasao?.brasaoUrl ?? '';
+
   String get header => brasao?.header ?? '';
   String get descricao => brasao?.descricao ?? '';
   String get premio => brasao?.premio ?? '';

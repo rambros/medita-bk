@@ -7,6 +7,7 @@ library;
 
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:medita_bk/domain/models/notificacao.dart';
 import 'package:medita_bk/domain/models/user_notification_state.dart';
@@ -19,6 +20,29 @@ class NotificacoesRepository {
   static const String _notificationsCollection = 'notifications';
 
   NotificacoesRepository({FirebaseFirestore? firestore}) : _firestore = firestore ?? FirebaseFirestore.instance;
+
+  // === HELPER ===
+
+  bool _deveMostrarNotificacao(Map<String, dynamic> data, String userId, DateTime? userCreationTime) {
+    // Se não tem data de criação do usuário, mostra tudo (fallback)
+    if (userCreationTime == null) return true;
+
+    final dataCriacaoRaw = data['dataCriacao'];
+    DateTime? dataCriacao;
+    if (dataCriacaoRaw is Timestamp) {
+      dataCriacao = dataCriacaoRaw.toDate();
+    } else if (dataCriacaoRaw is DateTime) {
+      dataCriacao = dataCriacaoRaw;
+    }
+
+    // Se sem data na notificação, mostra (fallback para dados corrompidos/antigos sem data)
+    if (dataCriacao == null) return true;
+
+    // REGRA ESTRITA: Se notificação é anterior ao cadastro, esconde.
+    // Sem exceções para tipo 'sistema' ou destinatário específico.
+    // Mantemos apenas margem de 1 minuto para garantir mensagens de "Boas Vindas" criadas no ato do cadastro.
+    return dataCriacao.isAfter(userCreationTime.subtract(const Duration(minutes: 1)));
+  }
 
   // === QUERIES ===
 
@@ -33,6 +57,8 @@ class NotificacoesRepository {
       return [];
     }
 
+    final userCreationTime = FirebaseAuth.instance.currentUser?.metadata.creationTime;
+
     try {
       // UMA query simples!
       final snapshot = await _firestore
@@ -45,6 +71,11 @@ class NotificacoesRepository {
       final notificacoes = <Notificacao>[];
 
       for (final doc in snapshot.docs) {
+        // Filtro de data de cadastro
+        if (!_deveMostrarNotificacao(doc.data(), userId, userCreationTime)) {
+          continue;
+        }
+
         // Busca estado do usuário
         final userStateDoc = await doc.reference.collection('user_states').doc(userId).get();
 
@@ -80,6 +111,8 @@ class NotificacoesRepository {
       return;
     }
 
+    final userCreationTime = FirebaseAuth.instance.currentUser?.metadata.creationTime;
+
     try {
       await for (final snapshot in _firestore
           .collection(_notificationsCollection)
@@ -90,6 +123,11 @@ class NotificacoesRepository {
         final notificacoes = <Notificacao>[];
 
         for (final doc in snapshot.docs) {
+          // Filtro de data de cadastro
+          if (!_deveMostrarNotificacao(doc.data(), userId, userCreationTime)) {
+            continue;
+          }
+
           final userStateDoc = await doc.reference.collection('user_states').doc(userId).get();
 
           final userState = userStateDoc.exists ? UserNotificationState.fromMap(userStateDoc.data()!, userId) : null;
@@ -236,6 +274,8 @@ class NotificacoesRepository {
     final userId = currentUserUid;
     if (userId.isEmpty) return 0;
 
+    final userCreationTime = FirebaseAuth.instance.currentUser?.metadata.creationTime;
+
     try {
       final snapshot = await _firestore
           .collection(_notificationsCollection)
@@ -244,6 +284,11 @@ class NotificacoesRepository {
       int count = 0;
 
       for (final doc in snapshot.docs) {
+        // Filtro de data de cadastro
+        if (!_deveMostrarNotificacao(doc.data(), userId, userCreationTime)) {
+          continue;
+        }
+
         final userStateDoc = await doc.reference.collection('user_states').doc(userId).get();
 
         final userState = userStateDoc.exists ? UserNotificationState.fromMap(userStateDoc.data()!, userId) : null;

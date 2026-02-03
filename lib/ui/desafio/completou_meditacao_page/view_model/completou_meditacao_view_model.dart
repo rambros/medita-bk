@@ -60,11 +60,13 @@ class CompletouMeditacaoViewModel extends ChangeNotifier {
       }
 
       // Mark meditation as completed
+      final now = getCurrentTimestamp;
+
       AppStateStore().updateDesafio21Struct(
         (e) => e
           ..updateD21Meditations(
             (e) => e[diaCompletado]
-              ..dateCompleted = getCurrentTimestamp
+              ..dateCompleted = now
               ..meditationStatus = D21Status.completed,
           ),
       );
@@ -78,8 +80,20 @@ class CompletouMeditacaoViewModel extends ChangeNotifier {
       }
 
       // Persist to Firestore
+      var desafioToSave = AppStateStore().desafio21;
+
+      // IMPORTANT: Ensure listaBrasoes is present before saving
+      // If empty, load from template and merge
+      if (desafioToSave.listaBrasoes.isEmpty) {
+        final template = await _repository.getDesafio21Template();
+        if (template != null && template.desafio21Data.listaBrasoes.isNotEmpty) {
+          desafioToSave.listaBrasoes = template.desafio21Data.listaBrasoes;
+          AppStateStore().desafio21 = desafioToSave;
+        }
+      }
+
       await _repository.updateDesafio21(
-        AppStateStore().desafio21,
+        desafioToSave,
         desafio21Started: true,
       );
 

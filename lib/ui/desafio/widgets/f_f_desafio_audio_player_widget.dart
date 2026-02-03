@@ -207,8 +207,10 @@ class _CompletedSongButtonState extends State<CompletedSongButton> {
   void initState() {
     super.initState();
     playerController = globalAudioPlayerController;
-    // Reset the completedSongNotifier
-    playerController.completedSongNotifier.value = false;
+    // Reset the completedSongNotifier after the first frame to avoid setState during build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      playerController.completedSongNotifier.value = false;
+    });
   }
 
   @override

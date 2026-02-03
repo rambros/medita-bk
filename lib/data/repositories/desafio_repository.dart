@@ -16,8 +16,10 @@ class DesafioRepository {
     final uid = currentUserUid;
     if (uid.isEmpty) return;
 
+    final desafioMap = desafio21.toMap();
+
     final Map<String, dynamic> updateData = {
-      'desafio21': desafio21.toMap(),
+      'desafio21': desafioMap,
       if (desafio21Started != null) 'desafio21Started': desafio21Started,
     };
 

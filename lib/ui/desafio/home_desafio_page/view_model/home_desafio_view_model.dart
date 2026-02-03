@@ -48,6 +48,9 @@ class HomeDesafioViewModel extends ChangeNotifier {
           'd21_meditations': getD21MeditationModelListFirestoreData(
             desafio21.d21Meditations,
           ),
+          'listaBrasoes': getD21BrasaoModelListFirestoreData(
+            desafio21.listaBrasoes,
+          ),
         },
         clearUnsetFields: false,
       );

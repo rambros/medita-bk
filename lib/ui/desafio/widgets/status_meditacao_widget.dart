@@ -1,6 +1,5 @@
 import 'package:aligned_tooltip/aligned_tooltip.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'package:medita_bk/core/enums/enums.dart';
@@ -32,7 +31,17 @@ class StatusMeditacaoWidget extends StatelessWidget {
       if (statusMeditacao == D21Status.completed) {
         return _buildCompletedStatus(context);
       }
-      return _buildPlay(context, dia ?? 0, icon: Icons.play_arrow_rounded);
+      return _buildPlay(context, dia ?? 0);
+    }
+
+    // Check start date globally - blocks everything if future
+    final startDate = AppStateStore().diaInicioDesafio21;
+    if (startDate != null && getCurrentTimestamp < startDate) {
+      return _buildTooltip(
+        context,
+        message:
+            'Aguarde até ${dateTimeFormat("d/M/y", startDate, locale: FFLocalizations.of(context).languageCode)} para iniciar o desafio.',
+      );
     }
 
     if (statusMeditacao == D21Status.open) {
@@ -40,10 +49,25 @@ class StatusMeditacaoWidget extends StatelessWidget {
     }
 
     if (statusMeditacao == D21Status.closed) {
-      return Icon(
-        Icons.lock_outline_rounded,
-        color: FlutterFlowTheme.of(context).white70,
-        size: 32.0,
+      String message = 'Você precisa completar o dia anterior primeiro.';
+      bool isPermanentLock = true;
+
+      final currentDay = dia ?? 0;
+      if (currentDay > 1) {
+        final previousMeditation = AppStateStore().desafio21.d21Meditations.elementAtOrNull(currentDay - 2);
+
+        // Se a anterior foi completada (por data ou status), a trava aqui é de tempo (dia seguinte)
+        if (previousMeditation != null &&
+            (previousMeditation.dateCompleted != null || previousMeditation.meditationStatus == D21Status.completed)) {
+          message = 'Precisa aguardar o próximo dia para fazer esta meditação';
+          isPermanentLock = false; // Bloqueio temporal
+        }
+      }
+
+      return _buildLockedWarning(
+        context,
+        message: message,
+        isPermanent: isPermanentLock,
       );
     }
 
@@ -55,9 +79,9 @@ class StatusMeditacaoWidget extends StatelessWidget {
     final startDate = AppStateStore().diaInicioDesafio21;
 
     if (startDate == null) {
-      return FaIcon(
-        FontAwesomeIcons.lock,
-        color: FlutterFlowTheme.of(context).secondaryText,
+      return Icon(
+        Icons.error_outline,
+        color: FlutterFlowTheme.of(context).error,
         size: 32.0,
       );
     }
@@ -71,17 +95,13 @@ class StatusMeditacaoWidget extends StatelessWidget {
     }
 
     if (day == 1) {
-      return _buildPlay(context, day, icon: Icons.arrow_forward_ios);
+      return _buildPlay(context, day);
     }
 
-    final previousMeditation = AppStateStore()
-        .desafio21
-        .d21Meditations
-        .elementAtOrNull(day - 2)
-        ?.dateCompleted;
+    final previousMeditation = AppStateStore().desafio21.d21Meditations.elementAtOrNull(day - 2)?.dateCompleted;
 
     if (functions.checkNextDayMeditation(previousMeditation)) {
-      return _buildPlay(context, day, icon: Icons.play_arrow_rounded);
+      return _buildPlay(context, day);
     }
 
     return _buildLockedWarning(context);
@@ -95,14 +115,14 @@ class StatusMeditacaoWidget extends StatelessWidget {
       highlightColor: Colors.transparent,
       onTap: () => _navigateToMeditation(context),
       child: Icon(
-        Icons.check_rounded,
-        color: FlutterFlowTheme.of(context).secondary,
-        size: 32.0,
+        Icons.check_circle,
+        color: Colors.white,
+        size: 36.0,
       ),
     );
   }
 
-  Widget _buildPlay(BuildContext context, int day, {required IconData icon}) {
+  Widget _buildPlay(BuildContext context, int day) {
     return InkWell(
       splashColor: Colors.transparent,
       focusColor: Colors.transparent,
@@ -110,19 +130,20 @@ class StatusMeditacaoWidget extends StatelessWidget {
       highlightColor: Colors.transparent,
       onTap: () => _navigateToMeditation(context),
       child: Icon(
-        icon,
+        Icons.play_circle_outline,
         color: FlutterFlowTheme.of(context).info,
-        size: icon == Icons.arrow_forward_ios ? 32.0 : 38.0,
+        size: 38.0,
       ),
     );
   }
 
-  Widget _buildLockedWarning(BuildContext context) {
+  Widget _buildLockedWarning(BuildContext context, {String? message, bool isPermanent = false}) {
+    final msg = message ?? 'Precisa aguardar o próximo dia para fazer esta meditação';
     return AlignedTooltip(
       content: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Text(
-          'Precisa aguardar o próximo dia para fazer esta meditação',
+          msg,
           style: FlutterFlowTheme.of(context).bodyLarge.override(
                 fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
                 letterSpacing: 0.0,
@@ -149,7 +170,7 @@ class StatusMeditacaoWidget extends StatelessWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                'Precisa aguardar o próximo dia para fazer esta meditação',
+                msg,
                 style: TextStyle(
                   color: FlutterFlowTheme.of(context).primaryText,
                 ),
@@ -159,9 +180,9 @@ class StatusMeditacaoWidget extends StatelessWidget {
             ),
           );
         },
-        child: FaIcon(
-          FontAwesomeIcons.lock,
-          color: FlutterFlowTheme.of(context).secondaryText,
+        child: Icon(
+          isPermanent ? Icons.lock : Icons.lock_clock,
+          color: isPermanent ? FlutterFlowTheme.of(context).secondaryText : FlutterFlowTheme.of(context).white70,
           size: 32.0,
         ),
       ),
@@ -191,9 +212,9 @@ class StatusMeditacaoWidget extends StatelessWidget {
       waitDuration: const Duration(milliseconds: 100),
       showDuration: const Duration(milliseconds: 1500),
       triggerMode: TooltipTriggerMode.tap,
-      child: FaIcon(
-        FontAwesomeIcons.lock,
-        color: FlutterFlowTheme.of(context).secondaryText,
+      child: Icon(
+        Icons.schedule,
+        color: FlutterFlowTheme.of(context).warning,
         size: 32.0,
       ),
     );
@@ -213,8 +234,7 @@ class StatusMeditacaoWidget extends StatelessWidget {
       extra: <String, dynamic>{
         kTransitionInfoKey: const TransitionInfo(
           hasTransition: true,
-          transitionType: PageTransitionType.fade,
-          duration: Duration(milliseconds: 0),
+          transitionType: PageTransitionType.leftToRight,
         ),
       },
     );

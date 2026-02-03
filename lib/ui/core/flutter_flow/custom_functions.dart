@@ -229,16 +229,29 @@ String? getURLMandala(
 }
 
 bool checkNextDayMeditation(DateTime? dataMeditation) {
-  // create a functionn that receive a datetime in firebase e check if today is one day after
+  // Permite que o usuário continue o desafio de onde parou, mesmo após pausas
+  // Retorna true se passou pelo menos 1 dia desde a última meditação
   if (dataMeditation == null) {
     return false;
   }
 
   final now = DateTime.now();
+
+  // Garante que ambas as datas estão no mesmo timezone (local)
+  final dataMeditationLocal = dataMeditation.toLocal();
+
   // Remove time component for date comparison
   final today = DateTime(now.year, now.month, now.day);
-  final compareDate =
-      DateTime(dataMeditation.year, dataMeditation.month, dataMeditation.day);
+  final compareDate = DateTime(
+    dataMeditationLocal.year,
+    dataMeditationLocal.month,
+    dataMeditationLocal.day,
+  );
 
+  // Permite fazer a próxima meditação se passou 1 ou mais dias
+  // Exemplos:
+  // - Última meditação: 01/02, hoje: 02/02 → true (próximo dia)
+  // - Última meditação: 01/02, hoje: 05/02 → true (pode retomar)
+  // - Última meditação: 02/02, hoje: 02/02 → false (mesmo dia)
   return today.difference(compareDate).inDays >= 1;
 }

@@ -62,7 +62,7 @@ class ListaEtapasViewModel extends ChangeNotifier {
           }
         }
       } catch (e) {
-        debugPrint('Error fixing Desafio data: $e');
+        // Silent fail - data will be fixed on next load
       }
     }
   }

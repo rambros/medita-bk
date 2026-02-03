@@ -138,16 +138,22 @@ class HomeViewModel extends ChangeNotifier {
         // Load user's existing desafio21 data
         _desafio21Data = _userRecord!.desafio21;
 
-        // Fix for missing meditations or null data (corrupted state)
-        if (_desafio21Data == null || _desafio21Data!.d21Meditations.isEmpty) {
+        // Fix for missing meditations, listaBrasoes, or null data (corrupted state)
+        if (_desafio21Data == null || _desafio21Data!.d21Meditations.isEmpty || _desafio21Data!.listaBrasoes.isEmpty) {
           // Use template data to restore/fix
           final templateData = _desafioRecord!.desafio21Data;
 
           if (_desafio21Data == null) {
             _desafio21Data = templateData;
           } else {
-            // Only update meditations, keeping other progress if possible
-            _desafio21Data!.d21Meditations = templateData.d21Meditations;
+            // Update missing fields, keeping other progress if possible
+            if (_desafio21Data!.d21Meditations.isEmpty) {
+              _desafio21Data!.d21Meditations = templateData.d21Meditations;
+            }
+            if (_desafio21Data!.listaBrasoes.isEmpty) {
+              debugPrint('🔥 HomeViewModel - listaBrasoes vazio, copiando do template: ${templateData.listaBrasoes.length} brasões');
+              _desafio21Data!.listaBrasoes = templateData.listaBrasoes;
+            }
           }
 
           // Persist the fix to Firestore

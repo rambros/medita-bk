@@ -18,7 +18,7 @@ class DesafioPlayViewModel extends ChangeNotifier {
   })  : _authRepository = authRepository,
         _homeRepository = homeRepository;
 
-  bool _isLoading = true;
+  bool _isLoading = false;
   bool get isLoading => _isLoading;
 
   String? _errorMessage;
@@ -35,54 +35,49 @@ class DesafioPlayViewModel extends ChangeNotifier {
     if (meditationIndex < 0 || meditationIndex >= desafio21.d21Meditations.length) {
       return null;
     }
+
     return desafio21.d21Meditations.elementAtOrNull(meditationIndex);
   }
 
   String get meditationTitle => currentMeditation?.titulo ?? '';
   String get audioUrl => currentMeditation?.audioUrl ?? '';
+
   String get imageUrl => currentMeditation?.imageUrl ?? '';
 
   Future<void> loadDesafioData() async {
-    _setLoading(true);
     try {
-      // Fetch desafio template
       _desafio21Record = await _homeRepository.getDesafio21Template();
 
       if (_desafio21Record == null) {
-        _setError('Desafio template not found');
         return;
       }
 
-      // Update lista mandalas in AppStateStore
       AppStateStore().listaEtapasMandalas = _desafio21Record!.listaEtapasMandalas.toList().cast<D21EtapaModelStruct>();
 
-      // Check if user has started the challenge
       final userDesafio = _authRepository.currentUser?.desafio21;
       if (userDesafio == null) {
-        // Not started - use template data
         AppStateStore().desafio21 = _desafio21Record!.desafio21Data;
         _iniciadoDesafio = false;
       } else {
-        // Started - use user data
-        AppStateStore().desafio21 = userDesafio;
+        final mergedDesafio = _desafio21Record!.desafio21Data;
+
+        mergedDesafio.d21Meditations = userDesafio.d21Meditations;
+        mergedDesafio.etapasCompletadas = userDesafio.etapasCompletadas;
+        mergedDesafio.etapaAtual = userDesafio.etapaAtual;
+        mergedDesafio.diasCompletados = userDesafio.diasCompletados;
+        mergedDesafio.diaAtual = userDesafio.diaAtual;
+        mergedDesafio.dateStarted = userDesafio.dateStarted;
+        mergedDesafio.dateCompleted = userDesafio.dateCompleted;
+        mergedDesafio.d21Status = userDesafio.d21Status;
+        mergedDesafio.isD21Completed = userDesafio.isD21Completed;
+
+        AppStateStore().desafio21 = mergedDesafio;
         _iniciadoDesafio = true;
       }
 
       notifyListeners();
     } catch (e) {
-      _setError('Erro ao carregar dados do desafio: $e');
-    } finally {
-      _setLoading(false);
+      // Silent fail - data already available from AppStateStore
     }
-  }
-
-  void _setLoading(bool value) {
-    _isLoading = value;
-    notifyListeners();
-  }
-
-  void _setError(String message) {
-    _errorMessage = message;
-    notifyListeners();
   }
 }

@@ -36,11 +36,6 @@ class _DesafioPlayPageState extends State<DesafioPlayPage> {
   void initState() {
     super.initState();
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'desafioPlayPage'});
-
-    SchedulerBinding.instance.addPostFrameCallback((_) async {
-      if (!mounted) return;
-      await _viewModel?.loadDesafioData();
-    });
   }
 
   @override
@@ -52,6 +47,12 @@ class _DesafioPlayPageState extends State<DesafioPlayPage> {
         authRepository: context.read<AuthRepository>(),
         homeRepository: context.read<HomeRepository>(),
       );
+
+      // Load data immediately after creating viewModel
+      SchedulerBinding.instance.addPostFrameCallback((_) async {
+        if (!mounted) return;
+        await _viewModel?.loadDesafioData();
+      });
     }
   }
 
@@ -68,13 +69,6 @@ class _DesafioPlayPageState extends State<DesafioPlayPage> {
       value: _viewModel!,
       child: Consumer<DesafioPlayViewModel>(
         builder: (context, viewModel, _) {
-          if (viewModel.isLoading) {
-            return Scaffold(
-              backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-              body: const Center(child: CircularProgressIndicator()),
-            );
-          }
-
           if (viewModel.errorMessage != null) {
             return Scaffold(
               backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
