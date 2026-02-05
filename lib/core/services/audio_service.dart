@@ -154,9 +154,9 @@ class _AudioHandler extends BaseAudioHandler {
       if (url == null) {
         throw ArgumentError('Asset audio requires url reference');
       }
-      final nomeArquivo = path.basename(url);
-      return AudioSource.uri(
-        Uri.parse('asset:///assets/audios/$nomeArquivo'),
+      // Use AudioSource.asset for Flutter assets, not AudioSource.uri
+      return AudioSource.asset(
+        'assets/$url',
         tag: mediaItem,
       );
     }
@@ -166,8 +166,8 @@ class _AudioHandler extends BaseAudioHandler {
         start: const Duration(seconds: 0),
         end: Duration(seconds: mediaItem.duration!.inSeconds),
         tag: mediaItem,
-        child: AudioSource.uri(
-          Uri.parse('asset:///assets/audios/silence60.m4a'),
+        child: AudioSource.asset(
+          'assets/audios/silence60.m4a',
           tag: mediaItem,
         ),
       );

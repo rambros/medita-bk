@@ -76,9 +76,11 @@ class _SelectinstrumentPageState extends State<SelectinstrumentPage> {
                       size: 30.0,
                     ),
                     onPressed: () async {
-                      if (_model.isSelected && (_model.selectedIndex > 0)) {
-                        AppStateStore()
-                            .addToListAudiosSelected(_model.instrumentsSounds.elementAtOrNull(_model.selectedIndex)!);
+                      if (_model.isSelected && (_model.selectedIndex >= 0)) {
+                        final selectedItem = _model.instrumentsSounds.elementAtOrNull(_model.selectedIndex)!;
+                        debugPrint('✅ Adicionando à playlist: ${selectedItem.title} (índice: ${_model.selectedIndex})');
+                        debugPrint('✅ Detalhes: ID=${selectedItem.id}, Duration=${selectedItem.duration}, FileLocation=${selectedItem.fileLocation}');
+                        AppStateStore().addToListAudiosSelected(selectedItem);
                         safeSetState(() {});
                       }
                       context.pop();
@@ -175,6 +177,8 @@ class _SelectinstrumentPageState extends State<SelectinstrumentPage> {
                                                   onTap: () async {
                                                     _model.isSelected = true;
                                                     _model.selectedIndex = instrumentSoundIndex;
+                                                    debugPrint('🎵 Selecionado: ${instrumentSoundItem.title} (índice: $instrumentSoundIndex)');
+                                                    debugPrint('🎵 ID: ${instrumentSoundItem.id}, AudioType: ${instrumentSoundItem.audioType}');
                                                     safeSetState(() {});
                                                     await AudioUtils.playSound(
                                                       instrumentSoundItem,

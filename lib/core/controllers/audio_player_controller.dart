@@ -113,6 +113,7 @@ class AudioPlayerController {
 
   final AudioHandler _audioHandler = globalAudioHandler;
   var _listAudios = <AudioModelStruct>[];
+  bool _listenersInitialized = false;
 
   void initPlaylistPlayer(PlaylistModel audios) async {
     _listAudios = audios.listAudios;
@@ -123,8 +124,24 @@ class AudioPlayerController {
   }
 
   void initAudioPlayer(PlayerModel model) async {
+    // Parar e limpar a fila apenas se houver algo tocando
+    try {
+      final playbackState = _audioHandler.playbackState.value;
+      if (playbackState.playing || playbackState.processingState != AudioProcessingState.idle) {
+        await _audioHandler.stop();
+      }
+    } catch (e) {
+      debugPrint('⚠️ Erro ao parar player: $e');
+    }
+
     await _loadMusic(model);
-    _initListeners();
+
+    // Só inicializa listeners uma vez
+    if (!_listenersInitialized) {
+      _initListeners();
+      _listenersInitialized = true;
+    }
+
     play();
   }
 
@@ -306,6 +323,24 @@ class AudioPlayerController {
     final lastIndex = _audioHandler.queue.value.length - 1;
     if (lastIndex < 0) return;
     _audioHandler.removeQueueItemAt(lastIndex);
+  }
+
+  void clearQueue() {
+    try {
+      // Sempre remove o primeiro item até a fila estar vazia
+      // Adiciona proteção contra loop infinito
+      int maxIterations = 100;
+      int count = 0;
+      while (_audioHandler.queue.value.isNotEmpty && count < maxIterations) {
+        _audioHandler.removeQueueItemAt(0);
+        count++;
+      }
+      if (count >= maxIterations) {
+        debugPrint('⚠️ clearQueue: atingiu limite de iterações, forçando limpeza');
+      }
+    } catch (e) {
+      debugPrint('⚠️ Erro ao limpar fila: $e');
+    }
   }
 
   void dispose() {

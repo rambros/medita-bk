@@ -14,7 +14,7 @@ class CompletouMeditacaoViewModel extends ChangeNotifier {
     required this.diaCompletado,
   }) : _repository = repository;
 
-  bool _isLoading = true;
+  bool _isLoading = false; // Iniciar como false para evitar tela em branco
   bool get isLoading => _isLoading;
 
   String? _errorMessage;
@@ -41,11 +41,26 @@ class CompletouMeditacaoViewModel extends ChangeNotifier {
   bool get isUltimoDia => diaCompletado >= 20;
 
   Future<void> processarConclusaoMeditacao() async {
-    _setLoading(true);
+    debugPrint('🎯 CompletouMeditacaoViewModel - Processando conclusão do dia $diaCompletado');
+    debugPrint('   Total de meditações no AppState: ${desafio21.d21Meditations.length}');
+
     try {
+      // Verificar se temos dados antes de processar
+      if (desafio21.d21Meditations.isEmpty) {
+        debugPrint('   ⚠️  AVISO: Lista de meditações vazia! Tentando carregar do Firestore...');
+        _setLoading(true);
+        await _carregarDadosSeNecessario();
+        _setLoading(false);
+
+        if (desafio21.d21Meditations.isEmpty) {
+          throw Exception('Não foi possível carregar os dados do desafio');
+        }
+      }
+
       // Check if meditation was already completed
       _isMeditacaoJaFeita =
           desafio21.d21Meditations.elementAtOrNull(diaCompletado)?.meditationStatus == D21Status.completed;
+      debugPrint('   Meditação já feita? $_isMeditacaoJaFeita');
 
       if (_isMeditacaoJaFeita) {
         // Just get the mandala URL
@@ -55,11 +70,10 @@ class CompletouMeditacaoViewModel extends ChangeNotifier {
           AppStateStore().listaEtapasMandalas.toList(),
         );
         notifyListeners();
-        _setLoading(false);
         return;
       }
 
-      // Mark meditation as completed
+      // Mark meditation as completed (atualiza estado local imediatamente)
       final now = getCurrentTimestamp;
 
       AppStateStore().updateDesafio21Struct(
@@ -73,17 +87,29 @@ class CompletouMeditacaoViewModel extends ChangeNotifier {
 
       if (isUltimoDia) {
         // Complete the entire challenge
-        await _completarDesafio();
+        _completarDesafio();
       } else {
         // Open next meditation and update progress
-        await _avancarParaProximoDia();
+        _avancarParaProximoDia();
       }
 
-      // Persist to Firestore
+      // UI atualizada - notifica imediatamente
+      notifyListeners();
+      debugPrint('   ✅ UI atualizada! Persistindo no Firestore em background...');
+
+      // Persist to Firestore em background (não-bloqueante)
+      _persistirNoFirestoreAsync();
+    } catch (e) {
+      _setError('Erro ao processar conclusão: $e');
+    }
+  }
+
+  /// Persiste dados no Firestore de forma assíncrona (não-bloqueante)
+  Future<void> _persistirNoFirestoreAsync() async {
+    try {
       var desafioToSave = AppStateStore().desafio21;
 
       // IMPORTANT: Ensure listaBrasoes is present before saving
-      // If empty, load from template and merge
       if (desafioToSave.listaBrasoes.isEmpty) {
         final template = await _repository.getDesafio21Template();
         if (template != null && template.desafio21Data.listaBrasoes.isNotEmpty) {
@@ -97,15 +123,14 @@ class CompletouMeditacaoViewModel extends ChangeNotifier {
         desafio21Started: true,
       );
 
-      notifyListeners();
+      debugPrint('   ✅ Dados persistidos no Firestore com sucesso!');
     } catch (e) {
-      _setError('Erro ao processar conclusão: $e');
-    } finally {
-      _setLoading(false);
+      debugPrint('   ❌ Erro ao persistir no Firestore: $e');
+      // Não propaga o erro - dados já estão no AppState local
     }
   }
 
-  Future<void> _completarDesafio() async {
+  void _completarDesafio() {
     // Update challenge completion data
     AppStateStore().updateDesafio21Struct(
       (e) => e
@@ -132,7 +157,7 @@ class CompletouMeditacaoViewModel extends ChangeNotifier {
     );
   }
 
-  Future<void> _avancarParaProximoDia() async {
+  void _avancarParaProximoDia() {
     // Open next meditation
     AppStateStore().updateDesafio21Struct(
       (e) => e
@@ -165,6 +190,24 @@ class CompletouMeditacaoViewModel extends ChangeNotifier {
           ..etapasCompletadas = _proximaEtapa! - 1
           ..etapaAtual = _proximaEtapa,
       );
+    }
+  }
+
+  /// Carrega dados do template se o AppStateStore estiver vazio
+  Future<void> _carregarDadosSeNecessario() async {
+    try {
+      debugPrint('   📥 Carregando template do Firestore...');
+      final template = await _repository.getDesafio21Template();
+
+      if (template != null && template.desafio21Data.d21Meditations.isNotEmpty) {
+        debugPrint('   ✅ Template carregado com ${template.desafio21Data.d21Meditations.length} meditações');
+        AppStateStore().desafio21 = template.desafio21Data;
+        AppStateStore().listaEtapasMandalas = template.listaEtapasMandalas.toList().cast<D21EtapaModelStruct>();
+      } else {
+        debugPrint('   ❌ Template vazio ou nulo');
+      }
+    } catch (e) {
+      debugPrint('   ❌ Erro ao carregar template: $e');
     }
   }
 

@@ -51,29 +51,37 @@ class HomeViewModel extends ChangeNotifier {
 
   /// Main initialization method
   /// Called when page loads
+  /// OTIMIZADO: Carrega dados em paralelo quando possível
   Future<void> initialize(BuildContext context) async {
     if (_isLoading) return;
+
+    debugPrint('🏠 HomeViewModel - Iniciando carregamento...');
+    final startTime = DateTime.now();
 
     _isLoading = true;
     notifyListeners();
 
     try {
-      // Check internet access
+      // 1. Check internet access (rápido, mas necessário primeiro)
       await checkInternetAccess(context);
+      debugPrint('   ✅ Internet check: ${DateTime.now().difference(startTime).inMilliseconds}ms');
 
-      // Load user data
+      // 2. Load user data (necessário para o resto)
       await loadUserData();
+      debugPrint('   ✅ User data loaded: ${DateTime.now().difference(startTime).inMilliseconds}ms');
 
-      // Initialize Desafio 21
-      await initializeDesafio21();
+      // 3. PARALELIZAR: Settings e Desafio21 podem carregar ao mesmo tempo
+      final settingsFuture = loadSettings();
+      final desafio21Future = initializeDesafio21();
 
-      // Load settings
-      await loadSettings();
+      await Future.wait([settingsFuture, desafio21Future]);
+      debugPrint('   ✅ Settings & Desafio21 loaded: ${DateTime.now().difference(startTime).inMilliseconds}ms');
     } catch (e) {
-      debugPrint('Error initializing HomePage: $e');
+      debugPrint('   ❌ Error initializing HomePage: $e');
     } finally {
       _isLoading = false;
       notifyListeners();
+      debugPrint('   🏁 Total loading time: ${DateTime.now().difference(startTime).inMilliseconds}ms');
     }
   }
 
@@ -105,14 +113,16 @@ class HomeViewModel extends ChangeNotifier {
     }
 
     if (_userRecord != null) {
-      // Update last access timestamp
-      await _repository.updateLastAccess(userId);
+      // Update last access timestamp (não-bloqueante - não precisa esperar)
+      // ignore: unawaited_futures
+      _repository.updateLastAccess(userId);
     }
 
     notifyListeners();
   }
 
   /// Initialize Desafio 21 data
+  /// OTIMIZADO: Escritas não-críticas são não-bloqueantes
   Future<void> initializeDesafio21() async {
     final userId = _authRepository.currentUserUid;
     if (userId.isEmpty || _userRecord == null) return;
@@ -121,9 +131,10 @@ class HomeViewModel extends ChangeNotifier {
     final desafioStarted = _userRecord?.desafio21Started ?? false;
     AppStateStore().desafioStarted = desafioStarted;
 
-    // Create field if it doesn't exist
+    // Create field if it doesn't exist (não-bloqueante - apenas garante consistência)
     if (desafioStarted != true) {
-      await _repository.updateDesafio21Started(userId, false);
+      // ignore: unawaited_futures
+      _repository.updateDesafio21Started(userId, false);
     }
 
     // Load Desafio 21 template
@@ -156,15 +167,17 @@ class HomeViewModel extends ChangeNotifier {
             }
           }
 
-          // Persist the fix to Firestore
-          await _repository.updateUserDesafio21(userId, _desafio21Data!);
+          // Persist the fix to Firestore (não-bloqueante - correção de dados)
+          // ignore: unawaited_futures
+          _repository.updateUserDesafio21(userId, _desafio21Data!);
         }
 
         AppStateStore().desafio21 = _desafio21Data!;
       } else {
-        // Create new desafio21 for user
+        // Create new desafio21 for user (não-bloqueante - apenas inicialização)
         final newDesafio21 = _desafioRecord!.desafio21Data;
-        await _repository.updateUserDesafio21(userId, newDesafio21);
+        // ignore: unawaited_futures
+        _repository.updateUserDesafio21(userId, newDesafio21);
 
         _desafio21Data = newDesafio21;
         AppStateStore().desafio21 = newDesafio21;

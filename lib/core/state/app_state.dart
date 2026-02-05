@@ -223,18 +223,22 @@ class AppStateStore extends ChangeNotifier {
   List<AudioModelStruct> get listAudiosSelected => _listAudiosSelected;
   set listAudiosSelected(List<AudioModelStruct> value) {
     _listAudiosSelected = value;
+    notifyListeners();
   }
 
   void addToListAudiosSelected(AudioModelStruct value) {
     listAudiosSelected.add(value);
+    notifyListeners();
   }
 
   void removeFromListAudiosSelected(AudioModelStruct value) {
     listAudiosSelected.remove(value);
+    notifyListeners();
   }
 
   void removeAtIndexFromListAudiosSelected(int index) {
     listAudiosSelected.removeAt(index);
+    notifyListeners();
   }
 
   void updateListAudiosSelectedAtIndex(
@@ -242,10 +246,12 @@ class AppStateStore extends ChangeNotifier {
     AudioModelStruct Function(AudioModelStruct) updateFn,
   ) {
     listAudiosSelected[index] = updateFn(_listAudiosSelected[index]);
+    notifyListeners();
   }
 
   void insertAtIndexInListAudiosSelected(int index, AudioModelStruct value) {
     listAudiosSelected.insert(index, value);
+    notifyListeners();
   }
 
   AudioModelStruct _tempAudioModel =

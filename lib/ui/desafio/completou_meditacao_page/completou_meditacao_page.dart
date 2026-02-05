@@ -75,10 +75,41 @@ class _CompletouMeditacaoPageState extends State<CompletouMeditacaoPage> {
           if (viewModel.errorMessage != null) {
             return Scaffold(
               backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+              appBar: AppBar(
+                backgroundColor: FlutterFlowTheme.of(context).primary,
+                leading: IconButton(
+                  icon: const Icon(Icons.chevron_left),
+                  onPressed: () => context.pop(),
+                ),
+                title: Text(
+                  'Desafio 21 dias',
+                  style: FlutterFlowTheme.of(context).titleLarge.override(
+                        fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
+                        color: FlutterFlowTheme.of(context).info,
+                        letterSpacing: 0.0,
+                        useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
+                      ),
+                ),
+              ),
               body: Center(
-                child: Text(
-                  viewModel.errorMessage!,
-                  style: FlutterFlowTheme.of(context).bodyMedium,
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.error_outline,
+                        size: 64.0,
+                        color: FlutterFlowTheme.of(context).error,
+                      ),
+                      const SizedBox(height: 16.0),
+                      Text(
+                        viewModel.errorMessage!,
+                        textAlign: TextAlign.center,
+                        style: FlutterFlowTheme.of(context).bodyMedium,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );

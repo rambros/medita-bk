@@ -39,16 +39,26 @@ class _DesafioPlayPageState extends State<DesafioPlayPage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_viewModel == null && widget.indiceListaMeditacao != null) {
+    // Recria o viewModel se for null OU se o índice mudou
+    final needsNewViewModel = _viewModel == null ||
+        (_viewModel?.meditationIndex != widget.indiceListaMeditacao);
+
+    if (needsNewViewModel && widget.indiceListaMeditacao != null) {
       _viewModel = DesafioPlayViewModel(
         meditationIndex: widget.indiceListaMeditacao!,
         authRepository: context.read<AuthRepository>(),
         homeRepository: context.read<HomeRepository>(),
       );
 
-      // Load data immediately after creating viewModel
+      // Load data BEFORE first render to ensure meditation data is available
+      // Using addPostFrameCallback is fine - the isLoading state will handle the UI
       SchedulerBinding.instance.addPostFrameCallback((_) async {
         if (!mounted) return;
         await _viewModel?.loadDesafioData();
@@ -69,13 +79,52 @@ class _DesafioPlayPageState extends State<DesafioPlayPage> {
       value: _viewModel!,
       child: Consumer<DesafioPlayViewModel>(
         builder: (context, viewModel, _) {
+          // Show loading while data is being loaded
+          if (viewModel.isLoading) {
+            return Scaffold(
+              backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+              body: const Center(child: CircularProgressIndicator()),
+            );
+          }
+
           if (viewModel.errorMessage != null) {
             return Scaffold(
               backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+              appBar: AppBar(
+                backgroundColor: FlutterFlowTheme.of(context).primary,
+                leading: IconButton(
+                  icon: const Icon(Icons.chevron_left),
+                  onPressed: () => context.pop(),
+                ),
+                title: Text(
+                  'Desafio 21 dias',
+                  style: FlutterFlowTheme.of(context).titleLarge.override(
+                        fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
+                        color: FlutterFlowTheme.of(context).info,
+                        letterSpacing: 0.0,
+                        useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
+                      ),
+                ),
+              ),
               body: Center(
-                child: Text(
-                  viewModel.errorMessage!,
-                  style: FlutterFlowTheme.of(context).bodyMedium,
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.error_outline,
+                        size: 64.0,
+                        color: FlutterFlowTheme.of(context).error,
+                      ),
+                      const SizedBox(height: 16.0),
+                      Text(
+                        viewModel.errorMessage!,
+                        textAlign: TextAlign.center,
+                        style: FlutterFlowTheme.of(context).bodyMedium,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
@@ -84,10 +133,47 @@ class _DesafioPlayPageState extends State<DesafioPlayPage> {
           if (viewModel.currentMeditation == null) {
             return Scaffold(
               backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+              appBar: AppBar(
+                backgroundColor: FlutterFlowTheme.of(context).primary,
+                leading: IconButton(
+                  icon: const Icon(Icons.chevron_left),
+                  onPressed: () => context.pop(),
+                ),
+                title: Text(
+                  'Desafio 21 dias',
+                  style: FlutterFlowTheme.of(context).titleLarge.override(
+                        fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
+                        color: FlutterFlowTheme.of(context).info,
+                        letterSpacing: 0.0,
+                        useGoogleFonts: !FlutterFlowTheme.of(context).titleLargeIsCustom,
+                      ),
+                ),
+              ),
               body: Center(
-                child: Text(
-                  'Meditação não encontrada',
-                  style: FlutterFlowTheme.of(context).bodyMedium,
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.search_off,
+                        size: 64.0,
+                        color: FlutterFlowTheme.of(context).secondaryText,
+                      ),
+                      const SizedBox(height: 16.0),
+                      Text(
+                        'Meditação não encontrada',
+                        textAlign: TextAlign.center,
+                        style: FlutterFlowTheme.of(context).bodyMedium,
+                      ),
+                      const SizedBox(height: 8.0),
+                      Text(
+                        'Esta meditação não está disponível no momento.',
+                        textAlign: TextAlign.center,
+                        style: FlutterFlowTheme.of(context).bodySmall,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
@@ -233,6 +319,7 @@ class _DesafioPlayPageState extends State<DesafioPlayPage> {
                                   width: 620.0,
                                   height: 620.0,
                                   child: FFDesafioAudioPlayerWidget(
+                                    key: ValueKey('audio_player_${widget.indiceListaMeditacao}'),
                                     width: 620.0,
                                     height: 620.0,
                                     audioTitle: viewModel.meditationTitle,

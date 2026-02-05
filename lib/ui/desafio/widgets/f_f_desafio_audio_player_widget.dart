@@ -47,13 +47,29 @@ class FFDesafioAudioPlayerWidgetState extends State<FFDesafioAudioPlayerWidget> 
     super.initState();
     audioPlayerController = globalAudioPlayerController;
 
-    final playerModel = PlayerModel(
-      id: widget.audioTitle,
-      title: widget.audioTitle,
-      urlAudio: widget.audioUrl,
-      urlImage: widget.audioArt,
-    );
-    audioPlayerController.initAudioPlayer(playerModel);
+    // Pausar áudio anterior
+    try {
+      audioPlayerController.pause();
+    } catch (e) {
+      debugPrint('⚠️ Erro ao pausar: $e');
+    }
+
+    // Aguardar o próximo frame para resetar o notifier e inicializar
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
+      audioPlayerController.completedSongNotifier.value = false;
+
+      final playerModel = PlayerModel(
+        id: widget.audioTitle,
+        title: widget.audioTitle,
+        urlAudio: widget.audioUrl,
+        urlImage: widget.audioArt,
+      );
+
+      audioPlayerController.initAudioPlayer(playerModel);
+    });
+
     _prepareAudioDownload();
 
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -97,8 +113,12 @@ class FFDesafioAudioPlayerWidgetState extends State<FFDesafioAudioPlayerWidget> 
 
   @override
   void dispose() {
-    audioPlayerController.pause();
-    audioPlayerController.stop();
+    // Pausar áudio ao sair da tela
+    try {
+      audioPlayerController.pause();
+    } catch (e) {
+      debugPrint('⚠️ Erro ao pausar no dispose: $e');
+    }
     super.dispose();
   }
 
@@ -200,24 +220,28 @@ class CompletedSongButton extends StatefulWidget {
 }
 
 class _CompletedSongButtonState extends State<CompletedSongButton> {
-  bool _hasExecuted = false; // Flag para controlar a execução
+  bool _hasExecuted = false;
   late final AudioPlayerController playerController;
+  bool _isInitialBuild = true;
 
   @override
   void initState() {
     super.initState();
     playerController = globalAudioPlayerController;
-    // Reset the completedSongNotifier after the first frame to avoid setState during build
+
+    // Resetar o notifier e marcar como pronto no próximo frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       playerController.completedSongNotifier.value = false;
+      setState(() {
+        _isInitialBuild = false;
+      });
     });
   }
 
   @override
   void dispose() {
     _hasExecuted = false;
-    // Reset the completedSongNotifier
-    playerController.completedSongNotifier.value = false;
     super.dispose();
   }
 
@@ -227,9 +251,15 @@ class _CompletedSongButtonState extends State<CompletedSongButton> {
     return ValueListenableBuilder<bool>(
       valueListenable: playerController.completedSongNotifier,
       builder: (_, isCompleted, __) {
+        // Ignora o primeiro build para evitar navegação com estado residual
+        if (_isInitialBuild) {
+          return const SizedBox();
+        }
+
         if (isCompleted && !_hasExecuted) {
-          _hasExecuted = true; // Marca como executado
+          _hasExecuted = true;
           WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) return;
             widget.nextActionFunction();
           });
         }

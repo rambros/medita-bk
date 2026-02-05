@@ -276,37 +276,43 @@ class _SelectMeditationsPageState
                                                                   MainAxisSize
                                                                       .max,
                                                               children: [
-                                                                Padding(
-                                                                  padding: const EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          0.0,
-                                                                          4.0),
-                                                                  child: Text(
-                                                                    listViewMeditationsRecord
-                                                                        .title,
-                                                                    style: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyLarge
-                                                                        .override(
-                                                                          fontFamily:
-                                                                              FlutterFlowTheme.of(context).bodyLargeFamily,
-                                                                          fontSize:
-                                                                              14.0,
-                                                                          letterSpacing:
-                                                                              0.0,
-                                                                          fontWeight:
-                                                                              FontWeight.w500,
-                                                                          useGoogleFonts:
-                                                                              !FlutterFlowTheme.of(context).bodyLargeIsCustom,
-                                                                        ),
+                                                                Expanded(
+                                                                  child: Padding(
+                                                                    padding: const EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            0.0,
+                                                                            0.0,
+                                                                            0.0,
+                                                                            4.0),
+                                                                    child: Text(
+                                                                      listViewMeditationsRecord
+                                                                          .title,
+                                                                      maxLines: 2,
+                                                                      overflow: TextOverflow.ellipsis,
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyLarge
+                                                                          .override(
+                                                                            fontFamily:
+                                                                                FlutterFlowTheme.of(context).bodyLargeFamily,
+                                                                            fontSize:
+                                                                                14.0,
+                                                                            letterSpacing:
+                                                                                0.0,
+                                                                            fontWeight:
+                                                                                FontWeight.w500,
+                                                                            useGoogleFonts:
+                                                                                !FlutterFlowTheme.of(context).bodyLargeIsCustom,
+                                                                          ),
+                                                                    ),
                                                                   ),
                                                                 ),
                                                               ],
                                                             ),
                                                             Text(
                                                               '${listViewMeditationsRecord.authorName}  -  ${listViewMeditationsRecord.audioDuration}',
+                                                              maxLines: 1,
+                                                              overflow: TextOverflow.ellipsis,
                                                               style: FlutterFlowTheme
                                                                       .of(context)
                                                                   .bodyMedium

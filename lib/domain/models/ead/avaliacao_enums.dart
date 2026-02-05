@@ -1,4 +1,5 @@
 /// Enums para o sistema de avaliação de cursos
+library;
 
 /// Tipo de pergunta na avaliação
 enum TipoPerguntaAvaliacao {

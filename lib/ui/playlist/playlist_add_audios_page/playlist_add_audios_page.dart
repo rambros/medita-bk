@@ -187,8 +187,23 @@ class _PlaylistAddAudiosPageState extends State<PlaylistAddAudiosPage> {
                                       itemCount: listAudios.length,
                                       itemBuilder: (context, listAudiosIndex) {
                                         final listAudiosItem = listAudios[listAudiosIndex];
-                                        return Container(
+                                        return Dismissible(
                                           key: ValueKey('ListView_h62s1qyo_${listAudiosIndex.toString()}'),
+                                          direction: DismissDirection.endToStart,
+                                          onDismissed: (direction) {
+                                            AppStateStore().removeAtIndexFromListAudiosSelected(listAudiosIndex);
+                                            safeSetState(() {});
+                                          },
+                                          background: Container(
+                                            alignment: Alignment.centerRight,
+                                            padding: const EdgeInsets.only(right: 20.0),
+                                            color: Colors.red,
+                                            child: const Icon(
+                                              Icons.delete,
+                                              color: Colors.white,
+                                              size: 32.0,
+                                            ),
+                                          ),
                                           child: Align(
                                             alignment: const AlignmentDirectional(0.0, 0.0),
                                             child: Padding(

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:medita_bk/data/repositories/auth_repository.dart';
 import 'package:medita_bk/data/repositories/desafio_repository.dart';
 import 'package:medita_bk/core/structs/index.dart';
+import 'package:medita_bk/core/controllers/index.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_widgets.dart';
@@ -118,6 +119,16 @@ class ConfirmaResetDesafioWidget extends StatelessWidget {
                                   );
                               AppStateStore().desafio21 = D21ModelStruct();
                               AppStateStore().desafioStarted = false;
+
+                              // Limpar o audio player global
+                              try {
+                                globalAudioPlayerController.pause();
+                                // Não chamar stop() pois causa PlatformException assíncrona
+                                // Apenas pausar e resetar o notifier é suficiente
+                                globalAudioPlayerController.completedSongNotifier.value = false;
+                              } catch (e) {
+                                debugPrint('⚠️ Erro ao limpar audio player no reset: $e');
+                              }
                             }
 
                             if (!context.mounted) return;

@@ -156,6 +156,7 @@ class InnerBox extends StatelessWidget {
                       const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 32.0),
                   child: Text(
                     titulo,
+                    textAlign: TextAlign.center,
                     style: FlutterFlowTheme.of(context).titleLarge.override(
                           fontFamily:
                               FlutterFlowTheme.of(context).titleLargeFamily,
