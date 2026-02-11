@@ -161,16 +161,18 @@ class _DailyStatisticsWidgetState extends State<DailyStatisticsWidget> {
       var index = listDailyLog.indexWhere((value) =>
           value!.day!.day == log.date!.day && value.day!.month == log.date!.month && value.day!.year == log.date!.year);
 
-      listDailyLog[index]!.totalTime = listDailyLog[index]!.totalTime! + log.duration;
-      listDailyLog[index]!.medTime =
-          log.type == 'guided' ? listDailyLog[index]!.medTime! + log.duration : listDailyLog[index]!.medTime;
-      listDailyLog[index]!.timerTime =
-          log.type == 'timer' ? listDailyLog[index]!.timerTime! + log.duration : listDailyLog[index]!.timerTime;
-      listDailyLog[index]!.medSession =
-          log.type == 'guided' ? listDailyLog[index]!.medSession! + 1 : listDailyLog[index]!.medSession;
-      listDailyLog[index]!.timerSession =
-          log.type == 'timer' ? listDailyLog[index]!.timerSession! + 1 : listDailyLog[index]!.timerSession!;
-      listDailyLog[index]!.sessions = listDailyLog[index]!.sessions! + 1;
+      if (index >= 0) {
+        listDailyLog[index]!.totalTime = listDailyLog[index]!.totalTime! + log.duration;
+        listDailyLog[index]!.medTime =
+            log.type == 'guided' ? listDailyLog[index]!.medTime! + log.duration : listDailyLog[index]!.medTime;
+        listDailyLog[index]!.timerTime =
+            log.type == 'timer' ? listDailyLog[index]!.timerTime! + log.duration : listDailyLog[index]!.timerTime;
+        listDailyLog[index]!.medSession =
+            log.type == 'guided' ? listDailyLog[index]!.medSession! + 1 : listDailyLog[index]!.medSession;
+        listDailyLog[index]!.timerSession =
+            log.type == 'timer' ? listDailyLog[index]!.timerSession! + 1 : listDailyLog[index]!.timerSession!;
+        listDailyLog[index]!.sessions = listDailyLog[index]!.sessions! + 1;
+      }
     }
     _numberSessionsD = listLogs.length;
     if (_numberSessionsD > 0) {

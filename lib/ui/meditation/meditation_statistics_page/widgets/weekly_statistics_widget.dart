@@ -185,21 +185,25 @@ class _WeeklyStatisticsWidgetState extends State<WeeklyStatisticsWidget> {
       var index = listWeeklyLog
           .indexWhere((value) => (value!.week == getDate(log.date!.subtract(Duration(days: log.date!.weekday - 1)))));
 
-      listWeeklyLog[index]!.totalTime = listWeeklyLog[index]!.totalTime! + log.duration;
-      listWeeklyLog[index]!.medTime =
-          log.type == 'guided' ? listWeeklyLog[index]!.medTime! + log.duration : listWeeklyLog[index]!.medTime;
-      listWeeklyLog[index]!.timerTime =
-          log.type == 'timer' ? listWeeklyLog[index]!.timerTime! + log.duration : listWeeklyLog[index]!.timerTime;
-      listWeeklyLog[index]!.medSession =
-          log.type == 'guided' ? listWeeklyLog[index]!.medSession! + 1 : listWeeklyLog[index]!.medSession;
-      listWeeklyLog[index]!.timerSession =
-          log.type == 'timer' ? listWeeklyLog[index]!.timerSession! + 1 : listWeeklyLog[index]!.timerSession!;
-      listWeeklyLog[index]!.sessions = listWeeklyLog[index]!.sessions! + 1;
+      if (index >= 0) {
+        listWeeklyLog[index]!.totalTime = listWeeklyLog[index]!.totalTime! + log.duration;
+        listWeeklyLog[index]!.medTime =
+            log.type == 'guided' ? listWeeklyLog[index]!.medTime! + log.duration : listWeeklyLog[index]!.medTime;
+        listWeeklyLog[index]!.timerTime =
+            log.type == 'timer' ? listWeeklyLog[index]!.timerTime! + log.duration : listWeeklyLog[index]!.timerTime;
+        listWeeklyLog[index]!.medSession =
+            log.type == 'guided' ? listWeeklyLog[index]!.medSession! + 1 : listWeeklyLog[index]!.medSession;
+        listWeeklyLog[index]!.timerSession =
+            log.type == 'timer' ? listWeeklyLog[index]!.timerSession! + 1 : listWeeklyLog[index]!.timerSession!;
+        listWeeklyLog[index]!.sessions = listWeeklyLog[index]!.sessions! + 1;
+      }
 
       // insert values in the day that is in list -> search in day atribute
       var indexDay = listDays.indexWhere((value) =>
           value.day!.day == log.date!.day && value.day!.month == log.date!.month && value.day!.year == log.date!.year);
-      listDays[indexDay].sessions = listDays[indexDay].sessions! + 1;
+      if (indexDay >= 0) {
+        listDays[indexDay].sessions = listDays[indexDay].sessions! + 1;
+      }
     }
     _numberSessionsW = listLogs.length;
     if (_numberSessionsW > 0) {

@@ -1,0 +1,38 @@
+# Exemplo de workflow GitHub Actions para backup automático
+# Renomeie para backup-mapping.yml para ativar
+
+name: Backup Mapping Files
+
+on:
+  workflow_dispatch:  # Execução manual
+  push:
+    tags:
+      - 'v*'  # Executa ao criar tags de versão
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Download mapping files
+      uses: actions/download-artifact@v3
+      with:
+        name: mapping-files
+
+    - name: Upload to Google Drive
+      uses: satackey/action-google-drive@v1
+      with:
+        credentials: ${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}
+        folder: MeditaBK-Mappings
+        target: mapping.txt
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          mapping.txt
+          app-release.aab
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

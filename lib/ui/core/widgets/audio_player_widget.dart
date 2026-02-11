@@ -121,7 +121,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
           id: 'EAD_Audio',
           album: 'MeditaBK EAD',
           title: widget.audioTitle,
-          artUri: Uri.parse(widget.audioArt),
+          artUri: widget.audioArt.isNotEmpty ? Uri.tryParse(widget.audioArt) : null,
         ),
       ),
     ]);
