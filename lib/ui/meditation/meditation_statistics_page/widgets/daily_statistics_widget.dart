@@ -127,6 +127,11 @@ class _DailyStatisticsWidgetState extends State<DailyStatisticsWidget> {
 
     listLogs = _getLastDays(listLogs);
 
+    // Verificar novamente após filtrar - pode não haver logs nos últimos 14 dias
+    if (listLogs.isEmpty) {
+      return;
+    }
+
     for (var i = 0; i < listDailyLog.length; i++) {
       listDailyLog[i] = DailyLog(
         day: DateTime.now().subtract(Duration(days: i)),
@@ -221,7 +226,7 @@ class _DailyStatisticsWidgetState extends State<DailyStatisticsWidget> {
     var listTempTest = List.from(listDailyLog);
 
     listTempTest.sort((a, b) => b.sessions.compareTo(a.sessions));
-    _greaterNumDailySessionsD = listTempTest[0].sessions;
+    _greaterNumDailySessionsD = listTempTest.isNotEmpty ? listTempTest[0].sessions : 0;
 
     // reorganize for graphics in UI
     //listyLog.sort((a,b) => b.compareTo(a));

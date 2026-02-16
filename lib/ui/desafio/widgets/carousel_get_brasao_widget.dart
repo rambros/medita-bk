@@ -72,12 +72,36 @@ class _CarouselGetBrasaoWidgetState extends State<CarouselGetBrasaoWidget> {
                   final urlBrasaoItem = _brasoes[index];
                   return ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
-                    child: Image.network(
-                      urlBrasaoItem,
-                      width: 250.0,
-                      height: 250.0,
-                      fit: BoxFit.contain,
-                    ),
+                    child: () {
+                      final parsedUrl = Uri.tryParse(urlBrasaoItem);
+                      final hasValidUrl = parsedUrl != null &&
+                                          parsedUrl.hasScheme &&
+                                          parsedUrl.host.isNotEmpty;
+
+                      if (hasValidUrl) {
+                        return Image.network(
+                          urlBrasaoItem,
+                          width: 250.0,
+                          height: 250.0,
+                          fit: BoxFit.contain,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              width: 250.0,
+                              height: 250.0,
+                              color: Colors.grey[300],
+                              child: Icon(Icons.shield, color: Colors.grey[600], size: 100),
+                            );
+                          },
+                        );
+                      } else {
+                        return Container(
+                          width: 250.0,
+                          height: 250.0,
+                          color: Colors.grey[300],
+                          child: Icon(Icons.shield, color: Colors.grey[600], size: 100),
+                        );
+                      }
+                    }(),
                   );
                 },
                 carouselController: _controller,
@@ -142,6 +166,14 @@ class _CarouselGetBrasaoWidgetState extends State<CarouselGetBrasaoWidget> {
                 height: 270.0,
                 fit: BoxFit.contain,
                 alignment: const Alignment(0.0, 0.0),
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    width: 270.0,
+                    height: 270.0,
+                    color: Colors.grey[300],
+                    child: Icon(Icons.shield, color: Colors.grey[600], size: 108),
+                  );
+                },
               ),
             ),
           ),

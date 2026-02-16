@@ -1,3 +1,4 @@
+import 'package:medita_bk/core/utils/image_utils.dart';
 import 'package:medita_bk/data/models/firebase/user_model.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
@@ -141,24 +142,28 @@ class _AboutAuthorsPageState extends State<AboutAuthorsPage> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: ClipOval(
-                                    child: Container(
-                                      width: 90.0,
-                                      height: 90.0,
-                                      decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context).primaryBackground,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(8.0),
-                                        child: Image.network(
-                                          listViewUserModel.userImageUrl,
-                                          width: 150.0,
-                                          height: 150.0,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
+                                  child: ImageUtils.buildCircularNetworkImage(
+                                    url: listViewUserModel.userImageUrl,
+                                    size: 90.0,
+                                    errorIcon: Icons.person,
+                                    backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+                                    onError: (isNetworkError, errorMessage) {
+                                      if (isNetworkError && mounted) {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                            content: Row(
+                                              children: [
+                                                const Icon(Icons.wifi_off, color: Colors.white),
+                                                const SizedBox(width: 8),
+                                                Expanded(child: Text(errorMessage)),
+                                              ],
+                                            ),
+                                            backgroundColor: Colors.orange[800],
+                                            duration: const Duration(seconds: 3),
+                                          ),
+                                        );
+                                      }
+                                    },
                                   ),
                                 ),
                                 Expanded(

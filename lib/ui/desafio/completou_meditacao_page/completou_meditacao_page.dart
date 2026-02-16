@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
+import 'package:medita_bk/core/utils/image_utils.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
@@ -267,15 +268,35 @@ class _CompletouMeditacaoPageState extends State<CompletouMeditacaoPage> {
                 children: [
                   Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(0.0, 32.0, 0.0, 32.0),
-                    child: ClipRRect(
+                    child: ImageUtils.buildNetworkImage(
+                      url: viewModel.mandalaURL,
+                      width: MediaQuery.sizeOf(context).height < 800.0 ? 150.0 : 250.0,
+                      height: MediaQuery.sizeOf(context).height < 800.0 ? 150.0 : 250.0,
+                      fit: BoxFit.cover,
                       borderRadius: BorderRadius.circular(8.0),
-                      child: Image.network(
-                        viewModel.mandalaURL ??
-                            'https://firebasestorage.googleapis.com/v0/b/meditabk2020.appspot.com/o/desafio%2Fetapa2%2FMandala%202-1.png?alt=media&token=638044ff-ef95-4407-ac8d-ce982370f135',
+                      errorWidget: Container(
                         width: MediaQuery.sizeOf(context).height < 800.0 ? 150.0 : 250.0,
                         height: MediaQuery.sizeOf(context).height < 800.0 ? 150.0 : 250.0,
-                        fit: BoxFit.cover,
+                        color: Colors.grey[300],
+                        child: Icon(Icons.filter_vintage, color: Colors.grey[600], size: 64),
                       ),
+                      onError: (isNetworkError, errorMessage) {
+                        if (isNetworkError && mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Row(
+                                children: [
+                                  const Icon(Icons.wifi_off, color: Colors.white),
+                                  const SizedBox(width: 8),
+                                  Expanded(child: Text(errorMessage)),
+                                ],
+                              ),
+                              backgroundColor: Colors.orange[800],
+                              duration: const Duration(seconds: 3),
+                            ),
+                          );
+                        }
+                      },
                     ),
                   ),
                 ],

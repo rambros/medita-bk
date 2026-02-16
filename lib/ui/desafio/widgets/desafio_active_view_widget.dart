@@ -98,12 +98,38 @@ class DesafioActiveViewWidget extends StatelessWidget {
           padding: const EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 24.0),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8.0),
-            child: Image.network(
-              functions.getURLMandala(viewModel.etapaAtual, viewModel.diasCompletados, viewModel.listaEtapasMandalas)!,
-              width: MediaQuery.sizeOf(context).height < 800.0 ? 180.0 : 250.0,
-              height: MediaQuery.sizeOf(context).height < 800.0 ? 180.0 : 250.0,
-              fit: BoxFit.cover,
-            ),
+            child: () {
+              final imageUrl = functions.getURLMandala(viewModel.etapaAtual, viewModel.diasCompletados, viewModel.listaEtapasMandalas) ?? '';
+              final parsedUrl = Uri.tryParse(imageUrl);
+              final hasValidUrl = parsedUrl != null &&
+                                  parsedUrl.hasScheme &&
+                                  parsedUrl.host.isNotEmpty;
+              final size = MediaQuery.sizeOf(context).height < 800.0 ? 180.0 : 250.0;
+
+              if (hasValidUrl) {
+                return Image.network(
+                  imageUrl,
+                  width: size,
+                  height: size,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: size,
+                      height: size,
+                      color: Colors.grey[300],
+                      child: Icon(Icons.filter_vintage, color: Colors.grey[600], size: size * 0.4),
+                    );
+                  },
+                );
+              } else {
+                return Container(
+                  width: size,
+                  height: size,
+                  color: Colors.grey[300],
+                  child: Icon(Icons.filter_vintage, color: Colors.grey[600], size: size * 0.4),
+                );
+              }
+            }(),
           ),
         ),
 
@@ -159,12 +185,38 @@ class DesafioActiveViewWidget extends StatelessWidget {
           padding: const EdgeInsetsDirectional.fromSTEB(0.0, 32.0, 0.0, 32.0),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8.0),
-            child: Image.network(
-              functions.getURLMandala(viewModel.etapaAtual, viewModel.diasCompletados, viewModel.listaEtapasMandalas)!,
-              width: MediaQuery.sizeOf(context).height < 800.0 ? 180.0 : 250.0,
-              height: MediaQuery.sizeOf(context).height < 800.0 ? 180.0 : 250.0,
-              fit: BoxFit.cover,
-            ),
+            child: () {
+              final imageUrl = functions.getURLMandala(viewModel.etapaAtual, viewModel.diasCompletados, viewModel.listaEtapasMandalas) ?? '';
+              final parsedUrl = Uri.tryParse(imageUrl);
+              final hasValidUrl = parsedUrl != null &&
+                                  parsedUrl.hasScheme &&
+                                  parsedUrl.host.isNotEmpty;
+              final size = MediaQuery.sizeOf(context).height < 800.0 ? 180.0 : 250.0;
+
+              if (hasValidUrl) {
+                return Image.network(
+                  imageUrl,
+                  width: size,
+                  height: size,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: size,
+                      height: size,
+                      color: Colors.grey[300],
+                      child: Icon(Icons.filter_vintage, color: Colors.grey[600], size: size * 0.4),
+                    );
+                  },
+                );
+              } else {
+                return Container(
+                  width: size,
+                  height: size,
+                  color: Colors.grey[300],
+                  child: Icon(Icons.filter_vintage, color: Colors.grey[600], size: size * 0.4),
+                );
+              }
+            }(),
           ),
         ),
 

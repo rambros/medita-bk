@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:expandable/expandable.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
 
+import 'package:medita_bk/core/utils/image_utils.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
@@ -230,15 +231,36 @@ class _ListaEtapasPageState extends State<ListaEtapasPage> {
                           ),
                     ),
                   ),
-                  ClipRRect(
+                  ImageUtils.buildNetworkImage(
+                    url: functions.getURLMandala(
+                        etapa, viewModel.diasCompletados, viewModel.listaEtapasMandalas.toList()),
+                    width: 30.0,
+                    height: 30.0,
+                    fit: BoxFit.cover,
                     borderRadius: BorderRadius.circular(0.0),
-                    child: Image.network(
-                      functions.getURLMandala(
-                          etapa, viewModel.diasCompletados, viewModel.listaEtapasMandalas.toList())!,
+                    errorWidget: Container(
                       width: 30.0,
                       height: 30.0,
-                      fit: BoxFit.cover,
+                      color: Colors.grey[300],
+                      child: Icon(Icons.filter_vintage, color: Colors.grey[600], size: 16),
                     ),
+                    onError: (isNetworkError, errorMessage) {
+                      if (isNetworkError && mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Row(
+                              children: [
+                                const Icon(Icons.wifi_off, color: Colors.white),
+                                const SizedBox(width: 8),
+                                Expanded(child: Text(errorMessage)),
+                              ],
+                            ),
+                            backgroundColor: Colors.orange[800],
+                            duration: const Duration(seconds: 3),
+                          ),
+                        );
+                      }
+                    },
                   ),
                 ],
               ),

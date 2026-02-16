@@ -1,4 +1,5 @@
 import 'package:medita_bk/core/structs/comment_struct.dart';
+import 'package:medita_bk/core/utils/image_utils.dart';
 import 'package:medita_bk/data/models/firebase/meditation_model.dart';
 import 'package:medita_bk/data/repositories/meditation_repository.dart';
 import 'package:medita_bk/data/repositories/user_repository.dart';
@@ -280,47 +281,46 @@ class _MeditationDetailsPageState extends State<MeditationDetailsPage> {
                         child: Stack(
                           alignment: const AlignmentDirectional(0.0, 0.0),
                           children: [
-                            Builder(builder: (context) {
-                              final imageUrl = meditationDetailsPageMeditation.imageUrl;
-                              final parsedUrl = Uri.tryParse(imageUrl);
-                              final hasImage = parsedUrl != null && parsedUrl.hasScheme && parsedUrl.host.isNotEmpty;
-                              if (!hasImage) {
-                                return Container(
-                                  width: double.infinity,
-                                  height: MediaQuery.sizeOf(context).height * 1.0,
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context).accent4,
-                                    borderRadius: BorderRadius.circular(16.0),
-                                  ),
-                                  alignment: Alignment.center,
-                                  child: Icon(
-                                    Icons.image_not_supported_outlined,
-                                    color: FlutterFlowTheme.of(context).primary,
-                                    size: 48.0,
-                                  ),
-                                );
-                              }
-                              return ClipRRect(
-                                borderRadius: BorderRadius.circular(16.0),
-                                child: Image.network(
-                                  imageUrl,
-                                  width: MediaQuery.sizeOf(context).width * 1.0,
-                                  height: MediaQuery.sizeOf(context).height * 1.0,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (_, __, ___) => Container(
-                                    width: double.infinity,
-                                    height: MediaQuery.sizeOf(context).height * 1.0,
-                                    color: FlutterFlowTheme.of(context).accent4,
-                                    alignment: Alignment.center,
-                                    child: Icon(
-                                      Icons.broken_image_outlined,
-                                      color: FlutterFlowTheme.of(context).primary,
-                                      size: 48.0,
-                                    ),
-                                  ),
+                            ImageUtils.buildNetworkImage(
+                              url: meditationDetailsPageMeditation.imageUrl,
+                              width: MediaQuery.sizeOf(context).width * 1.0,
+                              height: MediaQuery.sizeOf(context).height * 1.0,
+                              fit: BoxFit.cover,
+                              borderRadius: BorderRadius.circular(16.0),
+                              errorWidget: Container(
+                                width: double.infinity,
+                                height: MediaQuery.sizeOf(context).height * 1.0,
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context).accent4,
+                                  borderRadius: BorderRadius.circular(16.0),
                                 ),
-                              );
-                            }),
+                                alignment: Alignment.center,
+                                child: Icon(
+                                  Icons.broken_image_outlined,
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  size: 48.0,
+                                ),
+                              ),
+                              onError: (isNetworkError, errorMessage) {
+                                if (isNetworkError && mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Row(
+                                        children: [
+                                          const Icon(Icons.wifi_off, color: Colors.white),
+                                          const SizedBox(width: 8),
+                                          Expanded(
+                                            child: Text(errorMessage),
+                                          ),
+                                        ],
+                                      ),
+                                      backgroundColor: Colors.orange[800],
+                                      duration: const Duration(seconds: 3),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
                             InkWell(
                               splashColor: Colors.transparent,
                               focusColor: Colors.transparent,
@@ -603,34 +603,32 @@ class _MeditationDetailsPageState extends State<MeditationDetailsPage> {
                                           children: [
                                             Flexible(
                                               flex: 3,
-                                              child: Container(
-                                                width: 60.0,
-                                                height: 60.0,
-                                                decoration: BoxDecoration(
-                                                  color: FlutterFlowTheme.of(context).primaryBackground,
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                child: Builder(
-                                                  builder: (context) {
-                                                    if (commentsItem.userImageUrl != '') {
-                                                      return ClipRRect(
-                                                        borderRadius: BorderRadius.circular(50.0),
-                                                        child: Image.network(
-                                                          commentsItem.userImageUrl,
-                                                          width: 100.0,
-                                                          height: 100.0,
-                                                          fit: BoxFit.cover,
+                                              child: ImageUtils.buildCircularNetworkImage(
+                                                url: commentsItem.userImageUrl.isNotEmpty
+                                                    ? commentsItem.userImageUrl
+                                                    : null,
+                                                size: 60.0,
+                                                errorIcon: Icons.person,
+                                                backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+                                                onError: (isNetworkError, errorMessage) {
+                                                  if (isNetworkError && mounted) {
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      SnackBar(
+                                                        content: Row(
+                                                          children: [
+                                                            const Icon(Icons.wifi_off, color: Colors.white),
+                                                            const SizedBox(width: 8),
+                                                            Expanded(
+                                                              child: Text(errorMessage),
+                                                            ),
+                                                          ],
                                                         ),
-                                                      );
-                                                    } else {
-                                                      return Icon(
-                                                        Icons.location_history,
-                                                        color: FlutterFlowTheme.of(context).primaryText,
-                                                        size: 50.0,
-                                                      );
-                                                    }
-                                                  },
-                                                ),
+                                                        backgroundColor: Colors.orange[800],
+                                                        duration: const Duration(seconds: 3),
+                                                      ),
+                                                    );
+                                                  }
+                                                },
                                               ),
                                             ),
                                             Expanded(

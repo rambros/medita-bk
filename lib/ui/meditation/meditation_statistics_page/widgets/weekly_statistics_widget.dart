@@ -137,6 +137,11 @@ class _WeeklyStatisticsWidgetState extends State<WeeklyStatisticsWidget> {
 
     listLogs = _getLastWeeks(listLogs);
 
+    // Verificar novamente após filtrar - pode não haver logs nas últimas 12 semanas
+    if (listLogs.isEmpty) {
+      return;
+    }
+
     //var _endOfWeek = getDate(date.add(Duration(days: DateTime.daysPerWeek - date.weekday)));
     // List to accumulate logs in weeks -> to display graphics
     var date = DateTime.now();
@@ -251,7 +256,7 @@ class _WeeklyStatisticsWidgetState extends State<WeeklyStatisticsWidget> {
 
     var listTemp = List.from(listDays);
     listTemp.sort((a, b) => b.sessions.compareTo(a.sessions));
-    _greaterNumDailySessionsW = listTemp[0].sessions;
+    _greaterNumDailySessionsW = listTemp.isNotEmpty ? listTemp[0].sessions : 0;
 
     // reorganize for graphics in UI
     listWeeklyLog.sort((a, b) => a!.week!.compareTo(b!.week!));

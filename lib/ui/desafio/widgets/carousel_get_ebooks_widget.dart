@@ -85,12 +85,36 @@ class _CarouselGetEbooksWidgetState extends State<CarouselGetEbooksWidget> {
                     },
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
-                      child: Image.network(
-                        ebookCoverUrl,
-                        width: 250.0,
-                        height: 250.0,
-                        fit: BoxFit.contain,
-                      ),
+                      child: () {
+                        final parsedUrl = Uri.tryParse(ebookCoverUrl);
+                        final hasValidUrl = parsedUrl != null &&
+                                            parsedUrl.hasScheme &&
+                                            parsedUrl.host.isNotEmpty;
+
+                        if (hasValidUrl) {
+                          return Image.network(
+                            ebookCoverUrl,
+                            width: 250.0,
+                            height: 250.0,
+                            fit: BoxFit.contain,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                width: 250.0,
+                                height: 250.0,
+                                color: Colors.grey[300],
+                                child: Icon(Icons.menu_book, color: Colors.grey[600], size: 100),
+                              );
+                            },
+                          );
+                        } else {
+                          return Container(
+                            width: 250.0,
+                            height: 250.0,
+                            color: Colors.grey[300],
+                            child: Icon(Icons.menu_book, color: Colors.grey[600], size: 100),
+                          );
+                        }
+                      }(),
                     ),
                   );
                 },

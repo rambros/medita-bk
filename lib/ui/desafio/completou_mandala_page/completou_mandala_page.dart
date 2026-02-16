@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:medita_bk/core/utils/image_utils.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
@@ -218,14 +219,35 @@ class _CompletouMandalaPageState extends State<CompletouMandalaPage> {
                 children: [
                   Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(0.0, 32.0, 0.0, 32.0),
-                    child: ClipRRect(
+                    child: ImageUtils.buildNetworkImage(
+                      url: viewModel.mandalaUrl,
+                      width: MediaQuery.sizeOf(context).height < 800.0 ? 150.0 : 250.0,
+                      height: MediaQuery.sizeOf(context).height < 800.0 ? 150.0 : 250.0,
+                      fit: BoxFit.cover,
                       borderRadius: BorderRadius.circular(8.0),
-                      child: Image.network(
-                        viewModel.mandalaUrl,
+                      errorWidget: Container(
                         width: MediaQuery.sizeOf(context).height < 800.0 ? 150.0 : 250.0,
                         height: MediaQuery.sizeOf(context).height < 800.0 ? 150.0 : 250.0,
-                        fit: BoxFit.cover,
+                        color: Colors.grey[300],
+                        child: Icon(Icons.filter_vintage, color: Colors.grey[600], size: 64),
                       ),
+                      onError: (isNetworkError, errorMessage) {
+                        if (isNetworkError && mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Row(
+                                children: [
+                                  const Icon(Icons.wifi_off, color: Colors.white),
+                                  const SizedBox(width: 8),
+                                  Expanded(child: Text(errorMessage)),
+                                ],
+                              ),
+                              backgroundColor: Colors.orange[800],
+                              duration: const Duration(seconds: 3),
+                            ),
+                          );
+                        }
+                      },
                     ),
                   ),
                 ],

@@ -143,6 +143,11 @@ class _MonthlyStatisticsWidgetState extends State<MonthlyStatisticsWidget> {
 
     listLogs = _getLastMonths(listLogs);
 
+    // Verificar novamente após filtrar - pode não haver logs nos últimos 12 meses
+    if (listLogs.isEmpty) {
+      return;
+    }
+
     // List to accumulate logs in months -> to display graphics
     var month = DateTime.now().month;
     var year = DateTime.now().year;
@@ -255,11 +260,11 @@ class _MonthlyStatisticsWidgetState extends State<MonthlyStatisticsWidget> {
     }
 
     listSequences.sort((a, b) => b.compareTo(a));
-    _greaterSequenceOfDaysWithSessionM = listSequences[0];
+    _greaterSequenceOfDaysWithSessionM = listSequences.isNotEmpty ? listSequences[0] : 0;
 
     var listTemp = List.from(listDays);
     listTemp.sort((a, b) => b.sessions.compareTo(a.sessions));
-    _greaterNumDailySessionsM = listTemp[0].sessions;
+    _greaterNumDailySessionsM = listTemp.isNotEmpty ? listTemp[0].sessions : 0;
 
     // reorganize for graphics in UI
     listMonthlyLog.sort((a, b) => a!.month!.compareTo(b!.month!));

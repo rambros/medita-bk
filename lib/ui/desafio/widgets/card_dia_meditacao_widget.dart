@@ -141,12 +141,37 @@ class _CardDiaMeditacaoWidgetState extends State<CardDiaMeditacaoWidget> {
                       padding: const EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
-                        child: Image.network(
-                          meditation.imageUrl,
-                          width: 200.0,
-                          height: 203.0,
-                          fit: BoxFit.cover,
-                        ),
+                        child: () {
+                          final imageUrl = meditation.imageUrl;
+                          final parsedUrl = Uri.tryParse(imageUrl);
+                          final hasValidUrl = parsedUrl != null &&
+                                              parsedUrl.hasScheme &&
+                                              parsedUrl.host.isNotEmpty;
+
+                          if (hasValidUrl) {
+                            return Image.network(
+                              imageUrl,
+                              width: 200.0,
+                              height: 203.0,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  width: 200.0,
+                                  height: 203.0,
+                                  color: Colors.grey[300],
+                                  child: Icon(Icons.self_improvement, color: Colors.grey[600], size: 64),
+                                );
+                              },
+                            );
+                          } else {
+                            return Container(
+                              width: 200.0,
+                              height: 203.0,
+                              color: Colors.grey[300],
+                              child: Icon(Icons.self_improvement, color: Colors.grey[600], size: 64),
+                            );
+                          }
+                        }(),
                       ),
                     ),
                   ),

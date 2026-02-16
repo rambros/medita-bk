@@ -30,6 +30,21 @@ class GetMandalaWidget extends StatelessWidget {
       );
     }
 
+    // Additional validation for empty string
+    final parsedUrl = Uri.tryParse(mandalaUrl);
+    final hasValidUrl = parsedUrl != null &&
+                        parsedUrl.hasScheme &&
+                        parsedUrl.host.isNotEmpty;
+
+    if (!hasValidUrl) {
+      return Container(
+        width: MediaQuery.sizeOf(context).width * 2.0,
+        height: 200.0,
+        color: Colors.grey[300],
+        child: Icon(Icons.filter_vintage, color: Colors.grey[600], size: 80),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
       child: ClipRRect(
@@ -39,6 +54,14 @@ class GetMandalaWidget extends StatelessWidget {
           width: MediaQuery.sizeOf(context).width * 2.0,
           height: 200.0,
           fit: BoxFit.contain,
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              width: MediaQuery.sizeOf(context).width * 2.0,
+              height: 200.0,
+              color: Colors.grey[300],
+              child: Icon(Icons.filter_vintage, color: Colors.grey[600], size: 80),
+            );
+          },
         ),
       ),
     );

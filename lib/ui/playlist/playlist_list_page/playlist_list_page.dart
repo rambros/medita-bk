@@ -1,4 +1,5 @@
 import 'package:medita_bk/core/structs/index.dart';
+import 'package:medita_bk/core/utils/image_utils.dart';
 import 'package:medita_bk/data/repositories/auth_repository.dart';
 import 'package:medita_bk/data/repositories/playlist_repository.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_icon_button.dart';
@@ -299,19 +300,48 @@ class _PlaylistListPageState extends State<PlaylistListPage> {
                                                 ),
                                                 shape: BoxShape.rectangle,
                                               ),
-                                              child: ClipRRect(
+                                              child: ImageUtils.buildNetworkImage(
+                                                url: playlistsItem.imageUrl,
+                                                width: 75.0,
+                                                height: 75.0,
+                                                fit: BoxFit.cover,
                                                 borderRadius: const BorderRadius.only(
                                                   bottomLeft: Radius.circular(16.0),
                                                   bottomRight: Radius.circular(0.0),
                                                   topLeft: Radius.circular(16.0),
                                                   topRight: Radius.circular(0.0),
                                                 ),
-                                                child: Image.network(
-                                                  playlistsItem.imageUrl,
+                                                errorWidget: Container(
                                                   width: 75.0,
                                                   height: 75.0,
-                                                  fit: BoxFit.cover,
+                                                  decoration: const BoxDecoration(
+                                                    color: Colors.grey,
+                                                    borderRadius: BorderRadius.only(
+                                                      bottomLeft: Radius.circular(16.0),
+                                                      bottomRight: Radius.circular(0.0),
+                                                      topLeft: Radius.circular(16.0),
+                                                      topRight: Radius.circular(0.0),
+                                                    ),
+                                                  ),
+                                                  child: const Icon(Icons.playlist_play, color: Colors.white, size: 32),
                                                 ),
+                                                onError: (isNetworkError, errorMessage) {
+                                                  if (isNetworkError && mounted) {
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      SnackBar(
+                                                        content: Row(
+                                                          children: [
+                                                            const Icon(Icons.wifi_off, color: Colors.white),
+                                                            const SizedBox(width: 8),
+                                                            Expanded(child: Text(errorMessage)),
+                                                          ],
+                                                        ),
+                                                        backgroundColor: Colors.orange[800],
+                                                        duration: const Duration(seconds: 3),
+                                                      ),
+                                                    );
+                                                  }
+                                                },
                                               ),
                                             ),
                                           ),

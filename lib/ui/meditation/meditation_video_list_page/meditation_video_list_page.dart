@@ -1,3 +1,4 @@
+import 'package:medita_bk/core/utils/image_utils.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
@@ -189,17 +190,29 @@ class _MeditationVideoListPageState extends State<MeditationVideoListPage> {
             child: Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                Container(
-                  width: 80.0,
-                  height: 80.0,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: Image.network(
-                    viewModel.channelProfilePicture ?? '',
-                    fit: BoxFit.cover,
-                  ),
+                ImageUtils.buildCircularNetworkImage(
+                  url: viewModel.channelProfilePicture,
+                  size: 80.0,
+                  errorIcon: Icons.person,
+                  onError: (isNetworkError, errorMessage) {
+                    if (isNetworkError && mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Row(
+                            children: [
+                              const Icon(Icons.wifi_off, color: Colors.white),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(errorMessage),
+                              ),
+                            ],
+                          ),
+                          backgroundColor: Colors.orange[800],
+                          duration: const Duration(seconds: 3),
+                        ),
+                      );
+                    }
+                  },
                 ),
                 Padding(
                   padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 0.0, 0.0),
@@ -301,14 +314,37 @@ class _MeditationVideoListPageState extends State<MeditationVideoListPage> {
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  ClipRRect(
+                  ImageUtils.buildNetworkImage(
+                    url: viewModel.getVideoThumbnail(video),
+                    width: 120.0,
+                    height: 200.0,
+                    fit: BoxFit.cover,
                     borderRadius: BorderRadius.circular(8.0),
-                    child: Image.network(
-                      viewModel.getVideoThumbnail(video) ?? '',
+                    errorWidget: Container(
                       width: 120.0,
                       height: 200.0,
-                      fit: BoxFit.cover,
+                      color: Colors.grey[300],
+                      child: Icon(Icons.video_library, color: Colors.grey[600], size: 48),
                     ),
+                    onError: (isNetworkError, errorMessage) {
+                      if (isNetworkError && mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Row(
+                              children: [
+                                const Icon(Icons.wifi_off, color: Colors.white),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(errorMessage),
+                                ),
+                              ],
+                            ),
+                            backgroundColor: Colors.orange[800],
+                            duration: const Duration(seconds: 3),
+                          ),
+                        );
+                      }
+                    },
                   ),
                   Flexible(
                     child: Padding(

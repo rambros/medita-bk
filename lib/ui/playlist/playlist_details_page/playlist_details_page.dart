@@ -1,5 +1,6 @@
 import 'package:medita_bk/core/enums/enums.dart';
 import 'package:medita_bk/core/structs/index.dart';
+import 'package:medita_bk/core/utils/image_utils.dart';
 import 'package:medita_bk/data/repositories/auth_repository.dart';
 import 'package:medita_bk/data/repositories/playlist_repository.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_icon_button.dart';
@@ -152,14 +153,38 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                       Hero(
                         tag: AppStateStore().tempPlaylist.imageUrl,
                         transitionOnUserGestures: true,
-                        child: ClipRRect(
+                        child: ImageUtils.buildNetworkImage(
+                          url: AppStateStore().tempPlaylist.imageUrl,
+                          width: MediaQuery.sizeOf(context).width * 1.0,
+                          height: MediaQuery.sizeOf(context).height * 0.35,
+                          fit: BoxFit.cover,
                           borderRadius: BorderRadius.circular(16.0),
-                          child: Image.network(
-                            AppStateStore().tempPlaylist.imageUrl,
+                          errorWidget: Container(
                             width: MediaQuery.sizeOf(context).width * 1.0,
                             height: MediaQuery.sizeOf(context).height * 0.35,
-                            fit: BoxFit.cover,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                            child: Icon(Icons.playlist_play, color: Colors.grey[600], size: 64),
                           ),
+                          onError: (isNetworkError, errorMessage) {
+                            if (isNetworkError && mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Row(
+                                    children: [
+                                      const Icon(Icons.wifi_off, color: Colors.white),
+                                      const SizedBox(width: 8),
+                                      Expanded(child: Text(errorMessage)),
+                                    ],
+                                  ),
+                                  backgroundColor: Colors.orange[800],
+                                  duration: const Duration(seconds: 3),
+                                ),
+                              );
+                            }
+                          },
                         ),
                       ),
                       InkWell(

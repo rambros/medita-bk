@@ -144,6 +144,11 @@ class _YearlyStatisticsWidgetState extends State<YearlyStatisticsWidget> {
 
     listLogs = _getLastYears(listLogs);
 
+    // Verificar novamente após filtrar - pode não haver logs nos últimos anos
+    if (listLogs.isEmpty) {
+      return;
+    }
+
     // List to accumulate logs in years -> to display graphics
     var listYearlyLog = List.filled(numYears, YearlyLog());
     var year = DateTime.now().year;
@@ -249,11 +254,11 @@ class _YearlyStatisticsWidgetState extends State<YearlyStatisticsWidget> {
     }
 
     listSequences.sort((a, b) => b.compareTo(a));
-    _greaterSequenceOfDaysWithSessionY = listSequences[0];
+    _greaterSequenceOfDaysWithSessionY = listSequences.isNotEmpty ? listSequences[0] : 0;
 
     var listTemp = List.from(listDays);
     listTemp.sort((a, b) => b.sessions.compareTo(a.sessions));
-    _greaterNumDailySessionsY = listTemp[0].sessions;
+    _greaterNumDailySessionsY = listTemp.isNotEmpty ? listTemp[0].sessions : 0;
 
     // reorganize for graphics in UI
     listYearlyLog.sort((a, b) => a.year!.compareTo(b.year!));
