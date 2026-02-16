@@ -9,34 +9,25 @@ import 'package:medita_bk/domain/models/ead/index.dart';
 class EadService {
   final FirebaseFirestore _firestore;
 
-  EadService({FirebaseFirestore? firestore})
-      : _firestore = firestore ?? FirebaseFirestore.instance;
+  EadService({FirebaseFirestore? firestore}) : _firestore = firestore ?? FirebaseFirestore.instance;
 
   // === Collections ===
 
-  CollectionReference<Map<String, dynamic>> get _cursosCollection =>
-      _firestore.collection('cursos');
+  CollectionReference<Map<String, dynamic>> get _cursosCollection => _firestore.collection('cursos');
 
-  CollectionReference<Map<String, dynamic>> get _inscricoesCollection =>
-      _firestore.collection('inscricoes_cursos');
+  CollectionReference<Map<String, dynamic>> get _inscricoesCollection => _firestore.collection('inscricoes_cursos');
 
   CollectionReference<Map<String, dynamic>> _aulasCollection(String cursoId) =>
       _cursosCollection.doc(cursoId).collection('aulas');
 
-  CollectionReference<Map<String, dynamic>> _topicosCollection(
-    String cursoId,
-    String aulaId,
-  ) =>
+  CollectionReference<Map<String, dynamic>> _topicosCollection(String cursoId, String aulaId) =>
       _aulasCollection(cursoId).doc(aulaId).collection('topicos');
 
   // === Cursos ===
 
   /// Busca todos os cursos publicados
   Future<List<CursoModel>> getCursosPublicados() async {
-    final snapshot = await _cursosCollection
-        .where('status', isEqualTo: 'publicado')
-        .orderBy('ordem')
-        .get();
+    final snapshot = await _cursosCollection.where('status', isEqualTo: 'publicado').orderBy('ordem').get();
 
     return snapshot.docs.map((doc) => CursoModel.fromFirestore(doc)).toList();
   }
@@ -54,69 +45,52 @@ class EadService {
         .where('status', isEqualTo: 'publicado')
         .orderBy('ordem')
         .snapshots()
-        .map((snapshot) =>
-            snapshot.docs.map((doc) => CursoModel.fromFirestore(doc)).toList());
+        .map((snapshot) => snapshot.docs.map((doc) => CursoModel.fromFirestore(doc)).toList());
   }
 
   // === Aulas ===
 
   /// Busca todas as aulas de um curso
   Future<List<AulaModel>> getAulasByCurso(String cursoId) async {
-    final snapshot =
-        await _aulasCollection(cursoId).orderBy('ordem').get();
+    final snapshot = await _aulasCollection(cursoId).orderBy('ordem').get();
 
-    return snapshot.docs
-        .map((doc) => AulaModel.fromFirestore(doc, cursoId: cursoId))
-        .toList();
+    return snapshot.docs.map((doc) => AulaModel.fromFirestore(doc, cursoId: cursoId)).toList();
   }
 
   /// Stream de aulas de um curso
   Stream<List<AulaModel>> streamAulasByCurso(String cursoId) {
-    return _aulasCollection(cursoId).orderBy('ordem').snapshots().map(
-        (snapshot) => snapshot.docs
-            .map((doc) => AulaModel.fromFirestore(doc, cursoId: cursoId))
-            .toList());
+    return _aulasCollection(cursoId)
+        .orderBy('ordem')
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => AulaModel.fromFirestore(doc, cursoId: cursoId)).toList());
   }
 
   // === Tópicos ===
 
   /// Busca todos os tópicos de uma aula
-  Future<List<TopicoModel>> getTopicosByAula(
-    String cursoId,
-    String aulaId,
-  ) async {
-    final snapshot =
-        await _topicosCollection(cursoId, aulaId).orderBy('ordem').get();
+  Future<List<TopicoModel>> getTopicosByAula(String cursoId, String aulaId) async {
+    final snapshot = await _topicosCollection(cursoId, aulaId).orderBy('ordem').get();
 
-    return snapshot.docs
-        .map((doc) =>
-            TopicoModel.fromFirestore(doc, cursoId: cursoId, aulaId: aulaId))
-        .toList();
+    return snapshot.docs.map((doc) => TopicoModel.fromFirestore(doc, cursoId: cursoId, aulaId: aulaId)).toList();
   }
 
   /// Busca um tópico específico
-  Future<TopicoModel?> getTopicoById(
-    String cursoId,
-    String aulaId,
-    String topicoId,
-  ) async {
-    final doc =
-        await _topicosCollection(cursoId, aulaId).doc(topicoId).get();
+  Future<TopicoModel?> getTopicoById(String cursoId, String aulaId, String topicoId) async {
+    final doc = await _topicosCollection(cursoId, aulaId).doc(topicoId).get();
 
     if (!doc.exists) return null;
     return TopicoModel.fromFirestore(doc, cursoId: cursoId, aulaId: aulaId);
   }
 
   /// Stream de tópicos de uma aula
-  Stream<List<TopicoModel>> streamTopicosByAula(
-    String cursoId,
-    String aulaId,
-  ) {
-    return _topicosCollection(cursoId, aulaId).orderBy('ordem').snapshots().map(
-        (snapshot) => snapshot.docs
-            .map((doc) =>
-                TopicoModel.fromFirestore(doc, cursoId: cursoId, aulaId: aulaId))
-            .toList());
+  Stream<List<TopicoModel>> streamTopicosByAula(String cursoId, String aulaId) {
+    return _topicosCollection(cursoId, aulaId)
+        .orderBy('ordem')
+        .snapshots()
+        .map(
+          (snapshot) =>
+              snapshot.docs.map((doc) => TopicoModel.fromFirestore(doc, cursoId: cursoId, aulaId: aulaId)).toList(),
+        );
   }
 
   /// Busca todos os tópicos de um curso (todas as aulas)
@@ -135,17 +109,13 @@ class EadService {
   // === Inscrições ===
 
   /// Busca a inscrição de um usuário em um curso
-  Future<InscricaoCursoModel?> getInscricao(
-    String cursoId,
-    String usuarioId, {
-    bool forceRefresh = false,
-  }) async {
+  Future<InscricaoCursoModel?> getInscricao(String cursoId, String usuarioId, {bool forceRefresh = false}) async {
     final inscricaoId = InscricaoCursoModel.gerarId(cursoId, usuarioId);
 
     // Se forceRefresh for true, força busca do servidor ignorando cache do Firestore
-    final doc = await _inscricoesCollection.doc(inscricaoId).get(
-      forceRefresh ? GetOptions(source: Source.server) : null,
-    );
+    final doc = await _inscricoesCollection
+        .doc(inscricaoId)
+        .get(forceRefresh ? GetOptions(source: Source.server) : null);
 
     if (!doc.exists) {
       return null;
@@ -154,45 +124,33 @@ class EadService {
   }
 
   /// Busca todas as inscrições de um usuário
-  Future<List<InscricaoCursoModel>> getInscricoesByUsuario(
-    String usuarioId,
-  ) async {
+  Future<List<InscricaoCursoModel>> getInscricoesByUsuario(String usuarioId) async {
     final snapshot = await _inscricoesCollection
         .where('usuarioId', isEqualTo: usuarioId)
         .orderBy('dataInscricao', descending: true)
         .get();
 
-    return snapshot.docs
-        .map((doc) => InscricaoCursoModel.fromFirestore(doc))
-        .toList();
+    return snapshot.docs.map((doc) => InscricaoCursoModel.fromFirestore(doc)).toList();
   }
 
   /// Busca inscrições ativas de um usuário
-  Future<List<InscricaoCursoModel>> getInscricoesAtivasByUsuario(
-    String usuarioId,
-  ) async {
+  Future<List<InscricaoCursoModel>> getInscricoesAtivasByUsuario(String usuarioId) async {
     final snapshot = await _inscricoesCollection
         .where('usuarioId', isEqualTo: usuarioId)
         .where('status', isEqualTo: 'ativo')
         .orderBy('dataInscricao', descending: true)
         .get();
 
-    return snapshot.docs
-        .map((doc) => InscricaoCursoModel.fromFirestore(doc))
-        .toList();
+    return snapshot.docs.map((doc) => InscricaoCursoModel.fromFirestore(doc)).toList();
   }
 
   /// Stream de inscrições de um usuário
-  Stream<List<InscricaoCursoModel>> streamInscricoesByUsuario(
-    String usuarioId,
-  ) {
+  Stream<List<InscricaoCursoModel>> streamInscricoesByUsuario(String usuarioId) {
     return _inscricoesCollection
         .where('usuarioId', isEqualTo: usuarioId)
         .orderBy('dataInscricao', descending: true)
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => InscricaoCursoModel.fromFirestore(doc))
-            .toList());
+        .map((snapshot) => snapshot.docs.map((doc) => InscricaoCursoModel.fromFirestore(doc)).toList());
   }
 
   /// Cria uma nova inscrição
@@ -206,24 +164,18 @@ class EadService {
   }
 
   /// Atualiza apenas o progresso de uma inscrição
-  Future<void> atualizarProgresso(
-    String inscricaoId,
-    ProgressoCursoModel progresso,
-  ) async {
+  Future<void> atualizarProgresso(String inscricaoId, ProgressoCursoModel progresso) async {
     await _inscricoesCollection.doc(inscricaoId).update({
       'progresso': progresso.toMap(),
+      // Campos denormalizados para queries eficientes no web admin
+      'totalAulasCompletas': progresso.aulasCompletas.length,
+      'ultimoAcessoTimestamp': progresso.ultimoAcesso,
     });
   }
 
   /// Atualiza status da inscrição
-  Future<void> atualizarStatusInscricao(
-    String inscricaoId,
-    StatusInscricao status, {
-    DateTime? dataConclusao,
-  }) async {
-    final data = <String, dynamic>{
-      'status': status.name,
-    };
+  Future<void> atualizarStatusInscricao(String inscricaoId, StatusInscricao status, {DateTime? dataConclusao}) async {
+    final data = <String, dynamic>{'status': status.name};
 
     if (dataConclusao != null) {
       data['dataConclusao'] = dataConclusao;
@@ -240,13 +192,8 @@ class EadService {
   // === Quiz ===
 
   /// Busca questões do quiz de um tópico
-  Future<List<QuizQuestionModel>> getQuizByTopico(
-    String cursoId,
-    String aulaId,
-    String topicoId,
-  ) async {
-    final topicoDoc =
-        await _topicosCollection(cursoId, aulaId).doc(topicoId).get();
+  Future<List<QuizQuestionModel>> getQuizByTopico(String cursoId, String aulaId, String topicoId) async {
+    final topicoDoc = await _topicosCollection(cursoId, aulaId).doc(topicoId).get();
 
     if (!topicoDoc.exists) {
       return [];
@@ -277,9 +224,7 @@ class EadService {
 
         // Obter índices das respostas corretas
         final respostasCorretasIndices =
-            (perguntaMap['respostasCorretasIndices'] as List<dynamic>?)
-                ?.map((e) => e as int)
-                .toList() ??
+            (perguntaMap['respostasCorretasIndices'] as List<dynamic>?)?.map((e) => e as int).toList() ??
             // Fallback para formato antigo
             [perguntaMap['respostaCorretaIndex'] as int? ?? 0];
 
@@ -290,9 +235,7 @@ class EadService {
           opcoesTextos = ['Verdadeiro', 'Falso'];
         } else {
           // Múltipla escolha ou múltiplas respostas: ler do JSON
-          opcoesTextos = (perguntaMap['opcoes'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ?? [];
+          opcoesTextos = (perguntaMap['opcoes'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [];
         }
 
         // Converte opcoes para QuizOpcaoModel

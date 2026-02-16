@@ -125,6 +125,9 @@ class InscricaoCursoModel {
       // Campos de busca
       'usuarioNomeSearch': usuarioNome.toLowerCase(),
       'usuarioEmailSearch': usuarioEmail.toLowerCase(),
+      // Campos denormalizados para queries eficientes no web admin
+      'totalAulasCompletas': progresso.aulasCompletas.length,
+      'ultimoAcessoTimestamp': progresso.ultimoAcesso,
     };
   }
 
