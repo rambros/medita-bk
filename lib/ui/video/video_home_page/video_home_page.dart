@@ -232,7 +232,7 @@ class _VideoHomePageState extends State<VideoHomePage> with TickerProviderStateM
                             height: 100.0,
                             decoration: const BoxDecoration(
                               gradient: LinearGradient(
-                                colors: [Color(0xFF42A5F5), Color(0xFF90CAF9)],
+                                colors: [Color(0xFFFFD54F), Color(0xFFFFECB3)],
                                 stops: [0.0, 1.0],
                                 begin: AlignmentDirectional(-1.0, -1.0),
                                 end: AlignmentDirectional(1.0, 1.0),
@@ -258,15 +258,19 @@ class _VideoHomePageState extends State<VideoHomePage> with TickerProviderStateM
                                       size: 24.0,
                                     ),
                                   ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation1']!),
-                                  Text(
-                                    'Canal Viver e Meditar',
-                                    textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context).bodyLarge.override(
-                                          fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
-                                        ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      'Canal Viver e Meditar',
+                                      textAlign: TextAlign.center,
+                                      style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                            fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
+                                            color: Colors.black,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w500,
+                                            useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
+                                          ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -296,7 +300,7 @@ class _VideoHomePageState extends State<VideoHomePage> with TickerProviderStateM
                             height: 100.0,
                             decoration: const BoxDecoration(
                               gradient: LinearGradient(
-                                colors: [Color(0xFF26A69A), Color(0xFF80CBC4)],
+                                colors: [Color(0xFF4FC3F7), Color(0xFFB3E5FC)],
                                 stops: [0.0, 1.0],
                                 begin: AlignmentDirectional(1.0, -1.0),
                                 end: AlignmentDirectional(-1.0, 1.0),
@@ -322,15 +326,19 @@ class _VideoHomePageState extends State<VideoHomePage> with TickerProviderStateM
                                       size: 24.0,
                                     ),
                                   ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation2']!),
-                                  Text(
-                                    'Palestras',
-                                    textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context).bodyLarge.override(
-                                          fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
-                                        ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      'Palestras',
+                                      textAlign: TextAlign.center,
+                                      style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                            fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
+                                            color: Colors.black,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w500,
+                                            useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
+                                          ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -368,7 +376,7 @@ class _VideoHomePageState extends State<VideoHomePage> with TickerProviderStateM
                             height: 100.0,
                             decoration: const BoxDecoration(
                               gradient: LinearGradient(
-                                colors: [Color(0xFFEC407A), Color(0xFFF48FB1)],
+                                colors: [Color(0xFFF06292), Color(0xFFF8BBD0)],
                                 stops: [0.0, 1.0],
                                 begin: AlignmentDirectional(-1.0, 1.0),
                                 end: AlignmentDirectional(1.0, -1.0),
@@ -394,15 +402,19 @@ class _VideoHomePageState extends State<VideoHomePage> with TickerProviderStateM
                                       size: 32.0,
                                     ),
                                   ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation3']!),
-                                  Text(
-                                    'Congresso de Raja Yoga',
-                                    textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context).bodyLarge.override(
-                                          fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
-                                        ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      'Congresso de Raja Yoga',
+                                      textAlign: TextAlign.center,
+                                      style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                            fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
+                                            color: Colors.black,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w500,
+                                            useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
+                                          ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -440,7 +452,7 @@ class _VideoHomePageState extends State<VideoHomePage> with TickerProviderStateM
                             height: 100.0,
                             decoration: const BoxDecoration(
                               gradient: LinearGradient(
-                                colors: [Color(0xFF66BB6A), Color(0xFFA5D6A7)],
+                                colors: [Color(0xFFAED581), Color(0xFFDCEDC8)],
                                 stops: [0.0, 1.0],
                                 begin: AlignmentDirectional(1.0, 1.0),
                                 end: AlignmentDirectional(-1.0, -1.0),
@@ -466,15 +478,19 @@ class _VideoHomePageState extends State<VideoHomePage> with TickerProviderStateM
                                       size: 24.0,
                                     ),
                                   ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation4']!),
-                                  Text(
-                                    'Entrevistas',
-                                    textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context).bodyLarge.override(
-                                          fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
-                                        ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      'Entrevistas',
+                                      textAlign: TextAlign.center,
+                                      style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                            fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
+                                            color: Colors.black,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w500,
+                                            useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
+                                          ),
+                                    ),
                                   ),
                                 ],
                               ),

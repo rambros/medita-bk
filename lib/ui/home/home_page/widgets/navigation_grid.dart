@@ -38,7 +38,8 @@ class NavigationGrid extends StatelessWidget {
           NavigationCard(
             title: 'Fazer uma meditação',
             icon: FFIcons.kselfImprovementBlack24dp,
-            gradientColors: const [Color(0xFFEC407A), Color(0xFFF48FB1)],
+            textColor: Colors.black,
+            gradientColors: const [Color(0xFF81D4FA), Color(0xFFA5D6A7)],
             gradientStops: const [0.0, 1.0],
             gradientBegin: const AlignmentDirectional(-1.0, -1.0),
             gradientEnd: const AlignmentDirectional(1.0, 1.0),
@@ -60,7 +61,8 @@ class NavigationGrid extends StatelessWidget {
           NavigationCard(
             title: 'Ler mensagem para o dia',
             icon: Icons.menu_book,
-            gradientColors: const [Color(0xFFFFA726), Color(0xFFFFCC80)],
+            textColor: Colors.black,
+            gradientColors: const [Color(0xFFFFCC80), Color(0xFFF8BBD0)],
             gradientStops: const [0.0, 1.0],
             gradientBegin: const AlignmentDirectional(-1.0, 1.0),
             gradientEnd: const AlignmentDirectional(1.0, -1.0),
@@ -82,7 +84,8 @@ class NavigationGrid extends StatelessWidget {
           NavigationCard(
             title: 'Aprenda a meditar',
             icon: Icons.school,
-            gradientColors: const [Color(0xFF7E57C2), Color(0xFFB39DDB)],
+            textColor: Colors.black,
+            gradientColors: const [Color(0xFFB39DDB), Color(0xFF80CBC4)],
             gradientStops: const [0.0, 1.0],
             gradientBegin: const AlignmentDirectional(-1.0, 1.0),
             gradientEnd: const AlignmentDirectional(1.0, -1.0),
@@ -106,7 +109,8 @@ class NavigationGrid extends StatelessWidget {
             NavigationCard(
               title: 'Desafio 21 dias',
               icon: Icons.emoji_events,
-              gradientColors: const [Color(0xFF8D4052), Color(0xFFB0747F)],
+              textColor: Colors.black,
+              gradientColors: const [Color(0xFFCE93D8), Color(0xFF90CAF9)],
               gradientStops: const [0.0, 1.0],
               gradientBegin: const AlignmentDirectional(-1.0, -1.0),
               gradientEnd: const AlignmentDirectional(1.0, 1.0),
@@ -118,7 +122,8 @@ class NavigationGrid extends StatelessWidget {
           NavigationCard(
             title: 'Ajuda',
             icon: Icons.support_agent,
-            gradientColors: const [Color(0xFF26A69A), Color(0xFF80CBC4)],
+            textColor: Colors.black,
+            gradientColors: const [Color(0xFF80CBC4), Color(0xFF4DB6AC)],
             gradientStops: const [0.0, 1.0],
             gradientBegin: const AlignmentDirectional(1.0, -1.0),
             gradientEnd: const AlignmentDirectional(-1.0, 1.0),
@@ -140,7 +145,8 @@ class NavigationGrid extends StatelessWidget {
           NavigationCard(
             title: 'Ajude-nos a melhorar o app',
             icon: Icons.thumb_up_alt,
-            gradientColors: const [Color(0xFFF9A825), Color(0xFFFFEE58)],
+            textColor: Colors.black,
+            gradientColors: const [Color(0xFFFFF59D), Color(0xFFFFCC80)],
             gradientStops: const [0.0, 1.0],
             gradientBegin: const AlignmentDirectional(1.0, 1.0),
             gradientEnd: const AlignmentDirectional(-1.0, -1.0),

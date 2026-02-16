@@ -253,7 +253,7 @@ class _MensagemDetailsPageState extends State<MensagemDetailsPage> with TickerPr
                                             color: FlutterFlowTheme.of(context).primary,
                                             textStyle: FlutterFlowTheme.of(context).titleSmall.override(
                                                   fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
-                                                  color: FlutterFlowTheme.of(context).primaryText,
+                                                  color: Colors.white,
                                                   letterSpacing: 0.0,
                                                   useGoogleFonts: !FlutterFlowTheme.of(context).titleSmallIsCustom,
                                                 ),

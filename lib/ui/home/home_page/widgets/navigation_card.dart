@@ -15,6 +15,8 @@ class NavigationCard extends StatelessWidget {
   final VoidCallback onTap;
   final AnimationInfo? animation;
 
+  final Color? textColor;
+
   const NavigationCard({
     super.key,
     required this.title,
@@ -25,6 +27,7 @@ class NavigationCard extends StatelessWidget {
     required this.gradientEnd,
     required this.onTap,
     this.animation,
+    this.textColor,
   });
 
   @override
@@ -92,7 +95,7 @@ class NavigationCard extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: FlutterFlowTheme.of(context).bodyLarge.override(
                           fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
-                          color: FlutterFlowTheme.of(context).primaryText,
+                          color: textColor ?? FlutterFlowTheme.of(context).primaryText,
                           letterSpacing: 0.0,
                           fontWeight: FontWeight.w500,
                           useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,

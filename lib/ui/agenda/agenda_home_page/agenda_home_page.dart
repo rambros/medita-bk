@@ -208,7 +208,7 @@ class _AgendaHomePageState extends State<AgendaHomePage> with TickerProviderStat
                             height: 100.0,
                             decoration: const BoxDecoration(
                               gradient: LinearGradient(
-                                colors: [Color(0xFF42A5F5), Color(0xFF90CAF9)],
+                                colors: [Color(0xFF81D4FA), Color(0xFFA5D6A7)],
                                 stops: [0.0, 1.0],
                                 begin: AlignmentDirectional(-1.0, -1.0),
                                 end: AlignmentDirectional(1.0, 1.0),
@@ -234,15 +234,19 @@ class _AgendaHomePageState extends State<AgendaHomePage> with TickerProviderStat
                                       size: 24.0,
                                     ),
                                   ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation1']!),
-                                  Text(
-                                    'Ver agenda mensal online',
-                                    textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context).bodyLarge.override(
-                                          fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
-                                        ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      'Ver agenda mensal online',
+                                      textAlign: TextAlign.center,
+                                      style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                            fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
+                                            color: Colors.black,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w500,
+                                            useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
+                                          ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -275,7 +279,7 @@ class _AgendaHomePageState extends State<AgendaHomePage> with TickerProviderStat
                             height: 100.0,
                             decoration: const BoxDecoration(
                               gradient: LinearGradient(
-                                colors: [Color(0xFFE53935), Color(0xFFEF9A9A)],
+                                colors: [Color(0xFFEF9A9A), Color(0xFFF48FB1)],
                                 stops: [0.0, 1.0],
                                 begin: AlignmentDirectional(1.0, -1.0),
                                 end: AlignmentDirectional(-1.0, 1.0),
@@ -301,15 +305,19 @@ class _AgendaHomePageState extends State<AgendaHomePage> with TickerProviderStat
                                       size: 24.0,
                                     ),
                                   ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation2']!),
-                                  Text(
-                                    'Lista de Cursos e Workshops',
-                                    textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context).bodyLarge.override(
-                                          fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
-                                        ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      'Lista de Cursos e Workshops',
+                                      textAlign: TextAlign.center,
+                                      style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                            fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
+                                            color: Colors.black,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w500,
+                                            useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
+                                          ),
+                                    ),
                                   ),
                                 ],
                               ),

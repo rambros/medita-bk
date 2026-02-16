@@ -207,10 +207,10 @@ class _MensagensHomePageState extends State<MensagensHomePage> with TickerProvid
                             height: 100.0,
                             decoration: const BoxDecoration(
                               gradient: LinearGradient(
-                                colors: [Color(0xFF42A5F5), Color(0xFFFFCC80)],
+                                colors: [Color(0xFFFFCC80), Color(0xFFF8BBD0)],
                                 stops: [0.0, 1.0],
-                                begin: AlignmentDirectional(-1.0, -1.0),
-                                end: AlignmentDirectional(1.0, 1.0),
+                                begin: AlignmentDirectional(-1.0, 1.0),
+                                end: AlignmentDirectional(1.0, -1.0),
                               ),
                             ),
                             child: Padding(
@@ -233,15 +233,19 @@ class _MensagensHomePageState extends State<MensagensHomePage> with TickerProvid
                                       size: 24.0,
                                     ),
                                   ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation1']!),
-                                  Text(
-                                    'Mensagem para o dia',
-                                    textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context).bodyLarge.override(
-                                          fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
-                                        ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      'Mensagem para o dia',
+                                      textAlign: TextAlign.center,
+                                      style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                            fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
+                                            color: Colors.black,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w500,
+                                            useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
+                                          ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -277,10 +281,10 @@ class _MensagensHomePageState extends State<MensagensHomePage> with TickerProvid
                             height: 100.0,
                             decoration: const BoxDecoration(
                               gradient: LinearGradient(
-                                colors: [Color(0xFFE53935), Color(0xFFEF9A9A)],
+                                colors: [Color(0xFFB39DDB), Color(0xFF80CBC4)],
                                 stops: [0.0, 1.0],
-                                begin: AlignmentDirectional(1.0, -1.0),
-                                end: AlignmentDirectional(-1.0, 1.0),
+                                begin: AlignmentDirectional(-1.0, 1.0),
+                                end: AlignmentDirectional(1.0, -1.0),
                               ),
                             ),
                             child: Padding(
@@ -303,15 +307,19 @@ class _MensagensHomePageState extends State<MensagensHomePage> with TickerProvid
                                       size: 24.0,
                                     ),
                                   ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation2']!),
-                                  Text(
-                                    'Pesquisar mensagens',
-                                    textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context).bodyLarge.override(
-                                          fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
-                                        ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      'Pesquisar mensagens',
+                                      textAlign: TextAlign.center,
+                                      style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                            fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
+                                            color: Colors.black,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w500,
+                                            useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
+                                          ),
+                                    ),
                                   ),
                                 ],
                               ),

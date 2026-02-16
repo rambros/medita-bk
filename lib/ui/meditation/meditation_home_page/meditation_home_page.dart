@@ -119,7 +119,7 @@ class _MeditationHomePageState extends State<MeditationHomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'O que você quer fazer agora?',
+                      'Meditações para melhorar o seu dia',
                       textAlign: TextAlign.center,
                       style: FlutterFlowTheme.of(context).titleLarge.override(
                             fontFamily: FlutterFlowTheme.of(context).titleLargeFamily,
@@ -165,7 +165,7 @@ class _MeditationHomePageState extends State<MeditationHomePage> {
                             height: 100.0,
                             decoration: const BoxDecoration(
                               gradient: LinearGradient(
-                                colors: [Color(0xFFEC407A), Color(0xFFF48FB1)],
+                                colors: [Color(0xFF81D4FA), Color(0xFFA5D6A7)],
                                 stops: [0.0, 1.0],
                                 begin: AlignmentDirectional(-1.0, -1.0),
                                 end: AlignmentDirectional(1.0, 1.0),
@@ -191,15 +191,19 @@ class _MeditationHomePageState extends State<MeditationHomePage> {
                                       size: 24.0,
                                     ),
                                   ),
-                                  Text(
-                                    'Escolher uma meditação',
-                                    textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context).bodyLarge.override(
-                                          fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
-                                        ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      'Escolher uma meditação',
+                                      textAlign: TextAlign.center,
+                                      style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                            fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
+                                            color: Colors.black,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w500,
+                                            useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
+                                          ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -219,7 +223,7 @@ class _MeditationHomePageState extends State<MeditationHomePage> {
                           height: 100.0,
                           decoration: const BoxDecoration(
                             gradient: LinearGradient(
-                              colors: [Colors.red, Color(0xFFEF9A9A)],
+                              colors: [Color(0xFFEF9A9A), Color(0xFFF48FB1)],
                               stops: [0.0, 1.0],
                               begin: AlignmentDirectional(1.0, -1.0),
                               end: AlignmentDirectional(-1.0, 1.0),
@@ -253,15 +257,19 @@ class _MeditationHomePageState extends State<MeditationHomePage> {
                                       size: 28.0,
                                     ),
                                   ),
-                                  Text(
-                                    'Playlist de meditação',
-                                    textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context).bodyLarge.override(
-                                          fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
-                                        ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      'Playlist de meditação',
+                                      textAlign: TextAlign.center,
+                                      style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                            fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
+                                            color: Colors.black,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w500,
+                                            useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
+                                          ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -290,7 +298,7 @@ class _MeditationHomePageState extends State<MeditationHomePage> {
                             height: 100.0,
                             decoration: const BoxDecoration(
                               gradient: LinearGradient(
-                                colors: [Color(0xFFFFA726), Color(0xFFFFCC80)],
+                                colors: [Color(0xFFFFF59D), Color(0xFFFFCC80)],
                                 stops: [0.0, 1.0],
                                 begin: AlignmentDirectional(-1.0, 1.0),
                                 end: AlignmentDirectional(1.0, -1.0),
@@ -316,15 +324,19 @@ class _MeditationHomePageState extends State<MeditationHomePage> {
                                       size: 20.0,
                                     ),
                                   ),
-                                  Text(
-                                    'Meditação com vídeo',
-                                    textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context).bodyLarge.override(
-                                          fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
-                                        ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      'Meditação com vídeo',
+                                      textAlign: TextAlign.center,
+                                      style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                            fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
+                                            color: Colors.black,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w500,
+                                            useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
+                                          ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -352,7 +364,7 @@ class _MeditationHomePageState extends State<MeditationHomePage> {
                             height: 100.0,
                             decoration: const BoxDecoration(
                               gradient: LinearGradient(
-                                colors: [Color(0xFFF9A825), Color(0xFFFFEE58)],
+                                colors: [Color(0xFFFFE082), Color(0xFFFFF59D)],
                                 stops: [0.0, 1.0],
                                 begin: AlignmentDirectional(1.0, 1.0),
                                 end: AlignmentDirectional(-1.0, -1.0),
@@ -378,15 +390,19 @@ class _MeditationHomePageState extends State<MeditationHomePage> {
                                       size: 24.0,
                                     ),
                                   ),
-                                  Text(
-                                    'Estatísticas de meditação',
-                                    textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context).bodyLarge.override(
-                                          fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
-                                        ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      'Estatísticas de meditação',
+                                      textAlign: TextAlign.center,
+                                      style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                            fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
+                                            color: Colors.black,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w500,
+                                            useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
+                                          ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -417,7 +433,7 @@ class _MeditationHomePageState extends State<MeditationHomePage> {
                             height: 100.0,
                             decoration: const BoxDecoration(
                               gradient: LinearGradient(
-                                colors: [Color(0xFF66BB6A), Color(0xFFFFEE58)],
+                                colors: [Color(0xFFB39DDB), Color(0xFF80CBC4)],
                                 stops: [0.0, 1.0],
                                 begin: AlignmentDirectional(-1.0, 1.0),
                                 end: AlignmentDirectional(1.0, -1.0),
@@ -443,15 +459,19 @@ class _MeditationHomePageState extends State<MeditationHomePage> {
                                       size: 24.0,
                                     ),
                                   ),
-                                  Text(
-                                    'Aprenda a Meditar',
-                                    textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context).bodyLarge.override(
-                                          fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
-                                        ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      'Aprenda a Meditar',
+                                      textAlign: TextAlign.center,
+                                      style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                            fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
+                                            color: Colors.black,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w500,
+                                            useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
+                                          ),
+                                    ),
                                   ),
                                 ],
                               ),
