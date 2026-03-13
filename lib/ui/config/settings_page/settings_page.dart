@@ -23,6 +23,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
+    debugPrint('⚙️ SettingsPage: initState - ARQUIVO ATUALIZADO COM TRAFFIC CONTROL');
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'SettingsPage'});
     // Initialize ViewModel
     SchedulerBinding.instance.addPostFrameCallback((_) {

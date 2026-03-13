@@ -82,7 +82,7 @@ class NavigationGrid extends StatelessWidget {
 
           // 3. EAD/Cursos card
           NavigationCard(
-            title: 'Aprenda a meditar',
+            title: 'Curso online de meditação',
             icon: Icons.school,
             textColor: Colors.black,
             gradientColors: const [Color(0xFFB39DDB), Color(0xFF80CBC4)],

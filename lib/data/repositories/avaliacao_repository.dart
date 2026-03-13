@@ -81,11 +81,27 @@ class AvaliacaoRepository {
       // Salvar resposta na collection avaliacoes_cursos
       await _firestore.collection('avaliacoes_cursos').doc(resposta.inscricaoId).set(resposta.toMap());
 
-      // Atualizar flag na inscrição
-      await _firestore.collection('inscricoes_cursos').doc(resposta.inscricaoId).update({
+      final updates = <String, dynamic>{
         'avaliacaoPreenchida': true,
         'dataAvaliacaoPreenchida': FieldValue.serverTimestamp(),
-      });
+      };
+
+      // 1. Verificar se a inscrição já está apta a ser concluída (100% concluído)
+      final docInscricao = await _firestore.collection('inscricoes_cursos').doc(resposta.inscricaoId).get();
+      if (docInscricao.exists) {
+        final dataInscricao = docInscricao.data()!;
+        final progresso = dataInscricao['progresso'] as Map<String, dynamic>?;
+        final percentual = (progresso?['percentualConcluido'] as num?)?.toDouble() ?? 0.0;
+        final statusAtual = dataInscricao['status'] as String?;
+
+        if (percentual >= 100.0 && statusAtual != 'concluido') {
+          updates['status'] = 'concluido';
+          updates['dataConclusao'] = FieldValue.serverTimestamp();
+        }
+      }
+
+      // Atualizar flag na inscrição (e mudar o status se bateu os critérios acima)
+      await _firestore.collection('inscricoes_cursos').doc(resposta.inscricaoId).update(updates);
 
       if (kDebugMode) {
         print('Resposta de avaliação salva com sucesso: ${resposta.inscricaoId}');

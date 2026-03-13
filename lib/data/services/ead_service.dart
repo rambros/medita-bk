@@ -174,7 +174,12 @@ class EadService {
   }
 
   /// Atualiza status da inscrição
-  Future<void> atualizarStatusInscricao(String inscricaoId, StatusInscricao status, {DateTime? dataConclusao}) async {
+  Future<void> atualizarStatusInscricao(
+    String inscricaoId,
+    StatusInscricao status, {
+    DateTime? dataConclusao,
+    String? usuarioId,
+  }) async {
     final data = <String, dynamic>{'status': status.name};
 
     if (dataConclusao != null) {

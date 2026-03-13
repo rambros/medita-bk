@@ -11,8 +11,12 @@ import 'package:medita_bk/data/services/auth/base_auth_user_provider.dart';
 import 'package:medita_bk/data/services/push_notifications/push_notifications_handler.dart' show PushNotificationsHandler;
 import 'package:medita_bk/ui/pages.dart';
 import 'package:medita_bk/routing/ead_routes.dart';
+import 'package:medita_bk/routing/tc_routes.dart';
 import 'package:medita_bk/ui/ead/avaliacao_form_page/avaliacao_form_page.dart';
 import 'package:medita_bk/main.dart';
+import 'package:medita_bk/ui/traffic_control/tc_home_page/tc_home_page.dart';
+import 'package:medita_bk/ui/traffic_control/tc_alarm_form_page/tc_alarm_form_page.dart';
+import 'package:medita_bk/ui/traffic_control/tc_music_picker_page/tc_music_picker_page.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
 
@@ -650,6 +654,33 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'notificacoes',
               requireAuth: true,
               builder: (context, params) => const NotificacoesPage(),
+            ),
+            // Traffic Control Module Routes
+            FFRoute(
+              name: TcRoutes.tcHome,
+              path: TcRoutes.tcHomePath,
+              requireAuth: true,
+              builder: (context, params) => const TcHomePage(),
+            ),
+            FFRoute(
+              name: TcRoutes.tcAlarmFormNew,
+              path: TcRoutes.tcAlarmFormNewPath,
+              requireAuth: true,
+              builder: (context, params) => const TcAlarmFormPage(),
+            ),
+            FFRoute(
+              name: TcRoutes.tcAlarmFormEdit,
+              path: TcRoutes.tcAlarmFormEditPath,
+              requireAuth: true,
+              builder: (context, params) => TcAlarmFormPage(
+                alarmId: params.getParam('id', ParamType.String),
+              ),
+            ),
+            FFRoute(
+              name: TcRoutes.tcMusicPicker,
+              path: TcRoutes.tcMusicPickerPath,
+              requireAuth: true,
+              builder: (context, params) => const TcMusicPickerPage(),
             ),
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ),

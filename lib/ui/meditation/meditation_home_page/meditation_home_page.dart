@@ -7,6 +7,7 @@ import 'package:medita_bk/ui/pages.dart';
 import 'package:medita_bk/routing/ead_routes.dart';
 import 'package:medita_bk/core/constants/course_constants.dart';
 import 'package:medita_bk/core/utils/logger.dart';
+import 'package:medita_bk/ui/traffic_control/tc_home_page/tc_home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -462,7 +463,75 @@ class _MeditationHomePageState extends State<MeditationHomePage> {
                                   SizedBox(
                                     width: double.infinity,
                                     child: Text(
-                                      'Aprenda a Meditar',
+                                      'Curso online de meditação',
+                                      textAlign: TextAlign.center,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                            fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
+                                            color: Colors.black,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w500,
+                                            useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
+                                          ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Card(
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        color: const Color(0xFFECCB9E),
+                        elevation: 4.0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            context.pushNamed(TcHomePage.routeName);
+                          },
+                          child: Container(
+                            width: 100.0,
+                            height: 100.0,
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [Color(0xFF9FA8DA), Color(0xFF80DEEA)],
+                                stops: [0.0, 1.0],
+                                begin: AlignmentDirectional(1.0, -1.0),
+                                end: AlignmentDirectional(-1.0, 1.0),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 42.0,
+                                    height: 42.0,
+                                    decoration: BoxDecoration(
+                                      color: FlutterFlowTheme.of(context).info,
+                                      borderRadius: BorderRadius.circular(50.0),
+                                    ),
+                                    child: Icon(
+                                      Icons.timer_outlined,
+                                      color: FlutterFlowTheme.of(context).secondaryText,
+                                      size: 24.0,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      'Lembretes para meditar',
                                       textAlign: TextAlign.center,
                                       style: FlutterFlowTheme.of(context).bodyLarge.override(
                                             fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,

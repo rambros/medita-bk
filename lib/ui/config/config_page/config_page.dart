@@ -380,15 +380,8 @@ class _ConfigPageState extends State<ConfigPage> {
                     hoverColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                     onTap: () async {
-                      context.pushNamed(
-                        AlarmPage.routeName,
-                        extra: <String, dynamic>{
-                          kTransitionInfoKey: const TransitionInfo(
-                            hasTransition: true,
-                            transitionType: PageTransitionType.leftToRight,
-                          ),
-                        },
-                      );
+                      // Traffic Control - Nova página de lembretes
+                      context.pushNamed('TcHomePage');
                     },
                     child: Container(
                       width: double.infinity,
@@ -404,7 +397,7 @@ class _ConfigPageState extends State<ConfigPage> {
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Icon(
-                              Icons.alarm,
+                              Icons.self_improvement,
                               color: FlutterFlowTheme.of(context).primary,
                               size: 24.0,
                             ),
@@ -412,7 +405,7 @@ class _ConfigPageState extends State<ConfigPage> {
                               child: Padding(
                                 padding: const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
                                 child: Text(
-                                  'Lembretes para meditar',
+                                  'Lembretes para Meditar',
                                   style: FlutterFlowTheme.of(context).bodyLarge.override(
                                         fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
                                         letterSpacing: 0.0,

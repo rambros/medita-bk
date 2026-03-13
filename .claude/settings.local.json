@@ -33,7 +33,9 @@
       "Bash(pod repo update)",
       "Bash(pod install:*)",
       "Bash(rm:*)",
-      "Bash(adb:*)"
+      "Bash(adb:*)",
+      "Bash(sudo gem install:*)",
+      "WebFetch(domain:pub.dev)"
     ],
     "deny": [],
     "ask": []

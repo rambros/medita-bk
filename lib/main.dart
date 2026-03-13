@@ -27,6 +27,18 @@ import 'package:medita_bk/data/repositories/index.dart';
 import 'package:medita_bk/ui/view_models.dart';
 import 'package:medita_bk/data/services/auth/firebase_auth/firebase_auth_service.dart';
 
+// Traffic Control
+import 'package:alarm/alarm.dart';
+import 'package:medita_bk/data/services/tc_local_storage_service.dart';
+import 'package:medita_bk/data/services/tc_audio_cache_service.dart';
+import 'package:medita_bk/data/services/tc_alarm_scheduler_service.dart';
+import 'package:medita_bk/data/services/tc_music_api_service.dart';
+import 'package:medita_bk/data/repositories/tc_alarm_repository.dart';
+import 'package:medita_bk/data/repositories/tc_music_repository.dart';
+import 'package:medita_bk/ui/traffic_control/tc_home_page/view_model/tc_home_view_model.dart';
+import 'package:medita_bk/ui/traffic_control/tc_alarm_form_page/view_model/tc_alarm_form_view_model.dart';
+import 'package:medita_bk/ui/traffic_control/tc_music_picker_page/view_model/tc_music_picker_view_model.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -55,6 +67,9 @@ void main() async {
   final appState = AppStateStore(); // Initialize AppStateStore
   await appState.initializePersistedState(); // Initialize SharedPreferences
   await initAudioPlayerController();
+
+  // Initialize Traffic Control Alarm
+  await Alarm.init();
 
   if (!kIsWeb) {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
@@ -235,6 +250,73 @@ void main() async {
               authRepository: authRepo,
               userRepository: userRepo,
             ),
+      ),
+
+      // Traffic Control Module - Services
+      Provider<TcLocalStorageService>(
+        create: (_) => TcLocalStorageService()..init(),
+      ),
+      Provider<TcAudioCacheService>(
+        create: (_) => TcAudioCacheService(),
+      ),
+      Provider<TcAlarmSchedulerService>(
+        create: (_) => TcAlarmSchedulerService()..init(),
+      ),
+      Provider<TcMusicApiService>(
+        create: (_) => TcMusicApiService(),
+      ),
+
+      // Traffic Control Module - Repositories
+      ChangeNotifierProxyProvider3<TcLocalStorageService, TcAlarmSchedulerService,
+          TcAudioCacheService, TcAlarmRepository>(
+        create: (context) => TcAlarmRepository(
+          localStorage: context.read<TcLocalStorageService>(),
+          scheduler: context.read<TcAlarmSchedulerService>(),
+          audioCache: context.read<TcAudioCacheService>(),
+        ),
+        update: (context, localStorage, scheduler, audioCache, previous) =>
+            previous ??
+            TcAlarmRepository(
+              localStorage: localStorage,
+              scheduler: scheduler,
+              audioCache: audioCache,
+            ),
+      ),
+      ChangeNotifierProxyProvider<TcMusicApiService, TcMusicRepository>(
+        create: (context) => TcMusicRepository(
+          apiService: context.read<TcMusicApiService>(),
+        ),
+        update: (context, apiService, previous) =>
+            previous ?? TcMusicRepository(apiService: apiService),
+      ),
+
+      // Traffic Control Module - ViewModels
+      ChangeNotifierProxyProvider<TcAlarmRepository, TcHomeViewModel>(
+        create: (context) => TcHomeViewModel(
+          repository: context.read<TcAlarmRepository>(),
+        ),
+        update: (context, repository, previous) =>
+            previous ?? TcHomeViewModel(repository: repository),
+      ),
+      ChangeNotifierProxyProvider2<TcAlarmRepository, TcMusicRepository,
+          TcAlarmFormViewModel>(
+        create: (context) => TcAlarmFormViewModel(
+          alarmRepository: context.read<TcAlarmRepository>(),
+          musicRepository: context.read<TcMusicRepository>(),
+        ),
+        update: (context, alarmRepo, musicRepo, previous) =>
+            previous ??
+            TcAlarmFormViewModel(
+              alarmRepository: alarmRepo,
+              musicRepository: musicRepo,
+            ),
+      ),
+      ChangeNotifierProxyProvider<TcMusicRepository, TcMusicPickerViewModel>(
+        create: (context) => TcMusicPickerViewModel(
+          repository: context.read<TcMusicRepository>(),
+        ),
+        update: (context, repository, previous) =>
+            previous ?? TcMusicPickerViewModel(repository: repository),
       ),
     ],
     child: const MyApp(),

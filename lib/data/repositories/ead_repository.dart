@@ -262,7 +262,12 @@ class EadRepository {
         debugPrint('✅ Requisitos atendidos. Concluindo curso...');
         final dataConclusao = DateTime.now();
 
-        await _service.atualizarStatusInscricao(inscricaoId, StatusInscricao.concluido, dataConclusao: dataConclusao);
+        await _service.atualizarStatusInscricao(
+          inscricaoId,
+          StatusInscricao.concluido,
+          dataConclusao: dataConclusao,
+          usuarioId: usuarioId,
+        );
         debugPrint('✅ Status atualizado no Firebase');
 
         // Atualiza modelo local com progresso E status concluído

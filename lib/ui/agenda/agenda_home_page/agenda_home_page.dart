@@ -8,6 +8,7 @@ import 'package:medita_bk/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AgendaHomePage extends StatefulWidget {
   const AgendaHomePage({super.key});
@@ -48,6 +49,18 @@ class _AgendaHomePageState extends State<AgendaHomePage> with TickerProviderStat
         ],
       ),
       'containerOnPageLoadAnimation2': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          MoveEffect(
+            curve: Curves.easeInOut,
+            delay: 0.0.ms,
+            duration: 800.0.ms,
+            begin: const Offset(18.0, 18.0),
+            end: const Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+      'containerOnPageLoadAnimation3': AnimationInfo(
         trigger: AnimationTrigger.onPageLoad,
         effectsBuilder: () => [
           MoveEffect(
@@ -310,6 +323,77 @@ class _AgendaHomePageState extends State<AgendaHomePage> with TickerProviderStat
                                     child: Text(
                                       'Lista de Cursos e Workshops',
                                       textAlign: TextAlign.center,
+                                      style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                            fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
+                                            color: Colors.black,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w500,
+                                            useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
+                                          ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Card(
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        color: const Color(0xFFECCB9E),
+                        elevation: 4.0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            final Uri url = Uri.parse('https://brahmakumaris.org.br/enderecos-e-contatos/');
+                            if (!await launchUrl(url)) {
+                              throw Exception('Não foi possível abrir: $url');
+                            }
+                          },
+                          child: Container(
+                            width: 100.0,
+                            height: 100.0,
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [Color(0xFFFFF59D), Color(0xFFFFCC80)],
+                                stops: [0.0, 1.0],
+                                begin: AlignmentDirectional(-1.0, 1.0),
+                                end: AlignmentDirectional(1.0, -1.0),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 42.0,
+                                    height: 42.0,
+                                    decoration: BoxDecoration(
+                                      color: FlutterFlowTheme.of(context).info,
+                                      borderRadius: BorderRadius.circular(50.0),
+                                    ),
+                                    child: Icon(
+                                      Icons.location_on,
+                                      color: FlutterFlowTheme.of(context).secondaryText,
+                                      size: 24.0,
+                                    ),
+                                  ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation3']!),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      'Endereços e Contatos',
+                                      textAlign: TextAlign.center,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                       style: FlutterFlowTheme.of(context).bodyLarge.override(
                                             fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
                                             color: Colors.black,
