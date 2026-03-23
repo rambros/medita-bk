@@ -72,6 +72,18 @@ class _AgendaHomePageState extends State<AgendaHomePage> with TickerProviderStat
           ),
         ],
       ),
+      'containerOnPageLoadAnimation4': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          MoveEffect(
+            curve: Curves.easeInOut,
+            delay: 0.0.ms,
+            duration: 800.0.ms,
+            begin: const Offset(18.0, 18.0),
+            end: const Offset(0.0, 0.0),
+          ),
+        ],
+      ),
     });
   }
 
@@ -322,6 +334,77 @@ class _AgendaHomePageState extends State<AgendaHomePage> with TickerProviderStat
                                     width: double.infinity,
                                     child: Text(
                                       'Lista de Cursos e Workshops',
+                                      textAlign: TextAlign.center,
+                                      style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                            fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,
+                                            color: Colors.black,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w500,
+                                            useGoogleFonts: !FlutterFlowTheme.of(context).bodyLargeIsCustom,
+                                          ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Card(
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        color: const Color(0xFFECCB9E),
+                        elevation: 4.0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ProgramacaoCidadePage(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            width: 100.0,
+                            height: 100.0,
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [Color(0xFFCE93D8), Color(0xFFE1BEE7)],
+                                stops: [0.0, 1.0],
+                                begin: AlignmentDirectional(1.0, -1.0),
+                                end: AlignmentDirectional(-1.0, 1.0),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 42.0,
+                                    height: 42.0,
+                                    decoration: BoxDecoration(
+                                      color: FlutterFlowTheme.of(context).info,
+                                      borderRadius: BorderRadius.circular(50.0),
+                                    ),
+                                    child: Icon(
+                                      Icons.location_city,
+                                      color: FlutterFlowTheme.of(context).secondaryText,
+                                      size: 24.0,
+                                    ),
+                                  ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation3']!),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      'Programação por Cidade',
                                       textAlign: TextAlign.center,
                                       style: FlutterFlowTheme.of(context).bodyLarge.override(
                                             fontFamily: FlutterFlowTheme.of(context).bodyLargeFamily,

@@ -44,7 +44,7 @@ class TcHomeViewModel extends ChangeNotifier {
   }
 
   /// Lista de alarmes carregados do repository
-  List<TcAlarmEntity> get alarms => _repository.alarms;
+  List<TcAlarmEntity> get alarms => _repository.alarmsSortedByTime;
 
   /// Estado de carregamento
   bool get isLoading => _isInitializing || _repository.isLoading;

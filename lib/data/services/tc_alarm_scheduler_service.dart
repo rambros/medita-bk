@@ -11,6 +11,15 @@ class TcAlarmSchedulerService {
     if (_isInitialized) return;
 
     await Alarm.init();
+
+    // Configura a notificação de aviso de encerramento do app em português
+    if (Platform.isIOS || Platform.isAndroid) {
+      await Alarm.setWarningNotificationOnKill(
+        'Seus alarmes podem não tocar',
+        'Você encerrou o aplicativo. Por favor, reabra para que seus alarmes sejam reagendados.',
+      );
+    }
+
     _isInitialized = true;
 
     print('TcAlarmScheduler: Serviço inicializado');
@@ -36,6 +45,13 @@ class TcAlarmSchedulerService {
       // Se o horário já passou hoje, agenda para amanhã
       if (scheduledTime.isBefore(now)) {
         scheduledTime = scheduledTime.add(const Duration(days: 1));
+      }
+
+      // Se dias específicos foram marcados, pular até bater um dos dias da semana permitidos
+      if (alarm.daysOfWeek.isNotEmpty) {
+        while (!alarm.daysOfWeek.contains(scheduledTime.weekday)) {
+          scheduledTime = scheduledTime.add(const Duration(days: 1));
+        }
       }
 
       print('TcAlarmScheduler: Agendando alarme com áudio: $audioPath');

@@ -4,11 +4,11 @@ import 'package:medita_bk/data/services/api_manager.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
 
 class AgendaRepository {
-  Future<List<EventModelStruct>> getEvents() async {
+  Future<List<EventModelStruct>> getEvents({int orgId = 258}) async {
     final response = await ApiManager.instance.makeApiCall(
       callName: 'getEventListById',
       apiUrl:
-          'http://events.brahmakumaris.org/bkregistration/organisationEventReportController.do?orgEventTemplate=jsonEventExport.ftl&orgId=258&fromIndex=0&toIndex=100&mimeType=text/plain',
+          'http://events.brahmakumaris.org/bkregistration/organisationEventReportController.do?orgEventTemplate=jsonEventExport.ftl&orgId=$orgId&fromIndex=0&toIndex=100&mimeType=text/plain',
       callType: ApiCallType.GET,
       headers: {},
       params: {},

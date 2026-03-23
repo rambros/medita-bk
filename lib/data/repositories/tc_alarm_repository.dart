@@ -357,11 +357,19 @@ class TcAlarmRepository extends ChangeNotifier {
       // Cancelar timer anterior se existir
       _activeTimers[alarmIdHash]?.cancel();
 
+      final validAlarm = matchingAlarm;
+
       // Criar novo timer para parar o alarme automaticamente
       _activeTimers[alarmIdHash] = Timer(Duration(seconds: durationSec), () async {
-        debugPrint('TcAlarmRepository: Timer finalizado - parando alarme ${matchingAlarm!.title}');
+        debugPrint('TcAlarmRepository: Timer finalizado - parando alarme ${validAlarm.title}');
         await _scheduler.stopRinging(alarmId); // Passa o ID original (string)
         _activeTimers.remove(alarmIdHash);
+
+        // REAGENDAR PARA O PRÓXIMO DIA (pois alarms devem repetir)
+        if (validAlarm.isEnabled) {
+           debugPrint('TcAlarmRepository: Reagendando alarme para amanhã: ${validAlarm.title}');
+           await _rescheduleAlarm(validAlarm);
+        }
       });
 
       debugPrint('TcAlarmRepository: Timer de ${durationSec}s iniciado para alarme $alarmIdHash');

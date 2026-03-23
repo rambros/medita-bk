@@ -28,6 +28,7 @@ export 'mensagens/mensagens_home_page/mensagens_home_page.dart' show MensagensHo
 export 'agenda/agenda_list_page/agenda_list_page.dart' show AgendaListPage;
 export 'agenda/event_details_page/event_details_page.dart' show EventDetailsPage;
 export 'agenda/event_list_page/event_list_page.dart' show EventListPage;
+export 'agenda/programacao_cidade_page/programacao_cidade_page.dart' show ProgramacaoCidadePage;
 export 'mensagens/mensagem_details_page/mensagem_details_page.dart' show MensagemDetailsPage;
 export 'mensagens/mensagem_show_page/mensagem_show_page.dart' show MensagemShowPage;
 export 'meditation/meditation_video_list_page/meditation_video_list_page.dart' show MeditationVideoListPage;

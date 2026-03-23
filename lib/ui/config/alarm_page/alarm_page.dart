@@ -1,3 +1,9 @@
+// =========================================================================
+// [DEPRECATED] - NÃO UTILIZAR
+// ESTE É O MÓDULO ANTIGO DE ALARMES.
+// A NOVA TELA DE "Lembretes para Meditar" FICA NO TRAFFIC_CONTROL:
+// lib/ui/traffic_control/tc_home_page/tc_home_page.dart
+// =========================================================================
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_icon_button.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';

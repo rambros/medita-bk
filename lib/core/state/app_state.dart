@@ -44,6 +44,7 @@ class AppStateStore extends ChangeNotifier {
               .withoutNulls
               .toList() ??
           _alarms;
+      _alarms.sort((a, b) => a.showTime.compareTo(b.showTime));
     });
     _safeInit(() {
       _dataMensagemHoje = prefs.getString('ff_dataMensagemHoje') ?? _dataMensagemHoje;
@@ -125,11 +126,13 @@ class AppStateStore extends ChangeNotifier {
   List<AlarmTimeStruct> get alarms => _alarms;
   set alarms(List<AlarmTimeStruct> value) {
     _alarms = value;
+    _alarms.sort((a, b) => a.showTime.compareTo(b.showTime));
     prefs.setStringList('ff_alarms', value.map((x) => x.serialize()).toList());
   }
 
   void addToAlarms(AlarmTimeStruct value) {
     alarms.add(value);
+    _alarms.sort((a, b) => a.showTime.compareTo(b.showTime));
     prefs.setStringList('ff_alarms', _alarms.map((x) => x.serialize()).toList());
   }
 
@@ -148,11 +151,13 @@ class AppStateStore extends ChangeNotifier {
     AlarmTimeStruct Function(AlarmTimeStruct) updateFn,
   ) {
     alarms[index] = updateFn(_alarms[index]);
+    _alarms.sort((a, b) => a.showTime.compareTo(b.showTime));
     prefs.setStringList('ff_alarms', _alarms.map((x) => x.serialize()).toList());
   }
 
   void insertAtIndexInAlarms(int index, AlarmTimeStruct value) {
     alarms.insert(index, value);
+    _alarms.sort((a, b) => a.showTime.compareTo(b.showTime));
     prefs.setStringList('ff_alarms', _alarms.map((x) => x.serialize()).toList());
   }
 

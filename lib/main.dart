@@ -128,6 +128,10 @@ void main() async {
         create: (context) => AgendaListViewModel(repository: context.read<AgendaRepository>()),
         update: (context, repo, viewModel) => viewModel ?? AgendaListViewModel(repository: repo),
       ),
+      ChangeNotifierProxyProvider<AgendaRepository, ProgramacaoCidadeViewModel>(
+        create: (context) => ProgramacaoCidadeViewModel(repository: context.read<AgendaRepository>()),
+        update: (context, repo, viewModel) => viewModel ?? ProgramacaoCidadeViewModel(repository: repo),
+      ),
       ChangeNotifierProxyProvider<AgendaRepository, EventListViewModel>(
         create: (context) => EventListViewModel(repository: context.read<AgendaRepository>()),
         update: (context, repo, viewModel) => viewModel ?? EventListViewModel(repository: repo),

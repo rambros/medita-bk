@@ -1,6 +1,7 @@
 export 'home/home_page/view_model/home_view_model.dart';
 export 'agenda/agenda_home_page/view_model/agenda_home_view_model.dart';
 export 'agenda/agenda_list_page/view_model/agenda_list_view_model.dart';
+export 'agenda/programacao_cidade_page/view_model/programacao_cidade_view_model.dart';
 export 'agenda/event_list_page/view_model/event_list_view_model.dart';
 export 'agenda/event_details_page/view_model/event_details_view_model.dart';
 export 'mensagens/mensagem_details_page/view_model/mensagem_details_view_model.dart';
