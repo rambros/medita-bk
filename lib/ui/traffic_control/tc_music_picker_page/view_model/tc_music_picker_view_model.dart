@@ -64,6 +64,12 @@ class TcMusicPickerViewModel extends ChangeNotifier {
   TcMusicPickerViewModel({required TcMusicRepository repository})
       : _repository = repository {
     _initAudioPlayer();
+    // Escuta mudanças do repository (ex: quando músicas terminam de carregar)
+    _repository.addListener(_onRepositoryChanged);
+  }
+
+  void _onRepositoryChanged() {
+    notifyListeners();
   }
 
   /// Inicializa o audio player
@@ -193,6 +199,7 @@ class TcMusicPickerViewModel extends ChangeNotifier {
 
   @override
   void dispose() {
+    _repository.removeListener(_onRepositoryChanged);
     _previewPlayer.dispose();
     debugPrint('TcMusicPickerVM: Disposed');
     super.dispose();

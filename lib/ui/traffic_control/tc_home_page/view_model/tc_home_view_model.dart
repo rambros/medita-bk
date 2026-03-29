@@ -59,6 +59,14 @@ class TcHomeViewModel extends ChangeNotifier {
   bool get globalToggle =>
       alarms.isNotEmpty && alarms.every((a) => a.isEnabled);
 
+  /// Verifica se algum alarme está tocando
+  bool get isRinging => _repository.isRinging;
+
+  /// Para o toque de um alarme manualmente
+  Future<void> stopRinging() async {
+    await _repository.stopRingingManually();
+  }
+
   /// Alterna o estado de um alarme específico (ativo/inativo)
   Future<void> toggleAlarm(String id, bool enabled) async {
     try {
@@ -115,6 +123,29 @@ class TcHomeViewModel extends ChangeNotifier {
   void initialize() {
     debugPrint('TcHomeVM: Inicializado');
     // Os alarmes já são carregados automaticamente no repository
+  }
+
+  /// Debug: imprime informações detalhadas dos alarmes
+  Future<void> debugPrintAlarms() async {
+    debugPrint('\n========================================');
+    debugPrint('DEBUG ALARMES - ${DateTime.now()}');
+    debugPrint('========================================');
+
+    // 1. Alarmes salvos no repository
+    debugPrint('\n1. ALARMES SALVOS (${alarms.length}):');
+    for (final alarm in alarms) {
+      debugPrint('  - ${alarm.formattedTime} | ${alarm.title}');
+      debugPrint('    Configurado: hour=${alarm.hour}, minute=${alarm.minute}');
+      debugPrint('    Ativo: ${alarm.isEnabled}');
+      debugPrint('    ID: ${alarm.id}');
+      debugPrint('    ID.hashCode: ${alarm.id.hashCode}');
+      debugPrint('    Dias: ${alarm.daysDescription}');
+    }
+
+    // 2. Alarmes agendados no sistema
+    await _repository.debugPrintScheduledAlarms();
+
+    debugPrint('========================================\n');
   }
 
   @override

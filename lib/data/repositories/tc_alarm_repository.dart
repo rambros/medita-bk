@@ -17,10 +17,11 @@ class TcAlarmRepository extends ChangeNotifier {
   List<TcAlarmEntity> _alarms = [];
   bool _isLoading = false;
   String? _error;
+  bool _isRinging = false;
+  String? _ringingAlarmId;
 
-  // Auto-stop: Listener e timers para parar alarmes automaticamente
+  // Listener do ringStream para detectar quando alarmes tocam
   StreamSubscription? _ringStreamSubscription;
-  final Map<int, Timer> _activeTimers = {};
 
   // Getters públicos
   List<TcAlarmEntity> get alarms => List.unmodifiable(_alarms);
@@ -29,6 +30,8 @@ class TcAlarmRepository extends ChangeNotifier {
   bool get hasAlarms => _alarms.isNotEmpty;
   int get alarmsCount => _alarms.length;
   int get activeAlarmsCount => _alarms.where((a) => a.isEnabled).length;
+  bool get isRinging => _isRinging;
+  String? get ringingAlarmId => _ringingAlarmId;
 
   TcAlarmRepository({
     required TcLocalStorageService localStorage,
@@ -263,6 +266,11 @@ class TcAlarmRepository extends ChangeNotifier {
   /// Reagenda um alarme (cancela o anterior e cria um novo)
   Future<void> _rescheduleAlarm(TcAlarmEntity alarm) async {
     try {
+      debugPrint('TcAlarmRepository: ===== REAGENDAMENTO =====');
+      debugPrint('TcAlarmRepository: Alarme: ${alarm.title}');
+      debugPrint('TcAlarmRepository: Horário configurado: ${alarm.formattedTime}');
+      debugPrint('TcAlarmRepository: DateTime.now() no momento do reagendamento: ${DateTime.now()}');
+
       // Garantir que o áudio está em cache
       final audioPath = await _audioCache.ensureCached(alarm.musicUrl);
 
@@ -271,6 +279,8 @@ class TcAlarmRepository extends ChangeNotifier {
 
       // Agendar novo alarme
       await _scheduler.scheduleAlarm(alarm, audioPath);
+
+      debugPrint('TcAlarmRepository: ============================');
     } catch (e) {
       debugPrint('TcAlarmRepository: Erro ao reagendar alarme ${alarm.id}: $e');
       rethrow;
@@ -319,6 +329,12 @@ class TcAlarmRepository extends ChangeNotifier {
     }
   }
 
+  /// Debug: imprime alarmes agendados no scheduler
+  Future<void> debugPrintScheduledAlarms() async {
+    debugPrint('\n2. ALARMES AGENDADOS NO SISTEMA:');
+    await _scheduler.debugPrintScheduledAlarms();
+  }
+
   // ==================== AUTO-STOP: RINGSTREAM + TIMER ====================
 
   /// Inicia o listener do ringStream para detectar quando alarmes tocam
@@ -329,14 +345,17 @@ class TcAlarmRepository extends ChangeNotifier {
     debugPrint('TcAlarmRepository: Listener de ringStream iniciado');
   }
 
-  /// Quando um alarme toca, inicia um timer para pará-lo automaticamente
+  /// Quando um alarme toca, atualiza UI e agenda reagendamento
+  ///
+  /// O alarm package já gerencia:
+  /// - Parar automaticamente quando áudio termina (loopAudio: false)
+  /// - Remover notificação (iOS: keepNotificationAfterAlarmEnds, Android: Alarm.stop())
   void _handleAlarmRinging(dynamic alarmSettings) {
     try {
       // Extrair o ID do alarme (hash do id original)
       final alarmIdHash = alarmSettings.id as int;
 
       // Buscar o alarme correspondente pelo ID original
-      // Nota: o alarm package usa hash do ID, então precisamos encontrar pelo contexto
       TcAlarmEntity? matchingAlarm;
       for (final alarm in _alarms) {
         if (alarm.id.hashCode == alarmIdHash) {
@@ -350,31 +369,63 @@ class TcAlarmRepository extends ChangeNotifier {
         return;
       }
 
-      final durationSec = matchingAlarm.musicDurationSec;
-      final alarmId = matchingAlarm.id; // ID original (string)
-      debugPrint('TcAlarmRepository: Alarme ${matchingAlarm.title} tocando - duração: ${durationSec}s');
+      final alarmId = matchingAlarm.id;
+      debugPrint('TcAlarmRepository: Alarme ${matchingAlarm.title} tocando');
 
-      // Cancelar timer anterior se existir
-      _activeTimers[alarmIdHash]?.cancel();
+      // Atualizar UI para mostrar que alarme está tocando
+      _isRinging = true;
+      _ringingAlarmId = alarmId;
+      notifyListeners();
 
-      final validAlarm = matchingAlarm;
+      // Agendar reagendamento após a música terminar
+      // O alarm package já para automaticamente quando áudio termina
+      _scheduleForNextDay(matchingAlarm);
 
-      // Criar novo timer para parar o alarme automaticamente
-      _activeTimers[alarmIdHash] = Timer(Duration(seconds: durationSec), () async {
-        debugPrint('TcAlarmRepository: Timer finalizado - parando alarme ${validAlarm.title}');
-        await _scheduler.stopRinging(alarmId); // Passa o ID original (string)
-        _activeTimers.remove(alarmIdHash);
-
-        // REAGENDAR PARA O PRÓXIMO DIA (pois alarms devem repetir)
-        if (validAlarm.isEnabled) {
-           debugPrint('TcAlarmRepository: Reagendando alarme para amanhã: ${validAlarm.title}');
-           await _rescheduleAlarm(validAlarm);
-        }
-      });
-
-      debugPrint('TcAlarmRepository: Timer de ${durationSec}s iniciado para alarme $alarmIdHash');
     } catch (e) {
       debugPrint('TcAlarmRepository: Erro ao processar alarme tocando: $e');
+    }
+  }
+
+  /// Agenda o alarme para o próximo dia após término
+  Future<void> _scheduleForNextDay(TcAlarmEntity alarm) async {
+    // Aguardar duração da música + 2 segundos de buffer
+    final durationSec = alarm.musicDurationSec + 2;
+    await Future.delayed(Duration(seconds: durationSec));
+
+    // Reagendar para o próximo dia se ainda estiver ativo
+    if (alarm.isEnabled) {
+      debugPrint('TcAlarmRepository: Reagendando alarme para próximo dia: ${alarm.title}');
+      await _rescheduleAlarm(alarm);
+    }
+
+    // Limpar estado de "tocando"
+    if (_ringingAlarmId == alarm.id) {
+      _isRinging = false;
+      _ringingAlarmId = null;
+      notifyListeners();
+    }
+  }
+
+  /// Para o alarme manualmente (ação do usuário)
+  Future<void> stopRingingManually() async {
+    if (_ringingAlarmId != null) {
+      final alarmId = _ringingAlarmId!;
+
+      // Parar som (também remove a notificação)
+      await _scheduler.stopRinging(alarmId);
+      debugPrint('TcAlarmRepository: Alarme $alarmId parado manualmente');
+
+      // Reagendar para o próximo dia
+      final matchingAlarm = getAlarmById(alarmId);
+      if (matchingAlarm != null && matchingAlarm.isEnabled) {
+        debugPrint('TcAlarmRepository: Reagendando alarme após parar manualmente');
+        await _rescheduleAlarm(matchingAlarm);
+      }
+
+      // Atualizar estado
+      _isRinging = false;
+      _ringingAlarmId = null;
+      notifyListeners();
     }
   }
 
@@ -384,12 +435,6 @@ class TcAlarmRepository extends ChangeNotifier {
 
     // Cancelar subscription do ringStream
     _ringStreamSubscription?.cancel();
-
-    // Cancelar todos os timers ativos
-    for (final timer in _activeTimers.values) {
-      timer.cancel();
-    }
-    _activeTimers.clear();
 
     super.dispose();
   }

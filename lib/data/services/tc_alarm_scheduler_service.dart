@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:alarm/alarm.dart';
+import 'package:flutter/services.dart';
 import 'package:medita_bk/domain/models/traffic_control/index.dart';
 
 /// Service para agendar e gerenciar alarmes usando o pacote alarm
@@ -55,7 +56,12 @@ class TcAlarmSchedulerService {
       }
 
       print('TcAlarmScheduler: Agendando alarme com áudio: $audioPath');
-      print('TcAlarmScheduler: Horário agendado: $scheduledTime');
+      print('TcAlarmScheduler: ===== DEBUG AGENDAMENTO =====');
+      print('TcAlarmScheduler: Alarme config - ${alarm.hour}:${alarm.minute}');
+      print('TcAlarmScheduler: DateTime.now() = $now');
+      print('TcAlarmScheduler: scheduledTime calculado = $scheduledTime');
+      print('TcAlarmScheduler: Diferença em minutos: ${scheduledTime.difference(now).inMinutes}');
+      print('TcAlarmScheduler: ================================');
 
       // Determina qual path usar baseado na origem do áudio
       String finalAudioPath;
@@ -93,6 +99,24 @@ class TcAlarmSchedulerService {
         }
       }
 
+      // Configuração de notificação (com suporte específico por plataforma)
+      final notificationSettings = Platform.isIOS
+          ? NotificationSettings(
+              title: alarm.title,
+              body: 'Hora de meditar 🧘',
+              stopButton: 'Parar',
+              icon: 'notification_icon',
+              // iOS: Remove notificação automaticamente após alarme terminar
+              keepNotificationAfterAlarmEnds: false,
+            )
+          : NotificationSettings(
+              title: alarm.title,
+              body: 'Hora de meditar 🧘',
+              stopButton: 'Parar',
+              icon: 'notification_icon',
+              // Android: Notificação é removida ao chamar Alarm.stop()
+            );
+
       // Configuração do alarme
       final alarmSettings = AlarmSettings(
         id: alarm.id.hashCode,
@@ -100,23 +124,41 @@ class TcAlarmSchedulerService {
         assetAudioPath: finalAudioPath,
         loopAudio: false, // Toca apenas uma vez até o final
         vibrate: false, // Apenas música, sem vibração
-        volumeSettings: VolumeSettings.fixed(
-          volume: 1.0, // Volume máximo desde o início
-        ),
-        notificationSettings: NotificationSettings(
-          title: alarm.title,
-          body: 'Hora de meditar 🧘',
-          stopButton: 'Parar',
-          icon: 'notification_icon',
-        ),
+        volumeSettings: VolumeSettings.fixed(volume: null),
+        notificationSettings: notificationSettings,
+        // Android: Liga tela quando alarme toca (melhor UX)
+        androidFullScreenIntent: true,
         warningNotificationOnKill: true,
       );
 
       await Alarm.set(alarmSettings: alarmSettings);
 
       print('TcAlarmScheduler: Alarme agendado - ${alarm.title} às ${alarm.formattedTime}');
+    } on PlatformException catch (e) {
+      // Erro específico de plataforma (Android/iOS)
+      print('TcAlarmScheduler: Erro de plataforma ao agendar alarme: ${e.code} - ${e.message}');
+
+      // Não joga erro fatal se for erro de foreground service (Android)
+      // Este erro é comum em Android e não deve travar o app
+      if (e.code.contains('ForegroundService') ||
+          e.code.contains('BackgroundService') ||
+          e.message?.contains('ForegroundService') == true) {
+        print('TcAlarmScheduler: Erro de foreground service ignorado para evitar crash');
+        print('TcAlarmScheduler: O alarme pode não ter sido agendado corretamente');
+        return; // Retorna sem relancar exceção
+      }
+
+      rethrow;
     } catch (e) {
       print('TcAlarmScheduler: Erro ao agendar alarme: $e');
+
+      // Log mas não trava o app se for erro de ForegroundService
+      if (e.toString().contains('ForegroundService') ||
+          e.toString().contains('BackgroundService')) {
+        print('TcAlarmScheduler: Erro de serviço em background ignorado');
+        return;
+      }
+
       rethrow;
     }
   }

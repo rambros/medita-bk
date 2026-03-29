@@ -88,12 +88,20 @@
       android:turnScreenOn="true"
       android:launchMode="singleInstance" />
 
-    <service android:name="io.flutter.plugins.androidalarmmanager.AlarmService" android:permission="android.permission.BIND_JOB_SERVICE" android:exported="false"/>
-    ''
-    <receiver android:name="io.flutter.plugins.androidalarmmanager.AlarmBroadcastReceiver" android:exported="false"/>
-    <receiver android:name="io.flutter.plugins.androidalarmmanager.RebootBroadcastReceiver" android:exported="false" android:enabled="false">
+    <!-- Alarm plugin - Service para tocar alarme em background/tela bloqueada -->
+    <service
+      android:name="com.gdelataillade.alarm.alarm.AlarmService"
+      android:foregroundServiceType="mediaPlayback"
+      android:exported="false" />
+
+    <!-- Alarm plugin - Receiver para reagendar alarmes após boot -->
+    <receiver
+      android:name="com.gdelataillade.alarm.alarm.AlarmReceiver"
+      android:exported="false"
+      tools:replace="android:exported">
       <intent-filter>
-        <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+        <action android:name="android.intent.action.BOOT_COMPLETED" />
+        <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
       </intent-filter>
     </receiver>
     <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver" android:exported="false">

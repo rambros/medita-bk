@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 /// Utilitários para carregamento seguro de imagens de rede
 ///
@@ -107,18 +108,13 @@ class ImageUtils {
       return errorWidget ?? _buildDefaultPlaceholder(width, height);
     }
 
-    final imageWidget = Image.network(
-      url!,
+    final imageWidget = CachedNetworkImage(
+      imageUrl: url!,
       width: width,
       height: height,
       fit: fit,
-      loadingBuilder: placeholder != null
-          ? (context, child, loadingProgress) {
-              if (loadingProgress == null) return child;
-              return placeholder;
-            }
-          : null,
-      errorBuilder: (context, error, stackTrace) {
+      placeholder: (context, url) => placeholder ?? buildLoadingPlaceholder(width, height),
+      errorWidget: (context, url, error) {
         // Verificar conectividade de forma assíncrona
         if (onError != null) {
           hasNetworkConnectivity().then((hasConnection) {
@@ -131,6 +127,11 @@ class ImageUtils {
         }
         return errorWidget ?? _buildDefaultPlaceholder(width, height);
       },
+      // Configurações de retry e timeout
+      maxHeightDiskCache: 1000,
+      maxWidthDiskCache: 1000,
+      memCacheHeight: (height * 2).toInt(),
+      memCacheWidth: (width * 2).toInt(),
     );
 
     // Aplicar border radius se fornecido
@@ -188,12 +189,22 @@ class ImageUtils {
         shape: BoxShape.circle,
         color: backgroundColor ?? Colors.grey[300],
       ),
-      child: Image.network(
-        url!,
+      child: CachedNetworkImage(
+        imageUrl: url!,
         width: size,
         height: size,
         fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) {
+        placeholder: (context, url) => Center(
+          child: SizedBox(
+            width: size * 0.3,
+            height: size * 0.3,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.grey[400]!),
+            ),
+          ),
+        ),
+        errorWidget: (context, url, error) {
           // Verificar conectividade de forma assíncrona
           if (onError != null) {
             hasNetworkConnectivity().then((hasConnection) {
@@ -210,6 +221,10 @@ class ImageUtils {
             backgroundColor,
           );
         },
+        maxHeightDiskCache: 500,
+        maxWidthDiskCache: 500,
+        memCacheHeight: (size * 2).toInt(),
+        memCacheWidth: (size * 2).toInt(),
       ),
     );
   }
@@ -286,5 +301,79 @@ class ImageUtils {
         size: width * 0.4 > height * 0.4 ? height * 0.4 : width * 0.4,
       ),
     );
+  }
+
+  /// Widget simples de imagem em cache com configurações padrão
+  ///
+  /// Este é um wrapper conveniente sobre CachedNetworkImage com:
+  /// - Retry automático em caso de falha de rede
+  /// - Cache de disco e memória
+  /// - Placeholder de loading
+  /// - Tratamento de erros com ícone padrão
+  ///
+  /// Exemplo:
+  /// ```dart
+  /// ImageUtils.cachedImage(
+  ///   url: meditation.imageUrl,
+  ///   width: 200,
+  ///   height: 200,
+  ///   borderRadius: BorderRadius.circular(12),
+  /// )
+  /// ```
+  static Widget cachedImage({
+    required String url,
+    double? width,
+    double? height,
+    BoxFit fit = BoxFit.cover,
+    BorderRadius? borderRadius,
+    IconData? errorIcon,
+    Color? errorIconColor,
+    Color? placeholderColor,
+  }) {
+    final imageWidget = CachedNetworkImage(
+      imageUrl: url,
+      width: width,
+      height: height,
+      fit: fit,
+      placeholder: (context, url) => Container(
+        width: width,
+        height: height,
+        color: placeholderColor ?? Colors.grey[200],
+        child: Center(
+          child: SizedBox(
+            width: 24,
+            height: 24,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.grey[400]!),
+            ),
+          ),
+        ),
+      ),
+      errorWidget: (context, url, error) => Container(
+        width: width,
+        height: height,
+        color: Colors.grey[300],
+        child: Icon(
+          errorIcon ?? Icons.broken_image,
+          color: errorIconColor ?? Colors.grey[600],
+          size: 32,
+        ),
+      ),
+      // Configurações de cache otimizadas
+      maxHeightDiskCache: height != null ? (height * 2).toInt() : 1000,
+      maxWidthDiskCache: width != null ? (width * 2).toInt() : 1000,
+      memCacheHeight: height != null ? (height * 2).toInt() : null,
+      memCacheWidth: width != null ? (width * 2).toInt() : null,
+    );
+
+    if (borderRadius != null) {
+      return ClipRRect(
+        borderRadius: borderRadius,
+        child: imageWidget,
+      );
+    }
+
+    return imageWidget;
   }
 }

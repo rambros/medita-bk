@@ -1,0 +1,178 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ============================================
+    // HELPER FUNCTIONS
+    // ============================================
+
+    // Verifica se usuário é o dono do documento pelo UID
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    // Verifica se usuário é admin consultando a collection users
+    function hasAdminRole() {
+      return request.auth != null &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // Verifica se campos sensíveis não estão sendo alterados
+    function isNotUpdatingField(field) {
+      return !(field in request.resource.data) || resource.data[field] == request.resource.data[field];
+    }
+
+    // ============================================
+    // USERS
+    // ============================================
+
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      // Impede que usuário mude seu próprio 'role' para admin
+      allow write: if request.auth != null && 
+                      (isOwner(userId) && isNotUpdatingField('role') || hasAdminRole());
+
+      // FCM Tokens (subcollection de users)
+      match /fcm_tokens/{tokenId} {
+        allow read: if request.auth != null && (isOwner(userId) || hasAdminRole());
+        allow write: if isOwner(userId);
+      }
+    }
+
+    // ============================================
+    // CONTEÚDO (Meditações, Categorias, Músicas)
+    // ============================================
+
+    match /meditations/{meditationId} {
+      allow read: if request.auth != null;
+      // Permite que usuários incrementem contadores (update parcial)
+      allow update: if request.auth != null && 
+                       request.resource.data.diff(resource.data).affectedKeys().hasOnly(['numPlayed', 'numLiked']);
+      allow write: if hasAdminRole();
+    }
+
+    match /category/{categoryId} {
+      allow read: if request.auth != null;
+      allow write: if hasAdminRole();
+    }
+
+    match /traffic_control_musics/{musicId} {
+      allow read: if request.auth != null;
+      allow write: if hasAdminRole();
+    }
+
+    // ============================================
+    // EAD (Cursos, Aulas, Tópicos, Inscrições)
+    // ============================================
+
+    match /cursos/{cursoId} {
+      allow read: if request.auth != null;
+      allow write: if hasAdminRole();
+
+      match /{document=**} {
+        allow read: if request.auth != null;
+        allow write: if hasAdminRole();
+      }
+    }
+
+    match /inscricoes_cursos/{inscricaoId} {
+      // Regra para ID cursoId_usuarioId ou campo usuarioId
+      allow read: if request.auth != null && (resource.data.usuarioId == request.auth.uid || hasAdminRole());
+      allow create: if request.auth != null && request.resource.data.usuarioId == request.auth.uid;
+      allow update: if request.auth != null && (resource.data.usuarioId == request.auth.uid || hasAdminRole());
+      allow delete: if hasAdminRole();
+    }
+
+    match /avaliacoes_cursos/{inscricaoId} {
+      allow read: if request.auth != null && (resource.data.usuarioId == request.auth.uid || hasAdminRole());
+      allow create: if request.auth != null && request.resource.data.usuarioId == request.auth.uid;
+      allow update: if hasAdminRole();
+    }
+
+    match /grupos/{grupoId} {
+      allow read: if request.auth != null;
+      allow write: if hasAdminRole();
+    }
+
+    // ============================================
+    // COMUNICAÇÃO (Tickets, Discussões)
+    // ============================================
+
+    match /tickets/{ticketId} {
+      // Apenas o dono do ticket ou admin podem ler/escrever
+      allow read: if request.auth != null && (resource.data.usuarioId == request.auth.uid || hasAdminRole());
+      allow create: if request.auth != null && request.resource.data.usuarioId == request.auth.uid;
+      allow update: if request.auth != null && (resource.data.usuarioId == request.auth.uid || hasAdminRole());
+
+      match /mensagens/{msgId} {
+        allow read: if request.auth != null && (get(/databases/$(database)/documents/tickets/$(ticketId)).data.usuarioId == request.auth.uid || hasAdminRole());
+        allow create: if request.auth != null; // Quem cria a mensagem deve estar no ticket (implícito pela leitura do pai)
+      }
+    }
+
+    match /discussoes/{discId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && (resource.data.usuarioId == request.auth.uid || hasAdminRole());
+      allow delete: if hasAdminRole();
+
+      match /respostas/{respId} {
+        allow read: if request.auth != null;
+        allow create: if request.auth != null;
+        allow update, delete: if request.auth != null && (resource.data.usuarioId == request.auth.uid || hasAdminRole());
+      }
+    }
+
+    // ============================================
+    // NOTIFICAÇÕES (Sistema Unificado V2)
+    // ============================================
+
+    match /notifications/{notifId} {
+      allow read: if request.auth != null && (resource.data.destinatarios.hasAny([request.auth.uid, 'TODOS']));
+      allow write: if hasAdminRole();
+
+      match /user_states/{userId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    // ============================================
+    // SISTEMA E LEGADO
+    // ============================================
+
+    match /desafio21/{docId} {
+      allow read: if request.auth != null;
+      allow write: if hasAdminRole();
+    }
+
+    match /settings/{docId} {
+      allow read: if request.auth != null;
+      allow write: if hasAdminRole();
+    }
+
+    match /in_app_notifications/{notifId} {
+      allow read: if request.auth != null && (resource.data.userId == request.auth.uid || resource.data.recipientUserIds.hasAny([request.auth.uid]));
+      allow write: if hasAdminRole();
+    }
+
+    match /user_states/{userId} {
+      allow read, write: if isOwner(userId);
+      match /{allPaths=**} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    match /ff_push_notifications/{notifId} {
+      allow read, write: if hasAdminRole();
+    }
+
+    match /_rowy_/{docId} {
+      allow read: if request.auth != null && request.auth.token.roles.size() > 0;
+      allow write: if hasAdminRole();
+      match /{document=**} {
+        allow read: if request.auth != null && request.auth.token.roles.size() > 0;
+        allow write: if hasAdminRole();
+      }
+    }
+  }
+}

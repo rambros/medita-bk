@@ -77,7 +77,23 @@ class _TcHomePageState extends State<TcHomePage> {
                     !FlutterFlowTheme.of(context).titleLargeIsCustom,
               ),
         ),
-        actions: const [],
+        actions: [
+          // Botão de DEBUG temporário
+          FlutterFlowIconButton(
+            borderColor: Colors.transparent,
+            borderRadius: 30.0,
+            borderWidth: 1.0,
+            buttonSize: 60.0,
+            icon: Icon(
+              Icons.bug_report,
+              color: FlutterFlowTheme.of(context).info,
+              size: 24.0,
+            ),
+            onPressed: () async {
+              await viewModel.debugPrintAlarms();
+            },
+          ),
+        ],
         centerTitle: true,
         elevation: 2.0,
       ),
@@ -149,6 +165,34 @@ class _TcHomePageState extends State<TcHomePage> {
     // Lista de alarmes
     return Column(
       children: [
+        if (viewModel.isRinging)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
+            child: ElevatedButton.icon(
+              onPressed: () async {
+                await viewModel.stopRinging();
+              },
+              icon: const Icon(Icons.stop_circle, size: 24),
+              label: Text(
+                'Parar Som do Lembrete',
+                style: FlutterFlowTheme.of(context).titleSmall.override(
+                      fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
+                      color: FlutterFlowTheme.of(context).info,
+                      useGoogleFonts: !FlutterFlowTheme.of(context).titleSmallIsCustom,
+                    ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: FlutterFlowTheme.of(context).error,
+                foregroundColor: FlutterFlowTheme.of(context).info,
+                minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 4,
+              ),
+            ),
+          ),
+
         // Toggle global
         TcGlobalToggle(
           value: viewModel.globalToggle,

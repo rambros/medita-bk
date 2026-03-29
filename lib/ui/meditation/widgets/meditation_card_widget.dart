@@ -8,6 +8,7 @@ import 'package:medita_bk/ui/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'meditation_card_model.dart';
 export 'meditation_card_model.dart';
 
@@ -84,7 +85,7 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
           borderRadius: BorderRadius.circular(16.0),
         ),
         child: Row(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -116,20 +117,41 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
                           topLeft: Radius.circular(16.0),
                           topRight: Radius.circular(0.0),
                         ),
-                        child: Image.network(
-                          imageUrl,
+                        child: CachedNetworkImage(
+                          imageUrl: imageUrl,
                           width: 100.0,
                           height: 100.0,
                           fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => const _PlaceholderImage(),
+                          placeholder: (context, url) => Container(
+                            width: 100.0,
+                            height: 100.0,
+                            color: FlutterFlowTheme.of(context).accent4,
+                            child: Center(
+                              child: SizedBox(
+                                width: 20.0,
+                                height: 20.0,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    FlutterFlowTheme.of(context).primary,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => const _PlaceholderImage(),
+                          maxHeightDiskCache: 200,
+                          maxWidthDiskCache: 200,
+                          memCacheHeight: 200,
+                          memCacheWidth: 200,
                         ),
                       )
                     : const _PlaceholderImage(),
               ),
             ),
-            Container(
-              width: MediaQuery.sizeOf(context).width * 0.66,
-              height: 100.0,
+            Expanded(
+              child: Container(
+                height: 100.0,
               decoration: BoxDecoration(
                 color: FlutterFlowTheme.of(context).primaryBackground,
               ),
@@ -172,7 +194,7 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
                     Align(
                       alignment: const AlignmentDirectional(0.0, 0.0),
                       child: Container(
-                        width: MediaQuery.sizeOf(context).width * 0.98,
+                        width: double.infinity,
                         height: 28.0,
                         decoration: BoxDecoration(
                           color: FlutterFlowTheme.of(context).primaryBackground,
@@ -204,7 +226,7 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
                     Padding(
                       padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 8.0, 0.0),
                       child: Container(
-                        width: MediaQuery.sizeOf(context).width * 1.0,
+                        width: double.infinity,
                         height: 20.0,
                         decoration: BoxDecoration(
                           color: FlutterFlowTheme.of(context).primaryBackground,
@@ -286,11 +308,12 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 
   Future<void> _refreshDownloadStatus() async {
     final audioUrl = widget.docMeditation?.audioUrl ?? '';

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 /// Entidade de domínio para alarmes do Traffic Control
 class TcAlarmEntity {
   final String id;
@@ -62,9 +60,7 @@ class TcAlarmEntity {
       maxDurationSec: map['maxDurationSec'] as int? ?? 0,
       isEnabled: map['isEnabled'] as bool? ?? true,
       daysOfWeek: (map['daysOfWeek'] as List<dynamic>?)?.map((e) => e as int).toList() ?? const [],
-      createdAt: map['createdAt'] != null
-          ? DateTime.parse(map['createdAt'] as String)
-          : DateTime.now(),
+      createdAt: map['createdAt'] != null ? DateTime.parse(map['createdAt'] as String) : DateTime.now(),
     );
   }
 

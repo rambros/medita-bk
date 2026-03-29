@@ -2,132 +2,379 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // ============================================
-    // NOTIFICAÇÕES (Sistema Unificado V2)
-    // ============================================
+    // ============================================================
+    // HELPER FUNCTIONS
+    // ============================================================
 
-    // Collection única de notificações
-    match /notifications/{notifId} {
-      // Leitura: se usuário está em destinatarios ou é "TODOS"
-      allow read: if request.auth != null &&
-                     (resource.data.destinatarios.hasAny([request.auth.uid, 'TODOS']));
-
-      // Escrita: apenas admin
-      allow write: if request.auth != null && hasAdminRole();
-
-      // Subcollection user_states (estado por usuário)
-      match /user_states/{userId} {
-        // Cada usuário pode ler/escrever apenas seu próprio estado
-        allow read, write: if request.auth != null && userId == request.auth.uid;
-      }
+    // Usuário autenticado
+    function isAuth() {
+      return request.auth != null;
     }
 
-    // ============================================
-    // NOTIFICAÇÕES ANTIGAS (manter para migração gradual)
-    // ============================================
-
-    // In-app notifications (antigas)
-    match /in_app_notifications/{notifId} {
-      allow read: if request.auth != null &&
-                     (resource.data.userId == request.auth.uid ||
-                      resource.data.recipientUserIds.hasAny([request.auth.uid]));
-      allow write: if request.auth != null && hasAdminRole();
+    // Dono do documento pelo UID
+    function isOwner(userId) {
+      return isAuth() && request.auth.uid == userId;
     }
 
-    // EAD push notifications (antigas)
-    match /ead_push_notifications/{notifId} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null && hasAdminRole();
+    // Lê o documento do usuário atual
+    function userData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
     }
 
-    // Global push notifications (antigas)
-    match /global_push_notifications/{notifId} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null && hasAdminRole();
+    // Verifica se o usuário possui ao menos um dos roles informados
+    // Suporta ambos os formatos: 'Admin' (capitalizado) e 'admin' (minúsculo)
+    function hasRole(roles) {
+      return isAuth() && userData().userRole.hasAny(roles);
     }
 
-    // ============================================
-    // USER STATES (estado de notificações antigas)
-    // ============================================
-
-    match /user_states/{userId} {
-      allow read, write: if request.auth != null && userId == request.auth.uid;
-
-      // Subcollections de estado por notificação
-      match /{allPaths=**} {
-        allow read, write: if request.auth != null && userId == request.auth.uid;
-      }
+    // Admin: acesso total ao painel e operações destrutivas
+    function isAdmin() {
+      return hasRole(['Admin', 'admin']);
     }
 
-    // ============================================
+    // Editor ou acima: pode criar/editar conteúdo no admin panel
+    function isEditorOrAbove() {
+      return hasRole(['Admin', 'Editor', 'Tester', 'Autor', 'admin', 'editor', 'tester', 'autor']);
+    }
+
+    // Tester: acesso a funcionalidades em teste no app mobile
+    function isTester() {
+      return hasRole(['Admin', 'Tester', 'admin', 'tester']);
+    }
+
+    // Verifica se um campo não está sendo alterado num update
+    function fieldUnchanged(field) {
+      return !(field in request.resource.data) || resource.data[field] == request.resource.data[field];
+    }
+
+
+    // ============================================================
     // USERS
-    // ============================================
+    // ============================================================
 
     match /users/{userId} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null &&
-                      (userId == request.auth.uid || hasAdminRole());
+      // Qualquer autenticado pode ler perfis (ex.: app exibe info de autores)
+      allow read: if isAuth();
+      // Criação apenas do próprio documento
+      allow create: if isOwner(userId);
+      // Update: dono do doc (sem alterar userRole) OU admin
+      allow update: if isAuth() && (
+        (isOwner(userId) && fieldUnchanged('userRole')) || isAdmin()
+      );
+      allow delete: if isAdmin();
+
+      // FCM Tokens — gerenciado pelo app mobile e Cloud Functions
+      match /fcm_tokens/{tokenId} {
+        allow read:  if isOwner(userId) || isAdmin();
+        allow write: if isOwner(userId);
+      }
+
+      // Notificações legado por usuário
+      match /notifications/{notifId} {
+        allow read, write: if isOwner(userId);
+      }
     }
 
-    // ============================================
-    // OUTRAS COLLECTIONS (exemplos)
-    // ============================================
 
-    // Cursos EAD
+    // ============================================================
+    // MEDITAÇÕES
+    // ============================================================
+
+    // Meditações publicadas: leitura pública autenticada; escrita apenas editores+
+    match /meditations/{meditationId} {
+      allow read: if isAuth();
+      // App mobile incrementa contadores de plays/likes
+      allow update: if isAuth() &&
+        request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['numPlayed', 'numLiked', 'numFavorites']);
+      // Criação/exclusão e demais campos: editor ou acima
+      allow create, delete: if isEditorOrAbove();
+      allow update: if isEditorOrAbove();
+    }
+
+    // Rascunhos: somente admin panel
+    match /meditations_draft/{document} {
+      allow read, write: if isEditorOrAbove();
+    }
+
+    // Categorias de meditação
+    match /category/{categoryId} {
+      allow read: if isAuth();
+      allow write: if isEditorOrAbove();
+    }
+
+    // Músicas de meditação (coleção do admin panel)
+    match /musics/{musicId} {
+      allow read: if isAuth();
+      allow write: if isAdmin();
+    }
+
+    // Músicas do Traffic Control (coleção do app mobile)
+    match /musicas/{musicId} {
+      allow read: if isAuth();
+      allow write: if isAdmin();
+    }
+
+    // Traffic Control — coleção usada pelas regras já deployadas
+    match /traffic_control_musics/{musicId} {
+      allow read: if isAuth();
+      allow write: if isAdmin();
+    }
+
+
+    // ============================================================
+    // EAD — CURSOS, AULAS, TÓPICOS
+    // ============================================================
+
     match /cursos/{cursoId} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null && hasAdminRole();
+      allow read: if isAuth();
+      allow write: if isEditorOrAbove();
 
-      match /{document=**} {
-        allow read: if request.auth != null;
-        allow write: if request.auth != null && hasAdminRole();
+      match /aulas/{aulaId} {
+        allow read: if isAuth();
+        allow write: if isEditorOrAbove();
+
+        match /topicos/{topicoId} {
+          allow read: if isAuth();
+          allow write: if isEditorOrAbove();
+        }
       }
+    }
+
+    // Wildcard para leitura de aulas em qualquer nível (consultas collectionGroup)
+    match /{path=**}/aulas/{document} {
+      allow read: if isAuth();
+    }
+
+    // Inscrições em cursos
+    // ID do documento: formato {cursoId}_{usuarioId}
+    match /inscricoes_cursos/{inscricaoId} {
+      allow read: if isAuth() && (
+        resource.data.usuarioId == request.auth.uid || isEditorOrAbove()
+      );
+      allow create: if isAuth() &&
+        request.resource.data.usuarioId == request.auth.uid;
+      allow update: if isAuth() && (
+        resource.data.usuarioId == request.auth.uid || isEditorOrAbove()
+      );
+      allow delete: if isAdmin();
+    }
+
+    // Avaliações de cursos
+    match /avaliacoes_cursos/{avaliacaoId} {
+      allow read: if isAuth() && (
+        resource.data.usuarioId == request.auth.uid || isEditorOrAbove()
+      );
+      allow create: if isAuth() &&
+        request.resource.data.usuarioId == request.auth.uid;
+      allow update: if isAuth() && (
+        resource.data.usuarioId == request.auth.uid || isEditorOrAbove()
+      );
+      allow delete: if isAdmin();
     }
 
     // Grupos EAD
     match /grupos/{grupoId} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null && hasAdminRole();
+      allow read: if isAuth();
+      allow write: if isAdmin();
     }
 
-    // Tickets
+    match /grupos_ead/{grupoId} {
+      allow read: if isEditorOrAbove();
+      allow write: if isAdmin();
+    }
+
+
+    // ============================================================
+    // COMUNICAÇÃO — TICKETS E DISCUSSÕES
+    // ============================================================
+
     match /tickets/{ticketId} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null;
+      // Dono do ticket ou equipe de suporte (editor+) podem ler
+      allow read: if isAuth() && (
+        resource.data.usuarioId == request.auth.uid || isEditorOrAbove()
+      );
+      // Apenas o próprio usuário cria o ticket
+      allow create: if isAuth() &&
+        request.resource.data.usuarioId == request.auth.uid;
+      // Dono pode atualizar campos básicos; suporte pode atualizar status etc.
+      allow update: if isAuth() && (
+        resource.data.usuarioId == request.auth.uid || isEditorOrAbove()
+      );
+      allow delete: if isAdmin();
+
+      match /mensagens/{msgId} {
+        // Leitura: dono do ticket pai ou suporte
+        allow read: if isAuth() && (
+          get(/databases/$(database)/documents/tickets/$(ticketId)).data.usuarioId == request.auth.uid
+          || isEditorOrAbove()
+        );
+        // Qualquer autenticado que tenha acesso ao ticket pode enviar mensagem
+        allow create: if isAuth();
+        allow update, delete: if isAdmin();
+      }
     }
 
-    // ============================================
-    // FCM PUSH NOTIFICATIONS (Cloud Functions)
-    // ============================================
+    // Contadores de comunicação não lida (por usuário)
+    match /contadores_comunicacao/{userId} {
+      allow read, write: if isOwner(userId) || isEditorOrAbove();
+    }
 
-    // Collection para envio de push notifications via FCM
-    // Usada pelas Cloud Functions (firebase/functions/index.js)
+    match /discussoes/{discId} {
+      allow read: if isAuth();
+      allow create: if isAuth();
+      allow update: if isAuth() && (
+        resource.data.autorId == request.auth.uid || isEditorOrAbove()
+      );
+      allow delete: if isAuth() && (
+        resource.data.autorId == request.auth.uid || isAdmin()
+      );
+
+      match /respostas/{respId} {
+        allow read: if isAuth();
+        allow create: if isAuth();
+        allow update: if isAuth() && (
+          resource.data.autorId == request.auth.uid || isEditorOrAbove()
+        );
+        allow delete: if isAuth() && (
+          resource.data.autorId == request.auth.uid || isAdmin()
+        );
+      }
+    }
+
+
+    // ============================================================
+    // NOTIFICAÇÕES
+    // ============================================================
+
+    // Notificações unificadas (admin cria; usuário lê as suas)
+    match /notifications/{notifId} {
+      allow read: if isAuth() && (
+        resource.data.destinatarios.hasAny([request.auth.uid, 'TODOS'])
+        || isEditorOrAbove()
+      );
+      allow create, update, delete: if isEditorOrAbove();
+
+      // Estado de leitura/exclusão por usuário
+      match /user_states/{userId} {
+        allow read, write: if isOwner(userId) || isEditorOrAbove();
+      }
+    }
+
+    // Notificações EAD (leitura pelo app mobile)
+    match /notificacoes_ead/{notifId} {
+      allow read: if isAuth() && (
+        resource.data.usuarioId == request.auth.uid || isEditorOrAbove()
+      );
+      allow write: if isEditorOrAbove();
+    }
+
+    // Push notifications via FlutterFlow (broadcast — somente admin)
     match /ff_push_notifications/{notifId} {
-      // Leitura: apenas admin
-      allow read: if request.auth != null && hasAdminRole();
-      // Escrita: apenas admin (para criar notificações)
-      allow write: if request.auth != null && hasAdminRole();
+      allow read, write: if isAdmin();
     }
 
-    // FCM Tokens (subcollection de users)
-    // Armazena tokens de dispositivos para push notifications
-    match /users/{userId}/fcm_tokens/{tokenId} {
-      // Leitura: apenas o próprio usuário ou admin
-      allow read: if request.auth != null &&
-                     (userId == request.auth.uid || hasAdminRole());
-      // Escrita: Cloud Functions (via addFcmToken)
-      // A escrita é feita via Cloud Function que valida a autenticação
-      allow write: if request.auth != null && userId == request.auth.uid;
+    // Push notifications disparadas por usuário (restrito ao remetente)
+    match /ff_user_push_notifications/{id} {
+      allow read, update, delete: if false;
+      allow create: if isAuth() &&
+        /databases/$(database)/documents/users/$(request.auth.uid) == request.resource.data.sender;
     }
 
-    // ============================================
-    // HELPER FUNCTIONS
-    // ============================================
 
-    // Verifica se usuário é admin
-    function hasAdminRole() {
-      return request.auth != null &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    // ============================================================
+    // E-MAIL E WHATSAPP (Admin Panel EAD)
+    // ============================================================
+
+    match /email_tags/{tagId} {
+      allow read, write: if isAdmin();
     }
+
+    match /email_templates/{templateId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /emails_ead/{emailId} {
+      allow read, write: if isAdmin();
+
+      match /logs/{logId} {
+        allow read: if isAdmin();
+        allow create: if isAdmin();
+      }
+    }
+
+    match /whatsapp_ead/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /whatsapp_notifications_log/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /ead_whatsapp_messages/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+
+    // ============================================================
+    // CONFIGURAÇÕES E SISTEMA
+    // ============================================================
+
+    // Configurações gerais do app (leitura pública autenticada)
+    match /settings/{docId} {
+      allow read: if isAuth();
+      allow write: if isAdmin();
+    }
+
+    // Desafio 21 dias (template lido pelo app mobile)
+    match /desafio21/{docId} {
+      allow read: if isAuth();
+      allow write: if isAdmin();
+    }
+
+    // Mensagens legado
+    match /messages/{docId} {
+      allow read: if isAuth();
+      allow write: if isAdmin();
+    }
+
+    // Contadores gerais (ex.: desafio21_stats)
+    match /item_count/{docId} {
+      allow read: if isAuth();
+      allow write: if isAdmin();
+    }
+
+    // User states globais (fora de subcoleção — padrão legado)
+    match /user_states/{userId} {
+      allow read, write: if isOwner(userId);
+      match /{allPaths=**} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    // In-app notifications (legado)
+    match /in_app_notifications/{notifId} {
+      allow read: if isAuth() && (
+        resource.data.userId == request.auth.uid
+        || resource.data.recipientUserIds.hasAny([request.auth.uid])
+        || isEditorOrAbove()
+      );
+      allow write: if isEditorOrAbove();
+    }
+
+
+    // ============================================================
+    // ROWY (ferramenta interna de gestão de dados)
+    // ============================================================
+
+    match /_rowy_/{docId} {
+      allow read: if isAuth() && request.auth.token.roles.size() > 0;
+      allow write: if isAdmin();
+      match /{document=**} {
+        allow read: if isAuth() && request.auth.token.roles.size() > 0;
+        allow write: if isAdmin();
+      }
+    }
+
   }
 }

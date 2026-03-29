@@ -4,7 +4,6 @@ import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_widgets.dart';
 import 'package:medita_bk/ui/core/actions/actions.dart' as actions;
 import 'package:medita_bk/core/enums/enums.dart';
-import 'package:medita_bk/ui/core/flutter_flow/custom_functions.dart' as functions;
 
 /// Widget para selecionar duração máxima do alarme
 ///
@@ -61,13 +60,11 @@ class TcDurationPicker extends StatelessWidget {
               Text(
                 'Duração Máxima',
                 style: FlutterFlowTheme.of(context).titleSmall.override(
-                      fontFamily:
-                          FlutterFlowTheme.of(context).titleSmallFamily,
+                      fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
                       color: FlutterFlowTheme.of(context).primaryText,
                       letterSpacing: 0.0,
                       fontWeight: FontWeight.w600,
-                      useGoogleFonts:
-                          !FlutterFlowTheme.of(context).titleSmallIsCustom,
+                      useGoogleFonts: !FlutterFlowTheme.of(context).titleSmallIsCustom,
                     ),
               ),
             ],
@@ -81,8 +78,7 @@ class TcDurationPicker extends StatelessWidget {
                   fontFamily: FlutterFlowTheme.of(context).bodySmallFamily,
                   color: FlutterFlowTheme.of(context).secondaryText,
                   letterSpacing: 0.0,
-                  useGoogleFonts:
-                      !FlutterFlowTheme.of(context).bodySmallIsCustom,
+                  useGoogleFonts: !FlutterFlowTheme.of(context).bodySmallIsCustom,
                 ),
           ),
           const SizedBox(height: 16.0),
@@ -105,16 +101,14 @@ class TcDurationPicker extends StatelessWidget {
               width: double.infinity,
               height: 48.0,
               padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-              iconPadding:
-                  const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+              iconPadding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
               color: FlutterFlowTheme.of(context).primary,
               textStyle: FlutterFlowTheme.of(context).titleSmall.override(
                     fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
                     color: Colors.white,
                     letterSpacing: 0.0,
                     fontWeight: FontWeight.w600,
-                    useGoogleFonts:
-                        !FlutterFlowTheme.of(context).titleSmallIsCustom,
+                    useGoogleFonts: !FlutterFlowTheme.of(context).titleSmallIsCustom,
                   ),
               elevation: 2.0,
               borderSide: BorderSide(
@@ -136,8 +130,7 @@ class TcDurationPicker extends StatelessWidget {
                     color: FlutterFlowTheme.of(context).primaryText,
                     letterSpacing: 0.0,
                     fontWeight: FontWeight.w500,
-                    useGoogleFonts:
-                        !FlutterFlowTheme.of(context).bodyMediumIsCustom,
+                    useGoogleFonts: !FlutterFlowTheme.of(context).bodyMediumIsCustom,
                   ),
             ),
           ),
@@ -150,8 +143,7 @@ class TcDurationPicker extends StatelessWidget {
                   fontFamily: FlutterFlowTheme.of(context).bodySmallFamily,
                   color: FlutterFlowTheme.of(context).secondaryText,
                   letterSpacing: 0.0,
-                  useGoogleFonts:
-                      !FlutterFlowTheme.of(context).bodySmallIsCustom,
+                  useGoogleFonts: !FlutterFlowTheme.of(context).bodySmallIsCustom,
                 ),
           ),
           const SizedBox(height: 8.0),
@@ -186,8 +178,7 @@ class TcDurationPicker extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        debugPrint(
-            'TcDurationPicker: Atalho rápido selecionado - $seconds segundos ($label)');
+        debugPrint('TcDurationPicker: Atalho rápido selecionado - $seconds segundos ($label)');
         onDurationChanged(seconds);
       },
       borderRadius: BorderRadius.circular(20.0),
@@ -199,9 +190,7 @@ class TcDurationPicker extends StatelessWidget {
               : FlutterFlowTheme.of(context).primaryBackground,
           borderRadius: BorderRadius.circular(20.0),
           border: Border.all(
-            color: isSelected
-                ? FlutterFlowTheme.of(context).primary
-                : FlutterFlowTheme.of(context).alternate,
+            color: isSelected ? FlutterFlowTheme.of(context).primary : FlutterFlowTheme.of(context).alternate,
             width: 1.0,
           ),
         ),
@@ -209,13 +198,10 @@ class TcDurationPicker extends StatelessWidget {
           label,
           style: FlutterFlowTheme.of(context).bodySmall.override(
                 fontFamily: FlutterFlowTheme.of(context).bodySmallFamily,
-                color: isSelected
-                    ? FlutterFlowTheme.of(context).primary
-                    : FlutterFlowTheme.of(context).secondaryText,
+                color: isSelected ? FlutterFlowTheme.of(context).primary : FlutterFlowTheme.of(context).secondaryText,
                 letterSpacing: 0.0,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                useGoogleFonts:
-                    !FlutterFlowTheme.of(context).bodySmallIsCustom,
+                useGoogleFonts: !FlutterFlowTheme.of(context).bodySmallIsCustom,
               ),
         ),
       ),

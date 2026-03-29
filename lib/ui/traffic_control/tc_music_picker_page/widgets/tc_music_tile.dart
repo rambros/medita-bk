@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:medita_bk/domain/models/traffic_control/tc_music_entity.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
 
@@ -47,6 +48,7 @@ class TcMusicTile extends StatelessWidget {
         child: Column(
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // Thumbnail ou ícone
                 _buildThumbnail(context),
@@ -98,14 +100,32 @@ class TcMusicTile extends StatelessWidget {
     if (music.thumbnailUrl != null && music.thumbnailUrl!.isNotEmpty) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
-        child: Image.network(
-          music.thumbnailUrl!,
+        child: CachedNetworkImage(
+          imageUrl: music.thumbnailUrl!,
           width: 56.0,
           height: 56.0,
           fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return _buildDefaultIcon(context);
-          },
+          maxHeightDiskCache: 200,
+          maxWidthDiskCache: 200,
+          placeholder: (context, url) => Container(
+            width: 56.0,
+            height: 56.0,
+            decoration: BoxDecoration(
+              color: FlutterFlowTheme.of(context).primary.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: Center(
+              child: SizedBox(
+                width: 20.0,
+                height: 20.0,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.0,
+                  color: FlutterFlowTheme.of(context).primary,
+                ),
+              ),
+            ),
+          ),
+          errorWidget: (context, url, error) => _buildDefaultIcon(context),
         ),
       );
     } else {
@@ -218,6 +238,9 @@ class TcMusicTile extends StatelessWidget {
   Widget _buildPlayButton(BuildContext context) {
     return IconButton(
       onPressed: onPlayPause,
+      padding: EdgeInsets.zero,
+      visualDensity: VisualDensity.compact,
+      constraints: const BoxConstraints(),
       icon: isLoading
           ? SizedBox(
               width: 24.0,

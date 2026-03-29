@@ -36,9 +36,9 @@ class _TcMusicPickerPageState extends State<TcMusicPickerPage> {
         parameters: {'screen_name': 'TcMusicPickerPage'});
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      // Carrega músicas se ainda não carregou
+      // Carrega músicas apenas se não há músicas E não está já carregando
       final viewModel = context.read<TcMusicPickerViewModel>();
-      if (viewModel.musics.isEmpty) {
+      if (viewModel.musics.isEmpty && !viewModel.isLoading) {
         viewModel.refresh();
       }
     });

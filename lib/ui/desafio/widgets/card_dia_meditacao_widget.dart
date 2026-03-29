@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:medita_bk/core/enums/enums.dart';
 import 'package:medita_bk/core/structs/index.dart';
@@ -149,12 +150,27 @@ class _CardDiaMeditacaoWidgetState extends State<CardDiaMeditacaoWidget> {
                                               parsedUrl.host.isNotEmpty;
 
                           if (hasValidUrl) {
-                            return Image.network(
-                              imageUrl,
+                            return CachedNetworkImage(
+                              imageUrl: imageUrl,
                               width: 200.0,
                               height: 203.0,
                               fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
+                              placeholder: (context, url) => Container(
+                                width: 200.0,
+                                height: 203.0,
+                                color: Colors.grey[200],
+                                child: Center(
+                                  child: SizedBox(
+                                    width: 24.0,
+                                    height: 24.0,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.grey[400]!),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) {
                                 return Container(
                                   width: 200.0,
                                   height: 203.0,
@@ -162,6 +178,10 @@ class _CardDiaMeditacaoWidgetState extends State<CardDiaMeditacaoWidget> {
                                   child: Icon(Icons.self_improvement, color: Colors.grey[600], size: 64),
                                 );
                               },
+                              maxHeightDiskCache: 400,
+                              maxWidthDiskCache: 400,
+                              memCacheHeight: 400,
+                              memCacheWidth: 400,
                             );
                           } else {
                             return Container(
