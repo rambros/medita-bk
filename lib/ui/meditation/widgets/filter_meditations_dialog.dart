@@ -22,6 +22,7 @@ class FilterMeditationsDialogWidget extends StatefulWidget {
 class _FilterMeditationsDialogWidgetState
     extends State<FilterMeditationsDialogWidget> {
   late FilterMeditationsDialogModel _model;
+  late final Stream<List<CategoryModel>> _categoriesStream;
 
   @override
   void setState(VoidCallback callback) {
@@ -33,8 +34,7 @@ class _FilterMeditationsDialogWidgetState
   void initState() {
     super.initState();
     _model = createModel(context, () => FilterMeditationsDialogModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
+    _categoriesStream = context.read<CategoryRepository>().getCategoriesStream();
   }
 
   @override
@@ -61,7 +61,7 @@ class _FilterMeditationsDialogWidgetState
         child: Align(
           alignment: const AlignmentDirectional(0.0, 1.0),
           child: StreamBuilder<List<CategoryModel>>(
-            stream: context.read<CategoryRepository>().getCategoriesStream(),
+            stream: _categoriesStream,
             builder: (context, snapshot) {
               // Customize what your widget looks like when it's loading.
               if (!snapshot.hasData) {

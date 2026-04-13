@@ -8,6 +8,7 @@ import 'view_model/tc_home_view_model.dart';
 import 'widgets/tc_alarm_card.dart';
 import 'widgets/tc_global_toggle.dart';
 import 'widgets/tc_empty_state.dart';
+import 'widgets/tc_battery_optimization_dialog.dart';
 
 /// Página principal do módulo Traffic Control
 ///
@@ -40,7 +41,13 @@ class _TcHomePageState extends State<TcHomePage> {
     // Inicializa o ViewModel
     SchedulerBinding.instance.addPostFrameCallback((_) {
       context.read<TcHomeViewModel>().initialize();
+      _checkBatteryOptimization();
     });
+  }
+
+  Future<void> _checkBatteryOptimization() async {
+    if (!mounted) return;
+    await TcBatteryOptimizationDialog.showIfNeeded(context);
   }
 
   @override
@@ -77,23 +84,7 @@ class _TcHomePageState extends State<TcHomePage> {
                     !FlutterFlowTheme.of(context).titleLargeIsCustom,
               ),
         ),
-        actions: [
-          // Botão de DEBUG temporário
-          FlutterFlowIconButton(
-            borderColor: Colors.transparent,
-            borderRadius: 30.0,
-            borderWidth: 1.0,
-            buttonSize: 60.0,
-            icon: Icon(
-              Icons.bug_report,
-              color: FlutterFlowTheme.of(context).info,
-              size: 24.0,
-            ),
-            onPressed: () async {
-              await viewModel.debugPrintAlarms();
-            },
-          ),
-        ],
+        actions: const [],
         centerTitle: true,
         elevation: 2.0,
       ),

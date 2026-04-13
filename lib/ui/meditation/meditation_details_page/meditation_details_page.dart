@@ -47,32 +47,32 @@ class _MeditationDetailsPageState extends State<MeditationDetailsPage> {
   bool _isAudioDownloaded = false;
   bool _isFavorite = false;
   String? _lastCheckedAudioUrl;
+  late final Stream<MeditationModel?> _meditationStream;
 
   @override
   void initState() {
     super.initState();
 
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'meditationDetailsPage'});
-    // On page load action.
+
+    // Stream criado uma única vez — StreamBuilder exige mesma instância entre
+    // rebuilds para não resetar para ConnectionState.waiting a cada setState
+    _meditationStream = widget.meditationDocRef != null
+        ? _meditationRepository.streamMeditationById(widget.meditationDocRef!.id)
+        : const Stream.empty();
+
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       final meditationRef = widget.meditationDocRef;
-      if (meditationRef == null) {
-        return;
-      }
+      if (meditationRef == null) return;
+
+      final userFavorites = context.read<AuthRepository>().currentUser?.favorites.toList() ?? [];
       _meditationDoc = await _meditationRepository.getMeditationById(meditationRef.id);
       if (!mounted) return;
+
       await _checkDownloadStatus(_meditationDoc?.audioUrl);
-      // TODO: Migrate isAudioDownloaded to AudioService
-      // final isDownloaded = await actions.isAudioDownloaded(
-      //   functions.getStringFromAudioPath(_meditationDoc!.audioUrl)!,
-      // );
-      // _isAudioDownloaded = isDownloaded;
-      final userFavorites = context.read<AuthRepository>().currentUser?.favorites.toList() ?? [];
       _isFavorite = userFavorites.contains(_meditationDoc?.documentId);
       safeSetState(() {});
     });
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -114,7 +114,7 @@ class _MeditationDetailsPageState extends State<MeditationDetailsPage> {
     }
 
     return StreamBuilder<MeditationModel?>(
-      stream: _meditationRepository.streamMeditationById(widget.meditationDocRef!.id),
+      stream: _meditationStream,
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData || snapshot.data == null) {
@@ -135,9 +135,6 @@ class _MeditationDetailsPageState extends State<MeditationDetailsPage> {
         }
 
         final meditationDetailsPageMeditation = snapshot.data!;
-        SchedulerBinding.instance.addPostFrameCallback(
-          (_) => _checkDownloadStatus(meditationDetailsPageMeditation.audioUrl),
-        );
 
         return GestureDetector(
           onTap: () {

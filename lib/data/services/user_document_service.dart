@@ -4,20 +4,12 @@ import 'package:medita_bk/data/models/firebase/user_model.dart';
 import 'package:medita_bk/data/services/auth/base_auth_user_provider.dart' as auth_provider;
 
 /// Serviço centralizado para garantir a existência do documento do usuário no Firestore
-///
-/// Este serviço resolve o problema de usuários autenticados (Firebase Auth)
-/// mas sem documento correspondente no Firestore (collection 'users').
-///
-/// Casos de uso:
-/// - Usuário fez login social mas a criação do documento falhou
-/// - Documento foi deletado manualmente mas a autenticação permaneceu
-/// - Sincronização entre Firebase Auth e Firestore
 class UserDocumentService {
   final UserRepository _userRepository;
   final AuthRepository _authRepository;
 
-  /// Cache para evitar verificações redundantes na mesma sessão
-  static final Map<String, bool> _verifiedUsers = {};
+  /// Cache do UserModel em memória para evitar chamadas ao Firestore na mesma sessão
+  static final Map<String, UserModel> _cachedUsers = {};
 
   UserDocumentService({
     required UserRepository userRepository,
@@ -27,45 +19,34 @@ class UserDocumentService {
 
   /// Garante que o usuário tem documento no Firestore
   ///
-  /// Se o documento não existir, cria automaticamente com dados do Firebase Auth
-  /// Retorna o UserModel (existente ou recém-criado) ou null se não houver usuário autenticado
-  ///
-  /// [forceCheck] - Se true, ignora o cache e força nova verificação
+  /// Retorna do cache em memória se disponível (sem chamada ao Firestore).
+  /// [forceCheck] - Se true, ignora o cache e força nova verificação no Firestore.
   Future<UserModel?> ensureUserDocument({bool forceCheck = false}) async {
     try {
-      // Verifica se há usuário autenticado
       final userId = _authRepository.currentUserUid;
+      if (userId.isEmpty) return null;
 
-      if (userId.isEmpty) {
-        return null;
-      }
-
-      // Verifica cache (evita verificações redundantes)
-      if (!forceCheck && _verifiedUsers.containsKey(userId)) {
-        return await _userRepository.getUserById(userId);
+      // Retorna do cache sem chamada ao Firestore
+      if (!forceCheck && _cachedUsers.containsKey(userId)) {
+        return _cachedUsers[userId];
       }
 
       // Busca documento do usuário no Firestore
       final existingUser = await _userRepository.getUserById(userId);
 
       if (existingUser != null) {
-        // Documento existe, adiciona ao cache
-        _verifiedUsers[userId] = true;
+        _cachedUsers[userId] = existingUser;
         return existingUser;
       }
 
-      // Obtém dados do Firebase Auth via AuthRepository
+      // Documento não existe — cria com dados do Firebase Auth
       final email = _authRepository.currentUserEmail;
-      if (email.isEmpty) {
-        return null;
-      }
+      if (email.isEmpty) return null;
 
-      // Coleta dados disponíveis do Firebase Auth
       final displayName = auth_provider.currentUser?.displayName ?? '';
       final photoUrl = auth_provider.currentUser?.photoUrl ??
           'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/medita-bk-web-admin-2vj9u4/assets/i10jga9fdqpj/autorImage.jpg';
 
-      // Cria novo documento com dados do Firebase Auth
       final newUser = UserModel(
         uid: userId,
         email: email,
@@ -78,7 +59,7 @@ class UserDocumentService {
       );
 
       await _userRepository.createUser(newUser);
-      _verifiedUsers[userId] = true;
+      _cachedUsers[userId] = newUser;
 
       return newUser;
     } catch (e) {
@@ -86,35 +67,20 @@ class UserDocumentService {
     }
   }
 
-  /// Detecta o tipo de login baseado no email do usuário
-  /// Nota: Detecção heurística baseada no domínio do email
   String _detectLoginType(String email) {
-    // Se não tem email, assume login anônimo
-    if (email.isEmpty) {
-      return 'anonymous';
-    }
-
-    // Detecta providers sociais pelo domínio do email
-    if (email.contains('@gmail.com') || email.contains('@googlemail.com')) {
-      return 'google';
-    }
-
-    if (email.contains('@icloud.com') || email.contains('@me.com') || email.contains('@mac.com')) {
-      return 'apple';
-    }
-
-    // Default para email/password
+    if (email.isEmpty) return 'anonymous';
+    if (email.contains('@gmail.com') || email.contains('@googlemail.com')) return 'google';
+    if (email.contains('@icloud.com') || email.contains('@me.com') || email.contains('@mac.com')) return 'apple';
     return 'email';
   }
 
-  /// Limpa o cache de verificação
-  /// Útil para forçar nova verificação após logout ou troca de usuário
+  /// Limpa o cache de todos os usuários (ex: após logout)
   static void clearCache() {
-    _verifiedUsers.clear();
+    _cachedUsers.clear();
   }
 
   /// Limpa cache de um usuário específico
   static void clearUserCache(String userId) {
-    _verifiedUsers.remove(userId);
+    _cachedUsers.remove(userId);
   }
 }

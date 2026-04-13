@@ -29,6 +29,7 @@
   <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
   <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
   <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+  <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
 
   <!-- Suporte para telas grandes (tablets, foldables, ChromeOS) -->
   <supports-screens
@@ -53,7 +54,7 @@
     <!-- [END fcm_default_icon] -->
     <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="high_importance_channel"/>
     <!-- [START fcm_default_channel] -->
-    <activity android:name="com.ryanheise.audioservice.AudioServiceActivity" android:exported="true" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize" android:resizeableActivity="true">
+    <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize" android:resizeableActivity="true">
       <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
@@ -79,14 +80,6 @@
       </intent-filter>
     </activity>
     <activity android:name="com.yalantis.ucrop.UCropActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-
-    <!-- Alarm plugin - Activity para mostrar quando o alarme tocar -->
-    <activity
-      android:name="com.gdelataillade.alarm.alarm.AlarmScreen"
-      android:exported="false"
-      android:showWhenLocked="true"
-      android:turnScreenOn="true"
-      android:launchMode="singleInstance" />
 
     <!-- Alarm plugin - Service para tocar alarme em background/tela bloqueada -->
     <service

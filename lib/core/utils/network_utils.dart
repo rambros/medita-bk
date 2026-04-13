@@ -9,17 +9,10 @@ import 'package:medita_bk/core/state/app_state.dart';
 class NetworkUtils {
   /// Check if device has internet access
   ///
-  /// Returns true if connected to network and can reach the internet.
+  /// Returns true if connected to a network (wifi, mobile, ethernet).
   static Future<bool> hasInternetAccess() async {
     final results = await Connectivity().checkConnectivity();
-    if (results.contains(ConnectivityResult.none)) return false;
-
-    try {
-      final result = await InternetAddress.lookup('google.com').timeout(const Duration(seconds: 3));
-      return result.isNotEmpty && result.first.rawAddress.isNotEmpty;
-    } on SocketException catch (_) {
-      return false;
-    }
+    return !results.contains(ConnectivityResult.none);
   }
 
   /// Download a file from URL

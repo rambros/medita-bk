@@ -22,6 +22,7 @@ class HomeRepository {
       collectionPath: _userCollection,
       documentId: userId,
       fromSnapshot: UserModel.fromFirestore,
+      cacheFirst: true,
     );
   }
 
@@ -69,6 +70,7 @@ class HomeRepository {
       collectionPath: 'desafio21',
       fromSnapshot: Desafio21Model.fromFirestore,
       queryBuilder: (query) => query.where('docId', isEqualTo: 1).limit(1),
+      cacheFirst: true,
     );
     return results.firstOrNull;
   }
@@ -79,6 +81,7 @@ class HomeRepository {
       collectionPath: 'settings',
       fromSnapshot: SettingsModel.fromFirestore,
       queryBuilder: (query) => query.limit(1),
+      cacheFirst: true,
     );
     return results.firstOrNull;
   }

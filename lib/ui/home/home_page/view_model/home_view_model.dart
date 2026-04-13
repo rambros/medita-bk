@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:medita_bk/data/models/firebase/user_model.dart';
@@ -49,9 +51,12 @@ class HomeViewModel extends ChangeNotifier {
   D21ModelStruct? _desafio21Data;
   D21ModelStruct? get desafio21Data => _desafio21Data;
 
-  /// Main initialization method
-  /// Called when page loads
-  /// OTIMIZADO: Carrega dados em paralelo quando possível
+  /// Inicialização da home page
+  ///
+  /// Estratégia:
+  /// - checkInternetAccess: ~5ms (sem DNS lookup)
+  /// - loadUserData: getDocument() — sempre servido do cache offline do Firestore
+  /// - loadSettings + initializeDesafio21: em paralelo após ter o userRecord
   Future<void> initialize(BuildContext context) async {
     if (_isLoading) return;
 
@@ -62,26 +67,20 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // 1. Check internet access (rápido, mas necessário primeiro)
       await checkInternetAccess(context);
-      debugPrint('   ✅ Internet check: ${DateTime.now().difference(startTime).inMilliseconds}ms');
+      debugPrint('   ✅ Internet: ${DateTime.now().difference(startTime).inMilliseconds}ms');
 
-      // 2. Load user data (necessário para o resto)
       await loadUserData();
-      debugPrint('   ✅ User data loaded: ${DateTime.now().difference(startTime).inMilliseconds}ms');
+      debugPrint('   ✅ User data: ${DateTime.now().difference(startTime).inMilliseconds}ms');
 
-      // 3. PARALELIZAR: Settings e Desafio21 podem carregar ao mesmo tempo
-      final settingsFuture = loadSettings();
-      final desafio21Future = initializeDesafio21();
-
-      await Future.wait([settingsFuture, desafio21Future]);
-      debugPrint('   ✅ Settings & Desafio21 loaded: ${DateTime.now().difference(startTime).inMilliseconds}ms');
+      await Future.wait([loadSettings(), initializeDesafio21()]);
+      debugPrint('   ✅ Settings + Desafio21: ${DateTime.now().difference(startTime).inMilliseconds}ms');
     } catch (e) {
       debugPrint('   ❌ Error initializing HomePage: $e');
     } finally {
       _isLoading = false;
       notifyListeners();
-      debugPrint('   🏁 Total loading time: ${DateTime.now().difference(startTime).inMilliseconds}ms');
+      debugPrint('   🏁 Total: ${DateTime.now().difference(startTime).inMilliseconds}ms');
     }
   }
 
@@ -91,73 +90,59 @@ class HomeViewModel extends ChangeNotifier {
     _hasInternet = true;
   }
 
-  /// Load user data and update last access
-  /// Garante que o documento do usuário existe no Firestore antes de prosseguir
+  /// Load user data
+  /// Primário: getDocument() — sempre servido do cache offline do Firestore (instantâneo)
+  /// Fallback: ensureUserDocument() — só para usuários novos sem documento
   Future<void> loadUserData() async {
     final userId = _authRepository.currentUserUid;
     if (userId.isEmpty) return;
 
-    // PREVENTIVO: Garante que o documento do usuário existe no Firestore
-    // Se não existir, cria automaticamente com dados do Firebase Auth
-    final userDocService = UserDocumentService(
-      userRepository: UserRepository(),
-      authRepository: _authRepository,
-    );
+    // Primário: getDocument() — sempre servido do cache offline do Firestore
+    _userRecord = await _repository.getUserById(userId);
 
-    try {
+    // Fallback: só se documento não existe (usuário novo)
+    if (_userRecord == null) {
+      final userDocService = UserDocumentService(
+        userRepository: UserRepository(),
+        authRepository: _authRepository,
+      );
       _userRecord = await userDocService.ensureUserDocument();
-    } catch (e) {
-      debugPrint('❌ Erro ao garantir documento do usuário: $e');
-      // Fallback: tenta buscar diretamente
-      _userRecord = await _repository.getUserById(userId);
     }
 
     if (_userRecord != null) {
-      // Update last access timestamp (não-bloqueante - não precisa esperar)
       // ignore: unawaited_futures
       _repository.updateLastAccess(userId);
     }
-
-    notifyListeners();
   }
 
   /// Initialize Desafio 21 data
-  /// OTIMIZADO: Escritas não-críticas são não-bloqueantes
   Future<void> initializeDesafio21() async {
     final userId = _authRepository.currentUserUid;
     if (userId.isEmpty || _userRecord == null) return;
 
-    // Get desafioStarted from user
     final desafioStarted = _userRecord?.desafio21Started ?? false;
     AppStateStore().desafioStarted = desafioStarted;
 
-    // Create field if it doesn't exist (não-bloqueante - apenas garante consistência)
     if (desafioStarted != true) {
       // ignore: unawaited_futures
       _repository.updateDesafio21Started(userId, false);
     }
 
-    // Load Desafio 21 template
     _desafioRecord = await _repository.getDesafio21Template();
 
     if (_desafioRecord != null) {
-      // Save mandalas to app state
       _listaEtapasMandalas = _desafioRecord!.listaEtapasMandalas.toList().cast<D21EtapaModelStruct>();
       AppStateStore().listaEtapasMandalas = _listaEtapasMandalas;
 
       if (valueOrDefault<bool>(_userRecord?.desafio21Started, false) == true) {
-        // Load user's existing desafio21 data
         _desafio21Data = _userRecord!.desafio21;
 
-        // Fix for missing meditations, listaBrasoes, or null data (corrupted state)
         if (_desafio21Data == null || _desafio21Data!.d21Meditations.isEmpty || _desafio21Data!.listaBrasoes.isEmpty) {
-          // Use template data to restore/fix
           final templateData = _desafioRecord!.desafio21Data;
 
           if (_desafio21Data == null) {
             _desafio21Data = templateData;
           } else {
-            // Update missing fields, keeping other progress if possible
             if (_desafio21Data!.d21Meditations.isEmpty) {
               _desafio21Data!.d21Meditations = templateData.d21Meditations;
             }
@@ -167,14 +152,12 @@ class HomeViewModel extends ChangeNotifier {
             }
           }
 
-          // Persist the fix to Firestore (não-bloqueante - correção de dados)
           // ignore: unawaited_futures
           _repository.updateUserDesafio21(userId, _desafio21Data!);
         }
 
         AppStateStore().desafio21 = _desafio21Data!;
       } else {
-        // Create new desafio21 for user (não-bloqueante - apenas inicialização)
         final newDesafio21 = _desafioRecord!.desafio21Data;
         // ignore: unawaited_futures
         _repository.updateUserDesafio21(userId, newDesafio21);
@@ -183,8 +166,6 @@ class HomeViewModel extends ChangeNotifier {
         AppStateStore().desafio21 = newDesafio21;
       }
     }
-
-    notifyListeners();
   }
 
   /// Load app settings
@@ -195,11 +176,8 @@ class HomeViewModel extends ChangeNotifier {
       _habilitaDesafio21 = _settings!.habilitaDesafio21;
       _diaInicioDesafio21 = _settings!.diaInicioDesafio21;
 
-      // Update app state
       AppStateStore().habilitaDesafio21 = _habilitaDesafio21;
       AppStateStore().diaInicioDesafio21 = _diaInicioDesafio21;
     }
-
-    notifyListeners();
   }
 }

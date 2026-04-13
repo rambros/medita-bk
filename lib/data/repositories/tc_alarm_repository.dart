@@ -55,6 +55,10 @@ class TcAlarmRepository extends ChangeNotifier {
   Future<void> loadAlarms() async {
     debugPrint('TcAlarmRepository: loadAlarms() INICIOU - setando isLoading = true');
     _isLoading = true;
+    // Limpa estado de "tocando" ao recarregar — pode ter ficado travado quando o app
+    // estava em background e o Future.delayed foi suspenso pelo Android (Doze/battery opt.)
+    _isRinging = false;
+    _ringingAlarmId = null;
     _error = null;
     notifyListeners();
 
@@ -345,17 +349,20 @@ class TcAlarmRepository extends ChangeNotifier {
     debugPrint('TcAlarmRepository: Listener de ringStream iniciado');
   }
 
-  /// Quando um alarme toca, atualiza UI e agenda reagendamento
+  /// Quando um alarme toca, atualiza UI e agenda próxima ocorrência imediatamente.
   ///
-  /// O alarm package já gerencia:
-  /// - Parar automaticamente quando áudio termina (loopAudio: false)
-  /// - Remover notificação (iOS: keepNotificationAfterAlarmEnds, Android: Alarm.stop())
+  /// IMPORTANTE: O reagendamento é feito NA HORA em que o alarme dispara, sem esperar
+  /// a música terminar. Isso evita o bug em que o app fica em background e o
+  /// Future.delayed é suspenso pelo Android (Doze/battery optimization), fazendo
+  /// o alarme nunca ser reagendado.
+  ///
+  /// Não chamamos cancelAlarm antes de scheduleAlarm aqui porque isso pararia
+  /// o áudio que está tocando. O scheduleAlarm sozinho agenda a próxima ocorrência
+  /// (que será amanhã, pois o horário de hoje já passou).
   void _handleAlarmRinging(dynamic alarmSettings) {
     try {
-      // Extrair o ID do alarme (hash do id original)
       final alarmIdHash = alarmSettings.id as int;
 
-      // Buscar o alarme correspondente pelo ID original
       TcAlarmEntity? matchingAlarm;
       for (final alarm in _alarms) {
         if (alarm.id.hashCode == alarmIdHash) {
@@ -377,32 +384,43 @@ class TcAlarmRepository extends ChangeNotifier {
       _ringingAlarmId = alarmId;
       notifyListeners();
 
-      // Agendar reagendamento após a música terminar
-      // O alarm package já para automaticamente quando áudio termina
-      _scheduleForNextDay(matchingAlarm);
+      // Reagendar IMEDIATAMENTE para a próxima ocorrência — não espera a música terminar.
+      // scheduleAlarm calcula a próxima data: se o horário de hoje já passou (acabou de tocar),
+      // ele agenda para amanhã (ou próximo dia da semana permitido).
+      _scheduleNextOccurrenceOnly(matchingAlarm);
+
+      // Timer apenas para limpar o estado de UI após a música terminar.
+      // Se o app for suspenso antes disso, loadAlarms() limpa o estado ao reabrir.
+      final durationSec = matchingAlarm.musicDurationSec + 2;
+      Future.delayed(Duration(seconds: durationSec), () {
+        if (_ringingAlarmId == alarmId) {
+          _isRinging = false;
+          _ringingAlarmId = null;
+          notifyListeners();
+          debugPrint('TcAlarmRepository: Estado de tocando limpo para: ${matchingAlarm?.title}');
+        }
+      });
 
     } catch (e) {
       debugPrint('TcAlarmRepository: Erro ao processar alarme tocando: $e');
     }
   }
 
-  /// Agenda o alarme para o próximo dia após término
-  Future<void> _scheduleForNextDay(TcAlarmEntity alarm) async {
-    // Aguardar duração da música + 2 segundos de buffer
-    final durationSec = alarm.musicDurationSec + 2;
-    await Future.delayed(Duration(seconds: durationSec));
-
-    // Reagendar para o próximo dia se ainda estiver ativo
-    if (alarm.isEnabled) {
-      debugPrint('TcAlarmRepository: Reagendando alarme para próximo dia: ${alarm.title}');
-      await _rescheduleAlarm(alarm);
-    }
-
-    // Limpar estado de "tocando"
-    if (_ringingAlarmId == alarm.id) {
-      _isRinging = false;
-      _ringingAlarmId = null;
-      notifyListeners();
+  /// Agenda a próxima ocorrência do alarme SEM cancelar o que está tocando.
+  ///
+  /// Chamado imediatamente quando um alarme dispara para garantir que o próximo
+  /// toque seja agendado mesmo se o app for para background em seguida.
+  Future<void> _scheduleNextOccurrenceOnly(TcAlarmEntity alarm) async {
+    try {
+      if (!alarm.isEnabled) return;
+      final audioPath = await _audioCache.ensureCached(alarm.musicUrl);
+      // Não chama cancelAlarm — apenas agenda a próxima ocorrência.
+      // Como o horário de hoje já passou (o alarme acabou de tocar), scheduleAlarm
+      // automaticamente calcula o próximo dia.
+      await _scheduler.scheduleAlarm(alarm, audioPath);
+      debugPrint('TcAlarmRepository: Próxima ocorrência agendada imediatamente: ${alarm.title}');
+    } catch (e) {
+      debugPrint('TcAlarmRepository: Erro ao agendar próxima ocorrência: $e');
     }
   }
 

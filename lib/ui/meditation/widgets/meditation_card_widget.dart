@@ -156,7 +156,7 @@ class _MeditationCardWidgetState extends State<MeditationCardWidget> {
                 color: FlutterFlowTheme.of(context).primaryBackground,
               ),
               child: Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(8.0, 4.0, 4.0, 2.0),
+                padding: const EdgeInsetsDirectional.fromSTEB(8.0, 2.0, 4.0, 0.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

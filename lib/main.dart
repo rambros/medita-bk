@@ -16,6 +16,7 @@ import 'data/services/firebase_config.dart';
 import 'package:medita_bk/ui/core/theme/app_theme.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
 import 'package:medita_bk/ui/core/flutter_flow/internationalization.dart';
+import 'dart:io' show HandshakeException;
 import 'package:flutter/foundation.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:medita_bk/ui/pages.dart';
@@ -72,7 +73,27 @@ void main() async {
   await Alarm.init();
 
   if (!kIsWeb) {
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+    FlutterError.onError = (FlutterErrorDetails details) {
+      final exception = details.exception;
+      final exceptionStr = exception.toString();
+
+      // Erros de rede transitórios não são crashes reais — reportar como não-fatal
+      // para não poluir o painel de crashes com problemas de conectividade do usuário.
+      // Exemplos: handshake TLS interrompido ao carregar imagens, conexão dropada.
+      final isNetworkError = exception is HandshakeException ||
+          exceptionStr.contains('HandshakeException') ||
+          exceptionStr.contains('Connection terminated during handshake') ||
+          exceptionStr.contains('Connection closed before full header') ||
+          exceptionStr.contains('SocketException') ||
+          exceptionStr.contains('Connection refused') ||
+          exceptionStr.contains('Network is unreachable');
+
+      if (isNetworkError) {
+        FirebaseCrashlytics.instance.recordFlutterError(details);
+      } else {
+        FirebaseCrashlytics.instance.recordFlutterFatalError(details);
+      }
+    };
   }
 
   runApp(MultiProvider(

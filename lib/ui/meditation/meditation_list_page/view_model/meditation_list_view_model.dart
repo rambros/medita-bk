@@ -11,9 +11,14 @@ class MeditationListViewModel extends ChangeNotifier {
     required MeditationRepository meditationRepository,
     required AuthRepository authRepository,
   })  : _meditationRepository = meditationRepository,
-        _authRepository = authRepository;
+        _authRepository = authRepository {
+    // Stream criado uma única vez — StreamBuilder exige mesma instância entre rebuilds
+    // para não resetar para ConnectionState.waiting a cada notifyListeners()
+    _meditationsStream = _meditationRepository.getMeditations();
+  }
 
-  Stream<List<MeditationModel>> get meditationsStream => _meditationRepository.getMeditations();
+  late final Stream<List<MeditationModel>> _meditationsStream;
+  Stream<List<MeditationModel>> get meditationsStream => _meditationsStream;
 
   // State
   bool _isSearching = false;

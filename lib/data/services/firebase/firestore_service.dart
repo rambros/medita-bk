@@ -12,11 +12,15 @@ class FirestoreService {
   // ========== QUERY METHODS ==========
 
   /// Get a collection with optional query builder
+  ///
+  /// [cacheFirst] — se true, tenta o cache local primeiro e só vai ao servidor
+  /// se não houver resultado em cache para esta query.
   Future<List<T>> getCollection<T>({
     required String collectionPath,
     required T Function(DocumentSnapshot) fromSnapshot,
     Query Function(Query)? queryBuilder,
     int? limit,
+    bool cacheFirst = false,
   }) async {
     Query query = _firestore.collection(collectionPath);
 
@@ -26,6 +30,17 @@ class FirestoreService {
 
     if (limit != null) {
       query = query.limit(limit);
+    }
+
+    if (cacheFirst) {
+      try {
+        final snapshot = await query.get(const GetOptions(source: Source.cache));
+        if (snapshot.docs.isNotEmpty) {
+          return snapshot.docs.map((doc) => fromSnapshot(doc)).toList();
+        }
+      } on FirebaseException {
+        // Cache miss — cai para server
+      }
     }
 
     final snapshot = await query.get();
@@ -50,13 +65,28 @@ class FirestoreService {
   }
 
   /// Get a single document
+  ///
+  /// [cacheFirst] — se true, tenta o cache local primeiro (instantâneo para
+  /// usuários recorrentes) e só vai ao servidor se não houver cache.
   Future<T?> getDocument<T>({
     required String collectionPath,
     required String documentId,
     required T Function(DocumentSnapshot) fromSnapshot,
+    bool cacheFirst = false,
   }) async {
-    final doc = await _firestore.collection(collectionPath).doc(documentId).get();
+    if (cacheFirst) {
+      try {
+        final doc = await _firestore
+            .collection(collectionPath)
+            .doc(documentId)
+            .get(const GetOptions(source: Source.cache));
+        if (doc.exists) return fromSnapshot(doc);
+      } on FirebaseException {
+        // Cache miss — cai para server
+      }
+    }
 
+    final doc = await _firestore.collection(collectionPath).doc(documentId).get();
     if (!doc.exists) return null;
     return fromSnapshot(doc);
   }

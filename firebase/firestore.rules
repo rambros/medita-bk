@@ -149,8 +149,11 @@ service cloud.firestore {
     // Inscrições em cursos
     // ID do documento: formato {cursoId}_{usuarioId}
     match /inscricoes_cursos/{inscricaoId} {
+      // resource == null cobre o caso de documento ainda não existir (usuário verificando se está inscrito)
       allow read: if isAuth() && (
-        resource.data.usuarioId == request.auth.uid || isEditorOrAbove()
+        resource == null ||
+        resource.data.usuarioId == request.auth.uid ||
+        isEditorOrAbove()
       );
       allow create: if isAuth() &&
         request.resource.data.usuarioId == request.auth.uid;
@@ -162,8 +165,11 @@ service cloud.firestore {
 
     // Avaliações de cursos
     match /avaliacoes_cursos/{avaliacaoId} {
+      // resource == null cobre o caso de documento ainda não existir
       allow read: if isAuth() && (
-        resource.data.usuarioId == request.auth.uid || isEditorOrAbove()
+        resource == null ||
+        resource.data.usuarioId == request.auth.uid ||
+        isEditorOrAbove()
       );
       allow create: if isAuth() &&
         request.resource.data.usuarioId == request.auth.uid;

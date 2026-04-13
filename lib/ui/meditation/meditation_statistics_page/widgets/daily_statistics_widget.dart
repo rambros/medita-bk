@@ -213,9 +213,13 @@ class _DailyStatisticsWidgetState extends State<DailyStatisticsWidget> {
       }
       numDay++;
     }
+    // Flush final sequence if loop ended while still in a sequence
+    if (isSequence) {
+      listSequences.add(daysInSequence);
+    }
 
     if (isSequenceActive) {
-      _actualSequenceOfDaysWithSessionD = listSequences[0] ?? 1;
+      _actualSequenceOfDaysWithSessionD = listSequences.isNotEmpty ? listSequences[0] : daysInSequence;
     } else {
       _actualSequenceOfDaysWithSessionD = 0;
     }
