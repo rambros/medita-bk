@@ -126,7 +126,6 @@ class TcAlarmSchedulerService {
         vibrate: false, // Apenas música, sem vibração
         volumeSettings: VolumeSettings.fixed(volume: null),
         notificationSettings: notificationSettings,
-        // Android: Liga tela quando alarme toca (melhor UX)
         androidFullScreenIntent: true,
         warningNotificationOnKill: true,
       );
@@ -153,8 +152,7 @@ class TcAlarmSchedulerService {
       print('TcAlarmScheduler: Erro ao agendar alarme: $e');
 
       // Log mas não trava o app se for erro de ForegroundService
-      if (e.toString().contains('ForegroundService') ||
-          e.toString().contains('BackgroundService')) {
+      if (e.toString().contains('ForegroundService') || e.toString().contains('BackgroundService')) {
         print('TcAlarmScheduler: Erro de serviço em background ignorado');
         return;
       }

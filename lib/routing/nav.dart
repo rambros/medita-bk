@@ -216,13 +216,17 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             FFRoute(
               name: MeditationPlayPage.routeName,
               path: MeditationPlayPage.routePath,
-              builder: (context, params) => MeditationPlayPage(
-                meditationId: params.getParam(
+              builder: (context, params) {
+                final meditationId = params.getParam(
                   'meditationId',
                   ParamType.String,
                   isList: false,
-                )!,
-              ),
+                );
+                if (meditationId == null || meditationId.isEmpty) {
+                  return const NavBarPage();
+                }
+                return MeditationPlayPage(meditationId: meditationId);
+              },
             ),
             FFRoute(
               name: MeditationListPage.routeName,

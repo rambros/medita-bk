@@ -246,9 +246,12 @@ class _YearlyStatisticsWidgetState extends State<YearlyStatisticsWidget> {
       }
       numDay++;
     }
+    if (isSequence) {
+      listSequences.add(daysInSequence);
+    }
 
     if (isSequenceActive) {
-      _actualSequenceOfDaysWithSessionY = listSequences[0] ?? 1;
+      _actualSequenceOfDaysWithSessionY = listSequences.isNotEmpty ? listSequences[0] : 1;
     } else {
       _actualSequenceOfDaysWithSessionY = 0;
     }

@@ -30,6 +30,8 @@
   <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
   <uses-permission android:name="android.permission.RECORD_AUDIO"/>
   <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
+  <!-- Necessário para alarmes na tela bloqueada (Android 12+) -->
+  <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
 
   <!-- Suporte para telas grandes (tablets, foldables, ChromeOS) -->
   <supports-screens

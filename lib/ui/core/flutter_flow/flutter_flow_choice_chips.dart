@@ -8,7 +8,7 @@ import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
 class ChipData {
   const ChipData(this.label, [this.iconData]);
   final String label;
-  final IconData? iconData;
+  final FaIconData? iconData;
 }
 
 class ChipStyle {

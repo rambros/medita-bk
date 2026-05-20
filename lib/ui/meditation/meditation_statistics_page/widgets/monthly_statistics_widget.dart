@@ -252,9 +252,12 @@ class _MonthlyStatisticsWidgetState extends State<MonthlyStatisticsWidget> {
       }
       numDay++;
     }
+    if (isSequence) {
+      listSequences.add(daysInSequence);
+    }
 
     if (isSequenceActive) {
-      _actualSequenceOfDaysWithSessionM = listSequences[0] ?? 1;
+      _actualSequenceOfDaysWithSessionM = listSequences.isNotEmpty ? listSequences[0] : 1;
     } else {
       _actualSequenceOfDaysWithSessionM = 0;
     }

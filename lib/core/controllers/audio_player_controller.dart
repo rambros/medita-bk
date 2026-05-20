@@ -14,7 +14,7 @@ Future<void> initAudioPlayerController() async {
   globalWatch = Stopwatch();
   globalAudioPlayerController = AudioPlayerController();
   final session = await AudioSession.instance;
-  await session.configure(const AudioSessionConfiguration.speech());
+  await session.configure(const AudioSessionConfiguration.music());
 }
 
 class PlayButtonNotifier extends ValueNotifier<ButtonState> {

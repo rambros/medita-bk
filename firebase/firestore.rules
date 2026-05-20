@@ -103,6 +103,12 @@ service cloud.firestore {
       allow write: if isEditorOrAbove();
     }
 
+    // Imagens pré-cadastradas para seleção em playlists
+    match /images/{imageId} {
+      allow read: if isAuth();
+      allow write: if isAdmin();
+    }
+
     // Músicas de meditação (coleção do admin panel)
     match /musics/{musicId} {
       allow read: if isAuth();

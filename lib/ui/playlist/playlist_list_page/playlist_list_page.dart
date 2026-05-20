@@ -220,6 +220,22 @@ class _PlaylistListPageState extends State<PlaylistListPage> {
                           child: StreamBuilder<List<PlaylistModelStruct>>(
                             stream: _model.playlistsStream,
                             builder: (context, snapshot) {
+                              if (snapshot.hasError) {
+                                return Center(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(Icons.error_outline, color: FlutterFlowTheme.of(context).error, size: 40),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        'Erro ao carregar playlists.\nTente novamente.',
+                                        textAlign: TextAlign.center,
+                                        style: FlutterFlowTheme.of(context).bodyMedium,
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
                               if (!snapshot.hasData) {
                                 return Center(
                                   child: CircularProgressIndicator(

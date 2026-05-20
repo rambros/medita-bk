@@ -22,10 +22,10 @@ class MeditaBKAudioService {
     globalAudioHandler = await AudioService.init(
       builder: () => _AudioHandler(),
       config: const AudioServiceConfig(
-        androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
-        androidNotificationChannelName: 'Audio Service Demo',
-        androidNotificationOngoing: true,
-        androidStopForegroundOnPause: true,
+        androidNotificationChannelId: 'app.brahmakumaris.meditabk.audio',
+        androidNotificationChannelName: 'MeditaBK',
+        androidNotificationChannelDescription: 'Reprodução de meditações',
+        androidStopForegroundOnPause: false,
       ),
     );
   }

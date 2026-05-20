@@ -198,8 +198,12 @@ class UserModel extends Equatable {
     if (data is List) {
       return data
           .map((item) {
-            if (item is Map<String, dynamic>) {
-              return PlaylistModelStruct.maybeFromMap(item);
+            try {
+              if (item is Map) {
+                return PlaylistModelStruct.maybeFromMap(item);
+              }
+            } catch (_) {
+              // skip malformed playlist items
             }
             return null;
           })

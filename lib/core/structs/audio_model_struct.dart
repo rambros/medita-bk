@@ -80,10 +80,10 @@ class AudioModelStruct extends FFFirebaseStruct {
   bool hasAudioType() => _audioType != null;
 
   static AudioModelStruct fromMap(Map<String, dynamic> data) => AudioModelStruct(
-        id: data['id'] as String?,
-        title: data['title'] as String?,
-        author: data['author'] as String?,
-        fileLocation: data['fileLocation'] as String?,
+        id: data['id']?.toString(),
+        title: data['title']?.toString(),
+        author: data['author']?.toString(),
+        fileLocation: data['fileLocation']?.toString(),
         fileType: data['fileType'] is FileType ? data['fileType'] : deserializeEnum<FileType>(data['fileType']),
         duration: castToType<int>(data['duration']),
         audioType: data['audioType'] is AudioType ? data['audioType'] : deserializeEnum<AudioType>(data['audioType']),

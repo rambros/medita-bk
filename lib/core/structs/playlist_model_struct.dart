@@ -73,10 +73,10 @@ class PlaylistModelStruct extends FFFirebaseStruct {
   bool hasAudios() => _audios != null;
 
   static PlaylistModelStruct fromMap(Map<String, dynamic> data) => PlaylistModelStruct(
-        id: data['id'] as String?,
-        title: data['title'] as String?,
-        description: data['description'] as String?,
-        imageUrl: data['imageUrl'] as String?,
+        id: data['id']?.toString(),
+        title: data['title']?.toString(),
+        description: data['description']?.toString(),
+        imageUrl: data['imageUrl']?.toString(),
         duration: castToType<int>(data['duration']),
         audios: getStructList(
           data['audios'],

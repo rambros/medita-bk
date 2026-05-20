@@ -38,7 +38,15 @@
       "WebFetch(domain:pub.dev)",
       "Bash(~/Library/Android/sdk/platform-tools/adb devices:*)",
       "WebSearch",
-      "Bash(pod update:*)"
+      "Bash(pod update:*)",
+      "Bash(curl -s \"https://pub.dev/api/packages/page_transition\")",
+      "Bash(cat /Users/rodrigoambros/.pub-cache/hosted/pub.dev/page_transition-2.2.1/lib/src/page_transition.dart | head -120)",
+      "Read(//Users/rodrigoambros/.pub-cache/hosted/pub.dev/page_transition-2.2.1/lib/src/**)",
+      "Bash(grep -r \"CupertinoPageTransitionsBuilder\" /Users/rodrigoambros/Documents/flutter/packages/flutter/lib/ 2>/dev/null | head -5)",
+      "Read(//Users/rodrigoambros/Documents/flutter/packages/flutter/lib/**)",
+      "Bash(cp -r /Users/rodrigoambros/.pub-cache/hosted/pub.dev/page_transition-2.2.1 /Users/rodrigoambros/Documents/Desenv/0.Clientes/Agencia/ProjGW/codigo/medita-bk/third_party/page_transition && echo \"Copied\")",
+      "Bash(grep -n \"androidNotificationChannelDescription\\\\|AudioServiceConfig\" /Users/rodrigoambros/.pub-cache/hosted/pub.dev/audio_service-0.18.18/lib/audio_service.dart 2>/dev/null | head -10)",
+      "Read(//Users/rodrigoambros/.pub-cache/hosted/pub.dev/audio_service-0.18.18/lib/**)"
     ],
     "deny": [],
     "ask": []

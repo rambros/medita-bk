@@ -244,9 +244,12 @@ class _WeeklyStatisticsWidgetState extends State<WeeklyStatisticsWidget> {
       }
       numDay++;
     }
+    if (isSequence) {
+      listSequences.add(daysInSequence);
+    }
 
     if (isSequenceActive) {
-      _actualSequenceOfDaysWithSessionW = listSequences[0] ?? 1;
+      _actualSequenceOfDaysWithSessionW = listSequences.isNotEmpty ? listSequences[0] : 1;
     } else {
       _actualSequenceOfDaysWithSessionW = 0;
     }

@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MeditaBK — Workspace Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-darker: #0d1117;
+      --bg-dark: #161b22;
+      --bg-medium: #21262d;
+      --bg-light: #30363d;
+      --border-color: #30363d;
+      --accent: #58a6ff;
+      --accent-hover: #1f6feb;
+      --text-main: #c9d1d9;
+      --text-muted: #8b949e;
+      --text-light: #f0f6fc;
+      --folder-color: #e2c08d;
+      --file-color: #58a6ff;
+      --dart-color: #00b4ab;
+      --yaml-color: #cb2431;
+      --md-color: #ff9e3b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-darker);
+      color: var(--text-main);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Titlebar */
+    header {
+      background-color: var(--bg-darker);
+      border-bottom: 1px solid var(--border-color);
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      font-size: 13px;
+      user-select: none;
+    }
+
+    .title-center {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .dot-red { background-color: #ff5f56; }
+    .dot-yellow { background-color: #ffbd2e; }
+    .dot-green { background-color: #27c93f; }
+
+    /* Main Container */
+    .main-container {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* Activity Bar (VS Code style far left) */
+    .activity-bar {
+      width: 48px;
+      background-color: var(--bg-darker);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 12px;
+      gap: 20px;
+    }
+
+    .activity-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .activity-btn.active, .activity-btn:hover {
+      color: var(--text-light);
+      background-color: var(--bg-medium);
+    }
+
+    /* Sidebar - Explorer Tree */
+    .sidebar {
+      width: 300px;
+      background-color: var(--bg-dark);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .sidebar-header {
+      padding: 12px 16px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .search-box {
+      padding: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .search-input {
+      width: 100%;
+      background-color: var(--bg-darker);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      padding: 6px 10px;
+      color: var(--text-light);
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+    }
+
+    .tree-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 6px;
+    }
+
+    /* Tree Node Styling */
+    .tree-node {
+      font-size: 13.5px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.15s ease;
+    }
+
+    .node-row {
+      display: flex;
+      align-items: center;
+      padding: 6px 8px;
+      gap: 6px;
+      position: relative;
+    }
+
+    .node-row:hover {
+      background-color: var(--bg-medium);
+    }
+
+    .node-row.selected {
+      background-color: var(--bg-light);
+      color: var(--text-light);
+    }
+
+    .arrow {
+      width: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition: transform 0.2s ease;
+    }
+
+    .arrow.open {
+      transform: rotate(90deg);
+    }
+
+    .icon {
+      font-size: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .node-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .children-container {
+      padding-left: 16px;
+      display: none;
+      border-left: 1px dashed rgba(255, 255, 255, 0.05);
+      margin-left: 15px;
+    }
+
+    .children-container.visible {
+      display: block;
+    }
+
+    /* Editor / Visualizer Area */
+    .editor-area {
+      flex: 1;
+      background-color: var(--bg-darker);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .tabs-bar {
+      height: 35px;
+      background-color: var(--bg-dark);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      overflow-x: auto;
+    }
+
+    .tab {
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      background-color: var(--bg-dark);
+      border-right: 1px solid var(--border-color);
+      font-size: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+      gap: 8px;
+      height: 100%;
+      position: relative;
+      user-select: none;
+    }
+
+    .tab.active {
+      background-color: var(--bg-darker);
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    .tab.active::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: var(--accent);
+    }
+
+    .tab-close {
+      font-size: 12px;
+      border-radius: 50%;
+      width: 14px;
+      height: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s ease;
+    }
+
+    .tab-close:hover {
+      background-color: var(--bg-light);
+      color: var(--text-light);
+    }
+
+    /* Code Viewport */
+    .code-viewport {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* Welcome / Dashboard Screen */
+    .welcome-screen {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      text-align: center;
+      background: radial-gradient(circle at center, var(--bg-dark) 0%, var(--bg-darker) 100%);
+    }
+
+    .welcome-logo {
+      font-size: 64px;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 4px 12px rgba(88, 166, 255, 0.2));
+      animation: pulse 2.5s infinite alternate;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.05); }
+    }
+
+    .welcome-title {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-light);
+      margin-bottom: 8px;
+    }
+
+    .welcome-subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 480px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .welcome-shortcuts {
+      background-color: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      max-width: 500px;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    .shortcut-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .shortcut-key {
+      font-family: 'Fira Code', monospace;
+      background-color: var(--bg-medium);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--accent);
+      border-bottom: 1px solid var(--bg-light);
+    }
+
+    /* Active File Viewer */
+    .file-viewer {
+      flex: 1;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .file-viewer.active {
+      display: flex;
+    }
+
+    .file-info-header {
+      padding: 16px 24px;
+      background-color: rgba(255, 255, 255, 0.01);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .file-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .file-path {
+      font-family: 'Fira Code', monospace;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .file-body {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* Left pane of file view: info card */
+    .file-details-pane {
+      width: 350px;
+      border-right: 1px solid var(--border-color);
+      padding: 20px;
+      overflow-y: auto;
+      background-color: rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .detail-card {
+      background-color: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .card-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .card-content {
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: var(--text-main);
+    }
+
+    /* Right pane: mock code snippet editor */
+    .code-editor-pane {
+      flex: 1;
+      padding: 20px;
+      overflow: auto;
+      background-color: #090c10;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .code-editor-header {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-family: 'Fira Code', monospace;
+      margin-bottom: 8px;
+      border-bottom: 1px dashed var(--border-color);
+      padding-bottom: 8px;
+    }
+
+    pre {
+      font-family: 'Fira Code', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      color: #e6edf3;
+      white-space: pre;
+    }
+
+    /* Status Bar at the bottom */
+    .status-bar {
+      height: 22px;
+      background-color: var(--accent-hover);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10px;
+      font-size: 11px;
+      user-select: none;
+      font-weight: 500;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-badge {
+      background-color: rgba(255, 255, 255, 0.2);
+      padding: 1px 6px;
+      border-radius: 3px;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-darker);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--bg-light);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #444c56;
+    }
+
+    /* Highlights inside mock code */
+    .keyword { color: #ff7b72; font-weight: bold; }
+    .type { color: #ffa657; }
+    .string { color: #a5d6ff; }
+    .comment { color: #8b949e; font-style: italic; }
+    .function { color: #d2a8ff; }
+    .number { color: #79c0ff; }
+    .annotation { color: #ff7b72; }
+  </style>
+</head>
+<body>
+
+  <!-- Top Window Bar -->
+  <header>
+    <div class="window-dots">
+      <div class="dot dot-red"></div>
+      <div class="dot dot-yellow"></div>
+      <div class="dot dot-green"></div>
+    </div>
+    <div class="title-center">medita-bk — Workspace Visual Explorer (Modo MVVM)</div>
+    <div style="width: 50px;"></div>
+  </header>
+
+  <div class="main-container">
+    <!-- Activity Bar -->
+    <div class="activity-bar">
+      <div class="activity-btn active" title="Explorer">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+      </div>
+      <div class="activity-btn" title="Busca Global" onclick="focusSearch()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </div>
+      <div class="activity-btn" title="Controle de Versão (Git)">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="6" r="3"></circle><path d="M13 6h3a2 2 0 0 1 2 2v7"></path><line x1="6" y1="9" x2="6" y2="21"></line></svg>
+      </div>
+    </div>
+
+    <!-- Sidebar Explorer -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <span>Explorer: MEDITA-BK</span>
+        <span style="font-size: 12px; cursor: pointer;" title="Colapsar tudo" onclick="collapseAll()">[- ]</span>
+      </div>
+
+      <div class="search-box">
+        <input type="text" id="treeSearch" class="search-input" placeholder="Filtrar arquivos..." oninput="filterTree()">
+      </div>
+
+      <!-- File Tree Container -->
+      <div class="tree-container" id="treeRoot">
+        <!-- Will be populated dynamically by JavaScript -->
+      </div>
+    </div>
+
+    <!-- Editor Area -->
+    <div class="editor-area">
+      <!-- Tabs Bar -->
+      <div class="tabs-bar" id="tabsBar">
+        <div class="tab active" id="welcomeTab" onclick="showWelcome()">
+          <span>🏠 Dashboard</span>
+        </div>
+      </div>
+
+      <!-- Code Viewport -->
+      <div class="code-viewport">
+        <!-- Welcome Screen -->
+        <div class="welcome-screen" id="welcomeScreen">
+          <div class="welcome-logo">💙</div>
+          <h2 class="welcome-title">MeditaBK Mobile Explorer</h2>
+          <p class="welcome-subtitle">
+            Um visualizador interativo da arquitetura MVVM do aplicativo. Navegue pela árvore de arquivos na esquerda para ler resumos, explorar código mockado e ver os padrões definidos pelo projeto.
+          </p>
+          <div class="welcome-shortcuts">
+            <div class="shortcut-item">
+              <span>Navegar Arquivos</span>
+              <span class="shortcut-key">Click na Árvore</span>
+            </div>
+            <div class="shortcut-item">
+              <span>Buscar</span>
+              <span class="shortcut-key">Cmd + F</span>
+            </div>
+            <div class="shortcut-item">
+              <span>Padrão de UI</span>
+              <span class="shortcut-key">MVVM / Provider</span>
+            </div>
+            <div class="shortcut-item">
+              <span>Firebase ID</span>
+              <span class="shortcut-key">meditabk2020</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- File Viewer Container -->
+        <div class="file-viewer" id="fileViewer">
+          <div class="file-info-header">
+            <div class="file-title" id="openedFileTitle">📂 file_name.dart</div>
+            <div class="file-path" id="openedFilePath">lib/path/to/file.dart</div>
+          </div>
+          <div class="file-body">
+            <!-- Left Info Pane -->
+            <div class="file-details-pane">
+              <div class="detail-card">
+                <div class="card-title">Resumo e Objetivo</div>
+                <div class="card-content" id="fileDesc">Selecione um arquivo para ver sua função no aplicativo.</div>
+              </div>
+              <div class="detail-card">
+                <div class="card-title">Regras de Arquitetura</div>
+                <div class="card-content" id="fileRules">
+                  Siga sempre a separação clássica:
+                  <ul style="padding-left: 18px; margin-top: 8px;">
+                    <li><b>UI:</b> Apenas renderiza estado da ViewModel.</li>
+                    <li><b>ViewModel:</b> Mantém o estado da UI e chama Repositories.</li>
+                    <li><b>Data/Repositories:</b> Acessa o Firestore e converte DTOs.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <!-- Right Code Editor Pane -->
+            <div class="code-editor-pane">
+              <div class="code-editor-header">
+                <span>DART SOURCE CODE PREVIEW (MOCK)</span>
+                <span>UTF-8</span>
+              </div>
+              <pre id="codeBlock"><code>// Selecione um arquivo na barra lateral</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Status Bar -->
+  <div class="status-bar">
+    <div class="status-item">
+      <span>💙 Flutter (Stable)</span>
+      <span>|</span>
+      <span>🌿 main</span>
+      <span>|</span>
+      <span class="status-badge">✔ No Problems</span>
+    </div>
+    <div class="status-item">
+      <span>Dart 3.x</span>
+      <span>|</span>
+      <span>MVVM Layered</span>
+    </div>
+  </div>
+
+  <script>
+    // Project File Hierarchy Data
+    const projectData = {
+      name: "medita-bk",
+      type: "folder",
+      path: "",
+      children: [
+        {
+          name: "lib",
+          type: "folder",
+          path: "lib",
+          description: "Pasta contendo todo o código-fonte principal do app escrito em Dart, estruturado conforme o padrão de camadas MVVM Feature-first do estudo Compass.",
+          children: [
+            {
+              name: "config",
+              type: "folder",
+              path: "lib/config",
+              description: "Armazena as configurações globais do aplicativo, definições de portas, chaves de API, variáveis de ambiente (Staging, Development, Production) e inicialização global.",
+              code: `<span class="keyword">class</span> <span class="type">AppConfig</span> {
+  <span class="keyword">static const</span> String firebaseProjectId = <span class="string">"meditabk2020"</span>;
+  <span class="keyword">static const</span> bool useEmulator = <span class="keyword">false</span>;
+  
+  <span class="keyword">static</span> <span class="type">void</span> <span class="function">initEnv</span>() {
+    <span class="comment">// Define se roda em staging ou dev</span>
+  }
+}`
+            },
+            {
+              name: "core",
+              type: "folder",
+              path: "lib/core",
+              description: "Elementos compartilhados de design e temas do app. Contém paletas de cores centralizadas, fontes do Google Fonts personalizadas e estilos de botões/cards unificados para evitar hard-coding.",
+              code: `<span class="keyword">import</span> <span class="string">'package:flutter/material.dart'</span>;
+
+<span class="keyword">class</span> <span class="type">AppTheme</span> {
+  <span class="keyword">static</span> <span class="type">ThemeData</span> <span class="keyword">get</span> <span class="function">darkTheme</span> => <span class="type">ThemeData</span>(
+    brightness: <span class="type">Brightness</span>.dark,
+    primaryColor: <span class="keyword">const</span> <span class="type">Color</span>(<span class="number">0xFF58A6FF</span>),
+    scaffoldBackgroundColor: <span class="keyword">const</span> <span class="type">Color</span>(<span class="number">0xFF0D1117</span>),
+    <span class="comment">// Estilizações harmonizadas HSL</span>
+  );
+}`
+            },
+            {
+              name: "data",
+              type: "folder",
+              path: "lib/data",
+              description: "Camada de Dados (Data Layer). Responsável por buscar, gravar, atualizar e modelar dados físicos de bancos externos (Firestore), APIs (Dio) ou memória local (SharedPreferences).",
+              children: [
+                {
+                  name: "models",
+                  type: "folder",
+                  path: "lib/data/models",
+                  description: "Data Transfer Objects (DTOs) específicos da infraestrutura. Contêm serialização (fromJson) e mapeamento direto dos documentos e objetos recebidos via rede.",
+                  code: `<span class="keyword">class</span> <span class="type">UserDTO</span> {
+  <span class="keyword">final</span> String uid;
+  <span class="keyword">final</span> List&lt;String&gt; userRole;
+
+  <span class="type">UserDTO</span>({<span class="keyword">required this</span>.uid, <span class="keyword">required this</span>.userRole});
+
+  <span class="keyword">factory</span> <span class="type">UserDTO</span>.<span class="function">fromJson</span>(Map&lt;String, <span class="keyword">dynamic</span>&gt; json) {
+    <span class="keyword">return</span> <span class="type">UserDTO</span>(
+      uid: json[<span class="string">'uid'</span>] ?? <span class="string">''</span>,
+      userRole: List&lt;String&gt;.from(json[<span class="string">'userRole'</span>] ?? []),
+    );
+  }
+}`
+                },
+                {
+                  name: "repositories",
+                  type: "folder",
+                  path: "lib/data/repositories",
+                  description: "Implementações reais das interfaces de Repositórios. Fazem a ponte entre fontes de dados locais/remotas e entregam os modelos de domínio consolidados para a ViewModel.",
+                  code: `<span class="keyword">import</span> <span class="string">'package:cloud_firestore/cloud_firestore.dart'</span>;
+
+<span class="keyword">class</span> <span class="type">MeditationRepository</span> {
+  <span class="keyword">final</span> <span class="type">FirebaseFirestore</span> _firestore = <span class="type">FirebaseFirestore</span>.instance;
+
+  <span class="type">Future</span>&lt;List&lt;<span class="type">Meditation</span>&gt;&gt; <span class="function">fetchMeditations</span>() <span class="keyword">async</span> {
+    <span class="keyword">final</span> snapshot = <span class="keyword">await</span> _firestore.collection(<span class="string">'meditations'</span>).get();
+    <span class="keyword">return</span> snapshot.docs.map((doc) => <span class="type">Meditation</span>.fromFirestore(doc)).toList();
+  }
+}`
+                },
+                {
+                  name: "services",
+                  type: "folder",
+                  path: "lib/data/services",
+                  description: "Clientes e wrappers de serviços externos: SDK do Firebase Auth, Firebase Storage para upload de áudio de meditações, e chamadas diretas a Cloud Functions.",
+                  code: `<span class="keyword">import</span> <span class="string">'package:firebase_auth/firebase_auth.dart'</span>;
+
+<span class="keyword">class</span> <span class="type">AuthService</span> {
+  <span class="keyword">final</span> <span class="type">FirebaseAuth</span> _auth = <span class="type">FirebaseAuth</span>.instance;
+
+  <span class="type">Future</span>&lt;<span class="type">User</span>?&gt; <span class="function">signIn</span>(String email, String password) <span class="keyword">async</span> {
+    <span class="keyword">final</span> credential = <span class="keyword">await</span> _auth.signInWithEmailAndPassword(email: email, password: password);
+    <span class="keyword">return</span> credential.user;
+  }
+}`
+                }
+              ]
+            },
+            {
+              name: "domain",
+              type: "folder",
+              path: "lib/domain",
+              description: "Camada de Domínio (Domain Layer). Contém a inteligência central e as entidades de negócio puras do app. Totalmente desacoplada de pacotes externos, Flutter e Firebase.",
+              children: [
+                {
+                  name: "agenda",
+                  type: "folder",
+                  path: "lib/domain/agenda",
+                  description: "Validações e regras de negócio para criação de horários de meditação e eventos coletivos."
+                },
+                {
+                  name: "meditation",
+                  type: "folder",
+                  path: "lib/domain/meditation",
+                  description: "Regras de playlist, contagem de minutos meditados, e controle de execução de áudios."
+                },
+                {
+                  name: "models",
+                  type: "folder",
+                  path: "lib/domain/models",
+                  description: "Entidades de domínio. Estruturas de dados ideais que a interface utiliza para se renderizar de forma desacoplada da infraestrutura.",
+                  code: `<span class="keyword">class</span> <span class="type">UserEntity</span> {
+  <span class="keyword">final</span> String id;
+  <span class="keyword">final</span> String name;
+  <span class="keyword">final</span> List&lt;String&gt; roles;
+
+  <span class="type">UserEntity</span>({<span class="keyword">required this</span>.id, <span class="keyword">required this</span>.name, <span class="keyword">required this</span>.roles});
+
+  bool <span class="keyword">get</span> <span class="function">isTester</span> => roles.any((r) => r.toLowerCase() == <span class="string">'tester'</span>);
+  bool <span class="keyword">get</span> <span class="function">isAdmin</span> => roles.any((r) => r.toLowerCase() == <span class="string">'admin'</span>);
+}`
+                },
+                {
+                  name: "user",
+                  type: "folder",
+                  path: "lib/domain/user",
+                  description: "Especificações de controle de permissões e perfis de usuários (Admin, Editor, Tester, Autor, User)."
+                }
+              ]
+            },
+            {
+              name: "routing",
+              type: "folder",
+              path: "lib/routing",
+              description: "Configuração do ecossistema de rotas declarativas do aplicativo. Utiliza GoRouter para definir fluxos de telas seguros e controle de redirecionamento quando desautenticado.",
+              code: `<span class="keyword">import</span> <span class="string">'package:go_router/go_router.dart'</span>;
+<span class="keyword">import</span> <span class="string">'../ui/pages.dart'</span>;
+
+<span class="keyword">final</span> <span class="type">GoRouter</span> router = <span class="type">GoRouter</span>(
+  initialLocation: <span class="string">'/'</span>,
+  routes: [
+    <span class="type">GoRoute</span>(
+      path: <span class="string">'/'</span>,
+      builder: (context, state) =&gt; <span class="keyword">const</span> <span class="type">HomePage</span>(),
+    ),
+    <span class="type">GoRoute</span>(
+      path: <span class="string">'/meditacoes'</span>,
+      builder: (context, state) =&gt; <span class="keyword">const</span> <span class="type">MeditationListPage</span>(),
+    ),
+  ],
+);`
+            },
+            {
+              name: "ui",
+              type: "folder",
+              path: "lib/ui",
+              description: "Camada Visual e de Apresentação. Onde as telas interagem com as lógicas do ViewModel por meio de ChangeNotifierProvider e Consumer/context.watch().",
+              children: [
+                { name: "agenda", type: "folder", path: "lib/ui/agenda", description: "Interface visual para calendarização e participação em lives." },
+                { name: "authentication", type: "folder", path: "lib/ui/authentication", description: "Telas de Login, Cadastro, Boas-vindas e verificação de perfil." },
+                { name: "config", type: "folder", path: "lib/ui/config", description: "Configuração de preferências do usuário como notificações e tema escuro." },
+                { name: "core", type: "folder", path: "lib/ui/core", description: "Widgets genéricos customizados (CustomButtons, GlassmorphicCard, Spinners)." },
+                { name: "desafio", type: "folder", path: "lib/ui/desafio", description: "Gamificação e desafios diários de meditação com badges de progresso." },
+                { name: "ead", type: "folder", path: "lib/ui/ead", description: "Interface de cursos online, palestras em texto e progresso acadêmico." },
+                { name: "home", type: "folder", path: "lib/ui/home", description: "Dashboard principal com atalhos rápidos e recomendações personalizadas." },
+                { name: "meditation", type: "folder", path: "lib/ui/meditation", description: "Telas de tocador de áudios de meditação guiados e visualizador de ondas sonoras." },
+                { name: "mensagens", type: "folder", path: "lib/ui/mensagens", description: "Telas de comunicação interna e murais espirituais." },
+                { name: "notificacoes", type: "folder", path: "lib/ui/notificacoes", description: "Configurações de alerta e histórico de push notifications lidos." },
+                { name: "playlist", type: "folder", path: "lib/ui/playlist", description: "Criação de fila de reprodução de meditações." },
+                { name: "suporte", type: "folder", path: "lib/ui/suporte", description: "Canal de abertura de chamados e FAQ interativo." },
+                { name: "traffic_control", type: "folder", path: "lib/ui/traffic_control", description: "Módulo interativo de controle de fluxos de tráfego." },
+                { name: "video", type: "folder", path: "lib/ui/video", description: "Listagem de palestras de áudio e vídeo do YouTube/Vimeo integrados nativamente." },
+                {
+                  name: "pages.dart",
+                  type: "file",
+                  path: "lib/ui/pages.dart",
+                  description: "Centralizador de exportações de páginas. Serve para encurtar e simplificar os pacotes de importação nas classes de rotas.",
+                  code: `<span class="keyword">export</span> <span class="string">'home/home_page.dart'</span>;
+<span class="keyword">export</span> <span class="string">'authentication/login_page.dart'</span>;
+<span class="keyword">export</span> <span class="string">'meditation/meditation_list_page.dart'</span>;
+<span class="keyword">export</span> <span class="string">'video/palestras_list_page.dart'</span>;`
+                },
+                {
+                  name: "view_models.dart",
+                  type: "file",
+                  path: "lib/ui/view_models.dart",
+                  description: "Gerencia a injeção global de ViewModels no Provider da aplicação, permitindo que as Views consumam estados limpos em ChangeNotifier de forma centralizada.",
+                  code: `<span class="keyword">import</span> <span class="string">'package:provider/provider.dart'</span>;
+<span class="keyword">import</span> <span class="string">'package:provider/single_child_widget.dart'</span>;
+<span class="keyword">import</span> <span class="string">'home/view_model/home_view_model.dart'</span>;
+<span class="keyword">import</span> <span class="string">'meditation/view_model/meditation_view_model.dart'</span>;
+
+<span class="type">List</span>&lt;<span class="type">SingleChildWidget</span>&gt; globalViewModels = [
+  <span class="type">ChangeNotifierProvider</span>(create: (_) =&gt; <span class="type">HomeViewModel</span>()),
+  <span class="type">ChangeNotifierProvider</span>(create: (_) =&gt; <span class="type">MeditationViewModel</span>()),
+];`
+                }
+              ]
+            },
+            {
+              name: "utils",
+              type: "folder",
+              path: "lib/utils",
+              description: "Helpers de data, conversores de segundos para timer de meditação, e helpers criptográficos para tratamento de dados locais."
+            },
+            {
+              name: "main.dart",
+              type: "file",
+              path: "lib/main.dart",
+              description: "Inicializador primordial. Carrega configurações do Firebase, inicializa widgets nativos de splash, instancia os Providers de estado de forma aninhada, e injeta o GoRouter na aplicação.",
+              code: `<span class="keyword">import</span> <span class="string">'package:flutter/material.dart'</span>;
+<span class="keyword">import</span> <span class="string">'package:provider/provider.dart'</span>;
+<span class="keyword">import</span> <span class="string">'routing/router.dart'</span>;
+<span class="keyword">import</span> <span class="string">'ui/view_models.dart'</span>;
+
+<span class="type">void</span> <span class="function">main</span>() <span class="keyword">async</span> {
+  <span class="type">WidgetsFlutterBinding</span>.<span class="function">ensureInitialized</span>();
+  <span class="keyword">await</span> <span class="type">Firebase</span>.<span class="function">initializeApp</span>();
+  
+  <span class="function">runApp</span>(<span class="keyword">const</span> <span class="type">MeditaBKApp</span>());
+}
+
+<span class="keyword">class</span> <span class="type">MeditaBKApp</span> <span class="keyword">extends</span> <span class="type">StatelessWidget</span> {
+  <span class="keyword">const</span> <span class="type">MeditaBKApp</span>({<span class="type">super</span>.key});
+
+  <span class="annotation">@override</span>
+  <span class="type">Widget</span> <span class="function">build</span>(<span class="type">BuildContext</span> context) {
+    <span class="keyword">return</span> <span class="type">MultiProvider</span>(
+      providers: globalViewModels,
+      child: <span class="type">MaterialApp</span>.router(
+        title: <span class="string">'MeditaBK'</span>,
+        theme: <span class="type">AppTheme</span>.darkTheme,
+        routerConfig: router,
+      ),
+    );
+  }
+}`
+            }
+          ]
+        },
+        {
+          name: "assets",
+          type: "folder",
+          path: "assets",
+          description: "Pasta com recursos multimídia do app. Dividida em subpastas de áudios de meditações (MP3), ícones, imagens de fundo de tela e animações vetoriais do Lottie."
+        },
+        {
+          name: "firebase",
+          type: "folder",
+          path: "firebase",
+          description: "Configurações de infraestrutura do backend Serverless no Firebase. Contém o arquivo crucial firestore.rules para segurança de leitura/escrita compartilhada com o admin panel.",
+          code: `<span class="comment">// rules_version = '2';</span>
+<span class="keyword">service</span> cloud.firestore {
+  <span class="keyword">match</span> /databases/{database}/documents {
+    <span class="keyword">function</span> <span class="function">isAuth</span>() { <span class="keyword">return</span> request.auth != <span class="keyword">null</span>; }
+    <span class="keyword">function</span> <span class="function">isOwner</span>(uid) { <span class="keyword">return</span> request.auth.uid == uid; }
+
+    <span class="keyword">match</span> /users/{uid} {
+      <span class="keyword">allow read, write:</span> <span class="keyword">if</span> isOwner(uid);
+    }
+  }
+}`
+        },
+        {
+          name: "docs",
+          type: "folder",
+          path: "docs",
+          description: "Documentações de integração. Onde fica listado o FIRESTORE_RULES.md descrevendo cada collection necessária e como integrá-las de forma sincronizada com o projeto ../medita-bk-web-admin."
+        },
+        {
+          name: "test",
+          type: "folder",
+          path: "test",
+          description: "Testes automatizados do projeto estruturados conforme o Compass. Inclui Fakes para repositórios do Firebase permitindo testar ViewModels em isolamento completo sem tocar na internet."
+        },
+        {
+          name: "pubspec.yaml",
+          type: "file",
+          path: "pubspec.yaml",
+          description: "Manifesto de pacotes do app Flutter. Controla dependências cruciais como `provider` para gerência de estado, `go_router` para navegação, `dio` para conexões de rede e ativa assets locais.",
+          code: `<span class="keyword">name:</span> medita_bk
+<span class="keyword">description:</span> Aplicativo Mobile de Meditação - Brahma Kumaris
+<span class="keyword">version:</span> 1.0.0+1
+
+<span class="keyword">environment:</span>
+  <span class="keyword">sdk:</span> '&gt;=3.0.0 &lt;4.0.0'
+
+<span class="keyword">dependencies:</span>
+  <span class="keyword">flutter:</span>
+    <span class="keyword">sdk:</span> flutter
+  <span class="keyword">provider:</span> ^6.1.1
+  <span class="keyword">go_router:</span> ^13.0.0
+  <span class="keyword">cloud_firestore:</span> ^4.14.0
+  <span class="keyword">firebase_core:</span> ^2.24.0`
+        },
+        {
+          name: "CLAUDE.md",
+          type: "file",
+          path: "CLAUDE.md",
+          description: "Manual operacional prioritário para agentes de Inteligência Artificial trabalhando neste projeto. Define comandos comuns, regras de collections e controle de deploys.",
+          code: `<span class="comment"># CLAUDE.md — MeditaBK (App Mobile)</span>
+<span class="comment">// Regras obrigatórias de collection:</span>
+1. Adicionar o bloco match em firebase/firestore.rules deste projeto
+2. Copiar o arquivo atualizado para o admin panel:
+   cp firebase/firestore.rules ../medita-bk-web-admin/firebase/firestore.rules
+3. Fazer deploy:
+   firebase deploy --only firestore:rules --project meditabk2020`
+        },
+        {
+          name: "flutter_standards.md",
+          type: "file",
+          path: "flutter_standards.md",
+          description: "Manual arquitetural oficial adotado. Define a arquitetura Clean MVVM segregada em UI, Domain e Data Layers, evitando completamente códigos injetados e placeholders.",
+          code: `<span class="comment"># Recomendações de desenvolvimento – MVVM (Flutter)</span>
+- UI fala apenas com ViewModel.
+- ViewModel herda de ChangeNotifier e encapsula comandos.
+- Domain possui enums e entidades puras de negócio.
+- Data manipula repositories físicos e models/DTOs.`
+        },
+        {
+          name: "README.md",
+          type: "file",
+          path: "README.md",
+          description: "Instruções de onboarding do projeto para desenvolvedores físicos, descrevendo pré-requisitos como instalação do Flutter SDK, emuladores e setup do Firebase CLI."
+        }
+      ]
+    };
+
+    const activeTabs = [];
+    let activeTabId = 'welcome';
+
+    function buildTree(node, container, searchFilter = '') {
+      const children = node.children || [];
+      const filteredChildren = children.filter(child => {
+        if (!searchFilter) return true;
+        
+        // Match search query
+        const matchName = child.name.toLowerCase().includes(searchFilter.toLowerCase());
+        const matchDesc = child.description && child.description.toLowerCase().includes(searchFilter.toLowerCase());
+        
+        if (matchName || matchDesc) return true;
+        
+        // Recursive children match
+        if (child.children) {
+          return hasMatchingChild(child, searchFilter);
+        }
+        return false;
+      });
+
+      filteredChildren.forEach(child => {
+        const isFolder = child.type === 'folder';
+        const nodeEl = document.createElement('div');
+        nodeEl.className = 'tree-node';
+
+        // Define icons based on type and name extensions
+        let icon = '📄';
+        let iconColor = 'var(--file-color)';
+        if (isFolder) {
+          icon = '📁';
+          iconColor = 'var(--folder-color)';
+        } else if (child.name.endsWith('.dart')) {
+          icon = '💙';
+          iconColor = 'var(--dart-color)';
+        } else if (child.name.endsWith('.yaml') || child.name.endsWith('.lock')) {
+          icon = '⚙️';
+          iconColor = 'var(--yaml-color)';
+        } else if (child.name.endsWith('.md')) {
+          icon = '📝';
+          iconColor = 'var(--md-color)';
+        }
+
+        const row = document.createElement('div');
+        row.className = 'node-row';
+        row.dataset.path = child.path;
+
+        let arrowHtml = '';
+        if (isFolder) {
+          arrowHtml = `<span class="arrow" id="arrow-${child.path.replace(/\//g, '-')}">▸</span>`;
+        } else {
+          arrowHtml = `<span class="arrow"></span>`;
+        }
+
+        row.innerHTML = `
+          ${arrowHtml}
+          <span class="icon" style="color: ${iconColor}">${icon}</span>
+          <span class="node-name">${child.name}</span>
+        `;
+
+        nodeEl.appendChild(row);
+
+        if (isFolder) {
+          const childrenContainer = document.createElement('div');
+          childrenContainer.className = 'children-container';
+          childrenContainer.id = `children-${child.path.replace(/\//g, '-')}`;
+          
+          if (searchFilter) {
+            childrenContainer.classList.add('visible');
+            const arrow = row.querySelector('.arrow');
+            if (arrow) arrow.classList.add('open');
+          }
+
+          nodeEl.appendChild(childrenContainer);
+          buildTree(child, childrenContainer, searchFilter);
+          
+          row.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleFolder(child.path);
+            selectFileOrFolder(child);
+          });
+        } else {
+          row.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openFile(child);
+          });
+        }
+
+        container.appendChild(nodeEl);
+      });
+    }
+
+    function hasMatchingChild(node, query) {
+      if (!node.children) return false;
+      return node.children.some(child => {
+        if (child.name.toLowerCase().includes(query.toLowerCase())) return true;
+        if (child.children) return hasMatchingChild(child, query);
+        return false;
+      });
+    }
+
+    function toggleFolder(path) {
+      const containerId = `children-${path.replace(/\//g, '-')}`;
+      const arrowId = `arrow-${path.replace(/\//g, '-')}`;
+      const container = document.getElementById(containerId);
+      const arrow = document.getElementById(arrowId);
+      
+      if (container) {
+        const isVisible = container.classList.toggle('visible');
+        if (arrow) {
+          if (isVisible) {
+            arrow.classList.add('open');
+            arrow.innerText = '◂'; // rotation handled by css, or just symbol swap
+          } else {
+            arrow.classList.remove('open');
+            arrow.innerText = '▸';
+          }
+        }
+      }
+    }
+
+    function collapseAll() {
+      document.querySelectorAll('.children-container').forEach(c => {
+        c.classList.remove('visible');
+      });
+      document.querySelectorAll('.arrow').forEach(a => {
+        a.classList.remove('open');
+        a.innerText = '▸';
+      });
+    }
+
+    function selectFileOrFolder(node) {
+      document.querySelectorAll('.node-row').forEach(row => {
+        row.classList.remove('selected');
+        if (row.dataset.path === node.path) {
+          row.classList.add('selected');
+        }
+      });
+      
+      if (node.type === 'folder') {
+        document.getElementById('welcomeScreen').style.display = 'none';
+        document.getElementById('fileViewer').classList.add('active');
+        document.getElementById('openedFileTitle').innerText = '📂 ' + node.name;
+        document.getElementById('openedFilePath').innerText = node.path;
+        document.getElementById('fileDesc').innerText = node.description;
+        document.getElementById('codeBlock').innerHTML = `<code>// Pasta: ${node.path}\n// Contém subpastas ou arquivos de funcionalidade.\n\n${node.description}</code>`;
+      }
+    }
+
+    function openFile(file) {
+      // Manage Selection Highlighting
+      document.querySelectorAll('.node-row').forEach(row => {
+        row.classList.remove('selected');
+        if (row.dataset.path === file.path) {
+          row.classList.add('selected');
+        }
+      });
+
+      // Show Viewers
+      document.getElementById('welcomeScreen').style.display = 'none';
+      document.getElementById('fileViewer').classList.add('active');
+
+      // Update Header Content
+      let icon = '📄';
+      if (file.name.endsWith('.dart')) icon = '💙';
+      else if (file.name.endsWith('.yaml')) icon = '⚙️';
+      else if (file.name.endsWith('.md')) icon = '📝';
+
+      document.getElementById('openedFileTitle').innerText = icon + ' ' + file.name;
+      document.getElementById('openedFilePath').innerText = file.path;
+      document.getElementById('fileDesc').innerText = file.description;
+
+      // Update Code Snippet
+      const mockCode = file.code || `// Arquivo: ${file.name}\n\n// Este arquivo armazena códigos da camada de infraestrutura ou utilitários.\n// Descrição: ${file.description}`;
+      document.getElementById('codeBlock').innerHTML = `<code>${mockCode}</code>`;
+
+      // Update Active Tab Id
+      activeTabId = file.path;
+      updateTabs(file);
+    }
+
+    function updateTabs(file) {
+      const tabsBar = document.getElementById('tabsBar');
+      
+      // Remove active class from welcome
+      document.getElementById('welcomeTab').classList.remove('active');
+
+      // Check if tab already exists
+      let tabEl = document.getElementById(`tab-${file.path.replace(/\//g, '-')}`);
+      if (!tabEl) {
+        tabEl = document.createElement('div');
+        tabEl.className = 'tab active';
+        tabEl.id = `tab-${file.path.replace(/\//g, '-')}`;
+        
+        let icon = '📄';
+        if (file.name.endsWith('.dart')) icon = '💙';
+        else if (file.name.endsWith('.yaml')) icon = '⚙️';
+        else if (file.name.endsWith('.md')) icon = '📝';
+
+        tabEl.innerHTML = `
+          <span>${icon} ${file.name}</span>
+          <span class="tab-close" onclick="closeTab(event, '${file.path}')">&times;</span>
+        `;
+        
+        tabEl.addEventListener('click', (e) => {
+          if (!e.target.classList.contains('tab-close')) {
+            openFile(file);
+          }
+        });
+        
+        tabsBar.appendChild(tabEl);
+      }
+
+      // Mark all tabs as inactive, then activate current
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tabEl.classList.add('active');
+    }
+
+    function closeTab(event, path) {
+      event.stopPropagation();
+      const tabId = `tab-${path.replace(/\//g, '-')}`;
+      const tabEl = document.getElementById(tabId);
+      if (tabEl) {
+        tabEl.remove();
+      }
+      showWelcome();
+    }
+
+    function showWelcome() {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('welcomeTab').classList.add('active');
+      document.getElementById('welcomeScreen').style.display = 'flex';
+      document.getElementById('fileViewer').classList.remove('active');
+      document.querySelectorAll('.node-row').forEach(row => row.classList.remove('selected'));
+    }
+
+    function filterTree() {
+      const searchVal = document.getElementById('treeSearch').value;
+      const rootContainer = document.getElementById('treeRoot');
+      rootContainer.innerHTML = '';
+      buildTree(projectData, rootContainer, searchVal);
+    }
+
+    function focusSearch() {
+      document.getElementById('treeSearch').focus();
+    }
+
+    // Initialize the Tree
+    const rootContainer = document.getElementById('treeRoot');
+    buildTree(projectData, rootContainer);
+  </script>
+</body>
+</html>

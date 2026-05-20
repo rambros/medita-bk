@@ -84,9 +84,15 @@ void main() async {
           exceptionStr.contains('HandshakeException') ||
           exceptionStr.contains('Connection terminated during handshake') ||
           exceptionStr.contains('Connection closed before full header') ||
+          exceptionStr.contains('Software caused connection abort') ||
+          exceptionStr.contains('Connection reset by peer') ||
+          exceptionStr.contains('Connection timed out') ||
           exceptionStr.contains('SocketException') ||
+          exceptionStr.contains('Failed host lookup') ||
+          exceptionStr.contains('No address associated with hostname') ||
           exceptionStr.contains('Connection refused') ||
-          exceptionStr.contains('Network is unreachable');
+          exceptionStr.contains('Network is unreachable') ||
+          exceptionStr.contains('firebasestorage.googleapis.com');
 
       if (isNetworkError) {
         FirebaseCrashlytics.instance.recordFlutterError(details);
@@ -307,12 +313,13 @@ void main() async {
               audioCache: audioCache,
             ),
       ),
-      ChangeNotifierProxyProvider<TcMusicApiService, TcMusicRepository>(
+      // lazy: false garante que loadMusics() inicia ao subir o app,
+      // não quando o usuário abre o seletor de músicas pela primeira vez.
+      ChangeNotifierProvider<TcMusicRepository>(
+        lazy: false,
         create: (context) => TcMusicRepository(
           apiService: context.read<TcMusicApiService>(),
         ),
-        update: (context, apiService, previous) =>
-            previous ?? TcMusicRepository(apiService: apiService),
       ),
 
       // Traffic Control Module - ViewModels
