@@ -75,16 +75,18 @@ class AvaliacaoFormViewModel extends ChangeNotifier {
   }
 
   Future<void> _carregarDados() async {
-    // TODO: Buscar inscrição e curso do Firestore
-    // Por enquanto, apenas buscar a avaliação
-
-    // Extrair cursoId do inscricaoId (formato: cursoId_usuarioId)
+    // Buscar inscrição e curso do Firestore
     final parts = inscricaoId.split('_');
-    if (parts.isEmpty) {
+    if (parts.length < 2) {
       throw Exception('ID de inscrição inválido');
     }
 
     final cursoId = parts[0];
+    final usuarioId = parts[1];
+
+    final eadRepository = EadRepository();
+    _curso = await eadRepository.getCursoById(cursoId);
+    _inscricao = await eadRepository.getInscricao(cursoId, usuarioId);
 
     // Buscar avaliação do curso
     _avaliacao = await _avaliacaoRepository.getAvaliacaoCurso(cursoId);

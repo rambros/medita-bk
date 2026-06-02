@@ -3,6 +3,7 @@ import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_theme.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_util.dart';
 import 'package:medita_bk/ui/core/flutter_flow/flutter_flow_widgets.dart';
 import 'package:medita_bk/core/services/review_service.dart';
+import 'package:medita_bk/routing/ead_routes.dart';
 import 'package:medita_bk/ui/pages.dart';
 import 'package:flutter/material.dart';
 
@@ -103,6 +104,81 @@ class _SupportPageState extends State<SupportPage> {
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          // === FAQ ===
+                          Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 16.0, 8.0),
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(16.0),
+                              onTap: () => context.pushNamed(EadRoutes.faq),
+                              child: Container(
+                                width: MediaQuery.sizeOf(context).width * 0.85,
+                                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      FlutterFlowTheme.of(context).primary,
+                                      FlutterFlowTheme.of(context).secondary,
+                                    ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(16.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: FlutterFlowTheme.of(context).primary.withValues(alpha: 0.3),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(8.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withValues(alpha: 0.2),
+                                        borderRadius: BorderRadius.circular(8.0),
+                                      ),
+                                      child: const Icon(Icons.help_outline_rounded, color: Colors.white, size: 24.0),
+                                    ),
+                                    const SizedBox(width: 16.0),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Perguntas Frequentes (FAQ)',
+                                            style: FlutterFlowTheme.of(context).titleSmall.override(
+                                                  fontFamily: FlutterFlowTheme.of(context).titleSmallFamily,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  letterSpacing: 0.0,
+                                                  useGoogleFonts: !FlutterFlowTheme.of(context).titleSmallIsCustom,
+                                                ),
+                                          ),
+                                          const SizedBox(height: 2.0),
+                                          Text(
+                                            'Veja se sua dúvida já foi respondida',
+                                            style: FlutterFlowTheme.of(context).bodySmall.override(
+                                                  fontFamily: FlutterFlowTheme.of(context).bodySmallFamily,
+                                                  color: Colors.white.withValues(alpha: 0.85),
+                                                  letterSpacing: 0.0,
+                                                  useGoogleFonts: !FlutterFlowTheme.of(context).bodySmallIsCustom,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white, size: 18.0),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 4.0),
+                            child: Divider(),
+                          ),
                           Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 12.0),
                             child: Row(

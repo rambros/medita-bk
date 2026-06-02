@@ -103,6 +103,12 @@ class FFAudioPlayerWidgetState extends State<FFAudioPlayerWidget> {
             _isDownloaded = cached;
             _isDownloading = false;
           });
+          // Se o download foi bem-sucedido e o player ainda não está tocando
+          // (ex: travado em buffering por rede lenta), reinicializa usando o
+          // arquivo local em vez de continuar tentando fazer stream da URL.
+          if (cached && audioPlayerController.playButtonNotifier.value != ButtonState.playing) {
+            _initPlayer();
+          }
         }
       }
     }

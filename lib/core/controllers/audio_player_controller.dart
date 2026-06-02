@@ -123,7 +123,11 @@ class AudioPlayerController {
     play();
   }
 
-  void initAudioPlayer(PlayerModel model) async {
+  void initAudioPlayer(PlayerModel model) {
+    _doInitAudioPlayer(model);
+  }
+
+  Future<void> _doInitAudioPlayer(PlayerModel model) async {
     // Parar e limpar a fila apenas se houver algo tocando
     try {
       final playbackState = _audioHandler.playbackState.value;
@@ -134,7 +138,12 @@ class AudioPlayerController {
       debugPrint('⚠️ Erro ao parar player: $e');
     }
 
-    await _loadMusic(model);
+    try {
+      await _loadMusic(model);
+    } catch (e) {
+      debugPrint('⚠️ Erro ao carregar música: $e');
+      return; // Não chama play() se o carregamento falhou
+    }
 
     // Só inicializa listeners uma vez
     if (!_listenersInitialized) {

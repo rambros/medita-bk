@@ -191,8 +191,17 @@ class _AudioHandler extends BaseAudioHandler {
     // Check if audio is in cache
     if (url != null) {
       final cached = await _resolveCachedPath(url);
-      if (cached != null && File(cached).existsSync()) {
-        return AudioSource.uri(Uri.file(cached), tag: mediaItem);
+      if (cached != null) {
+        final file = File(cached);
+        if (file.existsSync() && file.lengthSync() > 0) {
+          return AudioSource.uri(Uri.file(cached), tag: mediaItem);
+        } else if (file.existsSync()) {
+          // Arquivo vazio/corrompido — remove da lista para forçar novo download
+          await _purgeCacheEntry(url);
+          try {
+            file.deleteSync();
+          } catch (_) {}
+        }
       }
     }
 
@@ -423,8 +432,18 @@ class _AudioHandler extends BaseAudioHandler {
 
   @override
   Future<void> stop() async {
-    await _player.seek(Duration.zero, index: 0);
-    await _playlist.clear();
+    // Seek antes de limpar evita glitch de áudio, mas pode falhar se o player
+    // estiver em estado de erro ou sem source — por isso o try-catch.
+    try {
+      await _player.seek(Duration.zero, index: 0);
+    } catch (e) {
+      debugPrint('AudioHandler stop: seek failed (ignored): $e');
+    }
+    try {
+      await _playlist.clear();
+    } catch (e) {
+      debugPrint('AudioHandler stop: playlist.clear failed (ignored): $e');
+    }
     await _player.stop();
 
     playbackState.add(playbackState.value.copyWith(

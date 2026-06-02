@@ -30,6 +30,10 @@ class EadRoutes {
   static const String certificado = 'certificado';
   static const String certificadoPath = 'ead/certificado/:cursoId';
 
+  // FAQ
+  static const String faq = 'faq';
+  static const String faqPath = 'suporte/faq';
+
   // Suporte - Tickets
   static const String meusTickets = 'meusTickets';
   static const String meusTicketsPath = 'suporte/tickets';

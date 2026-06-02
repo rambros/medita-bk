@@ -1,18 +1,18 @@
-/// =====================================================
-/// INSTRUÇÕES PARA INTEGRAR ROTAS DO EAD NO nav.dart
-/// =====================================================
-/// 
-/// 1. No arquivo lib/routing/nav.dart, adicione os imports:
-/// 
-/// ```dart
-/// import 'package:medita_bk/ui/ead/index.dart';
-/// import 'package:medita_bk/routing/ead_routes.dart';
-/// ```
-/// 
-/// 2. Adicione as rotas abaixo dentro da lista de FFRoutes
-///    (dentro de `routes: [` do GoRouter)
-/// 
-/// 3. Cole o código abaixo após as outras rotas existentes:
+// =====================================================
+// INSTRUÇÕES PARA INTEGRAR ROTAS DO EAD NO nav.dart
+// =====================================================
+// 
+// 1. No arquivo lib/routing/nav.dart, adicione os imports:
+// 
+// ```dart
+// import 'package:medita_bk/ui/ead/index.dart';
+// import 'package:medita_bk/routing/ead_routes.dart';
+// ```
+// 
+// 2. Adicione as rotas abaixo dentro da lista de FFRoutes
+//    (dentro de `routes: [` do GoRouter)
+// 
+// 3. Cole o código abaixo após as outras rotas existentes:
 
 /*
             // === MÓDULO EAD ===
@@ -122,79 +122,79 @@
             // === FIM MÓDULO EAD ===
 */
 
-/// =====================================================
-/// EXEMPLO DE NAVEGAÇÃO PARA AS ROTAS EAD
-/// =====================================================
-/// 
-/// ```dart
-/// // Ir para Home EAD
-/// context.pushNamed(EadRoutes.eadHome);
-/// 
-/// // Ir para Catálogo de Cursos
-/// context.pushNamed(EadRoutes.catalogoCursos);
-/// 
-/// // Ir para Detalhes do Curso
-/// context.pushNamed(
-///   EadRoutes.cursoDetalhes,
-///   pathParameters: {'cursoId': 'abc123'},
-/// );
-/// 
-/// // Ir para Meus Cursos
-/// context.pushNamed(EadRoutes.meusCursos);
-/// 
-/// // Ir para Player do Tópico
-/// context.pushNamed(
-///   EadRoutes.playerTopico,
-///   pathParameters: {
-///     'cursoId': 'curso123',
-///     'aulaId': 'aula456',
-///     'topicoId': 'topico789',
-///   },
-/// );
-/// 
-/// // Ir para Quiz
-/// context.pushNamed(
-///   EadRoutes.quiz,
-///   pathParameters: {
-///     'cursoId': 'curso123',
-///     'aulaId': 'aula456',
-///     'topicoId': 'topico789',
-///   },
-/// );
-/// 
-/// // Ir para Certificado
-/// context.pushNamed(
-///   EadRoutes.certificado,
-///   pathParameters: {'inscricaoId': 'inscricao_abc'},
-/// );
-///
-/// // === DISCUSSÕES (Q&A) ===
-///
-/// // Ir para Discussões do Curso
-/// context.pushNamed(
-///   EadRoutes.discussoesCurso,
-///   pathParameters: {'cursoId': 'curso123'},
-///   extra: {'cursoTitulo': 'Nome do Curso'},
-/// );
-///
-/// // Ir para Nova Discussão
-/// context.pushNamed(
-///   EadRoutes.novaDiscussao,
-///   pathParameters: {'cursoId': 'curso123'},
-///   extra: {'cursoTitulo': 'Nome do Curso'},
-/// );
-///
-/// // Ir para Detalhes da Discussão
-/// context.pushNamed(
-///   EadRoutes.discussaoDetail,
-///   pathParameters: {'discussaoId': 'discussao123'},
-/// );
-///
-/// // === AVALIAÇÃO ===
-///
-/// // Ir para Formulário de Avaliação
-/// context.pushNamed(
-///   EadRoutes.avaliacaoForm,
-///   pathParameters: {'inscricaoId': 'curso123_user456'},
-/// );
-/// ```
+// =====================================================
+// EXEMPLO DE NAVEGAÇÃO PARA AS ROTAS EAD
+// =====================================================
+// 
+// ```dart
+// // Ir para Home EAD
+// context.pushNamed(EadRoutes.eadHome);
+// 
+// // Ir para Catálogo de Cursos
+// context.pushNamed(EadRoutes.catalogoCursos);
+// 
+// // Ir para Detalhes do Curso
+// context.pushNamed(
+//   EadRoutes.cursoDetalhes,
+//   pathParameters: {'cursoId': 'abc123'},
+// );
+// 
+// // Ir para Meus Cursos
+// context.pushNamed(EadRoutes.meusCursos);
+// 
+// // Ir para Player do Tópico
+// context.pushNamed(
+//   EadRoutes.playerTopico,
+//   pathParameters: {
+//     'cursoId': 'curso123',
+//     'aulaId': 'aula456',
+//     'topicoId': 'topico789',
+//   },
+// );
+// 
+// // Ir para Quiz
+// context.pushNamed(
+//   EadRoutes.quiz,
+//   pathParameters: {
+//     'cursoId': 'curso123',
+//     'aulaId': 'aula456',
+//     'topicoId': 'topico789',
+//   },
+// );
+// 
+// // Ir para Certificado
+// context.pushNamed(
+//   EadRoutes.certificado,
+//   pathParameters: {'inscricaoId': 'inscricao_abc'},
+// );
+//
+// // === DISCUSSÕES (Q&A) ===
+//
+// // Ir para Discussões do Curso
+// context.pushNamed(
+//   EadRoutes.discussoesCurso,
+//   pathParameters: {'cursoId': 'curso123'},
+//   extra: {'cursoTitulo': 'Nome do Curso'},
+// );
+//
+// // Ir para Nova Discussão
+// context.pushNamed(
+//   EadRoutes.novaDiscussao,
+//   pathParameters: {'cursoId': 'curso123'},
+//   extra: {'cursoTitulo': 'Nome do Curso'},
+// );
+//
+// // Ir para Detalhes da Discussão
+// context.pushNamed(
+//   EadRoutes.discussaoDetail,
+//   pathParameters: {'discussaoId': 'discussao123'},
+// );
+//
+// // === AVALIAÇÃO ===
+//
+// // Ir para Formulário de Avaliação
+// context.pushNamed(
+//   EadRoutes.avaliacaoForm,
+//   pathParameters: {'inscricaoId': 'curso123_user456'},
+// );
+// ```

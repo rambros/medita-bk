@@ -54,6 +54,10 @@ class DesafioRepository {
     final uid = currentUserUid;
     if (uid.isEmpty) return;
 
-    // TODO: define reset logic (template reload, clear progress, etc.)
+    // Clear the challenge progress and mark it as not started
+    await updateDesafio21(
+      createD21ModelStruct(delete: true),
+      desafio21Started: false,
+    );
   }
 }

@@ -52,6 +52,10 @@ export 'ead_home_page/widgets/ead_home_widgets.dart';
 // Widgets - Certificado
 export 'certificado_page/widgets/certificado_widget.dart';
 
+// === FAQ ===
+export '../suporte/faq/faq_list_page/faq_list_page.dart';
+export '../suporte/faq/view_model/faq_view_model.dart';
+
 // === SUPORTE - TICKETS ===
 // (Movido para /lib/ui/suporte)
 export '../suporte/meus_tickets_page/meus_tickets_page.dart';

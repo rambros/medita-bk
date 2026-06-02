@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 import 'package:alarm/alarm.dart';
 import 'package:flutter/services.dart';

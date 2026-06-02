@@ -77,6 +77,9 @@ export 'ead/player_topico_page/player_topico_page.dart' show PlayerTopicoPage;
 export 'ead/quiz_page/quiz_page.dart' show QuizPage;
 export 'ead/certificado_page/certificado_page.dart' show CertificadoPage;
 
+// FAQ
+export 'suporte/faq/faq_list_page/faq_list_page.dart' show FaqListPage;
+
 // Suporte (Tickets)
 export 'suporte/meus_tickets_page/meus_tickets_page.dart' show MeusTicketsPage;
 export 'suporte/novo_ticket_page/novo_ticket_page.dart' show NovoTicketPage;

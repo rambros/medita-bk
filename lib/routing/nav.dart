@@ -611,6 +611,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 inscricaoId: params.getParam('inscricaoId', ParamType.String)!,
               ),
             ),
+            // === FAQ ===
+            FFRoute(
+              name: EadRoutes.faq,
+              path: EadRoutes.faqPath,
+              builder: (context, params) => const FaqListPage(),
+            ),
             // === SUPORTE - TICKETS ===
             FFRoute(
               name: EadRoutes.meusTickets,
@@ -766,9 +772,9 @@ extension _GoRouterStateExtensions on GoRouterState {
     ..addAll(pathParameters)
     ..addAll(uri.queryParameters)
     ..addAll(extraMap);
-  TransitionInfo get transitionInfo => extraMap.containsKey(kTransitionInfoKey)
-      ? extraMap[kTransitionInfoKey] as TransitionInfo
-      : TransitionInfo.appDefault();
+  // TransitionInfo get transitionInfo => extraMap.containsKey(kTransitionInfoKey)
+  //     ? extraMap[kTransitionInfoKey] as TransitionInfo
+  //     : TransitionInfo.appDefault();
 }
 
 class FFParameters {

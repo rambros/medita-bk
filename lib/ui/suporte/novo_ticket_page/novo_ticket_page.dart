@@ -123,6 +123,10 @@ class _NovoTicketPageState extends State<NovoTicketPage> {
               child: ListView(
                 padding: const EdgeInsets.all(16),
                 children: [
+                  // Banner FAQ
+                  _buildFaqBanner(),
+                  const SizedBox(height: 16),
+
                   // Header informativo
                   _buildHeader(),
                   const SizedBox(height: 24),
@@ -150,6 +154,52 @@ class _NovoTicketPageState extends State<NovoTicketPage> {
               ),
             );
           },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFaqBanner() {
+    final appTheme = AppTheme.of(context);
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: () => context.pushNamed(EadRoutes.faq),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: appTheme.secondary.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: appTheme.secondary.withValues(alpha: 0.35)),
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.help_outline_rounded, color: appTheme.secondary, size: 22),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Sua dúvida pode já estar respondida',
+                    style: TextStyle(
+                      color: appTheme.secondary,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    'Consulte nossas Perguntas Frequentes antes de abrir uma solicitação →',
+                    style: TextStyle(
+                      color: appTheme.secondaryText,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

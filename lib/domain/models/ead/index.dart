@@ -32,3 +32,6 @@ export 'resposta_discussao_model.dart';
 
 // Notificações EAD
 export 'notificacao_ead_model.dart';
+
+// FAQ
+export 'faq_model.dart';
