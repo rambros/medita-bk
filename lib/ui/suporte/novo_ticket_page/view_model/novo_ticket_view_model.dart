@@ -23,7 +23,7 @@ class NovoTicketViewModel extends ChangeNotifier {
 
   // === Estado ===
 
-  CategoriaTicket _categoriaSelecionada = CategoriaTicket.outro;
+  CategoriaTicket _categoriaSelecionada = CategoriaTicket.tecnico;
   CategoriaTicket get categoriaSelecionada => _categoriaSelecionada;
 
   String? _cursoSelecionadoId;
@@ -167,7 +167,7 @@ class NovoTicketViewModel extends ChangeNotifier {
   void limparFormulario() {
     tituloController.clear();
     descricaoController.clear();
-    _categoriaSelecionada = CategoriaTicket.outro;
+    _categoriaSelecionada = CategoriaTicket.tecnico;
     _cursoSelecionadoId = null;
     _cursoSelecionado = null;
     _error = null;

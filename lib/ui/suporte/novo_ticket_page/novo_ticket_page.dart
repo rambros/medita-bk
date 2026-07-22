@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:medita_bk/data/repositories/auth_repository.dart';
 import 'package:medita_bk/data/models/firebase/user_model.dart';
 import 'package:medita_bk/routing/ead_routes.dart';
-import 'package:medita_bk/domain/models/ead/index.dart';
 import 'package:medita_bk/ui/core/theme/app_theme.dart';
 import 'package:medita_bk/ui/suporte/novo_ticket_page/view_model/novo_ticket_view_model.dart';
 
@@ -131,10 +130,6 @@ class _NovoTicketPageState extends State<NovoTicketPage> {
                   _buildHeader(),
                   const SizedBox(height: 24),
 
-                  // Categoria
-                  _buildCategoriaSection(viewModel),
-                  const SizedBox(height: 24),
-
                   // Título
                   _buildTituloField(viewModel),
                   const SizedBox(height: 16),
@@ -250,55 +245,6 @@ class _NovoTicketPageState extends State<NovoTicketPage> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildCategoriaSection(NovoTicketViewModel viewModel) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Categoria do problema *',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 4,
-          children: CategoriaTicket.values.map((categoria) {
-            final isSelected = viewModel.categoriaSelecionada == categoria;
-            return ChoiceChip(
-              label: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    categoria.icon,
-                    size: 18,
-                    color: isSelected ? Colors.white : categoria.color,
-                  ),
-                  const SizedBox(width: 6),
-                  Text(categoria.label),
-                ],
-              ),
-              selected: isSelected,
-              selectedColor: categoria.color,
-              backgroundColor: categoria.color.withOpacity(0.1),
-              labelStyle: TextStyle(
-                color: isSelected ? Colors.white : Colors.black87,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-              ),
-              onSelected: (selected) {
-                if (selected) {
-                  viewModel.setCategoria(categoria);
-                }
-              },
-            );
-          }).toList(),
-        ),
-      ],
     );
   }
 

@@ -24,6 +24,7 @@ class NotificacoesViewModel extends ChangeNotifier {
   bool _isLoading = true;
   bool _isRefreshing = false;
   String? _errorMessage;
+  bool _disposed = false;
 
   StreamSubscription<List<Notificacao>>? _notificacoesSubscription;
 
@@ -65,9 +66,12 @@ class NotificacoesViewModel extends ChangeNotifier {
     loadNotificacoes();
   }
 
+  void _safeNotify() {
+    if (!_disposed) notifyListeners();
+  }
+
   /// Configura listeners de streams para notificações
   void _setupListeners() {
-    // Listen para notificações
     _notificacoesSubscription = _repository.streamNotificacoes().listen(
       (notificacoes) {
         _notificacoes = notificacoes;
@@ -75,12 +79,12 @@ class NotificacoesViewModel extends ChangeNotifier {
         _isLoading = false;
         _errorMessage = null;
         _updateAppBadge(_totalNaoLidas);
-        notifyListeners();
+        _safeNotify();
       },
       onError: (error) {
         _errorMessage = 'Erro ao carregar notificações: $error';
         _isLoading = false;
-        notifyListeners();
+        _safeNotify();
       },
     );
   }
@@ -109,7 +113,7 @@ class NotificacoesViewModel extends ChangeNotifier {
   Future<void> loadNotificacoes() async {
     _isLoading = true;
     _errorMessage = null;
-    notifyListeners();
+    _safeNotify();
 
     try {
       _notificacoes = await _repository.getNotificacoes();
@@ -119,14 +123,14 @@ class NotificacoesViewModel extends ChangeNotifier {
       _errorMessage = 'Erro ao carregar notificações: $e';
     } finally {
       _isLoading = false;
-      notifyListeners();
+      _safeNotify();
     }
   }
 
   /// Recarrega notificações (pull to refresh)
   Future<void> refresh() async {
     _isRefreshing = true;
-    notifyListeners();
+    _safeNotify();
 
     try {
       _notificacoes = await _repository.getNotificacoes();
@@ -137,7 +141,7 @@ class NotificacoesViewModel extends ChangeNotifier {
       _errorMessage = 'Erro ao recarregar notificações: $e';
     } finally {
       _isRefreshing = false;
-      notifyListeners();
+      _safeNotify();
     }
   }
 
@@ -207,6 +211,7 @@ class NotificacoesViewModel extends ChangeNotifier {
 
   @override
   void dispose() {
+    _disposed = true;
     _notificacoesSubscription?.cancel();
     super.dispose();
   }
